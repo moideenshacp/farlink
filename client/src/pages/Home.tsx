@@ -14,7 +14,7 @@ const Home = () => {
 
       <div className="flex flex-col lg:flex-row">
         <img
-          className="w-full sm:w-[200px] lg:w-[550px] ml-16 mt-28 mb-8 lg:mb-0"
+          className="sm: w-[280px] lg:w-[550px] ml-16 mt-28 mb-8 lg:mb-0"
           src={Home1}
           alt="Home Image 1"
         />
