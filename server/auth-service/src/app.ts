@@ -3,10 +3,17 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 import bodyParser from "body-parser";
 import AuthRoutes from "./presentation/routes/AuthRoutes";
+import cors from 'cors';
 
 dotenv.config();
 
 const app = express();
+app.use(cors({
+  origin: process.env.FRONT_URL,
+  methods: ['GET','POST'],
+  allowedHeaders: ['Content-Type']
+
+}))
 app.use(bodyParser.json());
 app.use("/api/auth", AuthRoutes);
 
@@ -20,4 +27,7 @@ mongoose
       console.log(`Server running on port ${PORT}`);
     });
   })
-  .catch
+  .catch((err)=>{
+    console.log(err);
+    
+  })

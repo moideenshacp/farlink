@@ -1,12 +1,54 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import logo from '../assets/farlink.png';
 import signup from '../assets/signUp.jpg'
 import Footer from '../components/Footer';
 import Header from '../components/Header';
 import { FaUser, FaEnvelope, FaLock } from 'react-icons/fa';
 import { FcGoogle } from 'react-icons/fc'; // Import Google icon
+import { useState } from 'react';
+import axios from 'axios';
 
 const SignUp = () => {
+
+  const navigate = useNavigate()
+
+  const [formData,setFormData] = useState({
+    name:'',
+    email:'',
+    password:'',
+    confirmPassword:''
+  })
+
+  const handleChange = (e:React.ChangeEvent<HTMLInputElement>)=>{
+    const {name,value} = e.target
+
+    setFormData({
+      ...formData,
+      [name]:value,
+    })
+  }
+
+  const handleSubmit = async (e:React.FormEvent)=>{
+    e.preventDefault()
+
+    try {
+      const response =await axios.post(`${import.meta.env.VITE_SERVER_BASE_URL}/api/auth/register`, {
+        name:formData.name,
+        email:formData.email,
+        password:formData.password,
+        confirmPassword:formData.confirmPassword
+      })
+      console.log(response.data)
+      if(response.data.message === 'User registered successfully'){
+        navigate('/verifyEmail-msg')
+      }
+      
+    } catch (error) {
+      console.log(error);
+      
+    }
+  }
+
   return (
     
     <div>
@@ -28,12 +70,14 @@ const SignUp = () => {
           SIGN UP
         </h2>
 
-        <form className="mt-6 space-y-4">
+        <form className="mt-6 space-y-4 " onSubmit={handleSubmit} >
           <div className="flex items-center border border-[#E0E2E9] rounded-lg px-3 py-2 bg-white">
             <FaUser className="text-[#ADB0CD] mr-3" />
             <input
               type="text"
               placeholder="Username"
+              onChange={handleChange}
+              name="name"
               className="flex-1 outline-none text-sm text-[#969AB8]"
             />
           </div>
@@ -42,6 +86,8 @@ const SignUp = () => {
             <FaEnvelope className="text-[#ADB0CD] mr-3" />
             <input
               type="email"
+              name="email"
+              onChange={handleChange}
               placeholder="Email"
               className="flex-1 outline-none text-sm text-[#969AB8]"
             />
@@ -51,6 +97,8 @@ const SignUp = () => {
             <FaLock className="text-[#ADB0CD] mr-3" />
             <input
               type="password"
+              name="password"
+              onChange={handleChange}
               placeholder="Password"
               className="flex-1 outline-none text-sm text-[#969AB8]"
             />
@@ -60,6 +108,8 @@ const SignUp = () => {
             <FaLock className="text-[#ADB0CD] mr-3" />
             <input
               type="password"
+              name="confirmPassword"
+              onChange={handleChange}
               placeholder="Repeat Password"
               className="flex-1 outline-none text-sm text-[#969AB8]"
             />

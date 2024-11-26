@@ -4,22 +4,31 @@ import { MongoUserRepository } from "../../infrastructure/repositories/MongoUser
 import { UserMapper } from "../../application/mappers/UserMapper";
 import { AuthService } from "../../application/services/AuthService";
 import { VerifyEmail } from "../../core/use-cases/Verify-Email";
+import { registerUserSchema } from "../../application/validators/RegisterUserValidator";
 
 const registerUser = async (req: Request, res: Response) => {
   try {
+    const {error,value} = registerUserSchema.validate(req.body,{abortEarly:false})
+    if(error){
+      const errorMessage = error.details.map((err)=>err.message)
+       res.status(400).json({errors:errorMessage})
+       return
+    }
     const userRepo = new MongoUserRepository();
     const useCase = new RegisterUser(userRepo);
-    const userDto = req.body;
+    console.log("req",req.body)
 
-    const userEntity = UserMapper.toEntity(userDto);
+    const userEntity = UserMapper.toEntity(value);
     const user = await useCase.execute(userEntity);
 
     const token = AuthService.generateToken(user);
     console.log('user registered')
 
     res.status(201).json({ message: "User registered successfully", token });
-  } catch (error) {
+  } catch (error:any) {
     res.status(400).json({ error: error });
+    console.log(error.message);
+    
   }
 };
 
