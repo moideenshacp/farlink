@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import logo from '../assets/farlink.png';
 import signup from '../assets/signUp.jpg'
 import Footer from '../components/Footer';
@@ -76,7 +77,7 @@ const Login = () => {
           </button>
         </div>
         <br />
-        <p className="text-[#969AB8] text-center">Don’t have an account?<span className='text-[#4361EE]'>Sign up</span></p>
+        <p className="text-[#969AB8] text-center">Don’t have an account?<Link to='/sign-up'><span className='text-[#4361EE]'>Sign up</span></Link></p>
 
       </div>
 

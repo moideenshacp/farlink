@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import logo from "../../assets/EmailLogo.png";
 import Footer from "../../components/Footer";
 
@@ -45,9 +46,11 @@ const Step3 = () => {
         </div>
 
         <div className="mt-8">
+          <Link to='/my-team/*'>
           <button className="bg-[#4361EE] text-white font-semibold px-6 py-3 rounded-lg hover:bg-[#4361EE]transition">
             Go To Dashboard
           </button>
+          </Link>
         </div>
       </div>
       <Footer/>

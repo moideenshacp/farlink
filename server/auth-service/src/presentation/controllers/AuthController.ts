@@ -15,6 +15,7 @@ const registerUser = async (req: Request, res: Response) => {
     const user = await useCase.execute(userEntity);
 
     const token = AuthService.generateToken(user);
+    console.log('user registered')
 
     res.status(201).json({ message: "User registered successfully", token });
   } catch (error) {
