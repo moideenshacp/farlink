@@ -15,8 +15,6 @@ export class UserExist extends CustomError{
     }
 }
 
-
-
 // ========================= User not found ========================================
 
 export class userNotFound extends CustomError{
@@ -24,7 +22,6 @@ export class userNotFound extends CustomError{
         super(400,"User not found..")
     }
 }
-
 
 // ========================= User already verified ========================================
 
@@ -36,9 +33,17 @@ export class userAlreadyverifed extends CustomError{
 
 // ========================= Token error ========================================
 
-
 export class TokenError extends CustomError{
     constructor(){
         super(400,"Invalid  or expired token")
     }
 }
+
+// ========================= Login user not found ========================================
+
+export class LoginUserError extends  CustomError{
+    constructor(){
+        super(400,"Invalid email or password")
+    }
+}
+

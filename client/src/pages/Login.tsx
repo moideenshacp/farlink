@@ -33,6 +33,7 @@ const Login = () => {
               <input
                 type="email"
                 placeholder="Email"
+                name="email"
                 className="flex-1 outline-none text-sm text-[#969AB8]"
               />
             </div>
@@ -42,6 +43,7 @@ const Login = () => {
               <input
                 type="password"
                 placeholder="Password"
+                name="password"
                 className="flex-1 outline-none text-sm text-[#969AB8]"
               />
             </div>

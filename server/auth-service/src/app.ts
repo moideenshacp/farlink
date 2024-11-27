@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import bodyParser from "body-parser";
 import AuthRoutes from "./presentation/routes/AuthRoutes";
 import cors from 'cors';
+import cookieParser from 'cookie-parser'
 
 dotenv.config();
 
@@ -15,6 +16,7 @@ app.use(cors({
 
 }))
 app.use(bodyParser.json());
+app.use(cookieParser())
 app.use("/api/auth", AuthRoutes);
 
 const PORT = process.env.PORT || 5000;
