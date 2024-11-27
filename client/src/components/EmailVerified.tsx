@@ -1,30 +1,82 @@
-import { Link } from 'react-router-dom'
-import logo from '../assets/EmailLogo.png'
+import { useLocation } from "react-router-dom";
+import logo from "../assets/EmailLogo.png";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import AlreadyVerifiedEmail from "./AlreadyVerifiedEmail";
+import InvalidVerifyEmail from "./InvalidVerifyEmail";
+import SuccessfulEmailVerifcation from "./SuccessfulEmailVerifcation";
 
 const EmailVerified = () => {
+  const location = useLocation();
+  const [err, setErr] = useState<string | null>(null);
+  const [verificationStatus, setVerificationStatus] = useState<string | null>(
+    null
+  );
+
+  useEffect(() => {
+    const verifyEmail = async () => {
+      const urlParams = new URLSearchParams(location.search);
+      const token = urlParams.get("token");
+
+      try {
+        const res = await axios.post(
+          `${
+            import.meta.env.VITE_SERVER_BASE_URL
+          }/api/auth/verify-email?token=${token}`
+        );
+
+        console.log("dtata=====", res.data.message);
+        if (res.data.message === "Email successfully verified.") {
+          setVerificationStatus("verified");
+        }
+      } catch (error) {
+        if (axios.isAxiosError(error)) {
+          if (error.response) {
+            console.log("Error message:", error.response.data.error);
+            setErr(error.response.data.error);
+          } else {
+            console.log("Error message:", error.message);
+            setErr(error.message);
+          }
+        } else {
+          console.log("An unexpected error occurred:", error);
+        }
+      }
+    };
+
+    verifyEmail();
+  }, [location.search]);
+
   return (
     <div>
-        <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="bg-white shadow-2xl rounded-2xl p-6 md:p-10 max-w-md text-center">
-        <img
-          src={logo}
-          alt="FarLink Logo"
-          className="w-56 ml-12 mx-auto mb-6"
-        />
-        <h1 className="text-2xl font-bold text-[#08AD36]">Email Verified!</h1>
-        <p className="mt-4 text-[#000000]">
-          Your email has been successfully verified. <br />
-          Welcome to the FarLink App!
-        </p>
-        <Link to='/step-1' >
-        <button className="mt-6 bg-[#4361EE] font-semibold text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition">
-          Set up your account now
-        </button>
-        </Link>
+      <div className="flex items-center justify-center min-h-screen bg-gray-100">
+        <div className="bg-white shadow-2xl rounded-2xl p-6 md:p-10 max-w-md text-center">
+          <img
+            src={logo}
+            alt="FarLink Logo"
+            className="w-56 ml-12 mx-auto mb-6"
+          />
+          {verificationStatus === "verified" ? (
+            <SuccessfulEmailVerifcation />
+          ) : err === "User is already verified.." ? (
+            <AlreadyVerifiedEmail />
+          ) : err === "Invalid  or expired token" ? (
+            <InvalidVerifyEmail />
+          ) : (
+            <div>
+              <h1 className="text-2xl font-bold text-[#08AD36]">
+                The user was not found.
+              </h1>
+              <p className="mt-4 text-[#000000]">
+                The user was not found. Please ensure the link is correct and
+                try again.
+              </p>
+            </div>
+          )}
+        </div>
       </div>
     </div>
-    </div>
-  )
-}
+  );
+};
 
-export default EmailVerified
+export default EmailVerified;

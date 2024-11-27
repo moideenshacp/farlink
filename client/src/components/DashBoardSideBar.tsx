@@ -1,14 +1,13 @@
-import { Link } from "react-router-dom"
+import { Link } from "react-router-dom";
 import logo from "../assets/EmailLogo.png";
 import { useState } from "react";
-
 
 const DashBoardSideBar = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
     <div>
-        <aside
+      <aside
         className={`fixed inset-y-0 left-0 transform ${
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
         } transition-transform duration-300 ease-in-out w-64 bg-white border-r border-gray-200 h-screen z-40 lg:translate-x-0 lg:static lg:block`}
@@ -170,9 +169,8 @@ const DashBoardSideBar = () => {
           </ul>
         </nav>
       </aside>
-        
 
-        {/* Hamburger Menu Button */}
+      {/* Hamburger Menu Button */}
       <button
         className="lg:hidden fixed top-4 left-4 z-50 text-gray-700 focus:outline-none"
         onClick={() => setSidebarOpen(!sidebarOpen)}
@@ -210,7 +208,7 @@ const DashBoardSideBar = () => {
         )}
       </button>
     </div>
-  )
-}
+  );
+};
 
-export default DashBoardSideBar
+export default DashBoardSideBar;

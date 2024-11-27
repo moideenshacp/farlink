@@ -1,6 +1,7 @@
 // src/core/use-cases/VerifyEmail.ts
 import jwt from "jsonwebtoken";
 import { UserRepository } from "../interfaces/UserRepository";
+import { CustomError, TokenError, userAlreadyverifed, userNotFound } from "../errors/CustomError";
 
 const EMAIL_SECRET = process.env.EMAIL_SECRET || "email_secret_key";
 
@@ -13,16 +14,30 @@ export class VerifyEmail {
 
       const user = await this.userRepository.findByEmail(email);
 
-      console.log('verify email:',user);
+      console.log('find userr',user);
       
-      if (!user) throw new Error("User not found");
-
-      if (user.verified) throw new Error("User is already verified");
-
+      if (!user) {
+        throw new userNotFound()
+      }
+      
+      if (user.verified){
+        console.log('already verified')
+        throw new userAlreadyverifed()
+      }
+      
       user.verified = true;
       await this.userRepository.create(user);
-    } catch (error:any) {
-      throw new Error("Invalid or expired token");
+
+      console.log('user verified:',user);
+    }catch (error: any) {
+      if (error instanceof CustomError) {
+        throw error;
+      }
+      if (error.name === "JsonWebTokenError" || error.name === "TokenExpiredError") {
+        throw new TokenError();
+      }
+      throw new CustomError(500, "Internal server Error");
     }
+    
   }
 }

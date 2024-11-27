@@ -3,13 +3,13 @@ import jwt from 'jsonwebtoken'
 
 const EMAIL_SECRET = process.env.EMAIL_SECRET  || "email_secret_key"
 
-const EMAIL_EXPIRATION = "1d"
+const EMAIL_EXPIRATION = "1h"
 
 export class EmailService {
     static async sendVerificationMail(email:string):Promise<void>{
         const verificationToken = jwt.sign({email},EMAIL_SECRET,{expiresIn:EMAIL_EXPIRATION})
 
-        const verificationLink  = `${process.env.BASE_URL}/api/auth/verify-email?token=${verificationToken}`
+        const verificationLink  = `${process.env.FRONT_URL}/verify-email?token=${verificationToken}`
 
         const transporter= nodeMailer.createTransport({
             service:'Gmail',
