@@ -54,13 +54,24 @@ const SignUp = () => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       if (error.response && error.response.data.errors) {
+        
         error.response.data.errors.forEach((err: string) => {
           toast.error(err, {
             position: "top-right",
             autoClose: 3000,
           });
         });
-      } else {
+      } else if(axios.isAxiosError(error)){
+        if(error.response){
+          toast.error(error.response.data.error, {
+            position: "top-right",
+            autoClose: 3000,
+          });
+          console.log("msg",error.response.data.error);
+          
+        }
+      
+      }else {
         toast.error("Something went wrong. Please try again.", {
           position: "top-right",
           autoClose: 3000,
