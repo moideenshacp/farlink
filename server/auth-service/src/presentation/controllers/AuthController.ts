@@ -29,9 +29,15 @@ const registerUser = async (req: Request, res: Response) => {
 
     res.status(201).json({ message: "User registered successfully", token });
   } catch (error:any) {
-    res.status(400).json({ error: error });
-    console.log(error.message);
-    
+    if(error instanceof CustomError){
+      res.status(error.status).json({error:error.message})
+      console.log('msg',error.message);
+      
+    }else{
+      res.status(400).json({ error: error });
+      console.log(error);
+      
+    }
   }
 };
 

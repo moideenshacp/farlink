@@ -12,4 +12,16 @@ export class MongoUserRepository implements UserRepository {
   async findByEmail(email: string): Promise<User | null> {
     return await UserModel.findOne({ email }).exec();
   }
+  async update(email: string, updates: Partial<User>): Promise<User> {
+    const updatedUser  = await UserModel.findOneAndUpdate(
+      {email},
+      {$set:updates},
+      {new:true}
+    ).exec()
+    
+    if (!updatedUser) {
+      throw new Error("User not found");
+    }
+    return updatedUser?.toObject()
+  }
 }

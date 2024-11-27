@@ -7,6 +7,16 @@ export class CustomError extends Error{
     }
 }
 
+// ========================= User already exist ========================================
+
+export class UserExist extends CustomError{
+    constructor(){
+        super(400,"User already exists")
+    }
+}
+
+
+
 // ========================= User not found ========================================
 
 export class userNotFound extends CustomError{
@@ -29,6 +39,6 @@ export class userAlreadyverifed extends CustomError{
 
 export class TokenError extends CustomError{
     constructor(){
-        super(400,"Invalid  or expired token ")
+        super(400,"Invalid  or expired token")
     }
 }
