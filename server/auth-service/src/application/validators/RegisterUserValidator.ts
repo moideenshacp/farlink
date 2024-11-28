@@ -13,12 +13,13 @@ export const registerUserSchema = Joi.object({
         'string.email':"Invalid email",
         'string.empty':'Invalid email'
     }),
-    password:Joi.string().min(6).max(20).required().messages({
+    password:Joi.string().min(6).max(20).required().pattern(/^(?=.*[A-Z])(?=.*[!@#$%^&*])/).messages({
         'string.min':'password atleast contain six letters',
         'string.max':'password must contain six letters',
         'any.required':'Invalid password',
         'string.base':'Invalid password',
-        'string.empty':'Invalid password'
+        'string.empty':'Invalid password',
+        'string.pattern.base': 'Password must contain at least one uppercase letter and one special character.',
     }),
     confirmPassword:Joi.string().valid(Joi.ref("password")).required().messages({
         "any.only":"Passwords must match",

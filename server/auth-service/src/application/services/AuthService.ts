@@ -2,7 +2,7 @@ import jwt from 'jsonwebtoken';
 import { User } from "../../core/entities/User";
 
 const JWT_SECRET = process.env.JWT_SECRET || 'your_secret_key';
-const JWT_EXPIRATION = '1h';
+const JWT_EXPIRATION = '1m';
 
 export class AuthService {
   static generateToken(user: User): string {

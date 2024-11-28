@@ -11,7 +11,7 @@ const VerifyMail = () => {
             className="w-56 ml-20 mx-auto mb-6"
           />
           <h1 className="text-2xl font-bold text-[#08AD36]">
-            Verify Your Email!
+            Please check Your Email!
           </h1>
           <p className="mt-4 text-[#000000]">
             A verification Link has been successfully sended to your email..{" "}

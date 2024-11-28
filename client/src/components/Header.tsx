@@ -30,7 +30,7 @@ const Header = () => {
           <li className="text-[#172C56] font-semibold cursor-pointer hover:text-[#4361EE]">
             Pricing
           </li>
-          <Link to="/login">
+          <Link to="/sign-in">
             <li className="text-[#172C56] font-semibold cursor-pointer hover:text-[#4361EE]">
               Login
             </li>

@@ -25,7 +25,7 @@ const DashBoardSideBar = () => {
               <ul className="mt-1 space-y-1">
                 <li>
                   <Link
-                    to="/my-team"
+                    to="/my-team/"
                     className="block text-[#0B0B0B] font-medium px-4 py-2  rounded-md"
                   >
                     Overview

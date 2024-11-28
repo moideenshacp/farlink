@@ -47,3 +47,9 @@ export class LoginUserError extends  CustomError{
     }
 }
 
+//=============================== login user not verified =================================
+export class LoginUserNotVerified extends CustomError{
+    constructor(){
+        super(400,"Please verify your Email first...")
+    }
+}

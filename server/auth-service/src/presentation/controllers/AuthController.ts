@@ -7,6 +7,7 @@ import { VerifyEmail } from "../../core/use-cases/Verify-Email";
 import { registerUserSchema } from "../../application/validators/RegisterUserValidator";
 import { CustomError } from "../../core/errors/CustomError";
 import { LoginUser } from "../../core/use-cases/LoginUser";
+import { error } from "console";
 
 const registerUser = async (req: Request, res: Response) => {
   try {
@@ -63,13 +64,17 @@ const verifyEmail = async (req: Request, res: Response) => {
 };
 
 const UserLoginHandle = async (req: Request, res: Response) =>  {
+  console.log("get in1====================================");
+
   try {
     const { email, password } = req.body;
 
+    console.log("body",email);
     if (!email || !password) {
       return res.status(400).json({ error: "Email and password are required." });
+      
     }
-
+    
     const userRepo = new MongoUserRepository();
     const useCase = new LoginUser(userRepo);
 
@@ -83,7 +88,11 @@ const UserLoginHandle = async (req: Request, res: Response) =>  {
   } catch (error: any) {
     if (error instanceof CustomError) {
        res.status(error.status).json({ error: error.message });
+       console.log(error.message);
+       
     }
+    console.log(error);
+    
   }
 };
 
