@@ -1,10 +1,11 @@
 import { useLocation } from "react-router-dom";
-import logo from "../assets/EmailLogo.png";
+import logo from "../../assets/EmailLogo.png";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import AlreadyVerifiedEmail from "./AlreadyVerifiedEmail";
-import InvalidVerifyEmail from "./InvalidVerifyEmail";
-import SuccessfulEmailVerifcation from "./SuccessfulEmailVerifcation";
+import AlreadyVerifiedEmail from "../../components/admin/AlreadyVerifiedEmail";
+import InvalidVerifyEmail from "../../components/admin/InvalidVerifyEmail";
+import SuccessfulEmailVerifcation from "../../components/admin/SuccessfulEmailVerifcation";
+import {  VerifyEmailAdmin } from "../../api/authApi";
 
 const EmailVerified = () => {
   const location = useLocation();
@@ -19,11 +20,7 @@ const EmailVerified = () => {
       const token = urlParams.get("token");
 
       try {
-        const res = await axios.post(
-          `${
-            import.meta.env.VITE_SERVER_BASE_URL
-          }/api/auth/verify-email?token=${token}`
-        );
+        const res = await VerifyEmailAdmin(token)
 
         console.log("dtata=====", res.data.message);
         if (res.data.message === "Email successfully verified.") {

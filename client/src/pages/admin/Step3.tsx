@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import logo from "../../assets/EmailLogo.png";
-import Footer from "../../components/Footer";
+import Footer from "../../shares/components/landingPageComponents/Footer";
 
 const Step3 = () => {
   return (

@@ -1,14 +1,15 @@
 import { Link } from "react-router-dom";
-import logo from "../assets/farlink.png";
-import signup from "../assets/signUp.jpg";
-import Footer from "../components/Footer";
-import Header from "../components/Header";
+import logo from "../../assets/farlink.png";
+import signup from "../../assets/signUp.jpg";
+import Footer from "../../shares/components/landingPageComponents/Footer";
+import Header from "../../shares/components/landingPageComponents/Header";
 import { FaEnvelope, FaLock } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc"; // Import Google icon
 import { useState } from "react";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { LoginAdmin } from "../../api/authApi";
 
 const Login = () => {
   const navigate = useNavigate()
@@ -30,16 +31,17 @@ const Login = () => {
     e.preventDefault()
     try {
 
-      const res =await axios.post(`${import.meta.env.VITE_SERVER_BASE_URL}/api/auth/login`,{
-        email:formData.email,
-        password:formData.password
-      })
-      if(res.data.message === "Login sucessfull"){
+      const res =await LoginAdmin(formData.email,formData.password)
+      
+      if(res.data.message === "Login sucessfull" && res.data.user.role === 'admin'){
         // navigate('/step-1')
-        navigate('/my-team/')
+        navigate('/admin/')
+      }if(res.data.user.role === 'superAdmin'){
+        console.log("not supre admin");
+        navigate('/superAdmin/')
+        
       }
-      
-      
+          
     } catch (error) {
       if(axios.isAxiosError(error)){
         if(error.response){

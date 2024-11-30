@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import logo from "../assets/EmailLogo.png";
+import logo from "../../../assets/EmailLogo.png";
 import { useState } from "react";
 
 const DashBoardSideBar = () => {
@@ -25,7 +25,7 @@ const DashBoardSideBar = () => {
               <ul className="mt-1 space-y-1">
                 <li>
                   <Link
-                    to="/my-team/"
+                    to="/admin/"
                     className="block text-[#0B0B0B] font-medium px-4 py-2  rounded-md"
                   >
                     Overview
@@ -33,7 +33,7 @@ const DashBoardSideBar = () => {
                 </li>
                 <li>
                   <Link
-                    to="/my-team/my-team"
+                    to="/admin/my-team"
                     className="block text-[#0B0B0B] font-medium hover:bg-gray-100 px-4 py-2 rounded-md"
                   >
                     My Team
@@ -50,7 +50,7 @@ const DashBoardSideBar = () => {
               <ul className="mt-1 space-y-1">
                 <li>
                   <Link
-                    to="/my-team/leave-summary"
+                    to="/admin/leave-summary"
                     className="block text-[#0B0B0B] font-medium hover:bg-gray-100 px-4 py-2 rounded-md"
                   >
                     Leave Summary
@@ -58,7 +58,7 @@ const DashBoardSideBar = () => {
                 </li>
                 <li>
                   <Link
-                    to="/my-team/manage-leave"
+                    to="/admin/manage-leave"
                     className="block text-[#0B0B0B] font-medium hover:bg-gray-100 px-4 py-2 rounded-md"
                   >
                     Manage Leave
@@ -75,7 +75,7 @@ const DashBoardSideBar = () => {
               <ul className="mt-1 space-y-1">
                 <li>
                   <Link
-                    to="/my-team/create-project"
+                    to="/admin/create-project"
                     className="block text-[#0B0B0B] font-medium hover:bg-gray-100 px-4 py-2 rounded-md"
                   >
                     Create Project
@@ -83,7 +83,7 @@ const DashBoardSideBar = () => {
                 </li>
                 <li>
                   <Link
-                    to="/my-team/manage-tasks"
+                    to="/admin/manage-tasks"
                     className="block text-[#0B0B0B] font-medium hover:bg-gray-100 px-4 py-2 rounded-md"
                   >
                     Manage Tasks
@@ -100,7 +100,7 @@ const DashBoardSideBar = () => {
               <ul className="mt-1 space-y-1">
                 <li>
                   <Link
-                    to="/my-team/service-request"
+                    to="/admin/service-request"
                     className="block text-[#0B0B0B] font-medium hover:bg-gray-100 px-4 py-2 rounded-md"
                   >
                     Service Requests
@@ -108,7 +108,7 @@ const DashBoardSideBar = () => {
                 </li>
                 <li>
                   <Link
-                    to="/my-team/realtime-alert"
+                    to="/admin/realtime-alert"
                     className="block text-[#0B0B0B] font-medium hover:bg-gray-100 px-4 py-2 rounded-md"
                   >
                     Real Time Alert
@@ -125,7 +125,7 @@ const DashBoardSideBar = () => {
               <ul className="mt-1 space-y-1">
                 <li>
                   <Link
-                    to="/my-team/meeting"
+                    to="/admin/meeting"
                     className="block text-[#0B0B0B] font-medium hover:bg-gray-100 px-4 py-2 rounded-md"
                   >
                     Meetings
@@ -133,7 +133,7 @@ const DashBoardSideBar = () => {
                 </li>
                 <li>
                   <Link
-                    to="/my-team/message"
+                    to="/admin/message"
                     className="block text-[#0B0B0B] font-medium hover:bg-gray-100 px-4 py-2 rounded-md"
                   >
                     Messages
@@ -150,7 +150,7 @@ const DashBoardSideBar = () => {
               <ul className="mt-1 space-y-1">
                 <li>
                   <Link
-                    to="/my-team/setting"
+                    to="/admin/setting"
                     className="block text-[#0B0B0B] font-medium hover:bg-gray-100 px-4 py-2 rounded-md"
                   >
                     Settings
@@ -158,7 +158,7 @@ const DashBoardSideBar = () => {
                 </li>
                 <li>
                   <Link
-                    to="/my-team/billing"
+                    to="/admin/billing"
                     className="block text-[#0B0B0B] font-medium hover:bg-gray-100 px-4 py-2 rounded-md"
                   >
                     Billing

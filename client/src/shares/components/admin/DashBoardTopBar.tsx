@@ -13,47 +13,47 @@ const DashBoardTopBar = () => {
     <div>
       <header className="bg-white shadow">
         <div className="px-6 py-4 flex justify-between items-center">
-          {location.pathname === "/my-team/" ? (
+          {location.pathname === "/admin/" ? (
             <h1 className="text-xl font-semibold text-gray-700 lg:block sm: hidden">
               Overview
             </h1>
-          ) : location.pathname === "/my-team/my-team" ? (
+          ) : location.pathname === "/admin/my-team" ? (
             <h1 className="text-xl font-semibold text-gray-700 lg:block sm: hidden">
               My Team
             </h1>
-          ) : location.pathname === "/my-team/leave-summary" ? (
+          ) : location.pathname === "/admin/leave-summary" ? (
             <h1 className="text-xl font-semibold text-gray-700 lg:block sm: hidden">
               Leave Summary
             </h1>
-          ) : location.pathname === "/my-team/manage-leave" ? (
+          ) : location.pathname === "/admin/manage-leave" ? (
             <h1 className="text-xl font-semibold text-gray-700 lg:block sm: hidden">
               Manage Leave
             </h1>
-          ) : location.pathname === "/my-team/create-project" ? (
+          ) : location.pathname === "/admin/create-project" ? (
             <h1 className="text-xl font-semibold text-gray-700 lg:block sm: hidden">
               Creat Project
             </h1>
-          ) : location.pathname === "/my-team/manage-tasks" ? (
+          ) : location.pathname === "/admin/manage-tasks" ? (
             <h1 className="text-xl font-semibold text-gray-700 lg:block sm: hidden">
               Manage Tasks
             </h1>
-          ) : location.pathname === "/my-team/service-request" ? (
+          ) : location.pathname === "/admin/service-request" ? (
             <h1 className="text-xl font-semibold text-gray-700 lg:block sm: hidden">
               Service Requests
             </h1>
-          ) : location.pathname === "/my-team/realtime-alert" ? (
+          ) : location.pathname === "/admin/realtime-alert" ? (
             <h1 className="text-xl font-semibold text-gray-700 lg:block sm: hidden">
               Real Time Alert
             </h1>
-          ) : location.pathname === "/my-team/meeting" ? (
+          ) : location.pathname === "/admin/meeting" ? (
             <h1 className="text-xl font-semibold text-gray-700 lg:block sm: hidden">
               Meetings
             </h1>
-          ) : location.pathname === "/my-team/message" ? (
+          ) : location.pathname === "/admin/message" ? (
             <h1 className="text-xl font-semibold text-gray-700 lg:block sm: hidden">
               Messages
             </h1>
-          ) : location.pathname === "/my-team/setting" ? (
+          ) : location.pathname === "/admin/setting" ? (
             <h1 className="text-xl font-semibold text-gray-700 lg:block sm: hidden">
               Settings
             </h1>

@@ -1,14 +1,15 @@
 import { Link, useNavigate } from "react-router-dom";
-import logo from "../assets/farlink.png";
-import signup from "../assets/signUp.jpg";
-import Footer from "../components/Footer";
-import Header from "../components/Header";
+import logo from "../../assets/farlink.png";
+import signup from "../../assets/signUp.jpg";
+import Footer from "../../shares/components/landingPageComponents/Footer";
+import Header from "../../shares/components/landingPageComponents/Header";
 import { FaUser, FaEnvelope, FaLock } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc"; // Import Google icon
 import { useState } from "react";
 import axios from "axios";
 import "react-toastify/dist/ReactToastify.css";
 import { toast, ToastContainer } from "react-toastify";
+import { SignUpAdmin } from "../../api/authApi";
 
 const SignUp = () => {
   const navigate = useNavigate();
@@ -33,15 +34,7 @@ const SignUp = () => {
     e.preventDefault();
 
     try {
-      const response = await axios.post(
-        `${import.meta.env.VITE_SERVER_BASE_URL}/api/auth/register`,
-        {
-          name: formData.name,
-          email: formData.email,
-          password: formData.password,
-          confirmPassword: formData.confirmPassword,
-        }
-      );
+      const response = await SignUpAdmin(formData.name,formData.email,formData.password,formData.confirmPassword)
       console.log(response.data.message);
       if (response.data.message === "User registered successfully") {
         toast.success("Sucessfully Registred!!", {
@@ -53,6 +46,8 @@ const SignUp = () => {
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
+      console.log(error);
+      
       if (error.response && error.response.data.errors) {
         
         error.response.data.errors.forEach((err: string) => {

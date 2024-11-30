@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import farlink from "../assets/Farlink-bg.png";
+import farlink from "../../../assets/Farlink-bg.png";
 
 const Footer = () => {
   return (

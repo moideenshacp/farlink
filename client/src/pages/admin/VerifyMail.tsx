@@ -1,4 +1,4 @@
-import logo from "../assets/EmailLogo.png";
+import logo from "../../assets/EmailLogo.png";
 
 const VerifyMail = () => {
   return (
