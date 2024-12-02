@@ -25,14 +25,21 @@ const EmailVerified = () => {
         console.log("dtata=====", res.data.message);
         if (res.data.message === "Email successfully verified.") {
           setVerificationStatus("verified");
+        }else if(res.data.message === "User already verified."){
+          setVerificationStatus("verified")
         }
       } catch (error) {
         if (axios.isAxiosError(error)) {
           if (error.response) {
-            console.log("Error message:", error.response.data.error);
+            if(error.response.data.error==="User is already verified.."){
+              setVerificationStatus("verified")
+              console.log('bahabab');
+              
+            }
+            console.log("Error message===:", error.response.data.error);
             setErr(error.response.data.error);
           } else {
-            console.log("Error message:", error.message);
+            console.log("Error message----:", error.message);
             setErr(error.message);
           }
         } else {

@@ -2,7 +2,7 @@ import axios from "axios"
 
 export const LoginAdmin = async(email:string,password:string)=>{
     try {
-        const res =await axios.post(`${import.meta.env.VITE_SERVER_BASE_URL}/api/auth/login`,{
+        const res =await axios.post(`${import.meta.env.VITE_SERVER_BASE_URL}/auth-service/api/auth/login`,{
         email:email,
         password:password
       },{ withCredentials: true })
@@ -18,7 +18,7 @@ export const LoginAdmin = async(email:string,password:string)=>{
 export const SignUpAdmin = async(name:string,email:string,password:string,confirmPassword:string)=>{
     try {
         const response = await axios.post(
-            `${import.meta.env.VITE_SERVER_BASE_URL}/api/auth/register`,
+            `${import.meta.env.VITE_SERVER_BASE_URL}/auth-service/api/auth/register`,
             {
               name: name,
               email: email,
@@ -40,7 +40,7 @@ export const VerifyEmailAdmin = async(token: string | null)=>{
         const res = await axios.post(
             `${
               import.meta.env.VITE_SERVER_BASE_URL
-            }/api/auth/verify-email?token=${token}`
+            }/auth-service/api/auth/verify-email?token=${token}`
           );
           return res
         

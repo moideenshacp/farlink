@@ -20,6 +20,7 @@ const SignUp = () => {
     password: "",
     confirmPassword: "",
   });
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -31,10 +32,17 @@ const SignUp = () => {
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
+    setLoading(true);
     e.preventDefault();
 
     try {
-      const response = await SignUpAdmin(formData.name,formData.email,formData.password,formData.confirmPassword)
+      const response = await SignUpAdmin(
+        formData.name,
+        formData.email,
+        formData.password,
+        formData.confirmPassword
+      );
+      setLoading(false);
       console.log(response.data.message);
       if (response.data.message === "User registered successfully") {
         toast.success("Sucessfully Registred!!", {
@@ -46,27 +54,25 @@ const SignUp = () => {
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
+      setLoading(false);
       console.log(error);
-      
+
       if (error.response && error.response.data.errors) {
-        
         error.response.data.errors.forEach((err: string) => {
           toast.error(err, {
             position: "top-right",
             autoClose: 3000,
           });
         });
-      } else if(axios.isAxiosError(error)){
-        if(error.response){
+      } else if (axios.isAxiosError(error)) {
+        if (error.response) {
           toast.error(error.response.data.error, {
             position: "top-right",
             autoClose: 3000,
           });
-          console.log("msg",error.response.data.error);
-          
+          console.log("msg", error.response.data.error);
         }
-      
-      }else {
+      } else {
         toast.error("Something went wrong. Please try again.", {
           position: "top-right",
           autoClose: 3000,
@@ -142,9 +148,12 @@ const SignUp = () => {
 
             <button
               type="submit"
-              className="w-full bg-[#4361EE] text-white py-3 rounded-lg font-medium hover:bg-blue-700 transition duration-300"
+              disabled={loading}
+              className={`w-full py-3 rounded-lg font-medium text-white ${
+                loading ? "bg-gray-400" : "bg-[#4361EE] hover:bg-blue-700"
+              }`}
             >
-              Verify Email
+              {loading ? "Loading..." : "Verify Email"}
             </button>
           </form>
           <ToastContainer />
