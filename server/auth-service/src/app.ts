@@ -1,35 +1,54 @@
 import express from "express";
-import mongoose from "mongoose";
 import dotenv from "dotenv";
 import bodyParser from "body-parser";
-import AuthRoutes from "./presentation/routes/AuthRoutes";
 import cors from 'cors';
 import cookieParser from 'cookie-parser'
+import connectDB from "./config/db";
+import logger from "./utils/logger";
+import morgan from 'morgan'
+import authRoutes from './routes/authRoute'
 
 dotenv.config();
+connectDB()
 
 const app = express();
 app.use(cors({
   origin: process.env.FRONT_URL,
   methods: ['GET','POST'],
-  allowedHeaders: ['Content-Type']
+  allowedHeaders: ['Content-Type'],
+  credentials:true
 
 }))
-app.use(bodyParser.json());
+
+const morganFormat = ":method :url :status :response-time ms";
+// morganFormat says that I want to have the method, url , status and response in milli s
+
+app.use(
+    morgan(morganFormat, {
+      stream: {
+        write: (message) => {
+          const logObject = {
+            method: message.split(" ")[0],
+            url: message.split(" ")[1],
+            status: message.split(" ")[2],
+            responseTime: message.split(" ")[3],
+          };
+          logger.info(JSON.stringify(logObject));
+        },
+      },
+    })
+  );
+
 app.use(cookieParser())
-app.use("/api/auth", AuthRoutes);
+app.use(bodyParser.json());
+app.use(express.json())
 
-const PORT = process.env.PORT || 5000;
+app.use("/api/auth", authRoutes);
 
-mongoose
-  .connect(process.env.MONGO_URI || 'mongodb://localhost:27017/farlink-auth-service')
-  .then(() => {
-    console.log("MongoDB connected...");
-    app.listen(PORT, () => {
-      console.log(`Server running on port ${PORT}`);
-    });
-  })
-  .catch((err)=>{
-    console.log(err);
+
+const port = process.env.PORT
+
+app.listen(port,()=>{
+    console.log(`auth-service started on port ${port}`);
     
-  })
+})
