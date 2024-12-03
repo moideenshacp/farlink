@@ -76,7 +76,6 @@ const SignUp = () => {
           });
         });
         console.log("eee error");
-        
       } else if (axios.isAxiosError(error)) {
         if (error.response) {
           toast.error(error.response.data.error, {
@@ -171,8 +170,10 @@ const SignUp = () => {
           </form>
           <ToastContainer />
           <br />
-          <Link to='/forget-password' >
-          <p className="text-[#4361EE] text-center cursor-pointer">Forgot password?</p>
+          <Link to="/forget-password">
+            <p className="text-[#4361EE] text-center cursor-pointer">
+              Forgot password?
+            </p>
           </Link>
 
           <div className="flex flex-col items-center mt-4 space-y-4">

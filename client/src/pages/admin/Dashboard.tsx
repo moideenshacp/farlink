@@ -1,4 +1,4 @@
-import {  Routes, Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import DashBoardSideBar from "../../shares/components/admin/DashBoardSideBar";
 import DashBoardTopBar from "../../shares/components/admin/DashBoardTopBar";
 
@@ -17,15 +17,13 @@ const Setting = () => <div>Setting Content</div>;
 const Billing = () => <div>Billing Content</div>;
 
 const MyTeamPage = () => {
-
-
   return (
     <div className="min-h-screen bg-gray-100 flex">
-      <DashBoardSideBar/>
+      <DashBoardSideBar />
 
       {/* Main Content */}
       <div className="flex-1 flex flex-col">
-        <DashBoardTopBar/>
+        <DashBoardTopBar />
 
         {/* Dynamic Content */}
         <main className="flex-1 bg-gray-50 p-6">
@@ -45,8 +43,6 @@ const MyTeamPage = () => {
           </Routes>
         </main>
       </div>
-
-      
     </div>
   );
 };

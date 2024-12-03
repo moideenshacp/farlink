@@ -7,7 +7,11 @@ const Step3 = () => {
     <div>
       <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50">
         <div className="text-center mb-6">
-          <img src={logo} alt="FarLink Logo" className="mx-auto w-60 ml-8 mb-1" />
+          <img
+            src={logo}
+            alt="FarLink Logo"
+            className="mx-auto w-60 ml-8 mb-1"
+          />
         </div>
         <div className="text-sm text-gray-500 text-center mb-4">
           <span className="bg-[#D9D9D9] text-[#FFFFFF] font-inter font-extrabold px-3 py-2 rounded-full">
@@ -46,14 +50,14 @@ const Step3 = () => {
         </div>
 
         <div className="mt-8">
-          <Link to='/my-team/*'>
-          <button className="bg-[#4361EE] text-white font-semibold px-6 py-3 rounded-lg hover:bg-[#4361EE]transition">
-            Go To Dashboard
-          </button>
+          <Link to="/my-team/*">
+            <button className="bg-[#4361EE] text-white font-semibold px-6 py-3 rounded-lg hover:bg-[#4361EE]transition">
+              Go To Dashboard
+            </button>
           </Link>
         </div>
       </div>
-      <Footer/>
+      <Footer />
     </div>
   );
 };

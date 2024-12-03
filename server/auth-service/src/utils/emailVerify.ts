@@ -42,12 +42,11 @@ export class EmailService {
     });
   }
   static async sendResetPasswordMail(email: string): Promise<void> {
-
     const resetToken = jwt.sign({ email }, EMAIL_SECRET, {
       expiresIn: EMAIL_EXPIRATION,
     });
     const resetLink = `${process.env.FRONT_URL}/reset-password?token=${resetToken}`;
-  
+
     const transporter = nodeMailer.createTransport({
       service: "Gmail",
       auth: {
@@ -55,7 +54,7 @@ export class EmailService {
         pass: process.env.EMAIL_PASS,
       },
     });
-  
+
     await transporter.sendMail({
       from: '"Farlink" <no-reply@example.com>',
       to: email,
@@ -76,5 +75,4 @@ export class EmailService {
       `,
     });
   }
-  
 }

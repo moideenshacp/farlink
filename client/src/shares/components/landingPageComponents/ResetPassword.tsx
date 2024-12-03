@@ -6,21 +6,18 @@ import { toast, ToastContainer } from "react-toastify";
 import { jwtDecode } from "jwt-decode";
 import axios from "axios";
 
-
 interface DecodedToken {
-    exp: number;
-  }
+  exp: number;
+}
 
 const ResetPassword = () => {
-    const location = useLocation()
-    const navigate = useNavigate()
+  const location = useLocation();
+  const navigate = useNavigate();
 
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isTokenValid, setIsTokenValid] = useState(true);
-
-
 
   useEffect(() => {
     const urlParams = new URLSearchParams(location.search);
@@ -47,8 +44,8 @@ const ResetPassword = () => {
         });
         navigate("/invalid-forget-password");
       }
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    } catch (error:unknown) {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    } catch (error: unknown) {
       setIsTokenValid(false);
       toast.error("Invalid token", {
         position: "top-right",
@@ -59,20 +56,23 @@ const ResetPassword = () => {
   }, [location, navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
-      e.preventDefault();
+    e.preventDefault();
 
-      if (!isTokenValid) {
-        toast.error("Token is not valid. Please request a new password reset link.", {
+    if (!isTokenValid) {
+      toast.error(
+        "Token is not valid. Please request a new password reset link.",
+        {
           position: "top-right",
           autoClose: 3000,
-        });
-        return;
-      }
-      setIsLoading(true);
-      const urlParams = new URLSearchParams(location.search);
-      const token = urlParams.get("token");
-        console.log("reset password token",token);
-    
+        }
+      );
+      return;
+    }
+    setIsLoading(true);
+    const urlParams = new URLSearchParams(location.search);
+    const token = urlParams.get("token");
+    console.log("reset password token", token);
+
     if (password !== confirmPassword) {
       toast.error("Passwords do not match", {
         position: "top-right",
@@ -83,22 +83,22 @@ const ResetPassword = () => {
     }
 
     try {
-      const response = await resetPassword(password,confirmPassword,token);
+      const response = await resetPassword(password, confirmPassword, token);
       if (response.data.message === "Password updated successfully") {
-        toast.success("password changed successfully",{
-            position:"top-right",
-            autoClose:2000,
-        })
+        toast.success("password changed successfully", {
+          position: "top-right",
+          autoClose: 2000,
+        });
         setTimeout(() => {
-            navigate("/sign-in");
-          }, 2000);
+          navigate("/sign-in");
+        }, 2000);
       }
-    console.log(response.data);
-    
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      console.log(response.data);
+
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
-        console.log(error);
-        
+      console.log(error);
+
       if (error.response && error.response.data.errors) {
         error.response.data.errors.forEach((err: string) => {
           toast.error(err, {
@@ -107,7 +107,6 @@ const ResetPassword = () => {
           });
         });
         console.log("eee error");
-        
       } else if (axios.isAxiosError(error)) {
         if (error.response) {
           toast.error(error.response.data.error, {
@@ -122,7 +121,7 @@ const ResetPassword = () => {
           autoClose: 3000,
         });
       }
-      }finally {
+    } finally {
       setIsLoading(false);
     }
   };
@@ -161,15 +160,13 @@ const ResetPassword = () => {
               type="submit"
               disabled={isLoading}
               className={`w-full py-3 rounded-lg font-medium text-white ${
-                isLoading
-                  ? "bg-gray-400 cursor-not-allowed"
-                  : "bg-[#4361EE]"
+                isLoading ? "bg-gray-400 cursor-not-allowed" : "bg-[#4361EE]"
               }`}
             >
               {isLoading ? "Resetting..." : "Reset Password"}
             </button>
           </form>
-          <ToastContainer/>
+          <ToastContainer />
         </div>
       </div>
     </div>

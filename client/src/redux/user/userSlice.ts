@@ -4,37 +4,36 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 interface User {
   name: string;
   email: string;
-  role:"admin" | "superAdmin" | "employee"
-
+  role: "admin" | "superAdmin" | "employee";
 }
 
 // Define the initial state type
 interface userState {
   user: User | null;
   isAuthenticated: boolean;
-  token:string | null
+  token: string | null;
 }
 
 // Initial state
 const initialState: userState = {
   user: null,
   isAuthenticated: false,
-  token:null
+  token: null,
 };
 
 const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    login(state, action: PayloadAction<{ user: User ,token:string }>) {
+    login(state, action: PayloadAction<{ user: User; token: string }>) {
       state.user = action.payload.user;
       state.isAuthenticated = true;
-      state.token = action.payload.token; 
+      state.token = action.payload.token;
     },
     logout(state) {
-        state.user = null;
-        state.isAuthenticated = false;
-        state.token = null;
+      state.user = null;
+      state.isAuthenticated = false;
+      state.token = null;
     },
   },
 });

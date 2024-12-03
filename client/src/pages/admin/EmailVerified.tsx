@@ -5,7 +5,7 @@ import axios from "axios";
 import AlreadyVerifiedEmail from "../../components/admin/AlreadyVerifiedEmail";
 import InvalidVerifyEmail from "../../components/admin/InvalidVerifyEmail";
 import SuccessfulEmailVerifcation from "../../components/admin/SuccessfulEmailVerifcation";
-import {  VerifyEmailAdmin } from "../../api/authApi";
+import { VerifyEmailAdmin } from "../../api/authApi";
 
 const EmailVerified = () => {
   const location = useLocation();
@@ -20,21 +20,20 @@ const EmailVerified = () => {
       const token = urlParams.get("token");
 
       try {
-        const res = await VerifyEmailAdmin(token)
+        const res = await VerifyEmailAdmin(token);
 
         console.log("dtata=====", res.data.message);
         if (res.data.message === "Email successfully verified.") {
           setVerificationStatus("verified");
-        }else if(res.data.message === "User already verified."){
-          setVerificationStatus("verified")
+        } else if (res.data.message === "User already verified.") {
+          setVerificationStatus("verified");
         }
       } catch (error) {
         if (axios.isAxiosError(error)) {
           if (error.response) {
-            if(error.response.data.error==="User is already verified.."){
-              setVerificationStatus("verified")
-              console.log('bahabab');
-              
+            if (error.response.data.error === "User is already verified..") {
+              setVerificationStatus("verified");
+              console.log("bahabab");
             }
             console.log("Error message===:", error.response.data.error);
             setErr(error.response.data.error);

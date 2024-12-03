@@ -13,64 +13,59 @@ import { LoginAdmin } from "../../api/authApi";
 import { useDispatch } from "react-redux";
 import { login } from "../../redux/user/userSlice";
 
-
 const Login = () => {
-  const navigate = useNavigate()
-  const dispatch = useDispatch()
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-  const [formData,setFormData] = useState({
-    email:"",
-    password:""
-  })
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
 
-  const handleChange = (e:React.ChangeEvent<HTMLInputElement>)=>{
-    const {name,value} = e.target;
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
 
     setFormData({
       ...formData,
-      [name]:value
-    })
-  }
-  const handleSubmit =async (e:React.FormEvent)=>{
-    e.preventDefault()
+      [name]: value,
+    });
+  };
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
     try {
+      const res = await LoginAdmin(formData.email, formData.password);
 
-      const res =await LoginAdmin(formData.email,formData.password)
-      
-      console.log("here is the res",res.data.user);
-      
+      console.log("here is the res", res.data.user);
 
-      if(res.data.message === "Login sucessfull" && res.data.user.role === 'admin'){
-        dispatch(login({user:res.data.user,token:res.data.user.token}))
+      if (
+        res.data.message === "Login sucessfull" &&
+        res.data.user.role === "admin"
+      ) {
+        dispatch(login({ user: res.data.user, token: res.data.user.token }));
         // navigate('/step-1')
-        navigate('/admin/',{replace:true})
-      }if(res.data.user.role === 'superAdmin'){
-        console.log("not supre admin");
-        dispatch(login({user:res.data.user,token:res.data.user.token}))
-        navigate('/superAdmin/',{replace:true})
-        
+        navigate("/admin/", { replace: true });
       }
-          
+      if (res.data.user.role === "superAdmin") {
+        console.log("not supre admin");
+        dispatch(login({ user: res.data.user, token: res.data.user.token }));
+        navigate("/superAdmin/", { replace: true });
+      }
     } catch (error) {
-      if(axios.isAxiosError(error)){
-        if(error.response){
-          toast.error(error.response.data.error,{
-            position:"top-right",
-            autoClose:3000
-          })
-        }else{
-          toast.error("Something went wrong.Please try again..",{
-            position:"top-right",
-            autoClose:3000
-          })
+      if (axios.isAxiosError(error)) {
+        if (error.response) {
+          toast.error(error.response.data.error, {
+            position: "top-right",
+            autoClose: 3000,
+          });
+        } else {
+          toast.error("Something went wrong.Please try again..", {
+            position: "top-right",
+            autoClose: 3000,
+          });
         }
       }
-      
     }
-  }
-
-
-
+  };
 
   return (
     <div>
@@ -122,13 +117,13 @@ const Login = () => {
               Login
             </button>
           </form>
-          <ToastContainer/>
+          <ToastContainer />
           <br />
-          <Link to='/forget-password' >
-
-          <p className="text-[#4361EE] cursor-pointer text-center">Forgot password?</p>
+          <Link to="/forget-password">
+            <p className="text-[#4361EE] cursor-pointer text-center">
+              Forgot password?
+            </p>
           </Link>
-          
 
           <div className="flex flex-col items-center mt-4 space-y-4">
             <div className="flex items-center w-full">

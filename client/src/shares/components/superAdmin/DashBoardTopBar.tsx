@@ -6,21 +6,21 @@ import { logout } from "../../../redux/user/userSlice";
 
 const DashBoardTopBar = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const dispatch = useDispatch()
-  const navigate = useNavigate()
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
   };
 
-  const handleLogout = async()=>{
-    const res = await logoutUser()
+  const handleLogout = async () => {
+    const res = await logoutUser();
 
-    if(res.data.message === "Logged out successfully"){
-      dispatch(logout())
-      navigate('/sign-in',{replace:true})
+    if (res.data.message === "Logged out successfully") {
+      dispatch(logout());
+      navigate("/sign-in", { replace: true });
     }
-  }
+  };
 
   const location = useLocation();
   return (
@@ -114,7 +114,6 @@ const DashBoardTopBar = () => {
 
               {isOpen && (
                 <div className="absolute right-0 z-10 mt-2 lg:w-48 sm: w-36 rounded-md shadow-lg bg-white ring-1 ring-[#4361EE] ring-opacity-5">
-                 
                   <div className="py-1">
                     <a
                       onClick={handleLogout}

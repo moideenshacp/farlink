@@ -31,11 +31,9 @@ const DashBoardSideBar = () => {
                     Overview
                   </Link>
                 </li>
-
               </ul>
             </li>
 
-           
             {/* Configuration */}
             <li className="mt-4">
               <p className="text-xs ml-2 text-[#8C97A8] font-semibold uppercase">

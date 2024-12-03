@@ -117,31 +117,32 @@ export class authService implements IuserService {
 
     return userExist;
   }
-  async generatePasswordResetToken(email:string) : Promise<void>{
-    
-    const user = await this._userRepository.findByEmail(email)
-    console.log("marnnaa userrrr",user);
-    
-    if(!user){
-      throw new userNotFound()
+  async generatePasswordResetToken(email: string): Promise<void> {
+    const user = await this._userRepository.findByEmail(email);
+    console.log("marnnaa userrrr", user);
+
+    if (!user) {
+      throw new userNotFound();
     }
-    await EmailService.sendResetPasswordMail(email)
+    await EmailService.sendResetPasswordMail(email);
   }
   async resetPassword(password: string, token: string): Promise<IuserModel> {
     try {
-      const {email} = jwt.verify(token, EMAIL_SECRET) as { email: string };
-      
-      const findUser =await this._userRepository.findByEmail(email)
+      const { email } = jwt.verify(token, EMAIL_SECRET) as { email: string };
 
-      if(!findUser){
-        throw new userNotFound()
+      const findUser = await this._userRepository.findByEmail(email);
+
+      if (!findUser) {
+        throw new userNotFound();
       }
 
-      const hashedPassword = await bcrypt.hash(password,10)
+      const hashedPassword = await bcrypt.hash(password, 10);
 
-      const updatePassword =await this._userRepository.update({email},{password:hashedPassword})
-      return updatePassword as IuserModel
-      
+      const updatePassword = await this._userRepository.update(
+        { email },
+        { password: hashedPassword }
+      );
+      return updatePassword as IuserModel;
     } catch (error: any) {
       if (
         error.name === "JsonWebTokenError" ||
@@ -156,6 +157,5 @@ export class authService implements IuserService {
       }
       throw new CustomError(500, "Internal Server Error");
     }
-
   }
 }
