@@ -1,18 +1,6 @@
 import Joi from "joi";
 
-export const registerUserSchema = Joi.object({
-    name:Joi.string().trim().min(3).max(50).required().messages({
-        'any.required':'Invalid Name',
-        'string.empty':'Invalid Name',
-        'string.min':'Invalid Name',
-        'string.max':'Invalid Name',
-        'string.base':'Invalid Name'
-    }),
-    email:Joi.string().email().required().messages({
-        'any.required':"Invalid email",
-        'string.email':"Invalid email",
-        'string.empty':'Invalid email'
-    }),
+export const resetPasswordSchema = Joi.object({
     password:Joi.string().min(6).max(20).required().pattern(/^(?=.*[A-Z])(?=.*[!@#$%^&*])/).messages({
         'string.min':'password atleast contain six letters',
         'string.max':'password must contain six letters',
@@ -25,6 +13,10 @@ export const registerUserSchema = Joi.object({
         "any.only":"Passwords must match",
         'string.empty':'Invalid confirm password',
         'any.required':'Invalid confirm password'
-    })
+    }),
+    token: Joi.string().required().messages({
+        'any.required': 'Token is required.',
+        'string.empty': 'Token cannot be empty.',
+      }),
 
 })

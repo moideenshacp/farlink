@@ -12,7 +12,9 @@ export class AuthService {
   static verifyToken(token: string): IuserModel | null {
     try {
       const decoded = jwt.verify(token, JWT_SECRET);
+      console.log("decoded******************",decoded);
       return decoded as IuserModel;
+      
     } catch (error:any) {
       return null;
     }

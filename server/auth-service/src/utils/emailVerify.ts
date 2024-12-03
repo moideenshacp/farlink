@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken";
 
 const EMAIL_SECRET = process.env.EMAIL_SECRET || "email_secret_key";
 
-const EMAIL_EXPIRATION = "1m";
+const EMAIL_EXPIRATION = "30m";
 
 export class EmailService {
   static async sendVerificationMail(email: string): Promise<void> {
@@ -41,4 +41,40 @@ export class EmailService {
           `,
     });
   }
+  static async sendResetPasswordMail(email: string): Promise<void> {
+
+    const resetToken = jwt.sign({ email }, EMAIL_SECRET, {
+      expiresIn: EMAIL_EXPIRATION,
+    });
+    const resetLink = `${process.env.FRONT_URL}/reset-password?token=${resetToken}`;
+  
+    const transporter = nodeMailer.createTransport({
+      service: "Gmail",
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
+      },
+    });
+  
+    await transporter.sendMail({
+      from: '"Farlink" <no-reply@example.com>',
+      to: email,
+      subject: "Reset Your Password",
+      html: `
+    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 5px;">
+    <div style="text-align: center;">  
+      <img src="https://imgur.com/4Typ3eP.png" alt="Your Company Logo" style="max-width: 200px; height: auto; margin-bottom: 10px;" />  
+    </div>  
+      <h2 style="text-align: center;">Reset Your Password</h2>
+      <p style="text-align: center;">We received a request to reset your password.</p>
+      <p style="text-align: center;">Click the button below to reset your password.</p>
+      <div style="text-align: center; margin: 20px;">
+        <a href="${resetLink}" style="display: inline-block; padding: 15px 30px; background-color: #007BFF; color: white; text-decoration: none; border-radius: 5px; font-size: 16px;">Reset Password</a>
+      </div>
+      <p style="text-align: center; font-size: 12px; color: #555;">If you did not request a password reset, you can ignore this email.</p>
+    </div>
+      `,
+    });
+  }
+  
 }
