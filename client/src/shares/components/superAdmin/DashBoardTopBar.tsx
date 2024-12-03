@@ -1,12 +1,26 @@
 import { useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import { logoutUser } from "../../../api/authApi";
+import { useDispatch } from "react-redux";
+import { logout } from "../../../redux/user/userSlice";
 
 const DashBoardTopBar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
 
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
   };
+
+  const handleLogout = async()=>{
+    const res = await logoutUser()
+
+    if(res.data.message === "Logged out successfully"){
+      dispatch(logout())
+      navigate('/sign-in',{replace:true})
+    }
+  }
 
   const location = useLocation();
   return (
@@ -103,7 +117,7 @@ const DashBoardTopBar = () => {
                  
                   <div className="py-1">
                     <a
-                      href="#"
+                      onClick={handleLogout}
                       className=" px-4 py-2 text-sm text-gray-700 flex items-center"
                     >
                       <svg

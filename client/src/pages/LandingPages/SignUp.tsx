@@ -20,6 +20,12 @@ const SignUp = () => {
     password: "",
     confirmPassword: "",
   });
+  const [errors, setErrors] = useState({
+    name: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
   const [loading, setLoading] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -28,6 +34,11 @@ const SignUp = () => {
     setFormData({
       ...formData,
       [name]: value,
+    });
+
+    setErrors({
+      ...errors,
+      [name]: "",
     });
   };
 
@@ -64,6 +75,8 @@ const SignUp = () => {
             autoClose: 3000,
           });
         });
+        console.log("eee error");
+        
       } else if (axios.isAxiosError(error)) {
         if (error.response) {
           toast.error(error.response.data.error, {
@@ -158,7 +171,9 @@ const SignUp = () => {
           </form>
           <ToastContainer />
           <br />
-          <p className="text-[#4361EE] text-center">Forgot password?</p>
+          <Link to='/forget-password' >
+          <p className="text-[#4361EE] text-center cursor-pointer">Forgot password?</p>
+          </Link>
 
           <div className="flex flex-col items-center mt-4 space-y-4">
             <div className="flex items-center w-full">

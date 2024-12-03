@@ -10,9 +10,13 @@ import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { LoginAdmin } from "../../api/authApi";
+import { useDispatch } from "react-redux";
+import { login } from "../../redux/user/userSlice";
+
 
 const Login = () => {
   const navigate = useNavigate()
+  const dispatch = useDispatch()
 
   const [formData,setFormData] = useState({
     email:"",
@@ -33,12 +37,17 @@ const Login = () => {
 
       const res =await LoginAdmin(formData.email,formData.password)
       
+      console.log("here is the res",res.data.user);
+      
+
       if(res.data.message === "Login sucessfull" && res.data.user.role === 'admin'){
+        dispatch(login({user:res.data.user,token:res.data.user.token}))
         // navigate('/step-1')
-        navigate('/admin/')
+        navigate('/admin/',{replace:true})
       }if(res.data.user.role === 'superAdmin'){
         console.log("not supre admin");
-        navigate('/superAdmin/')
+        dispatch(login({user:res.data.user,token:res.data.user.token}))
+        navigate('/superAdmin/',{replace:true})
         
       }
           
@@ -59,6 +68,10 @@ const Login = () => {
       
     }
   }
+
+
+
+
   return (
     <div>
       <div className="flex flex-col lg:flex-row">
@@ -111,7 +124,11 @@ const Login = () => {
           </form>
           <ToastContainer/>
           <br />
-          <p className="text-[#4361EE] text-center">Forgot password?</p>
+          <Link to='/forget-password' >
+
+          <p className="text-[#4361EE] cursor-pointer text-center">Forgot password?</p>
+          </Link>
+          
 
           <div className="flex flex-col items-center mt-4 space-y-4">
             <div className="flex items-center w-full">

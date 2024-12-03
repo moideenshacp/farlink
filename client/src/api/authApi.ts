@@ -50,3 +50,59 @@ export const VerifyEmailAdmin = async(token: string | null)=>{
         
     }
 }
+
+export const logoutUser = async()=>{
+    try {
+        
+        const res = await axios.post(
+            `${
+              import.meta.env.VITE_SERVER_BASE_URL
+            }/auth-service/api/auth/logout`
+        )
+        return res
+
+    } catch (error) {
+        console.log(error);
+        throw error
+        
+    }
+}
+
+export const forgetPassword = async(email:string) =>{
+    try {
+        
+        const response = await axios.post(
+            `${
+              import.meta.env.VITE_SERVER_BASE_URL
+            }/auth-service/api/auth/forget-password`,{
+                email:email
+            }
+        )
+        return response
+
+    } catch (error) {
+        console.log(error);
+        throw error
+    }
+}
+
+export const resetPassword = async(password:string,confirmPassword:string,token:string | null) =>{
+    try {
+        const res = await axios.post(
+            `${
+              import.meta.env.VITE_SERVER_BASE_URL
+            }/auth-service/api/auth/reset-password`,{
+                password:password,
+                confirmPassword:confirmPassword,
+                token:token
+            }
+          );
+          return res
+
+
+    } catch (error) {
+        console.log(error);
+        throw error
+        
+    }
+}
