@@ -12,8 +12,10 @@ app.use(express.json())
 app.use(express.static('public'));
 app.use(morgan('tiny'))
 app.use(cors({
-    origin:process.env.FRONT_URL,
-    credentials:true
+    origin:"http://localhost:5173",
+    methods: ["GET", "POST"],
+    allowedHeaders: ["Content-Type"],
+    credentials: true,
 },))
 
 app.use('/auth-service',proxy(`${process.env.AUTH_SERVICE_URL}`))

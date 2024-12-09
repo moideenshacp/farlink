@@ -14,10 +14,14 @@ const ResetPassword = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const [formData, setFormData] = useState({
+    password: "",
+    confirmPassword: "",
+  });
   const [isLoading, setIsLoading] = useState(false);
   const [isTokenValid, setIsTokenValid] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
 
   useEffect(() => {
     const urlParams = new URLSearchParams(location.search);
@@ -55,6 +59,16 @@ const ResetPassword = () => {
     }
   }, [location, navigate]);
 
+
+  const handleChange = (e:React.ChangeEvent<HTMLInputElement>)=>{
+    setError(null)
+    const {name,value} = e.target
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -73,17 +87,14 @@ const ResetPassword = () => {
     const token = urlParams.get("token");
     console.log("reset password token", token);
 
-    if (password !== confirmPassword) {
-      toast.error("Passwords do not match", {
-        position: "top-right",
-        autoClose: 3000,
-      });
+    if (formData.password !== formData.confirmPassword) {
+      setError("Passwords do not match.");
       setIsLoading(false);
       return;
     }
 
     try {
-      const response = await resetPassword(password, confirmPassword, token);
+      const response = await resetPassword(formData.password, formData.confirmPassword, token);
       if (response.data.message === "Password updated successfully") {
         toast.success("password changed successfully", {
           position: "top-right",
@@ -101,25 +112,16 @@ const ResetPassword = () => {
 
       if (error.response && error.response.data.errors) {
         error.response.data.errors.forEach((err: string) => {
-          toast.error(err, {
-            position: "top-right",
-            autoClose: 3000,
-          });
+          setError(err || "Something went wrong.");
         });
         console.log("eee error");
       } else if (axios.isAxiosError(error)) {
         if (error.response) {
-          toast.error(error.response.data.error, {
-            position: "top-right",
-            autoClose: 3000,
-          });
+          setError(error.response.data.error || "Something went wrong.");
           console.log("msg", error.response.data.error);
         }
       } else {
-        toast.error("Something went wrong. Please try again.", {
-          position: "top-right",
-          autoClose: 3000,
-        });
+        setError("Something went wrong. Please try again.");
       }
     } finally {
       setIsLoading(false);
@@ -139,20 +141,27 @@ const ResetPassword = () => {
           <p className="mt-4 text-[#000000]">
             Enter your new password and confirm it to reset your password.
           </p>
+          {error && (
+            <div className=" text-red-700  rounded mt-6">
+              {error}
+            </div>
+          )}
           <form onSubmit={handleSubmit} className="mt-6 space-y-4">
             <input
               type="password"
               placeholder="Enter new password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              value={formData.password}
+              onChange={handleChange}
+              name="password"
               required
               className="w-full px-4 py-3 border border-gray-300 rounded-lg text-sm text-gray-700 focus:outline-none focus:border-[#4361EE]"
             />
             <input
               type="password"
               placeholder="Confirm new password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
+              value={formData.confirmPassword}
+              name="confirmPassword"
+              onChange={handleChange}
               required
               className="w-full px-4 py-3 border border-gray-300 rounded-lg text-sm text-gray-700 focus:outline-none focus:border-[#4361EE]"
             />

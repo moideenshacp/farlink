@@ -106,3 +106,17 @@ export const resetPassword = async (
     throw error;
   }
 };
+
+export const regitserCompany = async (organization:unknown)=>{
+  try {
+    const res = await axios.post(
+      `${import.meta.env.VITE_SERVER_BASE_URL}/auth-service/api/company/register-company`, 
+      {organization:organization},
+      { withCredentials: true } // If you need to send cookies or session information
+    );
+    return res;
+  } catch (error) {
+    console.error('Error submitting Step 2 data:', error);
+    throw error;
+  }
+}

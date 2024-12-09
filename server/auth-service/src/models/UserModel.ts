@@ -15,6 +15,10 @@ const UserSchema: Schema = new Schema({
     type: Boolean,
     default: false,
   },
+  isOrganizationAdded:{
+    type: Boolean,
+    default: false
+  }
 });
 
 export default mongoose.model<IuserModel>("User", UserSchema);

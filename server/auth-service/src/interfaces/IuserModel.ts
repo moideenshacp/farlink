@@ -8,4 +8,5 @@ export default interface IuserModel extends Document {
   role: "admin" | "superAdmin" | "employee";
   isActive: boolean;
   verified: boolean;
+  isOrganizationAdded: boolean
 }

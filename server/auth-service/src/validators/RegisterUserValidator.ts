@@ -8,10 +8,12 @@ export const registerUserSchema = Joi.object({
     "string.max": "Invalid Name",
     "string.base": "Invalid Name",
   }),
-  email: Joi.string().email().required().messages({
+  email: Joi.string().email().pattern(/^[^\s@]+@[^\s@]+\.[^\s@]+$/).required().messages({
     "any.required": "Invalid email",
     "string.email": "Invalid email",
     "string.empty": "Invalid email",
+    "string.pattern.base":
+      "Invalid email."
   }),
   password: Joi.string()
     .min(6)

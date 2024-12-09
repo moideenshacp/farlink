@@ -1,23 +1,29 @@
 import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { logoutUser } from "../../../api/authApi";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../../redux/user/userSlice";
+import { RootState } from "../../../redux/store";
 
 const DashBoardTopBar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  const {user} = useSelector((state:RootState)=>state.user)
+
+  console.log("name of user",user?.name);
+  
+
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
   };
 
   const handleLogout = async () => {
+    dispatch(logout());
     const res = await logoutUser();
 
     if (res.data.message === "Logged out successfully") {
-      dispatch(logout());
       navigate("/sign-in", { replace: true });
     }
   };
@@ -147,6 +153,12 @@ const DashBoardTopBar = () => {
               {isOpen && (
                 <div className="absolute right-0 z-10 mt-2 lg:w-48 sm: w-36 rounded-md shadow-lg bg-white ring-1 ring-[#4361EE] ring-opacity-5">
                   <div className="py-1">
+                  <div className="px-4 py-2 text-sm text-gray-700 flex items-center">
+                      <span className="text-gray-500">Hello,</span>
+                      <span className="ml-2 font-medium text-gray-800">
+                        {user?.name}
+                      </span>{" "}
+                    </div>
                     <a
                       href="#"
                       onClick={handleLogout}

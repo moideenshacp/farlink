@@ -7,7 +7,6 @@ import { FaEnvelope, FaLock } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc"; // Import Google icon
 import { useState } from "react";
 import axios from "axios";
-import { toast, ToastContainer } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { LoginAdmin } from "../../api/authApi";
 import { useDispatch } from "react-redux";
@@ -21,8 +20,10 @@ const Login = () => {
     email: "",
     password: "",
   });
+  const [error, setError] = useState<string | null>(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setError(null);
     const { name, value } = e.target;
 
     setFormData({
@@ -34,38 +35,44 @@ const Login = () => {
     e.preventDefault();
     try {
       const res = await LoginAdmin(formData.email, formData.password);
-
-      console.log("here is the res", res.data.user);
-
-      if (
-        res.data.message === "Login sucessfull" &&
-        res.data.user.role === "admin"
-      ) {
-        dispatch(login({ user: res.data.user, token: res.data.user.token }));
-        // navigate('/step-1')
-        navigate("/admin/", { replace: true });
-      }
-      if (res.data.user.role === "superAdmin") {
-        console.log("not supre admin");
-        dispatch(login({ user: res.data.user, token: res.data.user.token }));
-        navigate("/superAdmin/", { replace: true });
+  
+      console.log("here is the res", res.data.user.isOrganizationAdded);
+  
+      if (res.data.message === "Login sucessfull") {
+        const user = res.data.user;
+  
+        if (user.role === "admin") {
+          dispatch(login({ user, token: user.token }));
+        
+          if (user.isOrganizationAdded) {
+            console.log("Admin with organization added, navigating to admin dashboard");
+            navigate("/admin/", { replace: true });
+          } else {
+            console.log("Admin without organization, navigating to step-1");
+            navigate("/step-1", { replace: true });
+          }
+        }
+        
+  
+        // Check for superAdmin role
+        if (user.role === "superAdmin") {
+          dispatch(login({ user, token: user.token }));
+          navigate("/superAdmin/", { replace: true });
+        }
       }
     } catch (error) {
       if (axios.isAxiosError(error)) {
         if (error.response) {
-          toast.error(error.response.data.error, {
-            position: "top-right",
-            autoClose: 3000,
-          });
+          setError(error.response.data.error || "Something went wrong.");
         } else {
-          toast.error("Something went wrong.Please try again..", {
-            position: "top-right",
-            autoClose: 3000,
-          });
+          setError("Something went wrong. Please try again.");
         }
+      } else {
+        setError("An unexpected error occurred.");
       }
     }
   };
+  
 
   return (
     <div>
@@ -86,6 +93,12 @@ const Login = () => {
           <h2 className="text-lg lg:text-3xl font-semibold text-[#172C56] mt-2 lg:mt-0">
             SIGN IN
           </h2>
+
+          {error && (
+            <div className=" text-red-700  rounded mt-6">
+              {error}
+            </div>
+          )}
 
           <form className="mt-6 space-y-4 " onSubmit={handleSubmit}>
             <div className="flex items-center border border-[#E0E2E9] rounded-lg px-3 py-2 bg-white">
@@ -117,7 +130,6 @@ const Login = () => {
               Login
             </button>
           </form>
-          <ToastContainer />
           <br />
           <Link to="/forget-password">
             <p className="text-[#4361EE] cursor-pointer text-center">

@@ -11,7 +11,7 @@ const SuccessfulEmailVerifcation = () => {
         </p>
         <Link to="/sign-in">
           <button className="mt-6 bg-[#4361EE] font-semibold text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition">
-            Login now
+            Login Now
           </button>
         </Link>
       </div>

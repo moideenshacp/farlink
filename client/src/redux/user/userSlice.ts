@@ -5,6 +5,7 @@ interface User {
   name: string;
   email: string;
   role: "admin" | "superAdmin" | "employee";
+  isOrganizationAdded: boolean
 }
 
 // Define the initial state type

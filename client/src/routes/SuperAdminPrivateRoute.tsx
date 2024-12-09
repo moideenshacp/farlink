@@ -6,7 +6,9 @@ const SuperAdminPrivateRoute = () => {
   const isAuthenticated = useSelector(
     (state: RootState) => state.user.isAuthenticated
   );
-  return isAuthenticated ? <Outlet /> : <Navigate to="/sign-in" replace />;
+  const userRole = useSelector((state: RootState) => state.user?.user?.role);
+
+  return isAuthenticated && userRole === "superAdmin" ? <Outlet /> : <Navigate to="/sign-in" replace />;
 };
 
 export default SuperAdminPrivateRoute;

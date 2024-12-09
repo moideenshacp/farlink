@@ -6,8 +6,17 @@ const AdminPrivateRoute = () => {
   const isAuthenticated = useSelector(
     (state: RootState) => state.user.isAuthenticated
   );
+  const userRole = useSelector((state: RootState) => state.user?.user?.role);
+  const isOrganizationAdded = useSelector(
+    (state: RootState) => state.user?.user?.isOrganizationAdded
+  );
 
-  return isAuthenticated ? <Outlet /> : <Navigate to="/sign-in" replace />;
+  if (isAuthenticated && userRole === "admin") {
+    return isOrganizationAdded ? <Outlet /> : <Navigate to="/step-1" replace />;
+  }
+
+  return <Navigate to="/sign-in" replace />;
 };
+
 
 export default AdminPrivateRoute;

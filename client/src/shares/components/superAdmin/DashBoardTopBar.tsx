@@ -1,13 +1,15 @@
 import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { logoutUser } from "../../../api/authApi";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../../redux/user/userSlice";
+import { RootState } from "../../../redux/store";
 
 const DashBoardTopBar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { user } = useSelector((state: RootState) => state.user);
 
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
@@ -115,6 +117,12 @@ const DashBoardTopBar = () => {
               {isOpen && (
                 <div className="absolute right-0 z-10 mt-2 lg:w-48 sm: w-36 rounded-md shadow-lg bg-white ring-1 ring-[#4361EE] ring-opacity-5">
                   <div className="py-1">
+                  <div className="px-4 py-2 text-sm text-gray-700 flex items-center">
+                      <span className="text-gray-500">Hello,</span>
+                      <span className="ml-2 font-medium text-gray-800">
+                        {user?.name}
+                      </span>{" "}
+                    </div>
                     <a
                       onClick={handleLogout}
                       className=" px-4 py-2 text-sm text-gray-700 flex items-center"

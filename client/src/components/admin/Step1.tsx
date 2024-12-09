@@ -1,7 +1,28 @@
+import React from "react";
 import logo from "../../assets/EmailLogo.png";
 import Footer from "../../shares/components/landingPageComponents/Footer";
+import { useCompanyBasicData } from "../../shares/hooks/UseRegisteration";
+import { useNavigate } from "react-router-dom";
 
 const Step1 = () => {
+
+
+  const navigate = useNavigate();
+  const {registrationData,setRegistrationData } = useCompanyBasicData()
+  const handleSubmit = (e:React.FormEvent)=>{
+    e.preventDefault()
+    navigate("/step-2");
+  }
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    setRegistrationData((prevData: any) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
   return (
     <div>
       <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50">
@@ -17,7 +38,7 @@ const Step1 = () => {
           <h2 className="text-center text-lg font-semibold text-gray-700 mb-6">
             Welcome to FarLink, let's get you set up in 3 easy steps.
           </h2>
-          <form className="space-y-4">
+          <form className="space-y-4" onSubmit={handleSubmit}>
             <div>
               <label
                 htmlFor="companyName"
@@ -29,6 +50,9 @@ const Step1 = () => {
                 type="text"
                 id="companyName"
                 placeholder="Enter your company name"
+                value={registrationData.companyName}
+                onChange={handleInputChange}
+                name="companyName"
                 className="mt-1 block w-full p-3 border border-[#80BDFF] rounded-md shadow-sm focus:outline-none focus:ring-1 shadow-[#6C757D] focus:ring-[#4361EE] focus:border-[#4361EE]"
               />
             </div>
@@ -42,6 +66,9 @@ const Step1 = () => {
               <textarea
                 id="companyDescription"
                 placeholder="Enter your company description"
+                value={registrationData.companyDescription}
+                name="companyDescription"
+                onChange={handleInputChange}
                 className="mt-1 block w-full p-3 border border-[#80BDFF] rounded-md shadow-sm focus:outline-none focus:ring-1 shadow-[#6C757D] focus:ring-[#4361EE] focus:border-[#4361EE]"
                 rows={3}
               ></textarea>
@@ -56,6 +83,9 @@ const Step1 = () => {
               <input
                 type="text"
                 id="industry"
+                value={registrationData.industry}
+                name="industry"
+                onChange={handleInputChange}
                 placeholder="Enter your industry"
                 className="mt-1 block w-full p-3 border border-[#80BDFF] rounded-md shadow-sm focus:outline-none focus:ring-1 shadow-[#6C757D] focus:ring-[#4361EE] focus:border-[#4361EE]"
               />

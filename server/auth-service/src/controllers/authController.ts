@@ -70,14 +70,22 @@ export class authController implements IauthController {
 
       const user = await this._authService.loginUser(email, password);
 
-      const token = AuthService.generateToken(user);
+      const token = AuthService.generateToken({ email: user.email, role: user.role });
+      const refreshToken = AuthService.generateRefreshToken({ email: user.email, role: user.role });
       console.log("token====", token);
 
       res.cookie("accessToken", token, {
         httpOnly: true,
         sameSite: "strict",
-        maxAge: 3600,
+        maxAge:  60 * 60 * 1000,
       });
+
+      res.cookie("refreshToken", refreshToken, {
+        httpOnly: true,
+        sameSite: "strict",
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+      });
+console.log("login get in-----");
 
       return res
         .status(200)
@@ -88,6 +96,7 @@ export class authController implements IauthController {
             role: user.role,
             name: user.name,
             token: token,
+            isOrganizationAdded:user.isOrganizationAdded
           },
         });
     } catch (error: any) {
@@ -103,8 +112,7 @@ export class authController implements IauthController {
     try {
       res.clearCookie("accessToken", {
         httpOnly: true,
-        sameSite: "strict",
-        path: "/",
+        sameSite: "strict"
       });
 
       return res.status(200).json({ message: "Logged out successfully" });
@@ -116,7 +124,6 @@ export class authController implements IauthController {
 
   public forgetPassword = async (req: Request, res: Response) => {
     try {
-      console.log("fuckkkk");
 
       const { email } = req.body;
       if (!email) {
@@ -167,4 +174,39 @@ export class authController implements IauthController {
       }
     }
   };
+  public refreshToken = async (req: Request, res: Response): Promise<Response> => {
+    try {
+      const refreshToken = req.cookies.refreshToken;
+  
+      if (!refreshToken) {
+        return res.status(401).json({ error: "Refresh token is required" });
+      }
+  
+      const decoded = AuthService.verifyRefreshToken(refreshToken);
+      if (!decoded) {
+        return res.status(403).json({ error: "Invalid or expired refresh token" });
+      }
+  
+      const newAccessToken = AuthService.generateToken({
+        email: decoded.email,
+        role: decoded.role,
+      });
+  
+      res.cookie("accessToken", newAccessToken, {
+        httpOnly: true,
+        sameSite: "strict",
+        maxAge: 60 * 60 * 1000, // 1 hour
+      });
+  
+      return res.status(200).json({
+        message: "Access token refreshed successfully",
+        accessToken: newAccessToken,
+      });
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ error: "Internal server error" });
+    }
+  };
+
+  
 }

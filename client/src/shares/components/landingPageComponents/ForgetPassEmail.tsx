@@ -2,7 +2,6 @@ import { useState } from "react";
 import logo from "../../../assets/EmailLogo.png";
 import { forgetPassword } from "../../../api/authApi";
 import { useNavigate } from "react-router-dom";
-import { toast, ToastContainer } from "react-toastify";
 import axios from "axios";
 
 const ForgetPassEmail = () => {
@@ -10,6 +9,14 @@ const ForgetPassEmail = () => {
 
   const [email, setEmail] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>)=>{
+    setError(null)
+    const email = e.target.value
+    setEmail(email)
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     setIsLoading(true);
@@ -27,25 +34,16 @@ const ForgetPassEmail = () => {
 
       if (error.response && error.response.data.errors) {
         error.response.data.errors.forEach((err: string) => {
-          toast.error(err, {
-            position: "top-right",
-            autoClose: 3000,
-          });
+          setError(err || "Something went wrong.");
         });
         console.log("eee error");
       } else if (axios.isAxiosError(error)) {
         if (error.response) {
-          toast.error(error.response.data.error, {
-            position: "top-right",
-            autoClose: 3000,
-          });
+          setError(error.response.data.error || "Something went wrong.");
           console.log("msg", error.response.data.error);
         }
       } else {
-        toast.error("Something went wrong. Please try again.", {
-          position: "top-right",
-          autoClose: 3000,
-        });
+        setError("Something went wrong. Please try again.");
       }
     } finally {
       setIsLoading(false);
@@ -66,12 +64,18 @@ const ForgetPassEmail = () => {
           <p className="mt-4 text-[#000000]">
             Please enter your registered email to reset your password.
           </p>
+          
+          {error && (
+            <div className=" text-red-700  rounded mt-6">
+              {error}
+            </div>
+          )}
           <form onSubmit={handleSubmit} className="mt-6 space-y-4">
             <input
               type="email"
               placeholder="Enter your email"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={handleChange}
               required
               className="w-full px-4 py-3 border border-gray-300 rounded-lg text-sm text-gray-700 focus:outline-none focus:border-[#4361EE]"
             />
@@ -85,7 +89,6 @@ const ForgetPassEmail = () => {
               {isLoading ? "Sending..." : "Send Reset Link"}
             </button>
           </form>
-          <ToastContainer />
         </div>
       </div>
     </div>

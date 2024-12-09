@@ -2,8 +2,11 @@ import { Link } from "react-router-dom";
 import logo from "../../../assets/EmailLogo.png";
 import { useState } from "react";
 
+
 const DashBoardSideBar = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+
+
 
   return (
     <div>

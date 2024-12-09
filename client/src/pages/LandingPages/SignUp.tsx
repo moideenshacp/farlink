@@ -26,6 +26,8 @@ const SignUp = () => {
     password: "",
     confirmPassword: "",
   });
+  const [error, setError] = useState<string | null>(null);
+
   const [loading, setLoading] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -40,6 +42,7 @@ const SignUp = () => {
       ...errors,
       [name]: "",
     });
+    setError(null)
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -69,26 +72,24 @@ const SignUp = () => {
       console.log(error);
 
       if (error.response && error.response.data.errors) {
+        const fieldErrors: typeof errors = { ...errors };
         error.response.data.errors.forEach((err: string) => {
-          toast.error(err, {
-            position: "top-right",
-            autoClose: 3000,
-          });
+          if (err.includes("Name")) fieldErrors.name = err;
+          else if (err.includes("email")) fieldErrors.email = err;
+          else if (err.includes("Password must contain at least one uppercase letter and one special character."))
+         fieldErrors.password = err;
+          else if (err.includes("Passwords must match"))
+          fieldErrors.confirmPassword = err;
         });
+        setErrors(fieldErrors);
         console.log("eee error");
       } else if (axios.isAxiosError(error)) {
         if (error.response) {
-          toast.error(error.response.data.error, {
-            position: "top-right",
-            autoClose: 3000,
-          });
+          setError(error.response.data.error || "Something went wrong.");
           console.log("msg", error.response.data.error);
         }
       } else {
-        toast.error("Something went wrong. Please try again.", {
-          position: "top-right",
-          autoClose: 3000,
-        });
+        setError("Something went wrong. Please try again.");
       }
     }
   };
@@ -112,8 +113,15 @@ const SignUp = () => {
           <h2 className="text-lg lg:text-3xl font-semibold text-[#172C56] mt-2 lg:mt-0">
             SIGN UP
           </h2>
+          {error && (
+            <div className=" text-red-700  rounded mt-6">
+              {error}
+            </div>
+          )}
 
           <form className="mt-6 space-y-4 " onSubmit={handleSubmit}>
+            <div>
+
             <div className="flex items-center border border-[#E0E2E9] rounded-lg px-3 py-2 bg-white">
               <FaUser className="text-[#ADB0CD] mr-3" />
               <input
@@ -124,6 +132,14 @@ const SignUp = () => {
                 className="flex-1 outline-none text-sm text-[#969AB8]"
               />
             </div>
+            {errors.name && (
+                <p className="text-red-500 text-sm mt-1">{errors.name}</p>
+              )}
+            </div>
+
+
+              <div>
+
 
             <div className="flex items-center border border-[#E0E2E9] rounded-lg px-3 py-2 bg-white">
               <FaEnvelope className="text-[#ADB0CD] mr-3" />
@@ -135,6 +151,12 @@ const SignUp = () => {
                 className="flex-1 outline-none text-sm text-[#969AB8]"
               />
             </div>
+            {errors.email && (
+                <p className="text-red-500 text-sm mt-1">{errors.email}</p>
+              )}
+              </div>
+
+              <div>
 
             <div className="flex items-center border border-[#E0E2E9] rounded-lg px-3 py-2 bg-white">
               <FaLock className="text-[#ADB0CD] mr-3" />
@@ -146,7 +168,13 @@ const SignUp = () => {
                 className="flex-1 outline-none text-sm text-[#969AB8]"
               />
             </div>
+            {errors.password && (
+                <p className="text-red-500 text-sm mt-1">{errors.password}</p>
+              )}
+              </div>
 
+
+              <div>
             <div className="flex items-center border border-[#E0E2E9] rounded-lg px-3 py-2 bg-white">
               <FaLock className="text-[#ADB0CD] mr-3" />
               <input
@@ -157,6 +185,13 @@ const SignUp = () => {
                 className="flex-1 outline-none text-sm text-[#969AB8]"
               />
             </div>
+            {errors.confirmPassword && (
+                <p className="text-red-500 text-sm mt-1">
+                  {errors.confirmPassword}
+                </p>
+              )}
+
+              </div>
 
             <button
               type="submit"
