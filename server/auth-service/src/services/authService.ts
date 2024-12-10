@@ -158,4 +158,58 @@ export class authService implements IuserService {
       throw new CustomError(500, "Internal Server Error");
     }
   }
+  async updateProfile(
+    fName: string,
+    lName: string,
+    phone: string,
+    email: string
+  ): Promise<IuserModel | null> {
+    try {
+      if (!fName || fName.trim().length === 0) {
+        throw new Error("First Name cannot be empty.");
+      }
+      if (!lName || lName.trim().length === 0) {
+        throw new Error("Last Name cannot be empty.");
+      }
+      if (!phone || !/^\d{10}$/.test(phone)) {
+        throw new Error("Phone number must be exactly 10 digits.");
+      }
+      const existingUser = await this._userRepository.findByEmail(email);
+
+      if (!existingUser) {
+        throw new Error("User not found.");
+      }
+
+      const updatedUser = await this._userRepository.update(
+        { email },
+        { firstName: fName, lastName: lName, phone: phone }
+      );
+
+      if (!updatedUser) {
+        throw new Error("Failed to update the user.");
+      }
+
+      console.log("Updated User:", updatedUser);
+
+      return updatedUser;
+    } catch (error) {
+      console.log(error);
+      return null;
+    }
+  }
+
+  async getUserProfile(email: string): Promise<IuserModel | null> {
+    try {
+      const userProfile = await this._userRepository.findByEmail(email);
+      if (!userProfile) {
+        console.error(`User with email ${email} not found.`);
+        return null;
+      }
+      console.log("User Profile:", userProfile);
+      return userProfile;
+    } catch (error) {
+      console.log(error);
+      return null;
+    }
+  }
 }

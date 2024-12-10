@@ -1,7 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 import DashBoardSideBar from "../../shares/components/admin/DashBoardSideBar";
 import DashBoardTopBar from "../../shares/components/admin/DashBoardTopBar";
-
+import DashboardSettings from "./DashboardSettings";
 // Content Components
 const Overview = () => <div>Overview Content</div>;
 const MyTeam = () => <div>My Team Content</div>;
@@ -13,7 +13,6 @@ const ServiceRequest = () => <div>ServiceRequest Content</div>;
 const RealTimeAlert = () => <div>RealTimeAlert Content</div>;
 const Meeting = () => <div>Meeting Content</div>;
 const Message = () => <div>Message Content</div>;
-const Setting = () => <div>Setting Content</div>;
 const Billing = () => <div>Billing Content</div>;
 
 const MyTeamPage = () => {
@@ -38,7 +37,7 @@ const MyTeamPage = () => {
             <Route path="/realtime-alert" element={<RealTimeAlert />} />
             <Route path="/meeting" element={<Meeting />} />
             <Route path="/message" element={<Message />} />
-            <Route path="/setting" element={<Setting />} />
+            <Route path="/setting" element={<DashboardSettings/>} />
             <Route path="/billing" element={<Billing />} />
           </Routes>
         </main>

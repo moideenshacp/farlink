@@ -1,4 +1,4 @@
-import { Document } from "mongoose";
+import mongoose, { Document } from "mongoose";
 
 export default interface IuserModel extends Document {
   _id: string;
@@ -9,4 +9,8 @@ export default interface IuserModel extends Document {
   isActive: boolean;
   verified: boolean;
   isOrganizationAdded: boolean
+  firstName:string,
+  lastName:string,
+  phone:string,
+  organizationId: mongoose.Types.ObjectId;
 }

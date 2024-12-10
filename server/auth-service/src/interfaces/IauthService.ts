@@ -11,4 +11,6 @@ export default interface IauthService {
   loginUser(email: string, password: string): Promise<IuserModel>;
   generatePasswordResetToken(email: string): Promise<void>;
   resetPassword(password: string, token: string): Promise<IuserModel>;
+  updateProfile(fName: string,lName:string,phone:string,email:string): Promise<IuserModel | null>;
+  getUserProfile(email:string): Promise<IuserModel | null>;
 }

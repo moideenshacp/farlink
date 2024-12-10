@@ -112,11 +112,53 @@ export const regitserCompany = async (organization:unknown)=>{
     const res = await axios.post(
       `${import.meta.env.VITE_SERVER_BASE_URL}/auth-service/api/company/register-company`, 
       {organization:organization},
-      { withCredentials: true } // If you need to send cookies or session information
+      { withCredentials: true } 
     );
     return res;
   } catch (error) {
     console.error('Error submitting Step 2 data:', error);
     throw error;
+  }
+
+  
+}
+export const updateProfile = async (
+  fName: string,
+  lName: string,
+  phone: string,
+  email:string | undefined
+)=>{
+  try {
+    const res = await axios.post(
+      `${import.meta.env.VITE_SERVER_BASE_URL}/auth-service/api/auth/update-profile`, 
+      {fName:fName,
+        lName:lName,
+        phone:phone,
+        email:email
+
+      },
+      { withCredentials: true } 
+    )
+    return res
+  } catch (error) {
+    console.log(error);
+    throw error
+    
+  }
+}
+
+export const fetchProfile = async(email:string)=>{
+  try {
+    const res = await axios.post(
+      `${import.meta.env.VITE_SERVER_BASE_URL}/auth-service/api/auth/get-profile`, 
+      {email:email},
+      { withCredentials: true } 
+    )
+    return res
+    
+  } catch (error) {
+    console.log(error)
+    throw error
+    
   }
 }

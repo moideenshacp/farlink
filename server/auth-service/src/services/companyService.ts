@@ -1,12 +1,15 @@
 import IcompanyService from "../interfaces/IcompanyService";
 import { userRepository } from "../repositories/userRepository";
-import Organization from "../models/OrganizationModel"; // Mongoose model for Organization
+import Organization from "../models/OrganizationModel";
+import { organizationRepository } from "../repositories/organizationRepository";
 
 export class companyService implements IcompanyService {
   private _userrepository!: userRepository;
+  private _organizationRepository: organizationRepository;
 
   constructor() {
     this._userrepository = new userRepository();
+    this._organizationRepository = new organizationRepository();
   }
 
   async registerCompany(organization: any): Promise<void> {
@@ -16,24 +19,53 @@ export class companyService implements IcompanyService {
       if (!email) {
         throw new Error("Email is required to register an organization.");
       }
-
-      // Find admin by email
       const admin = await this._userrepository.findOne({ email });
       if (!admin) {
         throw new Error("Admin with the provided email does not exist.");
       }
+      const newOrganization =
+        await this._organizationRepository.createOrganization({
+          ...orgData,
+          admin: admin._id,
+        });
+      if (!newOrganization) {
+        throw new Error("Failed to create a new organization.");
+      }
 
-      // Proceed to create the organization if admin is found
-      const newOrganization = new Organization({
-        ...orgData,
-        admin: admin._id, // Reference the admin ID
-      });
+      await this._userrepository.update(
+        { _id: admin._id },
+        {
+          isOrganizationAdded: true,
+          organizationId: newOrganization._id,
+        }
+      );
 
-      await newOrganization.save();
-      console.log("Organization registered successfully:", newOrganization);
+      console.log("Organization registered successfully", newOrganization);
     } catch (error) {
       console.error("Error registering organization:", error);
       throw error;
     }
   }
+  async fetchCompanyProfile(email: string): Promise<void> {
+    try {
+      // Fetch user and populate organization details
+      const userWithCompany = await this._userrepository.findByEmailWithPopulate(email,"organizationId" )
+      
+      if (!userWithCompany) {
+        console.log("User not found.");
+        return;
+      }
+  
+      console.log("User details with company:", userWithCompany);
+  
+      if (!userWithCompany.organizationId) {
+        console.log("No organization associated with this user.");
+      } else {
+        console.log("Company details:", userWithCompany.organizationId);
+      }
+    } catch (error) {
+      console.error("Error fetching company profile:", error);
+    }
+  }
+  
 }

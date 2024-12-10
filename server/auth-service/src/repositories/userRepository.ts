@@ -18,6 +18,9 @@ export class userRepository
   async createUser(userData: Partial<IuserModel>): Promise<IuserModel | null> {
     return this.save(userData);
   }
+  async findByEmailWithPopulate(email: string, populateField: string): Promise<IuserModel | null> {
+    return this.model.findOne({ email }).populate(populateField);
+  }
   async update(
     filter: FilterQuery<IuserModel>,
     update: Partial<IuserModel>

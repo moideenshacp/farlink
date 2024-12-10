@@ -8,4 +8,6 @@ export interface IauthController {
   forgetPassword(req: Request, res: Response): Promise<void>;
   resetPassword(req: Request, res: Response): Promise<Response>;
   refreshToken(req:Request,res:Response):Promise<Response>
+  updateProfile(req:Request,res:Response):Promise<void>
+  getUserProfile(req:Request,res:Response):Promise<void>
 }

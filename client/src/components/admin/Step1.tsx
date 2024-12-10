@@ -3,23 +3,34 @@ import logo from "../../assets/EmailLogo.png";
 import Footer from "../../shares/components/landingPageComponents/Footer";
 import { useCompanyBasicData } from "../../shares/hooks/UseRegisteration";
 import { useNavigate } from "react-router-dom";
+import { useValidation } from "../../shares/hooks/CompanyRegistration";
 
 const Step1 = () => {
-
-
   const navigate = useNavigate();
-  const {registrationData,setRegistrationData } = useCompanyBasicData()
-  const handleSubmit = (e:React.FormEvent)=>{
-    e.preventDefault()
-    navigate("/step-2");
-  }
+  const { registrationData, setRegistrationData } = useCompanyBasicData();
+  const { errors, validate, setErrors } = useValidation(registrationData);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (validate()) {
+      navigate("/step-2");
+    }
+  };
+
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = e.target;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     setRegistrationData((prevData: any) => ({
       ...prevData,
       [name]: value,
+    }));
+
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      [name]: "",
     }));
   };
 
@@ -55,6 +66,9 @@ const Step1 = () => {
                 name="companyName"
                 className="mt-1 block w-full p-3 border border-[#80BDFF] rounded-md shadow-sm focus:outline-none focus:ring-1 shadow-[#6C757D] focus:ring-[#4361EE] focus:border-[#4361EE]"
               />
+              {errors.companyName && (
+                <p className="text-sm text-red-500">{errors.companyName}</p>
+              )}
             </div>
             <div>
               <label
@@ -72,6 +86,11 @@ const Step1 = () => {
                 className="mt-1 block w-full p-3 border border-[#80BDFF] rounded-md shadow-sm focus:outline-none focus:ring-1 shadow-[#6C757D] focus:ring-[#4361EE] focus:border-[#4361EE]"
                 rows={3}
               ></textarea>
+              {errors.companyDescription && (
+                <p className="text-sm text-red-500">
+                  {errors.companyDescription}
+                </p>
+              )}
             </div>
             <div>
               <label
@@ -89,6 +108,9 @@ const Step1 = () => {
                 placeholder="Enter your industry"
                 className="mt-1 block w-full p-3 border border-[#80BDFF] rounded-md shadow-sm focus:outline-none focus:ring-1 shadow-[#6C757D] focus:ring-[#4361EE] focus:border-[#4361EE]"
               />
+              {errors.industry && (
+                <p className="text-sm text-red-500">{errors.industry}</p>
+              )}
             </div>
             <button
               type="submit"

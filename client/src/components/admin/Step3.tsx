@@ -1,8 +1,22 @@
-import { Link } from "react-router-dom";
 import logo from "../../assets/EmailLogo.png";
 import Footer from "../../shares/components/landingPageComponents/Footer";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { toggleOrganizationStatus } from "../../redux/user/userSlice";
+import { useEffect } from "react";
 
 const Step3 = () => {
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
+
+  const redirectHome = ()=>{
+    navigate('/admin/',{replace:true})
+    
+  }
+  useEffect(()=>{
+    dispatch(toggleOrganizationStatus());
+
+  })
   return (
     <div>
       <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50">
@@ -50,11 +64,9 @@ const Step3 = () => {
         </div>
 
         <div className="mt-8">
-          <Link to="/my-team/*">
-            <button className="bg-[#4361EE] text-white font-semibold px-6 py-3 rounded-lg hover:bg-[#4361EE]transition">
+            <button onClick={redirectHome} className="bg-[#4361EE] text-white font-semibold px-6 py-3 rounded-lg hover:bg-[#4361EE]transition">
               Go To Dashboard
             </button>
-          </Link>
         </div>
       </div>
       <Footer />

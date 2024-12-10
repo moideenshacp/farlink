@@ -15,13 +15,17 @@ const PublicRoute = () => {
     return <Outlet />;
   }
 
-  if (userRole === "admin") {
-    return isOrganizationAdded ? (
-      <Navigate to="/admin/" replace />
-    ) : (
-      <Navigate to="/step-1" replace />
-    );
+  if (userRole === "admin" && isAuthenticated) {
+    console.log("User is an admin"); // Log when the user role is admin
+    if (isOrganizationAdded) {
+      console.log("Organization is already added. Navigating to /admin/");
+      return <Navigate to="/admin/" replace />;
+    } else {
+      console.log("Organization is not added. Navigating to /step-1");
+      return <Outlet  />;
+    }
   }
+  
 
   if (userRole === "superAdmin") {
     return <Navigate to="/superAdmin/" replace />;

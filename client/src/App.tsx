@@ -16,6 +16,7 @@ import ForgetPassEmail from "./shares/components/landingPageComponents/ForgetPas
 import ForgetPassword from "./shares/components/landingPageComponents/ForgetPassword";
 import ResetPassword from "./shares/components/landingPageComponents/ResetPassword";
 import InvalidForgetPass from "./shares/components/landingPageComponents/InvalidForgetPass";
+import OrganizationPrivateRoute from "./routes/OrganizationPrivateRoute";
 
 function App() {
   return (
@@ -31,10 +32,17 @@ function App() {
             <Route path="/forget-password" element={<ForgetPassEmail />} />
             <Route path="/forget-password-msg" element={<ForgetPassword />} />
             <Route path="/reset-password" element={<ResetPassword />} />
+            <Route element={<OrganizationPrivateRoute />}>
+              <Route path="/step-1" element={<Step1 />} />
+              <Route path="/step-2" element={<Step2 />} />
+            </Route>
             <Route
               path="/invalid-forget-password"
               element={<InvalidForgetPass />}
             />
+          </Route>
+          <Route element={<OrganizationPrivateRoute />}>
+            <Route path="/step-3" element={<Step3 />} />
           </Route>
 
           <Route element={<AdminPrivateRoute />}>
@@ -44,9 +52,6 @@ function App() {
           <Route element={<SuperAdminPrivateRoute />}>
             <Route path="/superAdmin/*" element={<Dashboard />} />
           </Route>
-            <Route path="/step-1" element={<Step1 />} />
-            <Route path="/step-2" element={<Step2 />} />
-            <Route path="/step-3" element={<Step3 />} />
         </Routes>
       </div>
     </BrowserRouter>

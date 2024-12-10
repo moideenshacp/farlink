@@ -6,6 +6,7 @@ const CompanyController = new companyController()
 
 
 router.post("/register-company", CompanyController.registerCompany);
+router.post("/get-companyProfile", CompanyController.fetchCompanyProfile);
 
 
 

@@ -208,5 +208,54 @@ console.log("login get in-----");
     }
   };
 
+
+  public updateProfile = async (req: Request, res: Response): Promise<void> => {
+    try {
+      const { fName, lName, phone, email } = req.body;
+  
+      const user = await this._authService.updateProfile(fName, lName, phone, email);
+      if (user) {
+        res.status(200).json({ 
+          message: "Profile updated successfully",
+          user: {
+            firstName: user.firstName,
+            lastName: user.lastName,
+            phone: user.phone,
+            email: user.email,
+          }
+        });
+      }
+    } catch (error) {
+      console.log(error);
+  
+      res.status(500).json({ 
+        message: "An error occurred while updating the profile" 
+      });
+    }
+  };
+
+  public getUserProfile = async (req: Request, res: Response): Promise<void> => {
+    try {
+      const { email } = req.body;
+  
+      if (!email) {
+        res.status(400).json({ message: "Email is required" });
+        return;
+      }
+      const userProfile = await this._authService.getUserProfile(email);
+      if (!userProfile) {
+        res.status(404).json({ message: "User not found" });
+        return;
+      }
+      res.status(200).json({ message: "Profile fetched successfully",  userProfile });
+    } catch (error) {
+      console.log( error);
+      res.status(500).json({ message: "An error occurred while fetching the profile" });
+    }
+  };
+  
+  
+   
+
   
 }

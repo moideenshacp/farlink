@@ -36,8 +36,13 @@ const userSlice = createSlice({
       state.isAuthenticated = false;
       state.token = null;
     },
+    toggleOrganizationStatus(state) {
+      if (state.user) {
+        state.user.isOrganizationAdded = !state.user.isOrganizationAdded;
+      }
+    },
   },
 });
 
-export const { login, logout } = userSlice.actions;
+export const { login, logout ,toggleOrganizationStatus} = userSlice.actions;
 export default userSlice.reducer;
