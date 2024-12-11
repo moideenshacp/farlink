@@ -6,7 +6,7 @@ import { useCompanyBasicData } from "../../shares/hooks/UseRegisteration";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
-import { useFormValidationStep2 } from "../../shares/hooks/CompanyRegistration";
+import { useFormValidationStep2 } from "../../shares/hooks/useCompanyValidations";
 
 const Step2 = () => {
   const { registrationData } = useCompanyBasicData();

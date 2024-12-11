@@ -1,4 +1,5 @@
 import axios from "axios";
+import axiosInstance from "./axiosInterceptor";
 
 export const LoginAdmin = async (email: string, password: string) => {
   try {
@@ -109,7 +110,7 @@ export const resetPassword = async (
 
 export const regitserCompany = async (organization:unknown)=>{
   try {
-    const res = await axios.post(
+    const res = await axiosInstance.post(
       `${import.meta.env.VITE_SERVER_BASE_URL}/auth-service/api/company/register-company`, 
       {organization:organization},
       { withCredentials: true } 
@@ -129,7 +130,7 @@ export const updateProfile = async (
   email:string | undefined
 )=>{
   try {
-    const res = await axios.post(
+    const res = await axiosInstance.post(
       `${import.meta.env.VITE_SERVER_BASE_URL}/auth-service/api/auth/update-profile`, 
       {fName:fName,
         lName:lName,
@@ -147,18 +148,18 @@ export const updateProfile = async (
   }
 }
 
-export const fetchProfile = async(email:string)=>{
+export const fetchProfile = async (email: string) => {
   try {
-    const res = await axios.post(
-      `${import.meta.env.VITE_SERVER_BASE_URL}/auth-service/api/auth/get-profile`, 
-      {email:email},
-      { withCredentials: true } 
-    )
-    return res
-    
+    const res = await axiosInstance.get(
+      `${import.meta.env.VITE_SERVER_BASE_URL}/auth-service/api/auth/get-profile`,
+      {
+        params: { email },
+        withCredentials: true,
+      }
+    );
+    return res;
   } catch (error) {
-    console.log(error)
-    throw error
-    
+    console.error(error);
+    throw error;
   }
-}
+};

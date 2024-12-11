@@ -2,6 +2,8 @@ import IcompanyService from "../interfaces/IcompanyService";
 import { userRepository } from "../repositories/userRepository";
 import Organization from "../models/OrganizationModel";
 import { organizationRepository } from "../repositories/organizationRepository";
+import { ObjectId } from "mongoose";
+import IorgModel from "../interfaces/IorganizationModel";
 
 export class companyService implements IcompanyService {
   private _userrepository!: userRepository;
@@ -42,30 +44,60 @@ export class companyService implements IcompanyService {
 
       console.log("Organization registered successfully", newOrganization);
     } catch (error) {
-      console.error("Error registering organization:", error);
+      console.log(error);
       throw error;
     }
   }
-  async fetchCompanyProfile(email: string): Promise<void> {
+  async fetchCompanyProfile(email: string): Promise<IorgModel | null> {
     try {
-      // Fetch user and populate organization details
-      const userWithCompany = await this._userrepository.findByEmailWithPopulate(email,"organizationId" )
-      
+      const userWithCompany = await this._userrepository.findByEmailWithPopulate(email, "organizationId");
       if (!userWithCompany) {
         console.log("User not found.");
-        return;
+        return null;
       }
-  
-      console.log("User details with company:", userWithCompany);
-  
       if (!userWithCompany.organizationId) {
         console.log("No organization associated with this user.");
-      } else {
-        console.log("Company details:", userWithCompany.organizationId);
+        return null;
       }
+        const companyDetails = userWithCompany.organizationId as IorgModel;
+  
+      return companyDetails;
     } catch (error) {
-      console.error("Error fetching company profile:", error);
+      console.log(error);
+      return null;
     }
   }
+  async updateCompanyProfile(FormData: object, email: string): Promise<IorgModel | null> {
+    try {
+      const findUserCompany = await this._userrepository.findByEmailWithPopulate(email, "organizationId");
+      
+      if (!findUserCompany) {
+        return null;
+      }
+      
+      if (!findUserCompany.organizationId) {
+        return null;
+      }
+      
+      const companyDetails = findUserCompany.organizationId as IorgModel;
+    
+      const updatedCompany = await this._organizationRepository.updateOrganization(
+        { _id: companyDetails._id.toString() },
+        FormData
+      );  
+      if (!updatedCompany) {
+        return null;
+      }
+    
+      return updatedCompany;
+      
+    } catch (error) {
+      console.log("Error updating company profile:", error);
+      return null;
+    }
+  }
+  
+
+  
   
 }

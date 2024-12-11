@@ -19,7 +19,7 @@ export class userRepository
     return this.save(userData);
   }
   async findByEmailWithPopulate(email: string, populateField: string): Promise<IuserModel | null> {
-    return this.model.findOne({ email }).populate(populateField);
+    return this.model.findOne({ email }).populate(populateField).exec();
   }
   async update(
     filter: FilterQuery<IuserModel>,

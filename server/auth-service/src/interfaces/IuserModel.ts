@@ -1,4 +1,5 @@
 import mongoose, { Document } from "mongoose";
+import IorgModel from "./IorganizationModel";
 
 export default interface IuserModel extends Document {
   _id: string;
@@ -12,5 +13,5 @@ export default interface IuserModel extends Document {
   firstName:string,
   lastName:string,
   phone:string,
-  organizationId: mongoose.Types.ObjectId;
+  organizationId: IorgModel | mongoose.Types.ObjectId;
 }

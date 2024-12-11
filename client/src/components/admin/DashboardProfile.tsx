@@ -3,40 +3,30 @@ import { RootState } from "../../redux/store";
 import React, { useEffect, useState } from "react";
 import { fetchProfile, updateProfile } from "../../api/authApi";
 import { toast, ToastContainer } from "react-toastify";
+import useProfileValidation from "../../shares/hooks/useProfileValidation";
 
 const DashboardProfile = () => {
-  const [formData, setFormData] = useState({
+  const [isLoading, setIsLoading] = useState(false);
+
+  const { user } = useSelector((state: RootState) => state.user);
+
+  const {
+    formData,
+    setFormData,
+    validationErrors,
+    handleChange,
+    validateForm,
+  } = useProfileValidation({
     fName: "",
     lName: "",
     phone: "",
   });
+
   const [initialData, setInitialData] = useState({
     fName: "",
     lName: "",
     phone: "",
   });
-  const [validationErrors, setValidationErrors] = useState({
-    fName: "",
-    lName: "",
-    phone: "",
-  });
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-
-  const { user } = useSelector((state: RootState) => state.user);
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-
-    setValidationErrors((prevErrors) => ({
-      ...prevErrors,
-      [name]: "",
-    }));
-  };
 
   useEffect(() => {
     const getUserProfile = async () => {
@@ -47,43 +37,21 @@ const DashboardProfile = () => {
             const userProfile = {
               fName: res.data.userProfile.firstName || "",
               lName: res.data.userProfile.lastName || "",
-              phone: res.data.userProfile.phone ? String(res.data.userProfile.phone) : "",
+              phone: res.data.userProfile.phone
+                ? String(res.data.userProfile.phone)
+                : "",
             };
             setFormData(userProfile);
             setInitialData(userProfile);
           }
         }
       } catch (err) {
-        setError("Failed to load user profile. Please try again.");
         console.log(err);
       }
     };
 
     getUserProfile();
-  }, [user?.email]);
-
-  const validateForm = () => {
-    const errors: typeof validationErrors = {
-      fName: "",
-      lName: "",
-      phone: "",
-    };
-
-    if (!formData.fName.trim()) {
-      errors.fName = "First name is required.";
-    }
-    if (!formData.lName.trim()) {
-      errors.lName = "Last name is required.";
-    }
-    if (!formData.phone.trim()) {
-      errors.phone = "Phone number is required.";
-    } else if (!/^\d{10}$/.test(formData.phone)) {
-      errors.phone = "Phone number must be 10 digits.";
-    }
-
-    setValidationErrors(errors);
-    return !Object.values(errors).some((error) => error);
-  };
+  }, [user?.email, setFormData]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -119,8 +87,6 @@ const DashboardProfile = () => {
 
   const handleClear = () => {
     setFormData(initialData);
-    setValidationErrors({ fName: "", lName: "", phone: "" });
-    setError(null);
   };
 
   return (
@@ -209,7 +175,7 @@ const DashboardProfile = () => {
         </div>
       </div>
 
-      {error && <div className="text-red-500 text-sm">{error}</div>}
+      {/* {error && <div className="text-red-500 text-sm">{error}</div>} */}
       <ToastContainer />
     </form>
   );

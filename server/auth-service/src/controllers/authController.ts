@@ -77,15 +77,15 @@ export class authController implements IauthController {
       res.cookie("accessToken", token, {
         httpOnly: true,
         sameSite: "strict",
-        maxAge:  60 * 60 * 1000,
+        maxAge:  60  * 60 * 1000,
+        
       });
 
       res.cookie("refreshToken", refreshToken, {
         httpOnly: true,
-        sameSite: "strict",
+        sameSite: "strict", 
         maxAge: 7 * 24 * 60 * 60 * 1000,
       });
-console.log("login get in-----");
 
       return res
         .status(200)
@@ -176,14 +176,22 @@ console.log("login get in-----");
   };
   public refreshToken = async (req: Request, res: Response): Promise<Response> => {
     try {
+      console.log("coming ot create refrsh token");
+      
       const refreshToken = req.cookies.refreshToken;
+      console.log("refresh token----------------",refreshToken);
+      
   
       if (!refreshToken) {
+        console.log("1010====================================================");
+        
         return res.status(401).json({ error: "Refresh token is required" });
       }
   
       const decoded = AuthService.verifyRefreshToken(refreshToken);
       if (!decoded) {
+        console.log("2020===============================");
+        
         return res.status(403).json({ error: "Invalid or expired refresh token" });
       }
   
@@ -212,7 +220,8 @@ console.log("login get in-----");
   public updateProfile = async (req: Request, res: Response): Promise<void> => {
     try {
       const { fName, lName, phone, email } = req.body;
-  
+      
+      
       const user = await this._authService.updateProfile(fName, lName, phone, email);
       if (user) {
         res.status(200).json({ 
@@ -236,13 +245,13 @@ console.log("login get in-----");
 
   public getUserProfile = async (req: Request, res: Response): Promise<void> => {
     try {
-      const { email } = req.body;
+      const { email } = req.query;
   
       if (!email) {
         res.status(400).json({ message: "Email is required" });
         return;
       }
-      const userProfile = await this._authService.getUserProfile(email);
+      const userProfile = await this._authService.getUserProfile(email  as string);
       if (!userProfile) {
         res.status(404).json({ message: "User not found" });
         return;

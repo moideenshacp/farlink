@@ -35,6 +35,7 @@ const userSlice = createSlice({
       state.user = null;
       state.isAuthenticated = false;
       state.token = null;
+      localStorage.clear()
     },
     toggleOrganizationStatus(state) {
       if (state.user) {

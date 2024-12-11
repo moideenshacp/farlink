@@ -205,7 +205,6 @@ export class authService implements IuserService {
         console.error(`User with email ${email} not found.`);
         return null;
       }
-      console.log("User Profile:", userProfile);
       return userProfile;
     } catch (error) {
       console.log(error);
