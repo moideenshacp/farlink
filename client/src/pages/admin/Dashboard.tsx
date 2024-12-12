@@ -1,7 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 import DashBoardSideBar from "../../shares/components/admin/DashBoardSideBar";
 import DashBoardTopBar from "../../shares/components/admin/DashBoardTopBar";
-import DashboardSettings from "./DashboardSettings";
+import DashboardSettings from "../../components/admin/DashboardSettings";
 // Content Components
 const Overview = () => <div>Overview Content</div>;
 const MyTeam = () => <div>My Team Content</div>;
@@ -27,7 +27,7 @@ const MyTeamPage = () => {
         {/* Dynamic Content */}
         <main className="flex-1 bg-gray-50 p-6">
           <Routes>
-            <Route path="/admin/" element={<Overview />} />
+            <Route path="/" element={<Overview />} />
             <Route path="/my-team" element={<MyTeam />} />
             <Route path="/leave-summary" element={<LeaveSummary />} />
             <Route path="/manage-leave" element={<ManageLeave />} />

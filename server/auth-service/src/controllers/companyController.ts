@@ -37,10 +37,11 @@ export class companyController implements IcompanyController {
       );
       res.status(201).json({
         message: "organization data fetched successfully",
-        companyDetails,
+        companyDetails, 
       });
     } catch (error) {
       console.log(error);
+      res.status(500).json({ message: "Internal server error" });
     }
   };
 
@@ -71,6 +72,25 @@ export class companyController implements IcompanyController {
       });
     } catch (error) {
       console.log(error);
+      res.status(500).json({ message: "Internal server error" });
     }
   };
+  public fetchAllOrganization = async(req: Request, res: Response): Promise<void>=> {
+    try {
+      const allOrganizations = await this._companyservice.fetchAllOrganization()
+
+      if(!allOrganizations){
+        res.status(404).json({ message: "No organizations found." });
+        return;
+      }
+      res.status(200).json({
+        message: "Organizations fetched successfully",
+        data: allOrganizations,
+      });
+      
+    } catch (error) {
+      console.log(error)
+      res.status(500).json({ message: "Internal server error" });
+    }
+  }
 }

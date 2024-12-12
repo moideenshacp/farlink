@@ -10,10 +10,9 @@ const DashBoardTopBar = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const {user} = useSelector((state:RootState)=>state.user)
+  const { user } = useSelector((state: RootState) => state.user);
 
-  console.log("name of user",user?.name);
-  
+  console.log("name of user", user?.name);
 
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
@@ -32,6 +31,7 @@ const DashBoardTopBar = () => {
   return (
     <div>
       <header className="bg-white shadow">
+        
         <div className="px-6 py-4 flex justify-between items-center">
           {location.pathname === "/admin/" ? (
             <h1 className="text-xl font-semibold text-gray-700 lg:block sm: hidden">
@@ -83,63 +83,65 @@ const DashBoardTopBar = () => {
             </h1>
           )}
           <div className="flex items-center gap-12">
-            <div className="flex items-center ml-12">
+            <div className="flex items-center ml-12 relative">
               <input
                 type="text"
                 placeholder="Search anything..."
-                className="border border-gray-300 rounded-md px-4 py-2 text-[#8C97A8] focus:outline-none focus:ring-2 focus:ring-blue-400"
+                className="border border-gray-300 rounded-md px-4 py-2 text-[#8C97A8] focus:outline-none focus:ring-2 focus:ring-blue-400 pl-10"
               />
               <svg
-                className="h-8 w-8 text-[#8C97A8] -ml-10"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                stroke-width="2"
-                stroke="currentColor"
+                xmlns="http://www.w3.org/2000/svg"
                 fill="none"
-                stroke-linecap="round"
-                stroke-linejoin="round"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="#8C97A8"
+                className="absolute left-3 w-5 h-5"
               >
-                <path stroke="none" d="M0 0h24v24H0z" />
-                <circle cx="10" cy="10" r="7" />
-                <line x1="21" y1="21" x2="15" y2="15" />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
+                />
               </svg>
             </div>
+
             <button aria-label="Notifications" className="flex items-center">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
+                fill="none"
                 viewBox="0 0 24 24"
-                fill="#8C97A8"
-                className="h-6 w-6"
+                strokeWidth={1.5}
+                stroke="#8C97A8"
+                className="size-6"
               >
                 <path
-                  fillRule="evenodd"
-                  d="M5.25 9a6.75 6.75 0 0 1 13.5 0v.75c0 2.123.8 4.057 2.118 5.52a.75.75 0 0 1-.297 1.206c-1.544.57-3.16.99-4.831 1.243a3.75 3.75 0 1 1-7.48 0 24.585 24.585 0 0 1-4.831-1.244.75.75 0 0 1-.298-1.205A8.217 8.217 0 0 0 5.25 9.75V9Zm4.502 8.9a2.25 2.25 0 1 0 4.496 0 25.057 25.057 0 0 1-4.496 0Z"
-                  clipRule="evenodd"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0M3.124 7.5A8.969 8.969 0 0 1 5.292 3m13.416 0a8.969 8.969 0 0 1 2.168 4.5"
                 />
               </svg>
             </button>
             <div className="relative inline-block text-left">
               <div>
                 <button onClick={toggleDropdown} className="flex items-center">
-                  <div className="relative w-8 h-8 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600">
                     <svg
-                      className="absolute w-10 h-7 text-gray-400 -left-1"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
                       xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth={1.5}
+                      stroke="#8C97A8"
+                      className="size-8"
                     >
                       <path
-                        fill-rule="evenodd"
-                        d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
-                        clip-rule="evenodd"
-                      ></path>
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
+                      />
                     </svg>
-                  </div>
                   <svg
                     className="ml-2 w-4 h-4"
                     viewBox="0 0 20 20"
-                    fill="currentColor"
+                    fill="#8C97A8"
                   >
                     <path
                       fillRule="evenodd"
@@ -153,7 +155,7 @@ const DashBoardTopBar = () => {
               {isOpen && (
                 <div className="absolute right-0 z-10 mt-2 lg:w-48 sm: w-36 rounded-md shadow-lg bg-white ring-1 ring-[#4361EE] ring-opacity-5">
                   <div className="py-1">
-                  <div className="px-4 py-2 text-sm text-gray-700 flex items-center">
+                    <div className="px-4 py-2 text-sm text-gray-700 flex items-center">
                       <span className="text-gray-500">Hello,</span>
                       <span className="ml-2 font-medium text-gray-800">
                         {user?.name}

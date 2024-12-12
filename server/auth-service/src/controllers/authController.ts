@@ -194,7 +194,7 @@ export class authController implements IauthController {
         
         return res.status(403).json({ error: "Invalid or expired refresh token" });
       }
-  
+   
       const newAccessToken = AuthService.generateToken({
         email: decoded.email,
         role: decoded.role,
@@ -203,7 +203,7 @@ export class authController implements IauthController {
       res.cookie("accessToken", newAccessToken, {
         httpOnly: true,
         sameSite: "strict",
-        maxAge: 60 * 60 * 1000, // 1 hour
+        maxAge: 60 * 60 * 1000, // 1 hour 
       });
   
       return res.status(200).json({

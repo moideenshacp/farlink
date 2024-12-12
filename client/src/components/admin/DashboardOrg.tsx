@@ -113,7 +113,7 @@ const DashboardOrg = () => {
                   {key.charAt(0).toUpperCase() + key.slice(1)}
                 </label>
                 <input
-                  className="w-full p-2 border rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-200 text-[#333333] font-semibold"
+                  className="w-full p-2 border rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-200 text-[#333333] font-normal"
                   type="text"
                   value={formData[key]}
                   name={key}

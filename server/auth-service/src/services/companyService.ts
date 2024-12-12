@@ -96,7 +96,20 @@ export class companyService implements IcompanyService {
       return null;
     }
   }
-  
+  async fetchAllOrganization(): Promise<IorgModel[] | null> {
+    try {
+      const allOrganizations = await this._organizationRepository.findAll()
+      if(!allOrganizations  || allOrganizations.length === 0){
+        console.log("No organizations found.");
+        return null;
+      }
+      return allOrganizations
+    } catch (error) {
+      console.log(error);
+      return null
+      
+    }
+  }
 
   
   

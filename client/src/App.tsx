@@ -48,7 +48,6 @@ function App() {
           <Route element={<AdminPrivateRoute />}>
             <Route path="/admin/*" element={<AdminDashboard />} />
           </Route>
-
           <Route element={<SuperAdminPrivateRoute />}>
             <Route path="/superAdmin/*" element={<Dashboard />} />
           </Route>

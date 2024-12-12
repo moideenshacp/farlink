@@ -1,9 +1,9 @@
 import { useSelector } from "react-redux";
-import { RootState } from "../../redux/store";
+import { RootState } from "../../../redux/store";
 import React, { useEffect, useState } from "react";
-import { fetchProfile, updateProfile } from "../../api/authApi";
+import { fetchProfile, updateProfile } from "../../../api/authApi";
 import { toast, ToastContainer } from "react-toastify";
-import useProfileValidation from "../../shares/hooks/useProfileValidation";
+import useProfileValidation from "../../hooks/useProfileValidation";
 
 const DashboardProfile = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -112,7 +112,7 @@ const DashboardProfile = () => {
         <div className="form-group">
           <label className="block font-medium text-[#232360]">Username</label>
           <input
-            className="w-full p-2 border rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-200 text-[#333333] font-semibold"
+            className="w-full p-2 border rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-200 text-[#333333] font-normal"
             type="text"
             value={user?.name || ""}
             readOnly
@@ -122,7 +122,7 @@ const DashboardProfile = () => {
         <div className="form-group">
           <label className="block font-medium text-[#232360]">First Name</label>
           <input
-            className="w-full p-2 border rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-200 text-[#333333] font-semibold"
+            className="w-full p-2 border rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-200 text-[#333333] font-normal"
             type="text"
             placeholder="Enter your first name"
             onChange={handleChange}
@@ -137,7 +137,7 @@ const DashboardProfile = () => {
         <div className="form-group">
           <label className="block font-medium text-[#232360]">Last Name</label>
           <input
-            className="w-full p-2 border rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-200 text-[#333333] font-semibold"
+            className="w-full p-2 border rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-200 text-[#333333] font-normal"
             type="text"
             placeholder="Enter your last name"
             onChange={handleChange}
@@ -152,7 +152,7 @@ const DashboardProfile = () => {
         <div className="form-group">
           <label className="block font-medium text-[#232360]">Phone</label>
           <input
-            className="w-full p-2 border rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-200 text-[#333333] font-semibold"
+            className="w-full p-2 border rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-200 text-[#333333] font-normal"
             type="text"
             placeholder="Enter your phone"
             onChange={handleChange}
@@ -167,7 +167,7 @@ const DashboardProfile = () => {
         <div className="form-group">
           <label className="block font-medium text-[#232360]">Role</label>
           <input
-            className="w-full p-2 border rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-200 text-[#333333] font-semibold"
+            className="w-full p-2 border rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-200 text-[#333333] font-normal"
             type="text"
             defaultValue={user?.role || ""}
             readOnly

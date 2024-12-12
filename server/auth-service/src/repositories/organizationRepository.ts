@@ -28,4 +28,7 @@ export class organizationRepository
   ): Promise<IorganizationModel | null> {
     return this.model.findOneAndUpdate(filter, update, { new: true });
   }
+  async findAll(): Promise<IorganizationModel[]> {
+    return this.model.find({}).populate('admin');
+  }
 }

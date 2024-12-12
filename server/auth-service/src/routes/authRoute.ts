@@ -4,15 +4,21 @@ import { authenticate } from "../middlewares/authMiddleware";
 const router = express.Router();
 
 const AuthController = new authController();
-
+//admin===========================================================================================================
 router.post("/register", AuthController.registerUser);
 router.post("/verify-email", AuthController.verifyEmail);
-router.post("/login", AuthController.loginUser as any);
 router.post("/logout", AuthController.logoutUser as any);
-router.post("/forget-password", AuthController.forgetPassword);
+
+//common===========================================================================================================
+router.post("/login", AuthController.loginUser as any);
 router.post('/refresh-token', (AuthController.refreshToken as any));
+router.post("/forget-password", AuthController.forgetPassword);
 router.post("/reset-password", AuthController.resetPassword as any);
 router.post("/update-profile",(authenticate as any) , AuthController.updateProfile);
 router.get("/get-profile",(authenticate as any), AuthController.getUserProfile);
+
+
+//superAdmin========================================================================================================
+
 
 export default router;

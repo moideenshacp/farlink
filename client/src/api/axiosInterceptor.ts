@@ -8,35 +8,15 @@ const axiosInstance = axios.create({
   withCredentials: true, 
 });
 
-// Request interceptor to attach access token
-axiosInstance.interceptors.request.use(
-  (config) => {
-    let token;
-    if(localStorage.getItem('accessToken')){
-        token = localStorage.getItem('accessToken')
-        console.log("local il ind");
-        
-    }else{
-        const state = store.getState();
-         token = state.user.token
-         console.log("toooooooooooooooooooooooken",token);
-         console.log("Redux token:", state.user.token);
-    }
 
-    
-    if (token) {
-      config.headers['Authorization'] = `Bearer ${token}`;
-    }
-    return config;
-  },
-  (error) => Promise.reject(error)
-);
 
 // Response interceptor to handle token expiration
 axiosInstance.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
+    console.log("oroiginal request",originalRequest);
+    
     
     if (error.response.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
@@ -52,9 +32,7 @@ axiosInstance.interceptors.response.use(
         console.log("neww acess token kittiitoo-------------",newAccessToken);
         
 
-        // Save the new access token and retry the original request
-        localStorage.setItem('accessToken', newAccessToken);
-        originalRequest.headers['Authorization'] = `Bearer ${newAccessToken}`;
+        // originalRequest.headers['Authorization'] = `Bearer ${newAccessToken}`;
         
         return axiosInstance(originalRequest);  // Retry the original request with the new token
       } catch (refreshError) {
