@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken";
 
 const EMAIL_SECRET = process.env.EMAIL_SECRET || "email_secret_key";
 
-const EMAIL_EXPIRATION = "30m";
+const EMAIL_EXPIRATION = "50m";
 
 export class EmailService {
   static async sendVerificationMail(email: string): Promise<void> {

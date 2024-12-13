@@ -4,9 +4,8 @@ import DashBoardTopBar from "../../shares/components/superAdmin/DashBoardTopBar"
 import DashboardSettings from "../../components/superAdmin/DashboardSettings";
 import DashboardAllOrg from "../../components/superAdmin/DashboardAllOrg";
 import CompanyDetails from "../../components/superAdmin/CompanyDetails";
+import DashboardOverview from "../../components/superAdmin/DashboardOverview";
 
-// Content Components
-const Overview = () => <div>Overview Content</div>;
 const Billing = () => <div>Billing Content</div>;
 
 const Dashboard = () => {
@@ -24,7 +23,7 @@ const Dashboard = () => {
 
         <main className="flex-1 bg-white p-6 sm: mt-14 lg:pt-14">
           <Routes>
-            <Route path="/" element={<Overview />} />
+            <Route path="/" element={<DashboardOverview />} />
             <Route path="/All-organization" element={<DashboardAllOrg />} />
             <Route path="/setting" element={<DashboardSettings />} />
             <Route path="/billing" element={<Billing />} />

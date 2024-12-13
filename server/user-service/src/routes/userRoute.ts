@@ -1,21 +1,21 @@
 import express from "express";
-import { authController } from "../controllers/userController";
+import { userController } from "../controllers/userController";
 import { authenticate } from "../middlewares/authMiddleware";
 const router = express.Router();
 
-const AuthController = new authController();
+const UserController = new userController();
 //admin===========================================================================================================
-router.post("/register", AuthController.registerUser);
-router.post("/verify-email", AuthController.verifyEmail);
-router.post("/logout", AuthController.logoutUser as any);
+router.post("/register", UserController.registerUser);
+router.post("/verify-email", UserController.verifyEmail);
+router.post("/logout", UserController.logoutUser as any);
 
 //common===========================================================================================================
-router.post("/login", AuthController.loginUser as any);
-router.post('/refresh-token', (AuthController.refreshToken as any));
-router.post("/forget-password", AuthController.forgetPassword);
-router.post("/reset-password", AuthController.resetPassword as any);
-router.post("/update-profile",(authenticate as any) , AuthController.updateProfile);
-router.get("/get-profile",(authenticate as any), AuthController.getUserProfile);
+router.post("/login", UserController.loginUser as any);
+router.post('/refresh-token', (UserController.refreshToken as any));
+router.post("/forget-password", UserController.forgetPassword);
+router.post("/reset-password", UserController.resetPassword as any);
+router.post("/update-profile",(authenticate as any) , UserController.updateProfile);
+router.get("/get-profile",(authenticate as any), UserController.getUserProfile);
 
 
 //superAdmin========================================================================================================

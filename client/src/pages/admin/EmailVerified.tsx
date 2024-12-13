@@ -32,7 +32,8 @@ const EmailVerified = () => {
         if (axios.isAxiosError(error)) {
           if (error.response) {
             if (error.response.data.error === "User is already verified..") {
-              setVerificationStatus("verified");
+              // setVerificationStatus("verified");
+              setErr(error.response.data.error)
               console.log("bahabab");
             }
             console.log("Error message===:", error.response.data.error);

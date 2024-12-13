@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import IuserModel from "./IuserModel";
 
-export default interface IauthService {
+export default interface IuserService {
   registersUser(
     name: string,
     email: string,

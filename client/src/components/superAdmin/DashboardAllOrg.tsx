@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
-import { fetchAllCompanies } from "../../api/companyApi";
+import { Key } from "react";
 import { useNavigate } from "react-router-dom";
+import { useCompanies } from "../../shares/hooks/UseCompanies";
 
 const DashboardAllOrg = () => {
   interface Company {
@@ -10,35 +10,28 @@ const DashboardAllOrg = () => {
   interface Admin {
     phone: string;
     email: string;
+    isActive: boolean
   }
-  const navigate = useNavigate()
-  const [companies, setCompanies] = useState<Company[]>([]);
+  const navigate = useNavigate();
+  const { companies } = useCompanies();
 
-  useEffect(() => {
-    const fetchCompanies = async () => {
-      const res = await fetchAllCompanies();
-      if (res?.data.message === "Organizations fetched successfully") {
-        setCompanies(res.data.data);
-      }
-    };
-    fetchCompanies();
-  }, []);
-
-  const handleCardClick = (company:Company)=>{
-    navigate('/superAdmin/organization-details',{state:{company}})
-  }
+  const handleCardClick = (company: Company) => {
+    navigate("/superAdmin/organization-details", { state: { company } });
+  };
 
   return (
     <div className="p-4">
       <div className="grid grid-cols-1 min-h-64 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {companies.map((org, index) => (
+        {companies.map((org: Company, index: Key | null | undefined) => (
           <div
-            onClick={()=>handleCardClick(org)}
+            onClick={() => handleCardClick(org)}
             key={index}
             className="bg-white shadow-md rounded-lg p-16 flex flex-col items-center cursor-pointer border border-gray-200 hover:shadow-lg hover:scale-105 transition-transform"
           >
             <div
-              className={`w-12 h-12 rounded-full flex items-center justify-center text-white text-lg font-bold ${"bg-gray-500"}`}
+              className={`w-12 h-12 rounded-full flex items-center justify-center text-white text-lg font-bold ${ 
+                
+                org.admin?.isActive ? "bg-gray-500" : "bg-red-500"}`}
             >
               {org.name.charAt(0).toUpperCase()}
             </div>
@@ -77,7 +70,6 @@ const DashboardAllOrg = () => {
               </div>
             </div>
           </div>
-
         ))}
       </div>
     </div>

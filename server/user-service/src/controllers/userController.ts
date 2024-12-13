@@ -1,16 +1,16 @@
 import { Request, Response } from "express";
-import { IauthController } from "../interfaces/IuserController";
-import { authService } from "../services/userService";
+import { IuserController } from "../interfaces/IuserController";
+import { userService } from "../services/userService";
 import { registerUserSchema } from "../validators/RegisterUserValidator";
 import { CustomError } from "../errors/CustomError";
 import { AuthService } from "../utils/jwt";
 import { resetPasswordSchema } from "../validators/ResetPasswordValidation";
 
-export class authController implements IauthController {
-  private _authService: authService;
+export class userController implements IuserController {
+  private _userService: userService;
 
   constructor() {
-    this._authService = new authService();
+    this._userService = new userService();
   }
 
   public registerUser = async (req: Request, res: Response) => {
@@ -27,7 +27,7 @@ export class authController implements IauthController {
       }
       const { name, email, password } = value;
 
-      const user = await this._authService.registersUser(name, email, password);
+      const user = await this._userService.registersUser(name, email, password);
       res.status(201).json({ message: "User registered successfully" });
     } catch (error: any) {
       if (error instanceof CustomError) {
@@ -44,7 +44,7 @@ export class authController implements IauthController {
     try {
       const { token } = req.query;
 
-      await this._authService.verifyEmail(token as string);
+      await this._userService.verifyEmail(token as string);
       res
         .status(200)
         .json({ status: "success", message: "Email successfully verified." });
@@ -68,7 +68,7 @@ export class authController implements IauthController {
           .json({ error: "Email and password are required." });
       }
 
-      const user = await this._authService.loginUser(email, password);
+      const user = await this._userService.loginUser(email, password);
 
       const token = AuthService.generateToken({ email: user.email, role: user.role });
       const refreshToken = AuthService.generateRefreshToken({ email: user.email, role: user.role });
@@ -130,7 +130,7 @@ export class authController implements IauthController {
         res.status(400).json({ error: "Email is required" });
         return;
       }
-      await this._authService.generatePasswordResetToken(email);
+      await this._userService.generatePasswordResetToken(email);
       res
         .status(200)
         .json({ message: "Password reset link sent successfully" });
@@ -162,7 +162,7 @@ export class authController implements IauthController {
 
       const { password, token } = value;
 
-      await this._authService.resetPassword(password, token);
+      await this._userService.resetPassword(password, token);
       return res.status(201).json({ message: "Password updated successfully" });
     } catch (error: any) {
       if (error instanceof CustomError) {
@@ -222,7 +222,7 @@ export class authController implements IauthController {
       const { fName, lName, phone, email } = req.body;
       
       
-      const user = await this._authService.updateProfile(fName, lName, phone, email);
+      const user = await this._userService.updateProfile(fName, lName, phone, email);
       if (user) {
         res.status(200).json({ 
           message: "Profile updated successfully",
@@ -251,7 +251,7 @@ export class authController implements IauthController {
         res.status(400).json({ message: "Email is required" });
         return;
       }
-      const userProfile = await this._authService.getUserProfile(email  as string);
+      const userProfile = await this._userService.getUserProfile(email  as string);
       if (!userProfile) {
         res.status(404).json({ message: "User not found" });
         return;

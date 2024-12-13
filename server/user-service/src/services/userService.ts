@@ -17,7 +17,7 @@ import jwt from "jsonwebtoken";
 
 const EMAIL_SECRET = process.env.EMAIL_SECRET || "email_secret_key";
 
-export class authService implements IuserService {
+export class userService implements IuserService {
   private _userRepository!: userRepository;
 
   constructor() {
