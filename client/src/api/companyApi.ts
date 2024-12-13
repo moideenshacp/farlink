@@ -49,3 +49,16 @@ export const fetchAllCompanies = async()=>{
         
     }
 }
+
+export const blockOrganization = async(email:string)=>{
+    try {
+        const res = await axiosInstance.get(`${import.meta.env.VITE_SERVER_BASE_URL}/auth-service/api/company/block-organization`,{
+            params:{email},
+            withCredentials:true
+        })
+        return res
+    } catch (error) {
+        console.log(error);
+        
+    }
+}

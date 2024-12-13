@@ -6,7 +6,7 @@ import cookieParser from "cookie-parser";
 import connectDB from "./config/db";
 import logger from "./utils/logger";
 import morgan from "morgan";
-import authRoutes from "./routes/authRoute";
+import userRoutes from "./routes/userRoute";
 import companyRoutes from './routes/companyRoute'
 
 dotenv.config();
@@ -45,7 +45,7 @@ app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(express.json());
 
-app.use("/api/auth", authRoutes);
+app.use("/api/auth", userRoutes);
 app.use("/api/company", companyRoutes);
 
 const port = process.env.PORT;

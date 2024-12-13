@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import { IauthController } from "../interfaces/IauthController";
-import { authService } from "../services/authService";
+import { IauthController } from "../interfaces/IuserController";
+import { authService } from "../services/userService";
 import { registerUserSchema } from "../validators/RegisterUserValidator";
 import { CustomError } from "../errors/CustomError";
 import { AuthService } from "../utils/jwt";

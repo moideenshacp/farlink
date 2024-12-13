@@ -13,5 +13,6 @@ router.post("/update-companyProfile",(authenticate as any), CompanyController.up
 
 //superAdmin=====================================================================================================================
 router.get('/fetch-allOrganization',(authenticate as any),CompanyController.fetchAllOrganization)
+router.get('/block-organization',(authenticate as any),CompanyController.blockOrganization)
 
 export default router;

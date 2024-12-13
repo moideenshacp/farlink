@@ -1,7 +1,11 @@
+import { useState } from "react";
+import { blockOrganization } from "../../api/companyApi";
+
 interface Organization {
   admin: {
     email: string;
     phone: string;
+    isActive: boolean
   };
   name: string;
   description: string;
@@ -21,17 +25,54 @@ interface CompanyDetailsProfileProps {
 const CompanyDetailsProfile: React.FC<CompanyDetailsProfileProps> = ({
   organization,
 }) => {
-  console.log(organization);
+
+  const [activeStatus,setActiveStatus] = useState(organization.admin.isActive)
+  const [isLoading,setIsLoading] = useState(false)
+  console.log("normal",activeStatus);
+  
+ 
+  const handleClick =async ()=>{
+    setIsLoading(true)
+    try {
+      const res = await blockOrganization(organization.admin.email)
+      if(res?.data.result.isActive === false){
+        console.log("false--------");
+        
+        setActiveStatus(false)
+        console.log("from block",activeStatus);
+        
+      }else if(res?.data.result.isActive === true){
+        console.log("true-----------");
+        
+        setActiveStatus(true)
+        console.log("from unblock",activeStatus);
+        
+      }
+      
+    } catch (error) {
+      console.log(error);
+      
+    }finally{
+      setIsLoading(false)
+    }
+  }
+
 
   return (
     <div>
         <div className="justify-end flex mb-1" >
 
-      <button
+      <button onClick={handleClick}
         type="submit"
         className="bg-[#4361EE] py-2 px-6 rounded-full text-white"
+        disabled={isLoading}
       >
-        Block Organization
+        { isLoading 
+
+        ?(activeStatus ? "Blocking..." : "Unblocking...")
+        :(activeStatus ? "Block Organization" : "Unblock Organization")
+        
+        }
       </button>
 
         </div>

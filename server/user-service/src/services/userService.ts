@@ -4,11 +4,12 @@ import {
   LoginUserNotVerified,
   TokenError,
   userAlreadyverifed,
+  userBlocked,
   UserExist,
   userNotFound,
 } from "../errors/CustomError";
 import IuserModel from "../interfaces/IuserModel";
-import IuserService from "../interfaces/IauthService";
+import IuserService from "../interfaces/IuserService";
 import { userRepository } from "../repositories/userRepository";
 import { EmailService } from "../utils/emailVerify";
 import bcrypt from "bcryptjs";
@@ -107,6 +108,9 @@ export class authService implements IuserService {
     }
     if (userExist && userExist.verified === false) {
       throw new LoginUserNotVerified();
+    }
+    if(userExist && userExist.isActive === false){
+      throw new userBlocked()
     }
     console.log("useerexistsss", userExist);
 

@@ -4,6 +4,7 @@ import Organization from "../models/OrganizationModel";
 import { organizationRepository } from "../repositories/organizationRepository";
 import { ObjectId } from "mongoose";
 import IorgModel from "../interfaces/IorganizationModel";
+import IuserModel from "interfaces/IuserModel";
 
 export class companyService implements IcompanyService {
   private _userrepository!: userRepository;
@@ -106,6 +107,31 @@ export class companyService implements IcompanyService {
       return allOrganizations
     } catch (error) {
       console.log(error);
+      return null
+      
+    }
+  }
+  async blockOrganization(email: string): Promise<IuserModel | null> {
+    try {
+      const organizationAdmin = await this._userrepository.findByEmail(email)
+      if(!organizationAdmin){
+        return null
+      }
+
+      let updateToBlockAndUnblock
+      if(organizationAdmin.isActive === true){
+         updateToBlockAndUnblock = await this._userrepository.update({email},{isActive:false})
+      }else{
+         updateToBlockAndUnblock = await this._userrepository.update({email},{isActive:true})
+      }
+
+      console.log(updateToBlockAndUnblock);
+      
+      return updateToBlockAndUnblock
+      
+      
+    } catch (error) {
+      console.log();
       return null
       
     }

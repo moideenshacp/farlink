@@ -40,13 +40,13 @@ const useProfileValidation = (initialFormData: FormData) => {
       phone: "",
     };
 
-    if (!formData.fName.trim()) {
+    if (formData.fName.trim().length === 0) {
       errors.fName = "First name is required.";
     }
-    if (!formData.lName.trim()) {
+    if (formData.lName.trim().length === 0) {
       errors.lName = "Last name is required.";
     }
-    if (!formData.phone.trim()) {
+    if (formData.phone.trim().length === 0  ) {
       errors.phone = "Phone number is required.";
     } else if (!/^\d{10}$/.test(formData.phone)) {
       errors.phone = "Phone number must be 10 digits.";

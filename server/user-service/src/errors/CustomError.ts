@@ -30,7 +30,12 @@ export class userAlreadyverifed extends CustomError {
     super(400, "User is already verified..");
   }
 }
-
+//==================================blocked======================================
+export class userBlocked extends CustomError {
+  constructor(){
+    super(400,"Access Restricted..")
+  }
+}
 // ========================= Token error ========================================
 
 export class TokenError extends CustomError {

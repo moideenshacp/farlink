@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import e, { Request, Response } from "express";
 import { IcompanyController } from "../interfaces/IcompanyController";
 import { companyService } from "../services/companyService";
 import { companyValidationSchema } from "../validators/CompanyValidation";
@@ -93,4 +93,24 @@ export class companyController implements IcompanyController {
       res.status(500).json({ message: "Internal server error" });
     }
   }
+  public blockOrganization = async(req: Request, res: Response): Promise<void>=> {
+    try {
+      const {email} = req.query
+
+     const result = await this._companyservice.blockOrganization(email as string)
+      console.log(email);
+ 
+      if(result){
+      res.status(200).json({
+        message:"Organization blocked successfully",result
+      })
+    }
+    
+    } catch (error) {
+      console.log(error)
+      res.status(500).json({message:"Internal server error"})
+      
+    }
+  }
+
 }
