@@ -21,3 +21,7 @@
 {"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"POST\",\"url\":\"/api/employee/register-employee\",\"status\":\"200\",\"responseTime\":\"141.108\"}","timestamp":"2024-12-17T10:43:09.724Z"}
 {"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"POST\",\"url\":\"/api/employee/register-employee\",\"status\":\"400\",\"responseTime\":\"4.941\"}","timestamp":"2024-12-17T10:43:34.624Z"}
 {"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"POST\",\"url\":\"/api/employee/register-employee\",\"status\":\"400\",\"responseTime\":\"18.551\"}","timestamp":"2024-12-17T10:44:28.047Z"}
+{"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"POST\",\"url\":\"/api/employee/register-employee\",\"status\":\"200\",\"responseTime\":\"223.242\"}","timestamp":"2024-12-17T10:45:22.593Z"}
+{"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"POST\",\"url\":\"/api/employee/register-employee\",\"status\":\"200\",\"responseTime\":\"144.631\"}","timestamp":"2024-12-17T10:53:47.373Z"}
+{"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"POST\",\"url\":\"/api/employee/register-employee\",\"status\":\"200\",\"responseTime\":\"488.606\"}","timestamp":"2024-12-17T17:01:15.698Z"}
+{"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"POST\",\"url\":\"/api/employee/register-employee\",\"status\":\"200\",\"responseTime\":\"346.832\"}","timestamp":"2024-12-17T17:09:40.221Z"}

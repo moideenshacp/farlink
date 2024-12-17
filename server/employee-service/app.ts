@@ -7,10 +7,11 @@ import connectDB from "./src/config/db";
 import logger from "./src/utils/logger";
 import morgan from "morgan";
 import employeeRoutes from './src/routes/employeeRoute'
+import { rabbitmqConnect } from "./src/config/rabbitmq";
 
 dotenv.config();
 connectDB();
-
+rabbitmqConnect()
 const app = express();
 app.use(
   cors({

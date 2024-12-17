@@ -8,10 +8,21 @@ import logger from "./utils/logger";
 import morgan from "morgan";
 import userRoutes from "./routes/userRoute";
 import companyRoutes from './routes/companyRoute'
+import { rabbitmqConnect } from "../src/config/rabbitmq";
+import { consumeEvents } from "../src/rabbitmq/consumer/consumer";
 
 dotenv.config();
 connectDB();
+const startApplication = async () => {
+  try {
+      await rabbitmqConnect();
+      await consumeEvents(); 
+  } catch (error) {
+      console.error("Failed to start application:", error);
+  }
+};
 
+startApplication();
 const app = express();
 app.use(
   cors({
