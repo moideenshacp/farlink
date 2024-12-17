@@ -1,6 +1,5 @@
   import mongoose, { Schema } from "mongoose";
   import IuserModel from "../interfaces/IuserModel";
-  import { date, number, string } from "joi";
 
   const UserSchema: Schema = new Schema({
     name: String,

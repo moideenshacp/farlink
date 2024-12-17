@@ -20,7 +20,6 @@ const MyTeamPage = () => {
     <div className="min-h-screen bg-gray-100 flex">
       <DashBoardSideBar />
 
-      {/* Main Content */}
       <div className="flex-1 flex flex-col">
         <DashBoardTopBar />
 
