@@ -10,7 +10,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { LoginAdmin } from "../../api/authApi";
 import { useDispatch } from "react-redux";
-import { login } from "../../redux/user/userSlice";
+import { login, setOrganizationId } from "../../redux/user/userSlice";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -40,11 +40,14 @@ const Login = () => {
   
       if (res.data.message === "Login sucessfull") {
         const user = res.data.user;
+        console.log("admin",user);
+        
   
         if (user.role === "admin") {
           dispatch(login({ user, token: user.token }));
         
           if (user.isOrganizationAdded) {
+            dispatch(setOrganizationId(user.organizationId))
             console.log("Admin with organization added, navigating to admin dashboard");
             navigate("/admin/", { replace: true });
           } else {

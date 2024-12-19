@@ -5,6 +5,7 @@ interface User {
   email: string;
   role: "admin" | "superAdmin" | "employee";
   isOrganizationAdded: boolean
+  organizationId?: string;
 }
 
 // Define the initial state type
@@ -41,8 +42,13 @@ const userSlice = createSlice({
         state.user.isOrganizationAdded = !state.user.isOrganizationAdded;
       }
     },
+    setOrganizationId(state, action: PayloadAction<string>) {
+      if (state.user) {
+        state.user.organizationId = action.payload;
+      }
+    },
   },
 });
 
-export const { login, logout ,toggleOrganizationStatus} = userSlice.actions;
+export const { login, logout ,toggleOrganizationStatus,setOrganizationId} = userSlice.actions;
 export default userSlice.reducer;

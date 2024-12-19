@@ -1,8 +1,6 @@
 import IcompanyService from "../interfaces/IcompanyService";
 import { userRepository } from "../repositories/userRepository";
-import Organization from "../models/OrganizationModel";
 import { organizationRepository } from "../repositories/organizationRepository";
-import { ObjectId } from "mongoose";
 import IorgModel from "../interfaces/IorganizationModel";
 import IuserModel from "interfaces/IuserModel";
 
@@ -15,7 +13,8 @@ export class companyService implements IcompanyService {
     this._organizationRepository = new organizationRepository();
   }
 
-  async registerCompany(organization: any): Promise<void> {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  async registerCompany(organization: any): Promise<string> {
     try {
       const { email, ...orgData } = organization;
 
@@ -44,6 +43,7 @@ export class companyService implements IcompanyService {
       );
 
       console.log("Organization registered successfully", newOrganization);
+      return newOrganization._id.toString();
     } catch (error) {
       console.log(error);
       throw error;
@@ -131,7 +131,7 @@ export class companyService implements IcompanyService {
       
       
     } catch (error) {
-      console.log();
+      console.log(error);
       return null
       
     }

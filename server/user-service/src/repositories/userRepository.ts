@@ -27,4 +27,5 @@ export class userRepository
   ): Promise<IuserModel | null> {
     return this.model.findOneAndUpdate(filter, update, { new: true });
   }
+
 }

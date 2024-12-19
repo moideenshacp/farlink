@@ -6,13 +6,13 @@ import { authenticate } from "../middlewares/authMiddleware";
 const CompanyController = new companyController()
 
 //admin==============================================================================================================================
-router.post("/register-company",(authenticate as any), CompanyController.registerCompany);
-router.get("/get-companyProfile",(authenticate as any), CompanyController.fetchCompanyProfile);
-router.post("/update-companyProfile",(authenticate as any), CompanyController.updateCompanyProfile);
+router.post("/register-company",authenticate, CompanyController.registerCompany);
+router.get("/get-companyProfile",authenticate , CompanyController.fetchCompanyProfile);
+router.post("/update-companyProfile",authenticate, CompanyController.updateCompanyProfile);
 
 
 //superAdmin=====================================================================================================================
-router.get('/fetch-allOrganization',(authenticate as any),CompanyController.fetchAllOrganization)
-router.get('/block-organization',(authenticate as any),CompanyController.blockOrganization)
+router.get('/fetch-allOrganization',authenticate,CompanyController.fetchAllOrganization)
+router.get('/block-organization',authenticate,CompanyController.blockOrganization)
 
 export default router;

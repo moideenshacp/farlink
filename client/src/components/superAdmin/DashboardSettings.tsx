@@ -1,7 +1,7 @@
 import { useState } from "react";
-import DashboardProfile from "../../shares/components/admin/DashboardProfile";
-import DashboardPassword from "../../shares/components/admin/DashboardPassword";
-import DashboardEmail from "../../shares/components/admin/DashboardEmail";
+import DashboardProfile from "../../shares/components/DashboardProfile";
+import DashboardPassword from "../../shares/components/DashboardPassword";
+import DashboardEmail from "../../shares/components/DashboardEmail";
 
 const DashboardSettings = () => {
   const [activeTab, setActiveTab] = useState("profile");

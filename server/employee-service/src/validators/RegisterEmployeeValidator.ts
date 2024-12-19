@@ -25,6 +25,11 @@ export const registerEmployeeSchema = Joi.object({
     "string.max": "Invalid firstName",
     "string.base": "Invalid firstName",
   }),
+  organizationId: Joi.string().required().messages({
+    "any.required": "Invalid organizationId",
+    "string.empty": "Invalid organizationId",
+    "string.base": "Invalid organizationId",
+  }),
   lastName: Joi.string().trim().min(1).max(50).required().messages({
     "any.required": "Invalid lastName",
     "string.empty": "Invalid lastName",
@@ -51,4 +56,11 @@ export const registerEmployeeSchema = Joi.object({
     "string.empty": "Gender is required.",
     "any.only": "Invalid gender selection. Please choose 'male' or 'female'.",
   }),
+  image: Joi.string().uri().required().messages({
+    "string.uri": "Invalid image URL format.",
+    "any.required": "Image is required.",
+    "string.empty": "Image URL cannot be empty."
+  }),
+
+  
 });

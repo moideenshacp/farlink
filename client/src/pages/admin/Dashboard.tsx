@@ -2,9 +2,9 @@ import { Routes, Route } from "react-router-dom";
 import DashBoardSideBar from "../../shares/components/admin/DashBoardSideBar";
 import DashBoardTopBar from "../../shares/components/admin/DashBoardTopBar";
 import DashboardSettings from "../../components/admin/DashboardSettings";
+import Myteam from "../../components/admin/Myteam";
 // Content Components
 const Overview = () => <div>Overview Content</div>;
-const MyTeam = () => <div>My Team Content</div>;
 const LeaveSummary = () => <div>Leave Summary Content</div>;
 const ManageLeave = () => <div>Manage Leave Content</div>;
 const CreateProject = () => <div>Create Project Content</div>;
@@ -27,7 +27,7 @@ const MyTeamPage = () => {
         <main className="flex-1 bg-gray-50 p-6">
           <Routes>
             <Route path="/" element={<Overview />} />
-            <Route path="/my-team" element={<MyTeam />} />
+            <Route path="/my-team" element={<Myteam />} />
             <Route path="/leave-summary" element={<LeaveSummary />} />
             <Route path="/manage-leave" element={<ManageLeave />} />
             <Route path="/create-project" element={<CreateProject />} />

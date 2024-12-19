@@ -4,14 +4,16 @@ import Footer from "../../shares/components/landingPageComponents/Footer";
 import { regitserCompany } from "../../api/authApi";
 import { useCompanyBasicData } from "../../shares/hooks/UseRegisteration";
 import { Link, useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import { useFormValidationStep2 } from "../../shares/hooks/useCompanyValidations";
+import { setOrganizationId } from "../../redux/user/userSlice";
 
 const Step2 = () => {
   const { registrationData } = useCompanyBasicData();
   const { formErrors, validate, setFormErrors } = useFormValidationStep2();
   const navigate = useNavigate();
+  const dispatch = useDispatch()
 
   const [street, setStreet] = useState("");
   const [country, setCountry] = useState("");
@@ -65,6 +67,8 @@ const Step2 = () => {
       console.log("msggggg", response.data.message);
 
       if (response.data.message === "organization registered successfully") {
+        console.log(response.data);
+        dispatch(setOrganizationId(response.data.organizationId));
         console.log("come come");
         localStorage.removeItem("registrationData");
 

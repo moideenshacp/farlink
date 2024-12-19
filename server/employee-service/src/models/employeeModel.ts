@@ -56,6 +56,9 @@
     organizationId: {
       type: mongoose.Schema.Types.ObjectId,
     },
+    image:{
+      type:String
+    }
   });
 
   export default mongoose.model<IemployeeModel>("Employee", EmployeeSchema);

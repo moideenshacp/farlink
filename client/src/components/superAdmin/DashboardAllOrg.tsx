@@ -14,7 +14,8 @@ const DashboardAllOrg = () => {
   }
   const navigate = useNavigate();
   const { companies } = useCompanies();
-
+  console.log("comapniesss",companies);
+  
   const handleCardClick = (company: Company) => {
     navigate("/superAdmin/organization-details", { state: { company } });
   };

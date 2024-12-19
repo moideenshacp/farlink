@@ -85,6 +85,7 @@ export class userService implements IuserService {
       );
 
       console.log("User verified successfully:", updatedUser);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       if (
         error.name === "JsonWebTokenError" ||
@@ -147,6 +148,7 @@ export class userService implements IuserService {
         { password: hashedPassword }
       );
       return updatePassword as IuserModel;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       if (
         error.name === "JsonWebTokenError" ||

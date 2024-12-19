@@ -2,7 +2,7 @@ import mongoose, { Document } from "mongoose";
 import IorgModel from "./IorganizationModel";
 
 export default interface IuserModel extends Document {
-  _id: string;
+  _id: mongoose.Types.ObjectId;
   name: string;
   email: string;
   password: string;
@@ -10,8 +10,9 @@ export default interface IuserModel extends Document {
   isActive: boolean;
   verified: boolean;
   isOrganizationAdded: boolean
-  firstName:string,
-  lastName:string,
-  phone:string,
+  firstName:string
+  lastName:string
+  phone:string
+  image:string
   organizationId: IorgModel | mongoose.Types.ObjectId;
 }

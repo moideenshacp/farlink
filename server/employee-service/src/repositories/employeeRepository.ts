@@ -2,7 +2,7 @@ import BaseRepository from "./baseRepository";
 import IemployeeModel from "../interfaces/IemployeeModel";
 import IemployeeRepo from "../interfaces/IemployeeRepository";
 import EmployeeModel from "../models/employeeModel"
-import { FilterQuery } from "mongoose";
+import { FilterQuery, Types } from "mongoose";
 
 export class employeeRepository
   extends BaseRepository<IemployeeModel>
@@ -27,4 +27,9 @@ export class employeeRepository
   ): Promise<IemployeeModel | null> {
     return this.model.findOneAndUpdate(filter, update, { new: true });
   }
+  async findByOrganizationId(organizationId: string): Promise<IemployeeModel[]> {
+    const objectId = new Types.ObjectId(organizationId); 
+    return this.model.find({ organizationId: objectId }).exec();
+  }
+
 }

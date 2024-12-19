@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import OverviewCard from "../../shares/components/superAdmin/OverviewCard";
+import OverviewCard from "../../shares/components/OverviewCard";
 import { useCompanies } from "../../shares/hooks/UseCompanies";
 import { fetchAllCompanies } from "../../api/companyApi";
 
@@ -24,7 +24,8 @@ const DashboardOverview = () => {
     };
     fetchCompanies();
   }, [setCompanies]);
-
+  console.log("comapnhyyyy",companies);
+  
   return (
     <div className="flex space-x-28">
       <OverviewCard

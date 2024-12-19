@@ -1,13 +1,13 @@
 import { Request, Response, NextFunction } from 'express';
 import { AuthService } from '../utils/jwt';
 
-export const authenticate = async (req: Request, res: Response, next: NextFunction): Promise<void>  => {
+export const authenticate = async (req: Request, res: Response, next: NextFunction) => {
 
 const token = req.cookies.accessToken;
 
   if (!token) {
     console.log("Access token is missing or invalid.");
-     res.status(401).json({ error: 'Access token is missing or invalid.' });
+    return res.status(401).json({ error: 'Access token is missing or invalid.' });
   }
 
   const decoded = AuthService.verifyToken(token);
@@ -18,5 +18,5 @@ const token = req.cookies.accessToken;
     return next();
   }
 
-   res.status(401).json({ error: 'Invalid or expired access token.' });
+  return res.status(401).json({ error: 'Invalid or expired access token.' });
 };

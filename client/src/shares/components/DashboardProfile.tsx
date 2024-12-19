@@ -1,9 +1,9 @@
 import { useSelector } from "react-redux";
-import { RootState } from "../../../redux/store";
+import { RootState } from "../../redux/store";
 import React, { useEffect, useState } from "react";
-import { fetchProfile, updateProfile } from "../../../api/authApi";
+import { fetchProfile, updateProfile } from "../../api/authApi";
 import { toast, ToastContainer } from "react-toastify";
-import useProfileValidation from "../../hooks/useProfileValidation";
+import useProfileValidation from "../hooks/useProfileValidation";
 
 const DashboardProfile = () => {
   const [isLoading, setIsLoading] = useState(false);

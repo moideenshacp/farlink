@@ -20,5 +20,6 @@ export default interface IemployeeModel extends Document {
   state:string,
   zipcode:string,
   verified: boolean;
+  image:string;
   organizationId: mongoose.Types.ObjectId;
 }

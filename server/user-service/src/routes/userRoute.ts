@@ -7,15 +7,15 @@ const UserController = new userController();
 //admin===========================================================================================================
 router.post("/register", UserController.registerUser);
 router.post("/verify-email", UserController.verifyEmail);
-router.post("/logout", UserController.logoutUser as any);
+router.post("/logout", UserController.logoutUser as never);
 
 //common===========================================================================================================
-router.post("/login", UserController.loginUser as any);
-router.post('/refresh-token', (UserController.refreshToken as any));
+router.post("/login", UserController.loginUser as never);
+router.post('/refresh-token', (UserController.refreshToken as never));
 router.post("/forget-password", UserController.forgetPassword);
-router.post("/reset-password", UserController.resetPassword as any);
-router.post("/update-profile",(authenticate as any) , UserController.updateProfile);
-router.get("/get-profile",(authenticate as any), UserController.getUserProfile);
+router.post("/reset-password", UserController.resetPassword as never);
+router.post("/update-profile",authenticate, UserController.updateProfile);
+router.get("/get-profile",authenticate, UserController.getUserProfile);
 
 
 //superAdmin========================================================================================================

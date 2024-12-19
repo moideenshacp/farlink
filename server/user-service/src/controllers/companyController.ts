@@ -1,4 +1,4 @@
-import e, { Request, Response } from "express";
+import  { Request, Response } from "express";
 import { IcompanyController } from "../interfaces/IcompanyController";
 import { companyService } from "../services/companyService";
 import { companyValidationSchema } from "../validators/CompanyValidation";
@@ -19,8 +19,8 @@ export class companyController implements IcompanyController {
 
       const { organization } = req.body;
 
-      await this._companyservice.registerCompany(organization);
-      res.status(201).json({ message: "organization registered successfully" });
+      const organizationId = await this._companyservice.registerCompany(organization);
+      res.status(201).json({ message: "organization registered successfully",organizationId, });
     } catch (error) {
       console.log(error);
     }

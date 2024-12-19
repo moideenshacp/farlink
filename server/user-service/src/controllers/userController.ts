@@ -27,9 +27,9 @@ export class userController implements IuserController {
       }
       const { name, email, password } = value;
 
-      const user = await this._userService.registersUser(name, email, password);
+       await this._userService.registersUser(name, email, password);
       res.status(201).json({ message: "User registered successfully" });
-    } catch (error: any) {
+    } catch (error) {
       if (error instanceof CustomError) {
         res.status(error.status).json({ error: error.message });
         console.log("msg", error.message);
@@ -48,7 +48,7 @@ export class userController implements IuserController {
       res
         .status(200)
         .json({ status: "success", message: "Email successfully verified." });
-    } catch (error: any) {
+    } catch (error) {
       if (error instanceof CustomError) {
         res.status(error.status).json({ error: error.message });
       } else {
@@ -96,10 +96,11 @@ export class userController implements IuserController {
             role: user.role,
             name: user.name,
             token: token,
-            isOrganizationAdded:user.isOrganizationAdded
+            isOrganizationAdded:user.isOrganizationAdded,
+            organizationId:user.organizationId
           },
         });
-    } catch (error: any) {
+    } catch (error) {
       if (error instanceof CustomError) {
         return res.status(error.status).json({ error: error.message });
       } else {
@@ -134,7 +135,7 @@ export class userController implements IuserController {
       res
         .status(200)
         .json({ message: "Password reset link sent successfully" });
-    } catch (error: any) {
+    } catch (error) {
       if (error instanceof CustomError) {
         res.status(error.status).json({ error: error.message });
         console.log("msg", error.message);
@@ -144,7 +145,6 @@ export class userController implements IuserController {
       }
     }
   };
-
   public resetPassword = async (
     req: Request,
     res: Response
@@ -153,7 +153,6 @@ export class userController implements IuserController {
       const { error, value } = resetPasswordSchema.validate(req.body, {
         abortEarly: false,
       });
-
       if (error) {
         const errorMessage = error.details.map((err) => err.message);
         console.error("Validation errors:", errorMessage);
@@ -164,7 +163,7 @@ export class userController implements IuserController {
 
       await this._userService.resetPassword(password, token);
       return res.status(201).json({ message: "Password updated successfully" });
-    } catch (error: any) {
+    } catch (error) {
       if (error instanceof CustomError) {
         console.log("msg", error.message);
         return res.status(error.status).json({ error: error.message });
