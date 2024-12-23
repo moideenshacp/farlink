@@ -31,7 +31,6 @@ export class companyController implements IcompanyController {
   ): Promise<void> => {
     try {
       const { email } = req.query;
-
       const companyDetails = await this._companyservice.fetchCompanyProfile(
         email as string
       );

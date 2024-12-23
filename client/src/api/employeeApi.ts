@@ -12,6 +12,26 @@ interface EmployeeData {
   image: string;
 }
 
+interface EmployeeDetails{
+  employeeId:string
+  userName: string;
+  position: string;
+  email: string;
+  gender: string;
+  firstName: string;
+  lastName: string;
+  phone: string;
+  image: string;
+  dateOfJoining: string
+  dateOfBirth:string
+  highestQualification:string
+  institution: string
+  qualificationYear: string
+  fatherName: string
+  fatherProfession: string
+  motherName: string
+  motherProfession: string
+}
 export const addEmployee = async (employeeData: EmployeeData) => {
   try {
     const res = await axiosInstance.post(
@@ -84,3 +104,23 @@ export const getAllEmployees = async (organizationId: string | undefined) => {
     console.log(error);
   }
 };
+
+ export const updateEmployeeDetails = async (data:EmployeeDetails)=>{
+  try {
+    const res =  await axiosInstance.post(
+      `${
+        import.meta.env.VITE_SERVER_BASE_URL
+      }/employee-service/api/employee/update-employee`,
+      {
+        data,
+      },
+      {
+        withCredentials: true,
+      }
+    );
+    return res
+  } catch (error) {
+    console.log(error);
+    
+  }
+}

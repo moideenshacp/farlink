@@ -1,6 +1,6 @@
 import { Key } from "react";
 import { useNavigate } from "react-router-dom";
-import { useCompanies } from "../../shares/hooks/UseCompanies";
+import { useCompanies } from "../../shared/hooks/UseCompanies";
 
 const DashboardAllOrg = () => {
   interface Company {

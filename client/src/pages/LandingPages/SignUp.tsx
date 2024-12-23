@@ -1,8 +1,8 @@
 import { Link, useNavigate } from "react-router-dom";
 import logo from "../../assets/farlink.png";
 import signup from "../../assets/signUp.jpg";
-import Footer from "../../shares/components/landingPageComponents/Footer";
-import Header from "../../shares/components/landingPageComponents/Header";
+import Footer from "../../shared/components/landingPageComponents/Footer";
+import Header from "../../shared/components/landingPageComponents/Header";
 import { FaUser, FaEnvelope, FaLock } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc"; // Import Google icon
 import { useState } from "react";

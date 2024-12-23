@@ -1,6 +1,6 @@
 import { Routes, Route } from "react-router-dom";
-import DashBoardSideBar from "../../shares/components/superAdmin/DashBoardSideBar";
-import DashBoardTopBar from "../../shares/components/superAdmin/DashBoardTopBar";
+import DashBoardSideBar from "../../shared/components/superAdmin/DashBoardSideBar";
+import DashBoardTopBar from "../../shared/components/superAdmin/DashBoardTopBar";
 import DashboardSettings from "../../components/superAdmin/DashboardSettings";
 import DashboardAllOrg from "../../components/superAdmin/DashboardAllOrg";
 import CompanyDetails from "../../components/superAdmin/CompanyDetails";

@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { addEmployee, uploadImageToCloudinary } from "../../api/employeeApi";
+import { addEmployee, uploadImageToCloudinary } from "../../../api/employeeApi";
 import { useSelector } from "react-redux";
-import { RootState } from "../../redux/store";
+import { RootState } from "../../../redux/store";
 import { toast, ToastContainer } from "react-toastify";
 
 const AddEmployeeModal = ({ toggleModal }: { toggleModal: () => void }) => {

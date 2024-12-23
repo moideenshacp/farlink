@@ -17,17 +17,18 @@
       type:String,
     },
     gender:{
-      type:String
+      type: String,
+      enum: ['male', 'female'],
     },
     password: String,
     role: {
       type: String,
       default: "employee",
     },
-    DOB:{
+    dateOfBirth:{
       type:Date
     },
-    hiringDate:{
+    dateOfJoining:{
       type:Date
     },
     street:{
@@ -57,6 +58,27 @@
       type: mongoose.Schema.Types.ObjectId,
     },
     image:{
+      type:String
+    },
+    highestQualification:{
+      type:String
+    },
+    institution:{
+      type:String
+    },
+    qualificationYear:{
+      type:String
+    },
+    fatherName:{
+      type:String
+    },
+    fatherProfession:{
+      type:String
+    },
+    motherName:{
+      type:String
+    },
+    motherProfession:{
       type:String
     }
   });

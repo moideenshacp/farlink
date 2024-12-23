@@ -2,10 +2,10 @@ import React, { useEffect, useState } from "react";
 import {
   fetchCompanyProfile,
   updateCompanyProfile,
-} from "../../api/companyApi";
+} from "../../../api/companyApi";
 import { useSelector } from "react-redux";
-import { RootState } from "../../redux/store";
-import { useCompanyUpdate } from "../../shares/hooks/useCompanyValidations";
+import { RootState } from "../../../redux/store";
+import { useCompanyUpdate } from "../../../shared/hooks/useCompanyValidations";
 import { toast, ToastContainer } from "react-toastify";
 
 const DashboardOrg = () => {

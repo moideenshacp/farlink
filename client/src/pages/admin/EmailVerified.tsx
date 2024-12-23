@@ -2,9 +2,9 @@ import { useLocation } from "react-router-dom";
 import logo from "../../assets/EmailLogo.png";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import AlreadyVerifiedEmail from "../../components/admin/AlreadyVerifiedEmail";
-import InvalidVerifyEmail from "../../components/admin/InvalidVerifyEmail";
-import SuccessfulEmailVerifcation from "../../components/admin/SuccessfulEmailVerifcation";
+import AlreadyVerifiedEmail from "../../components/admin/signup/AlreadyVerifiedEmail";
+import InvalidVerifyEmail from "../../components/admin/signup/InvalidVerifyEmail";
+import SuccessfulEmailVerifcation from "../../components/admin/signup/SuccessfulEmailVerifcation";
 import { VerifyEmailAdmin } from "../../api/authApi";
 
 const EmailVerified = () => {

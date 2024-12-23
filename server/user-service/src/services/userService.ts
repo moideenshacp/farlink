@@ -65,7 +65,8 @@ export class userService implements IuserService {
     try {
       // Decode the token to extract the email
       const { email } = jwt.verify(token, EMAIL_SECRET) as { email: string };
-
+      console.log("EMAIL_SECRET",EMAIL_SECRET);
+      
       const user = await this._userRepository.findByEmail(email);
 
       console.log("Found user:", user);

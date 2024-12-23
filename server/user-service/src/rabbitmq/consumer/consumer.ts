@@ -33,7 +33,6 @@ export const consumeEvents = async (): Promise<void> => {
                     };
                     const userRepo = new userRepository();
 
-                    // Call user service logic to create the user
                    const savedData =  await userRepo.createUser(employeeData)
                    if(savedData){
                     console.log("saveddd");

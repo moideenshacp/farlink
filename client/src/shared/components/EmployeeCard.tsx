@@ -1,21 +1,55 @@
+import {  useNavigate } from "react-router-dom";
+
 interface EmployeeProfileCardProps {
     image: string;
     name: string
     position: string
     phone: string;
     email: string
+    employee : Employee
+}
+interface Employee {
+  _id:string;
+  userName:string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+  position: string;
+  gender: string;
+  role:string;
+  image: string;
+  dateOfJoining?: string; 
+  dateOfBirth?: string; 
+  highestQualification?: string; 
+  institution?: string; 
+  qualificationYear?: string; 
+  fatherName?: string; 
+  fatherProfession?: string; 
+  motherName?: string; 
+  motherProfession?: string; 
 }
 
 
+
+
 const EmployeeCard: React.FC<EmployeeProfileCardProps> = ({
-    image,
-    name,
-    position,
-    phone,
-    email,
-  }) => {
+  employee,
+  image,
+  name,
+  position,
+  phone,
+  email,
+}) => {
+  
+  const navigate = useNavigate()
+  const handleCardClick = (employee :Employee)=>{
+    navigate("/admin/employee-profile", { state: { employee } });
+  
+  }
+
     return (
-      <div className="w-80 bg-white shadow-lg rounded-2xl p-4">
+      <div onClick={()=>handleCardClick(employee)} className="w-80 bg-white shadow-lg rounded-2xl p-4 hover:shadow-lg hover:scale-105 transition-transform">
         {/* Profile Image */}
         <div className="flex justify-center">
           <img

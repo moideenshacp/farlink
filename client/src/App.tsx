@@ -1,21 +1,21 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Home from "./pages/LandingPages/Home";
 import SignUp from "./pages/LandingPages/SignUp";
 import Login from "./pages/LandingPages/Login";
 import EmailVerified from "./pages/admin/EmailVerified";
-import Step1 from "./components/admin/Step1";
-import Step2 from "./components/admin/Step2";
-import Step3 from "./components/admin/Step3";
+import Step1 from "./components/admin/companyRegister/Step1";
+import Step2 from "./components/admin/companyRegister/Step2";
+import Step3 from "./components/admin/companyRegister/Step3";
 import AdminDashboard from "./pages/admin/Dashboard";
 import VerifyMail from "./pages/admin/VerifyMail";
 import Dashboard from "./pages/superAdmin/Dashboard";
 import AdminPrivateRoute from "./routes/AdminPrivateRoute";
 import SuperAdminPrivateRoute from "./routes/SuperAdminPrivateRoute";
 import PublicRoute from "./routes/PublicRoute";
-import ForgetPassEmail from "./shares/components/landingPageComponents/ForgetPassEmail";
-import ForgetPassword from "./shares/components/landingPageComponents/ForgetPassword";
-import ResetPassword from "./shares/components/landingPageComponents/ResetPassword";
-import InvalidForgetPass from "./shares/components/landingPageComponents/InvalidForgetPass";
+import ForgetPassEmail from "./shared/components/landingPageComponents/ForgetPassEmail";
+import ForgetPassword from "./shared/components/landingPageComponents/ForgetPassword";
+import ResetPassword from "./shared/components/landingPageComponents/ResetPassword";
+import InvalidForgetPass from "./shared/components/landingPageComponents/InvalidForgetPass";
 import OrganizationPrivateRoute from "./routes/OrganizationPrivateRoute";
 
 function App() {

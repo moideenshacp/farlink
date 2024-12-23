@@ -5,4 +5,5 @@ import IemployeeModel from "./IemployeeModel";
 export interface IemployeeService {
     registerEmployee(employeeData:IemployeeData):Promise<void>
     getAllEmployees(organizationId:string):Promise<IemployeeModel[] | null>
+    updateEmployee(employeeId:string,employeeData:IemployeeModel):Promise<IemployeeModel>
 }

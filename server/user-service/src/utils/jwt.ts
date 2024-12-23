@@ -1,5 +1,4 @@
 import jwt, { JwtPayload } from "jsonwebtoken";
-import IuserModel from "../interfaces/IuserModel";
 import { JwtPayloadInput } from "../interfaces/JwtPayloadInput";
 
 
@@ -25,7 +24,9 @@ export class AuthService {
     try {
       const decoded = jwt.verify(token, JWT_SECRET);
       return decoded as JwtPayload;
-    } catch (error: any) {
+    } catch (error) {
+      console.log(error);
+      
       return null;
     }
   }
@@ -33,7 +34,9 @@ export class AuthService {
     try {
       const decoded = jwt.verify(token, REFRESH_SECRET);
       return decoded as JwtPayload;
-    } catch (error: any) {
+    } catch (error) {
+      console.log(error);
+      
       return null;
     }
   }

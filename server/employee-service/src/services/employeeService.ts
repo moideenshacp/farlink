@@ -1,4 +1,4 @@
-import { publishEvent } from "../../rabbitmq/producer/producer";
+import { publishEvent } from "../rabbitmq/producer/producer";
 import { IemployeeData } from "../interfaces/IemployeeData";
 import IemployeeModel from "../interfaces/IemployeeModel";
 import { IemployeeService } from "../interfaces/IemployeeService";
@@ -64,6 +64,23 @@ export class employeeService implements IemployeeService{
             console.log(error);
             return null
             
+        }
+    }
+    async updateEmployee(employeeId:string,employeeData: IemployeeModel): Promise<IemployeeModel> {
+        try {
+            
+            console.log(employeeData)
+            console.log(employeeId,'fromservice');
+            
+            const findEmployee = await this._employeeRepository.findByIdAndUpdate(employeeId,employeeData)
+
+            console.log('kitty mwone kitty',findEmployee);
+            
+            const employee = employeeData;
+            return employee
+        } catch (error) {
+            console.log(error);
+            throw new Error           
         }
     }
 }

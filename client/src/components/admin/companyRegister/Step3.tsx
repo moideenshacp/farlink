@@ -1,8 +1,8 @@
-import logo from "../../assets/EmailLogo.png";
-import Footer from "../../shares/components/landingPageComponents/Footer";
+import logo from "../../../assets/EmailLogo.png";
+import Footer from "../../../shared/components/landingPageComponents/Footer";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { toggleOrganizationStatus } from "../../redux/user/userSlice";
+import { toggleOrganizationStatus } from "../../../redux/user/userSlice";
 import { useEffect } from "react";
 
 const Step3 = () => {

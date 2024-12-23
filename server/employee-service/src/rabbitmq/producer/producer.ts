@@ -1,4 +1,4 @@
-import { getChannel } from "../../src/config/rabbitmq";
+import { getChannel } from "../../config/rabbitmq";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const publishEvent = async (queue: string, message: any): Promise<void> => {

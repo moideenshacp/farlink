@@ -1,8 +1,9 @@
 import { Routes, Route } from "react-router-dom";
-import DashBoardSideBar from "../../shares/components/admin/DashBoardSideBar";
-import DashBoardTopBar from "../../shares/components/admin/DashBoardTopBar";
-import DashboardSettings from "../../components/admin/DashboardSettings";
-import Myteam from "../../components/admin/Myteam";
+import DashBoardSideBar from "../../shared/components/admin/DashBoardSideBar";
+import DashBoardTopBar from "../../shared/components/admin/DashBoardTopBar";
+import DashboardSettings from "../../components/admin/settingss/DashboardSettings";
+import Myteam from "../../components/admin/myTeam/Myteam";
+import EmployeeProfile from "../../components/admin/myTeam/EmployeeProfile";
 // Content Components
 const Overview = () => <div>Overview Content</div>;
 const LeaveSummary = () => <div>Leave Summary Content</div>;
@@ -18,16 +19,21 @@ const Billing = () => <div>Billing Content</div>;
 const MyTeamPage = () => {
   return (
     <div className="min-h-screen bg-gray-100 flex">
-      <DashBoardSideBar />
+     <div className="lg:fixed lg:left-0 lg:top-0 lg:h-full lg:w-64 bg-white lg:border-r">
+        <DashBoardSideBar />
+      </div>
 
-      <div className="flex-1 flex flex-col">
-        <DashBoardTopBar />
+      <div className="flex-1 flex flex-col lg:ml-64">
+        <div className="fixed lg:top-0  lg:left-64 lg:w-[calc(100%-16rem)] bg-white z-auto ">
+          <DashBoardTopBar />
+        </div>
 
         {/* Dynamic Content */}
-        <main className="flex-1 bg-gray-50 p-6">
+        <main className="flex-1 bg-white p-6 sm: mt-14 lg:pt-14">
           <Routes>
             <Route path="/" element={<Overview />} />
             <Route path="/my-team" element={<Myteam />} />
+            <Route path="/employee-profile" element={<EmployeeProfile />} />
             <Route path="/leave-summary" element={<LeaveSummary />} />
             <Route path="/manage-leave" element={<ManageLeave />} />
             <Route path="/create-project" element={<CreateProject />} />

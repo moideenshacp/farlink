@@ -2,6 +2,7 @@ import { IemployeeController } from "../interfaces/IemployeeController";
 import { Request, Response } from "express";
 import { employeeService } from "../services/employeeService";
 import { registerEmployeeSchema } from "../validators/RegisterEmployeeValidator";
+import { employeeProfileUpdate } from "../validators/EmployeeProfileUpdate";
 
 export class employeeController implements IemployeeController{
 
@@ -56,6 +57,37 @@ export class employeeController implements IemployeeController{
         } catch (error) {
             console.log(error)
             res.status(500).json({message:"Interval server error"})
+            
+        }
+    }
+    public updateEmployees = async(req: Request, res: Response): Promise<void> =>{
+        try {
+            console.log("get in to update=======================================");
+            
+
+            const { employeeId, ...otherData } = req.body.data;
+            const { error } = employeeProfileUpdate.validate(otherData, {
+              abortEarly: false,
+            });
+            
+            if(error){
+                res.status(400).json({
+                    message:"validaton error",
+                    details: error.details[0].message
+                    
+                })
+                console.log("Validation Error:", error.details);
+                return
+            }
+
+            const updatedEmployee = await this._employeeservice.updateEmployee(employeeId,otherData)
+            if(updatedEmployee){
+
+                res.status(200).json({message:"employee updated"})
+            }
+
+        } catch (error) {
+            console.log(error);
             
         }
     }

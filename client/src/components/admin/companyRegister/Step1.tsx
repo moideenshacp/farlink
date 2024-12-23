@@ -1,9 +1,9 @@
 import React from "react";
-import logo from "../../assets/EmailLogo.png";
-import Footer from "../../shares/components/landingPageComponents/Footer";
-import { useCompanyBasicData } from "../../shares/hooks/UseRegisteration";
+import logo from "../../../assets/EmailLogo.png";
+import Footer from "../../../shared/components/landingPageComponents/Footer";
+import { useCompanyBasicData } from "../../../shared/hooks/UseRegisteration";
 import { useNavigate } from "react-router-dom";
-import { useValidation } from "../../shares/hooks/useCompanyValidations";
+import { useValidation } from "../../../shared/hooks/useCompanyValidations";
 
 const Step1 = () => {
   const navigate = useNavigate();

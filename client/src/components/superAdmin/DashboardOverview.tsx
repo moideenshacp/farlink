@@ -1,6 +1,6 @@
 import { useEffect } from "react";
-import OverviewCard from "../../shares/components/OverviewCard";
-import { useCompanies } from "../../shares/hooks/UseCompanies";
+import OverviewCard from "../../shared/components/OverviewCard";
+import { useCompanies } from "../../shared/hooks/UseCompanies";
 import { fetchAllCompanies } from "../../api/companyApi";
 
 const DashboardOverview = () => {

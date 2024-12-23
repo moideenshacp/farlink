@@ -1,13 +1,13 @@
 import React, { useState } from "react";
-import logo from "../../assets/EmailLogo.png";
-import Footer from "../../shares/components/landingPageComponents/Footer";
-import { regitserCompany } from "../../api/authApi";
-import { useCompanyBasicData } from "../../shares/hooks/UseRegisteration";
+import logo from "../../../assets/EmailLogo.png";
+import Footer from "../../../shared/components/landingPageComponents/Footer";
+import { regitserCompany } from "../../../api/authApi";
+import { useCompanyBasicData } from "../../../shared/hooks/UseRegisteration";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../redux/store";
-import { useFormValidationStep2 } from "../../shares/hooks/useCompanyValidations";
-import { setOrganizationId } from "../../redux/user/userSlice";
+import { RootState } from "../../../redux/store";
+import { useFormValidationStep2 } from "../../../shared/hooks/useCompanyValidations";
+import { setOrganizationId } from "../../../redux/user/userSlice";
 
 const Step2 = () => {
   const { registrationData } = useCompanyBasicData();

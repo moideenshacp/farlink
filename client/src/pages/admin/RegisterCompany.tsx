@@ -1,6 +1,6 @@
 import { useState } from "react";
-import Step1 from "../../components/admin/Step1"
-import Step2 from "../../components/admin/Step2";
+import Step1 from "../../components/admin/companyRegister/Step1"
+import Step2 from "../../components/admin/companyRegister/Step2";
 import axios from "axios";
 
 const RegisterCompany = () => {

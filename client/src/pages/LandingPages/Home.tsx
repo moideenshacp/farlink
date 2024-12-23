@@ -1,11 +1,11 @@
-import Header from "../../shares/components/landingPageComponents/Header";
+import Header from "../../shared/components/landingPageComponents/Header";
 import Home1 from "../../assets/Home1.png";
 import Home2 from "../../assets/Home2.png";
 import Home3 from "../../assets/Home3.png";
 import Home4 from "../../assets/Home4.png";
 import Home5 from "../../assets/Home5.png";
 import Home6 from "../../assets/Home6.png";
-import Footer from "../../shares/components/landingPageComponents/Footer";
+import Footer from "../../shared/components/landingPageComponents/Footer";
 
 const Home = () => {
   return (

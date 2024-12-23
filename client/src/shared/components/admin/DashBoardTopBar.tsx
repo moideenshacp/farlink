@@ -31,7 +31,6 @@ const DashBoardTopBar = () => {
   return (
     <div>
       <header className="bg-white shadow">
-        
         <div className="px-6 py-4 flex justify-between items-center">
           {location.pathname === "/admin/" ? (
             <h1 className="text-xl font-semibold text-gray-700 lg:block sm: hidden">
@@ -76,6 +75,10 @@ const DashBoardTopBar = () => {
           ) : location.pathname === "/admin/setting" ? (
             <h1 className="text-xl font-semibold text-gray-700 lg:block sm: hidden">
               Settings
+            </h1>
+          ) : location.pathname === "/admin/employee-profile" ? (
+            <h1 className="text-xl font-semibold text-gray-700 lg:block sm: hidden">
+              Employee Profile
             </h1>
           ) : (
             <h1 className="text-xl font-semibold text-gray-700 lg:block sm: hidden">
@@ -124,20 +127,20 @@ const DashBoardTopBar = () => {
             <div className="relative inline-block text-left">
               <div>
                 <button onClick={toggleDropdown} className="flex items-center">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth={1.5}
-                      stroke="#8C97A8"
-                      className="size-8"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
-                      />
-                    </svg>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={1.5}
+                    stroke="#8C97A8"
+                    className="size-8"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
+                    />
+                  </svg>
                   <svg
                     className="ml-2 w-4 h-4"
                     viewBox="0 0 20 20"
