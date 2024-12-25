@@ -1,1 +1,5 @@
 {"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"GET\",\"url\":\"/api/employee/get-employees?organizationId=676a60771038a82877ce3f1f\",\"status\":\"304\",\"responseTime\":\"553.639\"}","timestamp":"2024-12-24T18:30:35.834Z"}
+{"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"GET\",\"url\":\"/api/employee/get-employees?organizationId=676a60771038a82877ce3f1f\",\"status\":\"304\",\"responseTime\":\"988.780\"}","timestamp":"2024-12-25T05:04:16.541Z"}
+{"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"GET\",\"url\":\"/api/employee/get-employees?organizationId=676a60771038a82877ce3f1f\",\"status\":\"304\",\"responseTime\":\"151.895\"}","timestamp":"2024-12-25T05:04:20.797Z"}
+{"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"POST\",\"url\":\"/api/employee/update-employee\",\"status\":\"200\",\"responseTime\":\"306.216\"}","timestamp":"2024-12-25T05:04:34.854Z"}
+{"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"GET\",\"url\":\"/api/employee/get-employees?organizationId=676a60771038a82877ce3f1f\",\"status\":\"200\",\"responseTime\":\"122.209\"}","timestamp":"2024-12-25T05:04:38.197Z"}
