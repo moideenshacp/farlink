@@ -34,6 +34,9 @@
     },
     image:{
       type:String
+    },
+    googleId:{
+      type:String
     }
   });
 

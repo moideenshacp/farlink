@@ -4,13 +4,15 @@ import signup from "../../assets/signUp.jpg";
 import Footer from "../../shared/components/landingPageComponents/Footer";
 import Header from "../../shared/components/landingPageComponents/Header";
 import { FaEnvelope, FaLock } from "react-icons/fa";
-import { FcGoogle } from "react-icons/fc"; // Import Google icon
 import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { LoginAdmin } from "../../api/authApi";
+import { googleLogin, LoginAdmin } from "../../api/authApi";
 import { useDispatch } from "react-redux";
 import { login, setOrganizationId } from "../../redux/user/userSlice";
+import { toast, ToastContainer } from "react-toastify";
+import { jwtDecode } from "jwt-decode";
+import { CredentialResponse, GoogleLogin } from "@react-oauth/google";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -35,32 +37,39 @@ const Login = () => {
     e.preventDefault();
     try {
       const res = await LoginAdmin(formData.email, formData.password);
-  
+
       console.log("here is the res", res.data.user.isOrganizationAdded);
-  
+
       if (res.data.message === "Login sucessfull") {
         const user = res.data.user;
-        console.log("admin",user);
-        
-  
+        console.log("admin", user);
+
         if (user.role === "admin") {
           dispatch(login({ user, token: user.token }));
-        
+
           if (user.isOrganizationAdded) {
-            dispatch(setOrganizationId(user.organizationId))
-            console.log("Admin with organization added, navigating to admin dashboard");
+            dispatch(setOrganizationId(user.organizationId));
+            console.log(
+              "Admin with organization added, navigating to admin dashboard"
+            );
             navigate("/admin/", { replace: true });
           } else {
             console.log("Admin without organization, navigating to step-1");
             navigate("/step-1", { replace: true });
           }
         }
-        
-  
+
         // Check for superAdmin role
         if (user.role === "superAdmin") {
           dispatch(login({ user, token: user.token }));
           navigate("/superAdmin/", { replace: true });
+        }
+
+        if (user.role === "employee") {
+          toast.error("Please do Login via employee login section!!.", {
+            position: "top-right",
+            autoClose: 2000,
+          });
         }
       }
     } catch (error) {
@@ -75,7 +84,53 @@ const Login = () => {
       }
     }
   };
-  
+  const handleGoogleLoginSuccess = async (
+    credentialResponse: CredentialResponse
+  ) => {
+    if (credentialResponse.credential) {
+      try {
+        const userData = jwtDecode(credentialResponse.credential);
+        console.log("Google User Data:", userData);
+        const res = await googleLogin(userData);
+        console.log(res, "res from google login");
+        if (res.data.message === "Login sucessfull") {
+          const user = res.data.user;
+          console.log("admin", user);
+
+          if (user.role === "admin") {
+            dispatch(login({ user, token: user.token }));
+
+            if (user.isOrganizationAdded) {
+              dispatch(setOrganizationId(user.organizationId));
+              console.log(
+                "Admin with organization added, navigating to admin dashboard"
+              );
+              navigate("/admin/", { replace: true });
+            } else {
+              console.log("Admin without organization, navigating to step-1");
+              navigate("/step-1", { replace: true });
+            }
+          }
+
+          // Check for superAdmin role
+          if (user.role === "superAdmin") {
+            dispatch(login({ user, token: user.token }));
+            navigate("/superAdmin/", { replace: true });
+          }
+        }
+      } catch (error) {
+        console.error("Error decoding Google token:", error);
+        toast.error("Google Login failed. Please try again.");
+      }
+    } else {
+      console.error("No credential received from Google Login.");
+      toast.error("Google Login failed. Please try again.");
+    }
+  };
+
+  const handleGoogleLoginFailure = () => {
+    toast.error("Google Login Failed. Please try again.");
+  };
 
   return (
     <div>
@@ -97,11 +152,7 @@ const Login = () => {
             SIGN IN
           </h2>
 
-          {error && (
-            <div className=" text-red-700  rounded mt-6">
-              {error}
-            </div>
-          )}
+          {error && <div className=" text-red-700  rounded mt-6">{error}</div>}
 
           <form className="mt-6 space-y-4 " onSubmit={handleSubmit}>
             <div className="flex items-center border border-[#E0E2E9] rounded-lg px-3 py-2 bg-white">
@@ -147,13 +198,11 @@ const Login = () => {
               <div className="h-px bg-gray-300 flex-1"></div>
             </div>
 
-            <button
-              type="button"
-              className="flex items-center justify-center w-full border border-[#E0E2E9] bg-white py-3 rounded-lg font-medium hover:bg-gray-100 transition duration-300"
-            >
-              <FcGoogle className="text-2xl mr-2" />
-              Continue with Google
-            </button>
+            <GoogleLogin
+              onSuccess={handleGoogleLoginSuccess}
+              onError={handleGoogleLoginFailure}
+              useOneTap
+            />
           </div>
           <br />
           <p className="text-[#969AB8] text-center">
@@ -168,7 +217,7 @@ const Login = () => {
           <img src={signup} alt="Signup" className="max-w-full h-auto" />
         </div>
       </div>
-
+      <ToastContainer />
       <Footer />
     </div>
   );

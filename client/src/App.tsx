@@ -2,7 +2,7 @@
 import Home from "./pages/LandingPages/Home";
 import SignUp from "./pages/LandingPages/SignUp";
 import Login from "./pages/LandingPages/Login";
-import EmailVerified from "./pages/admin/EmailVerified";
+import EmailVerified from "./shared/components/email/EmailVerified";
 import Step1 from "./components/admin/companyRegister/Step1";
 import Step2 from "./components/admin/companyRegister/Step2";
 import Step3 from "./components/admin/companyRegister/Step3";
@@ -17,6 +17,9 @@ import ForgetPassword from "./shared/components/landingPageComponents/ForgetPass
 import ResetPassword from "./shared/components/landingPageComponents/ResetPassword";
 import InvalidForgetPass from "./shared/components/landingPageComponents/InvalidForgetPass";
 import OrganizationPrivateRoute from "./routes/OrganizationPrivateRoute";
+import SetUpPassword from "./pages/employee/SetUpPassword";
+import EmployeeLogin from "./pages/LandingPages/EmployeeLogin";
+import EmployeeDashboard from "./pages/employee/EmployeeDashboard";
 
 function App() {
   return (
@@ -27,11 +30,13 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/sign-up" element={<SignUp />} />
             <Route path="/sign-in" element={<Login />} />
+            <Route path="/employee-login" element={<EmployeeLogin />} />
             <Route path="/verify-email" element={<EmailVerified />} />
             <Route path="/verifyEmail-msg" element={<VerifyMail />} />
             <Route path="/forget-password" element={<ForgetPassEmail />} />
             <Route path="/forget-password-msg" element={<ForgetPassword />} />
             <Route path="/reset-password" element={<ResetPassword />} />
+            <Route path="/set-password" element={<SetUpPassword />} />
             <Route element={<OrganizationPrivateRoute />}>
               <Route path="/step-1" element={<Step1 />} />
               <Route path="/step-2" element={<Step2 />} />
@@ -57,6 +62,9 @@ function App() {
           <Route element={<SuperAdminPrivateRoute />}>
             <Route path="/superAdmin/*" element={<Dashboard />} />
           </Route>
+{/*================================================================================================================================== */}
+
+              <Route path="/employee/*" element={<EmployeeDashboard />} />
         </Routes>
       </div>
     </BrowserRouter>

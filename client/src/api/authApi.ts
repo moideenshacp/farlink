@@ -1,5 +1,6 @@
 import axios from "axios";
 import axiosInstance from "./axiosInterceptor";
+import { JwtPayload } from "jwt-decode";
 
 export const LoginAdmin = async (email: string, password: string) => {
   try {
@@ -163,3 +164,20 @@ export const fetchProfile = async (email: string) => {
     throw error;
   }
 };
+
+export const googleLogin = async (userData: JwtPayload) => {
+  try {
+    const res = await axios.post(
+      `${import.meta.env.VITE_SERVER_BASE_URL}/auth-service/api/auth/google-login`,
+      userData,
+      { withCredentials: true }
+    );
+    return res;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
+
+

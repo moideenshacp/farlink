@@ -4,15 +4,19 @@ import signup from "../../assets/signUp.jpg";
 import Footer from "../../shared/components/landingPageComponents/Footer";
 import Header from "../../shared/components/landingPageComponents/Header";
 import { FaUser, FaEnvelope, FaLock } from "react-icons/fa";
-import { FcGoogle } from "react-icons/fc"; // Import Google icon
 import { useState } from "react";
 import axios from "axios";
 import "react-toastify/dist/ReactToastify.css";
 import { toast, ToastContainer } from "react-toastify";
-import { SignUpAdmin } from "../../api/authApi";
+import { googleLogin, SignUpAdmin } from "../../api/authApi";
+import { CredentialResponse, GoogleLogin } from "@react-oauth/google";
+import { jwtDecode } from "jwt-decode";
+import { useDispatch } from "react-redux";
+import { login, setOrganizationId } from "../../redux/user/userSlice";
 
 const SignUp = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const [formData, setFormData] = useState({
     name: "",
@@ -42,7 +46,7 @@ const SignUp = () => {
       ...errors,
       [name]: "",
     });
-    setError(null)
+    setError(null);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -76,10 +80,14 @@ const SignUp = () => {
         error.response.data.errors.forEach((err: string) => {
           if (err.includes("Name")) fieldErrors.name = err;
           else if (err.includes("email")) fieldErrors.email = err;
-          else if (err.includes("Password must contain at least one uppercase letter and one special character."))
-         fieldErrors.password = err;
+          else if (
+            err.includes(
+              "Password must contain at least one uppercase letter and one special character."
+            )
+          )
+            fieldErrors.password = err;
           else if (err.includes("Passwords must match"))
-          fieldErrors.confirmPassword = err;
+            fieldErrors.confirmPassword = err;
         });
         setErrors(fieldErrors);
         console.log("eee error");
@@ -93,7 +101,53 @@ const SignUp = () => {
       }
     }
   };
+  const handleGoogleLoginSuccess = async (
+    credentialResponse: CredentialResponse
+  ) => {
+    if (credentialResponse.credential) {
+      try {
+        const userData = jwtDecode(credentialResponse.credential);
+        console.log("Google User Data:", userData);
+        const res = await googleLogin(userData);
+        console.log(res, "res from google login");
+        if (res.data.message === "Login sucessfull") {
+          const user = res.data.user;
+          console.log("admin", user);
 
+          if (user.role === "admin") {
+            dispatch(login({ user, token: user.token }));
+
+            if (user.isOrganizationAdded) {
+              dispatch(setOrganizationId(user.organizationId));
+              console.log(
+                "Admin with organization added, navigating to admin dashboard"
+              );
+              navigate("/admin/", { replace: true });
+            } else {
+              console.log("Admin without organization, navigating to step-1");
+              navigate("/step-1", { replace: true });
+            }
+          }
+
+          // Check for superAdmin role
+          if (user.role === "superAdmin") {
+            dispatch(login({ user, token: user.token }));
+            navigate("/superAdmin/", { replace: true });
+          }
+        }
+      } catch (error) {
+        console.error("Error decoding Google token:", error);
+        toast.error("Google Login failed. Please try again.");
+      }
+    } else {
+      console.error("No credential received from Google Login.");
+      toast.error("Google Login failed. Please try again.");
+    }
+  };
+
+  const handleGoogleLoginFailure = () => {
+    toast.error("Google Login Failed. Please try again.");
+  };
   return (
     <div>
       <div className="flex flex-col lg:flex-row">
@@ -113,85 +167,74 @@ const SignUp = () => {
           <h2 className="text-lg lg:text-3xl font-semibold text-[#172C56] mt-2 lg:mt-0">
             SIGN UP
           </h2>
-          {error && (
-            <div className=" text-red-700  rounded mt-6">
-              {error}
-            </div>
-          )}
+          {error && <div className=" text-red-700  rounded mt-6">{error}</div>}
 
           <form className="mt-6 space-y-4 " onSubmit={handleSubmit}>
             <div>
-
-            <div className="flex items-center border border-[#E0E2E9] rounded-lg px-3 py-2 bg-white">
-              <FaUser className="text-[#ADB0CD] mr-3" />
-              <input
-                type="text"
-                placeholder="Username"
-                onChange={handleChange}
-                name="name"
-                className="flex-1 outline-none text-sm text-[#969AB8]"
-              />
-            </div>
-            {errors.name && (
+              <div className="flex items-center border border-[#E0E2E9] rounded-lg px-3 py-2 bg-white">
+                <FaUser className="text-[#ADB0CD] mr-3" />
+                <input
+                  type="text"
+                  placeholder="Username"
+                  onChange={handleChange}
+                  name="name"
+                  className="flex-1 outline-none text-sm text-[#969AB8]"
+                />
+              </div>
+              {errors.name && (
                 <p className="text-red-500 text-sm mt-1">{errors.name}</p>
               )}
             </div>
 
-
-              <div>
-
-
-            <div className="flex items-center border border-[#E0E2E9] rounded-lg px-3 py-2 bg-white">
-              <FaEnvelope className="text-[#ADB0CD] mr-3" />
-              <input
-                type="email"
-                name="email"
-                onChange={handleChange}
-                placeholder="Email"
-                className="flex-1 outline-none text-sm text-[#969AB8]"
-              />
-            </div>
-            {errors.email && (
+            <div>
+              <div className="flex items-center border border-[#E0E2E9] rounded-lg px-3 py-2 bg-white">
+                <FaEnvelope className="text-[#ADB0CD] mr-3" />
+                <input
+                  type="email"
+                  name="email"
+                  onChange={handleChange}
+                  placeholder="Email"
+                  className="flex-1 outline-none text-sm text-[#969AB8]"
+                />
+              </div>
+              {errors.email && (
                 <p className="text-red-500 text-sm mt-1">{errors.email}</p>
               )}
-              </div>
-
-              <div>
-
-            <div className="flex items-center border border-[#E0E2E9] rounded-lg px-3 py-2 bg-white">
-              <FaLock className="text-[#ADB0CD] mr-3" />
-              <input
-                type="password"
-                name="password"
-                onChange={handleChange}
-                placeholder="Password"
-                className="flex-1 outline-none text-sm text-[#969AB8]"
-              />
             </div>
-            {errors.password && (
+
+            <div>
+              <div className="flex items-center border border-[#E0E2E9] rounded-lg px-3 py-2 bg-white">
+                <FaLock className="text-[#ADB0CD] mr-3" />
+                <input
+                  type="password"
+                  name="password"
+                  onChange={handleChange}
+                  placeholder="Password"
+                  className="flex-1 outline-none text-sm text-[#969AB8]"
+                />
+              </div>
+              {errors.password && (
                 <p className="text-red-500 text-sm mt-1">{errors.password}</p>
               )}
-              </div>
-
-
-              <div>
-            <div className="flex items-center border border-[#E0E2E9] rounded-lg px-3 py-2 bg-white">
-              <FaLock className="text-[#ADB0CD] mr-3" />
-              <input
-                type="password"
-                name="confirmPassword"
-                onChange={handleChange}
-                placeholder="Repeat Password"
-                className="flex-1 outline-none text-sm text-[#969AB8]"
-              />
             </div>
-            {errors.confirmPassword && (
+
+            <div>
+              <div className="flex items-center border border-[#E0E2E9] rounded-lg px-3 py-2 bg-white">
+                <FaLock className="text-[#ADB0CD] mr-3" />
+                <input
+                  type="password"
+                  name="confirmPassword"
+                  onChange={handleChange}
+                  placeholder="Repeat Password"
+                  className="flex-1 outline-none text-sm text-[#969AB8]"
+                />
+              </div>
+              {errors.confirmPassword && (
                 <p className="text-red-500 text-sm mt-1">
                   {errors.confirmPassword}
                 </p>
               )}
-
-              </div>
+            </div>
 
             <button
               type="submit"
@@ -218,13 +261,11 @@ const SignUp = () => {
               <div className="h-px bg-gray-300 flex-1"></div>
             </div>
 
-            <button
-              type="button"
-              className="flex items-center justify-center w-full border border-[#E0E2E9] bg-white py-3 rounded-lg font-medium hover:bg-gray-100 transition duration-300"
-            >
-              <FcGoogle className="text-2xl mr-2" />
-              Continue with Google
-            </button>
+            <GoogleLogin
+              onSuccess={handleGoogleLoginSuccess}
+              onError={handleGoogleLoginFailure}
+              useOneTap
+            />
           </div>
           <br />
           <p className="text-[#969AB8] text-center">

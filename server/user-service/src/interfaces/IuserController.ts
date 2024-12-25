@@ -10,4 +10,6 @@ export interface IuserController {
   refreshToken(req:Request,res:Response):Promise<Response>
   updateProfile(req:Request,res:Response):Promise<void>
   getUserProfile(req:Request,res:Response):Promise<void>
+  googleLogin(req:Request,res:Response):Promise<void>
+
 }

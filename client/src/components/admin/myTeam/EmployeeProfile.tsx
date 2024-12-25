@@ -20,7 +20,7 @@ const EmployeeProfile = () => {
       case "Attendence":
         return <EmployeeProfile_attendence />;
       case "Settings":
-        return <EmployeeProfile_settings />;
+        return <EmployeeProfile_settings email={employee.email} verified={employee.verified} />;
       default:
         return <div>Select a section</div>;
     }
@@ -62,7 +62,7 @@ const EmployeeProfile = () => {
               d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
             />
           </svg>
-          <span>Joined: {employee.dateOfJoining.split("T")[0] || ""}</span>
+          <span>Joined: {employee.dateOfJoining ? employee.dateOfJoining.split("T")[0] : ""}</span>
 
           <svg
             xmlns="http://www.w3.org/2000/svg"

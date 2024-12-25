@@ -30,7 +30,9 @@ const PublicRoute = () => {
   if (userRole === "superAdmin") {
     return <Navigate to="/superAdmin/" replace />;
   }
-
+  if(userRole === "employee"){
+    return <Navigate to='/employee/' replace />
+  }
   // Default for unknown roles
   return <Navigate to="/" replace />;
 };

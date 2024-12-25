@@ -50,10 +50,6 @@
       type:Boolean,
       default:true
     },
-    verified: {
-      type: Boolean,
-      default: false,
-    },
     organizationId: {
       type: mongoose.Schema.Types.ObjectId,
     },

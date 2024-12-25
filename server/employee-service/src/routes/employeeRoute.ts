@@ -9,6 +9,8 @@ const EmployeeController = new employeeController()
 router.post('/register-employee',(authenticate as never),EmployeeController.registerEmployee)
 router.get('/get-employees',(authenticate as never),EmployeeController.getAllEmployees)
 router.post('/update-employee',(authenticate as never),EmployeeController.updateEmployees)
+router.post('/invite-employee',(authenticate as never),EmployeeController.inviteEmployee)
+router.post('/set-up-password',EmployeeController.setUpPassword)
 
 
 

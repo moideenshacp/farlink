@@ -218,4 +218,19 @@ export class userService implements IuserService {
       return null;
     }
   }
+  async googleLogin(email: string, name: string, googleId: string, image: string): Promise<IuserModel | null> {
+    try {
+      const data = {email,name,googleId,image}
+      const user = await this._userRepository.findOne({email})
+      if (!user) {
+        await this._userRepository.createUser(data)
+        console.log("New user created:", user);
+      }
+      return user; 
+      
+    } catch (error) {
+      console.log(error);
+      return null
+    }
+  }
 }

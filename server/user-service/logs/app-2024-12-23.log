@@ -13,3 +13,10 @@
 {"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"GET\",\"url\":\"/api/auth/get-profile?email=moideenshacp28%40gmail.com\",\"status\":\"304\",\"responseTime\":\"70.420\"}","timestamp":"2024-12-23T08:52:38.640Z"}
 {"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"POST\",\"url\":\"/api/auth/refresh-token\",\"status\":\"200\",\"responseTime\":\"24.706\"}","timestamp":"2024-12-23T09:36:33.049Z"}
 {"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"POST\",\"url\":\"/api/auth/refresh-token\",\"status\":\"200\",\"responseTime\":\"12.441\"}","timestamp":"2024-12-23T10:53:10.630Z"}
+{"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"POST\",\"url\":\"/api/auth/refresh-token\",\"status\":\"200\",\"responseTime\":\"30.814\"}","timestamp":"2024-12-23T12:50:29.298Z"}
+{"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"POST\",\"url\":\"/api/auth/logout\",\"status\":\"200\",\"responseTime\":\"11.354\"}","timestamp":"2024-12-23T16:08:48.067Z"}
+{"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"POST\",\"url\":\"/api/auth/login\",\"status\":\"200\",\"responseTime\":\"2132.266\"}","timestamp":"2024-12-23T16:09:26.116Z"}
+{"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"GET\",\"url\":\"/api/auth/get-profile?email=moideenshacp28%40gmail.com\",\"status\":\"304\",\"responseTime\":\"110.773\"}","timestamp":"2024-12-23T16:09:38.376Z"}
+{"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"GET\",\"url\":\"/api/company/get-companyProfile?email=moideenshacp28%40gmail.com\",\"status\":\"201\",\"responseTime\":\"381.443\"}","timestamp":"2024-12-23T16:09:41.475Z"}
+{"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"GET\",\"url\":\"/api/auth/get-profile?email=moideenshacp28%40gmail.com\",\"status\":\"401\",\"responseTime\":\"8.519\"}","timestamp":"2024-12-23T17:12:54.125Z"}
+{"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"POST\",\"url\":\"/api/auth/login\",\"status\":\"200\",\"responseTime\":\"1133.522\"}","timestamp":"2024-12-23T17:14:40.944Z"}

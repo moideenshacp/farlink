@@ -124,3 +124,36 @@ export const getAllEmployees = async (organizationId: string | undefined) => {
     
   }
 }
+
+export const sendInvitationEmployee= async (email: string | null) => {
+  try {
+    const res = await axiosInstance.post(
+      `${
+        import.meta.env.VITE_SERVER_BASE_URL
+      }/employee-service/api/employee/invite-employee`,
+      {email},{withCredentials:true}
+    );
+    return res;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
+
+export const setUpPassword= async (password: string | null,confirmPassword:string | null,email:string|null) => {
+  try {
+    const res = await axios.post(
+      `${
+        import.meta.env.VITE_SERVER_BASE_URL
+      }/employee-service/api/employee/set-up-password`,
+      {password,confirmPassword,email}
+    );
+    return res;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
+

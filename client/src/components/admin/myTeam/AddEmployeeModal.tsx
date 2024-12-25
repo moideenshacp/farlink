@@ -87,7 +87,11 @@ const AddEmployeeModal = ({ toggleModal }: { toggleModal: () => void }) => {
           phone: "",
         });
         setSelectedFile(null);
-
+      }else{
+        toast.error("Something went wrong. Please try again.", {
+          position: "top-right",
+          autoClose: 2000,
+        });
       }
     } catch (error) {
       console.log(error);

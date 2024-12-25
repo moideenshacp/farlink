@@ -17,6 +17,7 @@ export default class BaseRepository<T extends Document>
   async findOne(filter: FilterQuery<T>): Promise<T | null> {
     return this.model.findOne(filter);
   }
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async findAll(filter?: Partial<T> | undefined): Promise<T[]> {
     return this.model.find();
   }

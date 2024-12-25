@@ -262,7 +262,58 @@ export class userController implements IuserController {
     }
   };
   
+  public googleLogin = async(req: Request, res: Response): Promise<void>=> {
+    try {
+      const { email, name, picture, sub } = req.body;
+    
+      if (!email || !sub) {
+         res.status(400).json({ error: "Invalid Google data." });
+      }  
+        const user = await this._userService.googleLogin(
+          email,
+          name,
+          sub,
+          picture,
+        );
   
+      console.log(user,'fro controller');
+      if(user){
+      const token = AuthService.generateToken({ email: user.email, role: user.role });
+      const refreshToken = AuthService.generateRefreshToken({ email: user.email, role: user.role });
+      console.log("token====", token);
+
+      res.cookie("accessToken", token, {
+        httpOnly: true,
+        sameSite: "strict",
+        maxAge:  60  * 60 * 1000,
+        
+      });
+
+      res.cookie("refreshToken", refreshToken, {
+        httpOnly: true,
+        sameSite: "strict", 
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+      });
+
+       res
+        .status(200)
+        .json({
+          message: "Login sucessfull",
+          user: {
+            email: user.email,
+            role: user.role,
+            name: user.name,
+            token: token,
+            isOrganizationAdded:user.isOrganizationAdded,
+            organizationId:user.organizationId
+          },
+        });
+      }
+    } catch (error) {
+      console.log(error);
+      
+    }
+  }
    
 
   

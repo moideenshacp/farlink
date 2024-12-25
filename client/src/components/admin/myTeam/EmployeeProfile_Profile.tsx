@@ -45,7 +45,7 @@ const EmployeeProfile_Profile: React.FC<EmployeeProfileProps> = ({
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
-
+    setErrors({});
     setFormData({
       ...formData,
       [name]: value,
@@ -75,7 +75,6 @@ const EmployeeProfile_Profile: React.FC<EmployeeProfileProps> = ({
       if (error) {
         const newErrors: Record<string, string> = error.details.reduce(
           (acc, curr) => {
-            // Ensure that acc has the correct type as an object with string keys and string values
             acc[curr.path[0] as string] = curr.message;
             return acc;
           },
@@ -160,7 +159,7 @@ const EmployeeProfile_Profile: React.FC<EmployeeProfileProps> = ({
             value={formData.userName}
             className="w-full border-b border-gray-300 focus:outline-none focus:border-[#4361EE] py-1"
           />
-          {errors.userName && <p>{errors.userName}</p>}
+          {errors.userName && <p className="text-red-600">{errors.userName}</p>}
         </div>
         <div className="mb-4">
           <label className="block text-sm font-medium text-[#6A7181]">
@@ -174,7 +173,9 @@ const EmployeeProfile_Profile: React.FC<EmployeeProfileProps> = ({
             value={formData.firstName}
             className="w-full border-b border-gray-300 focus:outline-none focus:border-[#4361EE] py-1"
           />
-          {errors.firstName && <p>{errors.firstName}</p>}
+          {errors.firstName && (
+            <p className="text-red-600">{errors.firstName}</p>
+          )}
         </div>
         <div className="mb-4">
           <label className="block text-sm font-medium text-[#6A7181]">
@@ -188,7 +189,7 @@ const EmployeeProfile_Profile: React.FC<EmployeeProfileProps> = ({
             value={formData.lastName}
             className="w-full border-b border-gray-300 focus:outline-none focus:border-[#4361EE] py-1"
           />
-          {errors.lastName && <p>{errors.lastName}</p>}
+          {errors.lastName && <p className="text-red-600">{errors.lastName}</p>}
           <div className="mb-4 mt-4">
             <label className="block text-sm font-medium text-[#6A7181]">
               Position
@@ -201,7 +202,9 @@ const EmployeeProfile_Profile: React.FC<EmployeeProfileProps> = ({
               value={formData.position}
               className="w-full border-b border-gray-300 focus:outline-none focus:border-[#4361EE] py-1"
             />
-            {errors.position && <p>{errors.position}</p>}
+            {errors.position && (
+              <p className="text-red-600">{errors.position}</p>
+            )}
           </div>
           <div className="mb-4">
             <label className="block text-sm font-medium text-[#6A7181]">
@@ -229,7 +232,9 @@ const EmployeeProfile_Profile: React.FC<EmployeeProfileProps> = ({
             onChange={handleChange}
             className="w-full border-b border-gray-300 focus:outline-none focus:border-[#4361EE] py-1"
           />
-          {errors.dateOfJoining && <p>{errors.dateOfJoining}</p>}
+          {errors.dateOfJoining && (
+            <p className="text-red-600">{errors.dateOfJoining}</p>
+          )}
         </div>
         <div className="mb-4">
           <label className="block text-sm font-medium text-[#6A7181]">
@@ -242,7 +247,9 @@ const EmployeeProfile_Profile: React.FC<EmployeeProfileProps> = ({
             onChange={handleChange}
             className="w-full border-b border-gray-300 focus:outline-none focus:border-[#4361EE] py-1"
           />
-          {errors.dateOfBirth && <p>{errors.dateOfBirth}</p>}
+          {errors.dateOfBirth && (
+            <p className="text-red-600">{errors.dateOfBirth}</p>
+          )}
         </div>
         <div className="mb-4">
           <label className="block text-sm font-medium text-[#6A7181]">
@@ -256,7 +263,7 @@ const EmployeeProfile_Profile: React.FC<EmployeeProfileProps> = ({
             value={formData.phone}
             className="w-full border-b border-gray-300 focus:outline-none focus:border-[#4361EE] py-1"
           />
-          {errors.phone && <p>{errors.phone}</p>}
+          {errors.phone && <p className="text-red-600">{errors.phone}</p>}
         </div>
 
         <div className="mb-4">
@@ -271,7 +278,7 @@ const EmployeeProfile_Profile: React.FC<EmployeeProfileProps> = ({
             value={formData.email}
             className="w-full border-b border-gray-300 focus:outline-none focus:border-[#4361EE] py-1"
           />
-          {errors.email && <p>{errors.email}</p>}
+          {errors.email && <p className="text-red-600">{errors.email}</p>}
         </div>
 
         <h2 className="text-lg font-semibold mt-6 mb-4">Educational Details</h2>
@@ -287,7 +294,9 @@ const EmployeeProfile_Profile: React.FC<EmployeeProfileProps> = ({
             placeholder="Enter Education details"
             className="w-full border-b border-gray-300 focus:outline-none focus:border-[#4361EE] py-1"
           />
-          {errors.highestQualification && <p>{errors.highestQualification}</p>}
+          {errors.highestQualification && (
+            <p className="text-red-600">{errors.highestQualification}</p>
+          )}
         </div>
         <div className="mb-4">
           <label className="block text-sm font-medium text-[#6A7181]">
@@ -301,7 +310,9 @@ const EmployeeProfile_Profile: React.FC<EmployeeProfileProps> = ({
             placeholder="Enter Name of Institution"
             className="w-full border-b border-gray-300 focus:outline-none focus:border-[#4361EE] py-1"
           />
-          {errors.institution && <p>{errors.institution}</p>}
+          {errors.institution && (
+            <p className="text-red-600">{errors.institution}</p>
+          )}
         </div>
         <div className="mb-4">
           <label className="block text-sm font-medium text-[#6A7181]">
@@ -315,7 +326,9 @@ const EmployeeProfile_Profile: React.FC<EmployeeProfileProps> = ({
             placeholder="Enter Year of Qualification"
             className="w-full border-b border-gray-300 focus:outline-none focus:border-[#4361EE] py-1"
           />
-          {errors.qualificationYear && <p>{errors.qualificationYear}</p>}
+          {errors.qualificationYear && (
+            <p className="text-red-600">{errors.qualificationYear}</p>
+          )}
         </div>
 
         <h2 className="text-lg font-semibold mt-6 mb-4">Family Details</h2>
@@ -331,7 +344,9 @@ const EmployeeProfile_Profile: React.FC<EmployeeProfileProps> = ({
             placeholder="Enter Father's Name"
             className="w-full border-b border-gray-300 focus:outline-none focus:border-[#4361EE] py-1"
           />
-          {errors.fatherName && <p>{errors.fatherName}</p>}
+          {errors.fatherName && (
+            <p className="text-red-600">{errors.fatherName}</p>
+          )}
         </div>
         <div className="mb-4">
           <label className="block text-sm font-medium text-[#6A7181]">
@@ -345,7 +360,9 @@ const EmployeeProfile_Profile: React.FC<EmployeeProfileProps> = ({
             placeholder="Enter Father's Profession"
             className="w-full border-b border-gray-300 focus:outline-none focus:border-[#4361EE] py-1"
           />
-          {errors.fatherProfession && <p>{errors.fatherProfession}</p>}
+          {errors.fatherProfession && (
+            <p className="text-red-600">{errors.fatherProfession}</p>
+          )}
         </div>
         <div className="mb-4">
           <label className="block text-sm font-medium text-[#6A7181]">
@@ -359,7 +376,9 @@ const EmployeeProfile_Profile: React.FC<EmployeeProfileProps> = ({
             value={formData.motherName}
             className="w-full border-b border-gray-300 focus:outline-none focus:border-[#4361EE] py-1"
           />
-          {errors.motherName && <p>{errors.motherName}</p>}
+          {errors.motherName && (
+            <p className="text-red-600">{errors.motherName}</p>
+          )}
         </div>
         <div className="mb-4">
           <label className="block text-sm font-medium text-[#6A7181]">
@@ -373,7 +392,9 @@ const EmployeeProfile_Profile: React.FC<EmployeeProfileProps> = ({
             placeholder="Enter Mother's Profession"
             className="w-full border-b border-gray-300 focus:outline-none focus:border-[#4361EE] py-1"
           />
-          {errors.motherProfession && <p>{errors.motherProfession}</p>}
+          {errors.motherProfession && (
+            <p className="text-red-600">{errors.motherProfession}</p>
+          )}
         </div>
       </div>
       <ToastContainer />

@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   return (
     <nav className="flex justify-between items-center px-6 py-4 shadow-md bg-white fixed w-full">
@@ -30,11 +31,31 @@ const Header = () => {
           <li className="text-[#172C56] font-semibold cursor-pointer hover:text-[#4361EE]">
             Pricing
           </li>
-          <Link to="/sign-in">
-            <li className="text-[#172C56] font-semibold cursor-pointer hover:text-[#4361EE]">
+          <div className="relative">
+            <button
+              onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+              className="text-[#172C56] font-semibold cursor-pointer hover:text-[#4361EE]"
+            >
               Login
-            </li>
-          </Link>
+            </button>
+            {isDropdownOpen && (
+              <div className="absolute bg-white shadow-lg rounded-lg mt-2 w-40">
+                <Link
+                  to="/sign-in"
+                  className="block px-4 py-2 text-sm text-[#172C56] hover:bg-[#F5F5F5]"
+                >
+                  Login as Admin
+                </Link>
+                <Link
+                  to="/employee-login"
+                  className="block px-4 py-2 text-sm text-[#172C56] hover:bg-[#F5F5F5]"
+                >
+                  Login as Employee
+
+                </Link>
+              </div>
+            )}
+          </div>
         </ul>
         <Link to="/sign-up">
           <button className="bg-[#4361EE] font-medium text-white px-7 py-3 rounded-full text-sm hover:bg-blue-700 transition duration-300">
@@ -99,9 +120,31 @@ const Header = () => {
             <li className="text-[#172C56] font-semibold cursor-pointer hover:text-[#4361EE]">
               Pricing
             </li>
-            <li className="text-[#172C56] font-semibold cursor-pointer hover:text-[#4361EE]">
-              Login
-            </li>
+            <div className="relative">
+              <button
+                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                className="text-[#172C56] font-semibold cursor-pointer hover:text-[#4361EE]"
+              >
+                Login
+              </button>
+              {isDropdownOpen && (
+                <div className="absolute bg-white shadow-lg rounded-lg mt-2 w-40">
+                  <Link
+                    to="/sign-in"
+                    className="block px-4 py-2 text-sm text-[#172C56] hover:bg-[#F5F5F5]"
+                  >
+                    Login as Admin
+                  </Link>
+                  <Link
+                    to="/employee-login"
+                    className="block px-4 py-2 text-sm text-[#172C56] hover:bg-[#F5F5F5]"
+                  >
+                    Login as Employee
+
+                  </Link>
+                </div>
+              )}
+            </div>
           </ul>
           <div className="flex justify-center pb-4">
             <button className="bg-[#4361EE] font-medium text-white px-6 py-2 rounded-full text-sm hover:bg-blue-700 transition duration-300">

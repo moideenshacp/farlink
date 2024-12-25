@@ -93,22 +93,25 @@ const DashboardProfile = () => {
   return (
     <form onSubmit={handleSubmit}>
       <div className="space-y-3">
-        <div className="mt-2 flex justify-end space-x-4">
-          <button
-            type="button"
-            className="bg-white border-2 border-[#D9DADE] py-2 px-6 rounded-xl"
-            onClick={handleClear}
-          >
-            Cancel
-          </button>
-          <button
-            type="submit"
-            className="bg-[#4361EE] py-2 px-6 rounded-xl text-white"
-            disabled={isLoading}
-          >
-            {isLoading ? "Saving..." : "Save"}
-          </button>
-        </div>
+      {user?.role !== "employee" && (
+  <div className="mt-2 flex justify-end space-x-4">
+    <button
+      type="button"
+      className="bg-white border-2 border-[#D9DADE] py-2 px-6 rounded-xl"
+      onClick={handleClear}
+    >
+      Cancel
+    </button>
+    <button
+      type="submit"
+      className="bg-[#4361EE] py-2 px-6 rounded-xl text-white"
+      disabled={isLoading}
+    >
+      {isLoading ? "Saving..." : "Save"}
+    </button>
+  </div>
+)}
+
 
         <div className="form-group">
           <label className="block font-medium text-[#232360]">Username</label>
@@ -129,6 +132,7 @@ const DashboardProfile = () => {
             onChange={handleChange}
             name="fName"
             value={formData.fName}
+            readOnly={user?.role === "employee"}
           />
           {validationErrors.fName && (
             <p className="text-red-500 text-sm">{validationErrors.fName}</p>
@@ -144,6 +148,7 @@ const DashboardProfile = () => {
             onChange={handleChange}
             name="lName"
             value={formData.lName}
+            readOnly={user?.role === "employee"}
           />
           {validationErrors.lName && (
             <p className="text-red-500 text-sm">{validationErrors.lName}</p>
@@ -159,6 +164,7 @@ const DashboardProfile = () => {
             onChange={handleChange}
             name="phone"
             value={formData.phone}
+            readOnly={user?.role === "employee"}
           />
           {validationErrors.phone && (
             <p className="text-red-500 text-sm">{validationErrors.phone}</p>
@@ -171,6 +177,7 @@ const DashboardProfile = () => {
             className="w-full p-2 border rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-200 text-[#333333] font-normal"
             type="text"
             defaultValue={user?.role || ""}
+            
             readOnly
           />
         </div>
