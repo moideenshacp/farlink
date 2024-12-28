@@ -77,14 +77,14 @@ export class employeeService implements IemployeeService {
         throw new Error("Employee data cannot be null");
       }
 
-      console.log(employeeData);
       console.log(employeeId, "fromservice");
 
       const findEmployee = await this._employeeRepository.findByIdAndUpdate(
         employeeId,
         employeeData
       );
-
+      console.log(employeeData,"employeeee");
+      
       if (!findEmployee) {
         throw new Error("Employee not found");
       }
@@ -94,13 +94,13 @@ export class employeeService implements IemployeeService {
         event: "UPDATE_EMPLOYEE",
         payload: {
           id: findEmployee?._id,
-          name: findEmployee?.userName,
-          email: findEmployee?.email,
-          firstName: findEmployee?.firstName,
-          lastName: findEmployee?.lastName,
-          phone: findEmployee?.phone,
-          role: findEmployee?.role,
-          image: findEmployee?.image,
+          name: employeeData?.userName,
+          email: employeeData?.email,
+          firstName: employeeData?.firstName,
+          lastName: employeeData?.lastName,
+          phone: employeeData?.phone,
+          role: employeeData?.role,
+          image: employeeData?.image,
           organizationId: findEmployee?.organizationId,
         },
       });
@@ -137,6 +137,22 @@ export class employeeService implements IemployeeService {
     } catch (error) {
       console.log(error);
       return "";
+    }
+  }
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  async EmployeesCount(organizationId: string): Promise<any> {
+    try {
+
+      console.log(organizationId,"sdtfghjrtfyguhj")
+      const employeeData = await this._employeeRepository.findByOrganizationId(organizationId)
+      const ActiveEmployeesCount =employeeData.filter((data)=>data.isActive === true).length
+      const TerminatedEmployeesCount =employeeData.filter((data)=>data.isActive === false).length
+      console.log("employeeData",ActiveEmployeesCount);
+      console.log("employeeData",TerminatedEmployeesCount);
+      const data = {ActiveEmployeesCount,TerminatedEmployeesCount}
+      return data     
+    } catch (error) {
+      console.log(error);      
     }
   }
 }

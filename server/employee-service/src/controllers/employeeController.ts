@@ -138,4 +138,24 @@ export class employeeController implements IemployeeController {
     }
       
   }
+  public EmployeesCount = async (req: Request, res: Response): Promise<void> => {
+    try {
+      const { organizationId } = req.query;
+      if (!organizationId) {
+        res.status(404).json({ message: "No organization found." });
+        return;
+      }
+        const employeeCountResponse = await this._employeeservice.EmployeesCount(organizationId as string);
+      
+      if (employeeCountResponse) {
+         res.status(200).json({ message: "Employees count fetched successfully", data: employeeCountResponse });
+      } else {
+         res.status(404).json({ message: "No employees found." });
+      }
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ message: "Internal Server Error" });
+    }
+  }
+  
 }

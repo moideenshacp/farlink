@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { IemployeeData } from "./IemployeeData";
 import IemployeeModel from "./IemployeeModel";
 
@@ -8,4 +9,5 @@ export interface IemployeeService {
     updateEmployee(employeeId:string,employeeData:IemployeeModel | null):Promise<IemployeeModel>
     inviteEmployee(email:string):Promise<string>
     setUpPassword(password:string,email:string):Promise<string>
+    EmployeesCount(organizationId:string):Promise<any>
 }

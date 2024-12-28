@@ -5,8 +5,8 @@ import DashboardSettings from "../../components/admin/settingss/DashboardSetting
 import Myteam from "../../components/admin/myTeam/Myteam";
 import EmployeeProfile from "../../components/admin/myTeam/EmployeeProfile";
 import Billing from "../../components/admin/billing/Billing"
+import DashboardOverview from "../../components/admin/overview/DashboardOverview";
 // Content Components
-const Overview = () => <div>Overview Content</div>;
 const LeaveSummary = () => <div>Leave Summary Content</div>;
 const ManageLeave = () => <div>Manage Leave Content</div>;
 const CreateProject = () => <div>Create Project Content</div>;
@@ -31,7 +31,7 @@ const MyTeamPage = () => {
         {/* Dynamic Content */}
         <main className="flex-1 bg-white p-6 sm: mt-14 lg:pt-14">
           <Routes>
-            <Route path="/" element={<Overview />} />
+            <Route path="/" element={<DashboardOverview />} />
             <Route path="/my-team" element={<Myteam />} />
             <Route path="/employee-profile" element={<EmployeeProfile />} />
             <Route path="/leave-summary" element={<LeaveSummary />} />

@@ -10,7 +10,7 @@ export default interface IuserService {
   loginUser(email: string, password: string): Promise<IuserModel>;
   generatePasswordResetToken(email: string): Promise<void>;
   resetPassword(password: string, token: string): Promise<IuserModel>;
-  updateProfile(fName: string,lName:string,phone:string,email:string): Promise<IuserModel | null>;
+  updateProfile(fName: string,lName:string,phone:string,email:string,image: string): Promise<IuserModel | null>;
   getUserProfile(email:string): Promise<IuserModel | null>;
   googleLogin(email:string,name:string,googleId:string,image:string): Promise<IuserModel>;
 }

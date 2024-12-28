@@ -128,7 +128,8 @@ export const updateProfile = async (
   fName: string,
   lName: string,
   phone: string,
-  email:string | undefined
+  email:string | undefined,
+  image:string
 )=>{
   try {
     const res = await axiosInstance.post(
@@ -136,7 +137,8 @@ export const updateProfile = async (
       {fName:fName,
         lName:lName,
         phone:phone,
-        email:email
+        email:email,
+        image:image
 
       },
       { withCredentials: true } 

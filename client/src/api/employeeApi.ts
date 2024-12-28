@@ -12,8 +12,8 @@ interface EmployeeData {
   image: string;
 }
 
-interface EmployeeDetails{
-  employeeId:string
+interface EmployeeDetails {
+  employeeId: string;
   userName: string;
   position: string;
   email: string;
@@ -22,15 +22,15 @@ interface EmployeeDetails{
   lastName: string;
   phone: string;
   image: string;
-  dateOfJoining: string
-  dateOfBirth:string
-  highestQualification:string
-  institution: string
-  qualificationYear: string
-  fatherName: string
-  fatherProfession: string
-  motherName: string
-  motherProfession: string
+  dateOfJoining: string;
+  dateOfBirth: string;
+  highestQualification: string;
+  institution: string;
+  qualificationYear: string;
+  fatherName: string;
+  fatherProfession: string;
+  motherName: string;
+  motherProfession: string;
 }
 export const addEmployee = async (employeeData: EmployeeData) => {
   try {
@@ -105,9 +105,9 @@ export const getAllEmployees = async (organizationId: string | undefined) => {
   }
 };
 
- export const updateEmployeeDetails = async (data:EmployeeDetails)=>{
+export const updateEmployeeDetails = async (data: EmployeeDetails) => {
   try {
-    const res =  await axiosInstance.post(
+    const res = await axiosInstance.post(
       `${
         import.meta.env.VITE_SERVER_BASE_URL
       }/employee-service/api/employee/update-employee`,
@@ -118,20 +118,20 @@ export const getAllEmployees = async (organizationId: string | undefined) => {
         withCredentials: true,
       }
     );
-    return res
+    return res;
   } catch (error) {
     console.log(error);
-    
   }
-}
+};
 
-export const sendInvitationEmployee= async (email: string | null) => {
+export const sendInvitationEmployee = async (email: string | null) => {
   try {
     const res = await axiosInstance.post(
       `${
         import.meta.env.VITE_SERVER_BASE_URL
       }/employee-service/api/employee/invite-employee`,
-      {email},{withCredentials:true}
+      { email },
+      { withCredentials: true }
     );
     return res;
   } catch (error) {
@@ -140,14 +140,17 @@ export const sendInvitationEmployee= async (email: string | null) => {
   }
 };
 
-
-export const setUpPassword= async (password: string | null,confirmPassword:string | null,email:string|null) => {
+export const setUpPassword = async (
+  password: string | null,
+  confirmPassword: string | null,
+  email: string | null
+) => {
   try {
     const res = await axios.post(
       `${
         import.meta.env.VITE_SERVER_BASE_URL
       }/employee-service/api/employee/set-up-password`,
-      {password,confirmPassword,email}
+      { password, confirmPassword, email }
     );
     return res;
   } catch (error) {
@@ -156,4 +159,21 @@ export const setUpPassword= async (password: string | null,confirmPassword:strin
   }
 };
 
-
+export const fetchEmployeesCount = async (
+  organizationId: string | undefined
+) => {
+  try {
+    const res = await axiosInstance.get(
+      `${
+        import.meta.env.VITE_SERVER_BASE_URL
+      }/employee-service/api/employee/fetch-EmployeesCount`,
+      {
+        params: { organizationId },
+        withCredentials: true,
+      }
+    );
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+};

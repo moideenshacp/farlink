@@ -86,7 +86,7 @@ export class userController implements IuserController {
         sameSite: "strict", 
         maxAge: 7 * 24 * 60 * 60 * 1000,
       });
-
+      
       return res
         .status(200)
         .json({
@@ -96,6 +96,7 @@ export class userController implements IuserController {
             role: user.role,
             name: user.name,
             token: token,
+            image:user.image,
             isOrganizationAdded:user.isOrganizationAdded,
             organizationId:user.organizationId
           },
@@ -218,10 +219,10 @@ export class userController implements IuserController {
 
   public updateProfile = async (req: Request, res: Response): Promise<void> => {
     try {
-      const { fName, lName, phone, email } = req.body;
+      const { fName, lName, phone, email ,image} = req.body;
       
       
-      const user = await this._userService.updateProfile(fName, lName, phone, email);
+      const user = await this._userService.updateProfile(fName, lName, phone, email,image);
       if (user) {
         res.status(200).json({ 
           message: "Profile updated successfully",
@@ -304,6 +305,7 @@ export class userController implements IuserController {
             role: user.role,
             name: user.name,
             token: token,
+            image:user.image,
             isOrganizationAdded:user.isOrganizationAdded,
             organizationId:user.organizationId
           },

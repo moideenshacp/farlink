@@ -4,6 +4,7 @@ interface FormData {
   fName: string;
   lName: string;
   phone: string;
+  image: string
 }
 
 interface ValidationErrors {

@@ -26,7 +26,7 @@ const CompanyDetails = () => {
           <div
             className={`w-12 h-12 rounded-full flex items-center justify-center text-white text-lg font-bold ${"bg-gray-500"}`}
           >
-            AB
+            {company.name.charAt(0).toUpperCase()}
           </div>
           <h3 className="text-base font-semibold mt-4">{company.name}</h3>
           <div className="flex flex-col items-center mt-4 text-xs text-gray-600">

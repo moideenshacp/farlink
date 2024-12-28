@@ -42,20 +42,8 @@ const DashboardSettings = () => {
         </div>
 
       </div>
-
-      <div className="flex mb-6">
-        {activeTab === "profile" && (
-          <div className="flex-shrink-0">
-            <img
-              src="https://www.w3schools.com/w3images/avatar2.png"
-              alt="User"
-              className="w-24 h-24 rounded-full"
-            />
-          </div>
-        )}
-        <div className="ml-6 w-full">{renderContent()}</div>
+        <div>{renderContent()}</div>
       </div>
-    </div>
   );
 };
 

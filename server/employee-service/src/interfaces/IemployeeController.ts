@@ -6,4 +6,5 @@ import { Request, Response } from "express";
         updateEmployees(req:Request,res:Response):Promise<void>
         inviteEmployee(req:Request,res:Response):Promise<void>
         setUpPassword(req:Request,res:Response):Promise<void>
+        EmployeesCount(req:Request,res:Response):Promise<void>
     }

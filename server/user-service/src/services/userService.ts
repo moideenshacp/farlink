@@ -169,7 +169,8 @@ export class userService implements IuserService {
     fName: string,
     lName: string,
     phone: string,
-    email: string
+    email: string,
+    image: string
   ): Promise<IuserModel | null> {
     try {
       if (!fName || fName.trim().length === 0) {
@@ -189,7 +190,7 @@ export class userService implements IuserService {
 
       const updatedUser = await this._userRepository.update(
         { email },
-        { firstName: fName, lastName: lName, phone: phone }
+        { firstName: fName, lastName: lName, phone: phone ,image:image}
       );
 
       if (!updatedUser) {
