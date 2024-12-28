@@ -3,6 +3,7 @@ import { userRepository } from "../repositories/userRepository";
 import { organizationRepository } from "../repositories/organizationRepository";
 import IorgModel from "../interfaces/IorganizationModel";
 import IuserModel from "interfaces/IuserModel";
+import { publishEvent } from "../rabbitmq/producer/producer";
 
 export class companyService implements IcompanyService {
   private _userrepository!: userRepository;
@@ -41,6 +42,16 @@ export class companyService implements IcompanyService {
           organizationId: newOrganization._id,
         }
       );
+      const queue = "subscription-service-queue";
+    await publishEvent(queue, {
+      event: "COMPANY_SUBCRIPTION",
+      payload: {
+        organizationId: newOrganization._id,
+        subscriptionType:newOrganization.subscriptionType,
+        industry:newOrganization.industry,
+        admin:newOrganization.admin
+      },
+    });
 
       console.log("Organization registered successfully", newOrganization);
       return newOrganization._id.toString();
@@ -136,7 +147,21 @@ export class companyService implements IcompanyService {
       
     }
   }
-
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  async findSubcription(email: string | null): Promise<any> {
+    try {
   
+      if (!email) {
+        throw new Error("Email cannot be null or undefined");
+      }
+
+      const result = await this._userrepository.findByEmailWithPopulate(email,'organizationId')
+  
+      return result
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  }
   
 }

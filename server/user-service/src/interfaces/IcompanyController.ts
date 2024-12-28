@@ -7,4 +7,6 @@ export interface IcompanyController {
     updateCompanyProfile(req:Request,res:Response):Promise<void>;
     fetchAllOrganization(req:Request,res:Response):Promise<void>
     blockOrganization(req:Request,res:Response):Promise<void>
+    findSubcription(req: Request, res: Response): Promise<void>;
+
 }

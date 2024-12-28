@@ -19,6 +19,9 @@ const orgSchema :Schema =new Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
         required: true,
-      }
+      },
+    subcriptionId:{
+        type:mongoose.Schema.Types.ObjectId
+    }
 })
 export default mongoose.model<IorgModel>("Organization",orgSchema)

@@ -20,6 +20,7 @@ import OrganizationPrivateRoute from "./routes/OrganizationPrivateRoute";
 import SetUpPassword from "./pages/employee/SetUpPassword";
 import EmployeeLogin from "./pages/LandingPages/EmployeeLogin";
 import EmployeeDashboard from "./pages/employee/EmployeeDashboard";
+import SuccessPayment from "./pages/admin/SuccessPayment";
 
 function App() {
   return (
@@ -56,6 +57,7 @@ function App() {
 
           <Route element={<AdminPrivateRoute />}>
             <Route path="/admin/*" element={<AdminDashboard />} />
+            <Route path="/success" element={<SuccessPayment/>} />
           </Route>
 
 {/*================================================================================================================================== */}

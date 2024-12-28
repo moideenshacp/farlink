@@ -4,6 +4,7 @@ import DashBoardTopBar from "../../shared/components/admin/DashBoardTopBar";
 import DashboardSettings from "../../components/admin/settingss/DashboardSettings";
 import Myteam from "../../components/admin/myTeam/Myteam";
 import EmployeeProfile from "../../components/admin/myTeam/EmployeeProfile";
+import Billing from "../../components/admin/billing/Billing"
 // Content Components
 const Overview = () => <div>Overview Content</div>;
 const LeaveSummary = () => <div>Leave Summary Content</div>;
@@ -14,7 +15,6 @@ const ServiceRequest = () => <div>ServiceRequest Content</div>;
 const RealTimeAlert = () => <div>RealTimeAlert Content</div>;
 const Meeting = () => <div>Meeting Content</div>;
 const Message = () => <div>Message Content</div>;
-const Billing = () => <div>Billing Content</div>;
 
 const MyTeamPage = () => {
   return (
@@ -43,7 +43,7 @@ const MyTeamPage = () => {
             <Route path="/meeting" element={<Meeting />} />
             <Route path="/message" element={<Message />} />
             <Route path="/setting" element={<DashboardSettings/>} />
-            <Route path="/billing" element={<Billing />} />
+            <Route path="/billing" element={<Billing/>} />
           </Routes>
         </main>
       </div>

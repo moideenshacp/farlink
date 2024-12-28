@@ -1,7 +1,7 @@
 import BaseRepository from "./baseRepository";
 import IsubcriptionModel from "../interfaces/IsubcriptionModel";
 import IsubcriptionRepository from "../interfaces/IsubcriptionRepository";
-import subcriptionModel from "../models/subcriptionModel"
+import subcriptionModel from "../models/subcriptionModel";
 import { FilterQuery, Types } from "mongoose";
 
 export class subcriptionRepository
@@ -15,7 +15,10 @@ export class subcriptionRepository
     return this.findOne({ email });
   }
 
-  async findByEmailWithPopulate(email: string, populateField: string): Promise<IsubcriptionModel | null> {
+  async findByEmailWithPopulate(
+    email: string,
+    populateField: string
+  ): Promise<IsubcriptionModel | null> {
     return this.model.findOne({ email }).populate(populateField).exec();
   }
   async update(
@@ -24,9 +27,27 @@ export class subcriptionRepository
   ): Promise<IsubcriptionModel | null> {
     return this.model.findOneAndUpdate(filter, update, { new: true });
   }
-  async findByOrganizationId(organizationId: string): Promise<IsubcriptionModel[]> {
-    const objectId = new Types.ObjectId(organizationId); 
+  async findByOrganizationId(
+    organizationId: string
+  ): Promise<IsubcriptionModel[]> {
+    const objectId = new Types.ObjectId(organizationId);
     return this.model.find({ organizationId: objectId }).exec();
   }
 
+  async findBySubscriptionId(
+    subscriptionId: string
+  ): Promise<IsubcriptionModel | null> {
+    return this.model.findOne({ subscriptionId }).exec();
+  }
+
+  async findActiveSubscription(
+    organizationId: string
+  ): Promise<IsubcriptionModel | null> {
+    return this.model
+      .findOne({
+        organizationId: organizationId,
+        status: "active",
+      })
+      .exec();
+  }
 }

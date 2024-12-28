@@ -20,6 +20,7 @@ app.use(cors({
 
 app.use('/auth-service',proxy(`${process.env.AUTH_SERVICE_URL}`))
 app.use('/employee-service',proxy(`${process.env.EMPLOYEE_SERVICE_URL}`))
+app.use('/subcription-service',proxy(`${process.env.SUBCRIPTION_SERVICE_URL}`))
 
 const port = process.env.SERVER_PORT || 4000
 

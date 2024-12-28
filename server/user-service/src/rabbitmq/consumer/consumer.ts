@@ -1,5 +1,6 @@
 import { userRepository } from "../../repositories/userRepository";
 import { getChannel } from "../../config/rabbitmq";
+import { publishEvent } from "../producer/producer";
 
 export const consumeEvents = async (): Promise<void> => {
   try {
@@ -106,6 +107,16 @@ export const consumeEvents = async (): Promise<void> => {
             } else {
                 console.log("failed");
             }
+          }
+
+          if(event.event === "FIND_SUBCRIPTION_PLAN"){
+            const {email,responseQueue} = event.payload
+
+            const userRepo = new userRepository();
+            
+            const details = await userRepo.findByEmailWithPopulate(email,"organizationId")
+            console.log(details);
+            await publishEvent(responseQueue, { success: true, details });
           }
 
         // // Acknowledge the message

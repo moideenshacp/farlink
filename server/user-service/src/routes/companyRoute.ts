@@ -9,6 +9,8 @@ const CompanyController = new companyController()
 router.post("/register-company",authenticate, CompanyController.registerCompany);
 router.get("/get-companyProfile",authenticate , CompanyController.fetchCompanyProfile);
 router.post("/update-companyProfile",authenticate, CompanyController.updateCompanyProfile);
+router.get('/get-subcriptionPlans',(authenticate as never),CompanyController.findSubcription)
+
 
 
 //superAdmin=====================================================================================================================

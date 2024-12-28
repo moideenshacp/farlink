@@ -111,7 +111,19 @@ export class companyController implements IcompanyController {
       
     }
   }
+  public findSubcription = async(req: Request, res: Response): Promise<void>=> {
+    try {
 
+      console.log("-----------------------------------------------------------------------------------------------------");
+      
+      const email = req.query.email as string;         
+      const details = await this._companyservice.findSubcription(email)
+      res.status(200).json({message:"sucessfully fetch subcription plans",details})
+    } catch (error) {
+      console.log(error);
+      
+    }
+}
   
 
 }

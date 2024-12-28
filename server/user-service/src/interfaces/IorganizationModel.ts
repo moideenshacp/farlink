@@ -7,5 +7,6 @@ export default interface IorgModel extends Document {
   industry: string;
   subscriptionType: "free" | "premium";
   admin: mongoose.Types.ObjectId;
+  subcriptionId:mongoose.Types.ObjectId;
 
 }
