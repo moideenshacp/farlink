@@ -72,7 +72,7 @@ export class subcriptionService implements Isubcriptionservice {
         plan: planName,
         amount: planAmount,
         status: stripeSubscription.status,
-        customerId:subcription.customerId,
+        customerId: subcription.customerId,
         current_period_end: new Date(
           stripeSubscription.current_period_end * 1000
         ),
@@ -103,7 +103,10 @@ export class subcriptionService implements Isubcriptionservice {
         line_items: [{ price: planId, quantity: 1 }],
         success_url: `${process.env.FRONT_URL}/success?session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: "http://localhost:3000/cancel",
-        metadata: { plan },
+        subscription_data: {
+          metadata: { plan },
+        },
+        metadata: { plan }, 
       });
 
       const subcriptionData: Partial<IsubcriptionModel> = {
@@ -153,7 +156,7 @@ export class subcriptionService implements Isubcriptionservice {
       switch (event.type) {
         case "checkout.session.completed": {
           const session = event.data.object as Stripe.Checkout.Session;
-          console.log("Checkout session completed:", session);
+          console.log("Checkout session completed:");
           const subscriptionId = session.subscription as string;
 
           const updated = await this._subcriptionRepository.update(
@@ -181,7 +184,7 @@ export class subcriptionService implements Isubcriptionservice {
         }
         case "invoice.payment_succeeded": {
           const invoice = event.data.object as Stripe.Invoice;
-          console.log("Payment succeeded:", invoice);
+          console.log("Payment succeeded:");
           const subscriptionId = invoice.subscription as string;
 
           const updated = await this._subcriptionRepository.update(
@@ -196,9 +199,44 @@ export class subcriptionService implements Isubcriptionservice {
           }
           break;
         }
+        case "customer.subscription.updated": {
+          const subscription = event.data.object as Stripe.Subscription;
+          console.log("Subscription updated:");
+
+          const subscriptionId = subscription.id;
+          const status = subscription.status;
+          
+          const cancelAtPeriodEnd = subscription.cancel_at_period_end;
+          const currentPeriodEnd = new Date(
+            subscription.current_period_end * 1000
+          );
+          const cancelAt = subscription.cancel_at
+            ? new Date(subscription.cancel_at * 1000)
+            : null;
+            const subscriptionType =(subscription.metadata?.plan as "free" | "MONTHLY" | "YEARLY") || "free";
+
+    console.log("Extracted subscriptionType:", subscriptionType);
+          const updated = await this._subcriptionRepository.update(
+            { subscriptionId: subscriptionId },
+            {
+              status: status,
+              cancelAtPeriodEnd: cancelAtPeriodEnd,
+              currentPeriodEnd: currentPeriodEnd,
+              cancelAt: cancelAt,
+              subscriptionType:subscriptionType
+            }
+          );
+
+          if (updated) {
+            console.log("Subscription updated successfully in the database.");
+          } else {
+            console.log("Failed to update subscription in the database.");
+          }
+          break;
+        }
         case "customer.subscription.deleted": {
           const subscription = event.data.object as Stripe.Subscription;
-          console.log("Subscription canceled:", subscription);
+          console.log("Subscription canceled:");
           const subscriptionId = subscription.id;
 
           const existingSubscription =
@@ -212,7 +250,7 @@ export class subcriptionService implements Isubcriptionservice {
           const updated = await this._subcriptionRepository.update(
             { subscriptionId: subscriptionId },
             {
-              status: "cancelled",
+              status: "canceled",
               subscriptionType: subscriptionType,
             }
           );
@@ -224,6 +262,7 @@ export class subcriptionService implements Isubcriptionservice {
           }
           break;
         }
+
         default:
           console.warn(`Unhandled event type: ${event.type}`);
       }
@@ -247,25 +286,21 @@ export class subcriptionService implements Isubcriptionservice {
   }
   async getPaymentHistory(customerId: string): Promise<unknown> {
     try {
-      console.log(customerId)
       const invoices = await stripe.invoices.list({
-              customer: customerId as string,
-              limit: 10,
-            });
-        
-      const paymentIntents = await stripe.paymentIntents.list({
-              customer: customerId as string,
-              limit: 10,
-            });
-            return {
-              invoices: invoices.data,
-              paymentIntents: paymentIntents.data,
-            };
+        customer: customerId as string,
+        limit: 10,
+      });
 
+      const paymentIntents = await stripe.paymentIntents.list({
+        customer: customerId as string,
+        limit: 10,
+      });
+      return {
+        invoices: invoices.data,
+        paymentIntents: paymentIntents.data,
+      };
     } catch (error) {
       console.log(error);
-      
     }
   }
-  
 }

@@ -10,7 +10,10 @@
       enum: ["admin", "superAdmin", "employee"],
       default: "admin",
     },
-    isActive: Boolean,
+    isActive: {
+      type:Boolean,
+      default:true
+    },
     verified: {
       type: Boolean,
       default: false,

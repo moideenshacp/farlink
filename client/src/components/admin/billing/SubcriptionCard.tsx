@@ -21,6 +21,8 @@ const SubscriptionCard: React.FC<SubscriptionCardProps> = ({
   activeStatus,
   customerId
 }) => {
+  console.log(planName,"plan edhaa");
+  
   const [isModalOpen, setModalOpen] = useState(false);
 
   const handleUpgradeClick = () => {

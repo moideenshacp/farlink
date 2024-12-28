@@ -47,3 +47,18 @@ export const getPaymentHistory = async (customerId: string | undefined): Promise
     throw new Error("Unable to fetch payment history.");
   }
 };
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const getAllPaymentHistory  =async():Promise<any>=>{
+  try {
+    const { data } = await axiosInstance.get(
+      `${import.meta.env.VITE_SERVER_BASE_URL}/subcription-service/api/subscription/All-payment-history`);
+      console.log("dataa from apo",data);
+      
+    return data;
+  } catch (error) {
+    console.log(error);
+    throw new Error("Unable to fetch payment history of all..")
+    
+  }
+}

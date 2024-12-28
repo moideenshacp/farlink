@@ -46,8 +46,10 @@ const Billing = () => {
     ? new Date(subscriptionDetails.current_period_end).toLocaleDateString()
     : "";
   const buttonText =
-    subscriptionDetails?.plan !== "free" ? "Manage Your Plan" : "Upgrade Plans";
+    subscriptionDetails?.plan === undefined ?"Upgrade Your Plan"  : "Manage Your Plan";
 
+    console.log(subscriptionDetails?.plan,"subcription detail plan");
+    
   const fallbackSubscriptionDetails = {
     plan: "FREE",
     amount: 0,

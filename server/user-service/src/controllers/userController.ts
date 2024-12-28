@@ -262,7 +262,7 @@ export class userController implements IuserController {
     }
   };
   
-  public googleLogin = async(req: Request, res: Response): Promise<void>=> {
+  public googleLogin = async(req: Request, res: Response): Promise<Response>=> {
     try {
       const { email, name, picture, sub } = req.body;
     
@@ -295,7 +295,7 @@ export class userController implements IuserController {
         maxAge: 7 * 24 * 60 * 60 * 1000,
       });
 
-       res
+      return res
         .status(200)
         .json({
           message: "Login sucessfull",
@@ -309,8 +309,13 @@ export class userController implements IuserController {
           },
         });
       }
+      return res.status(404).json({ error: "User not found." });
     } catch (error) {
-      console.log(error);
+      if (error instanceof CustomError) {
+        return res.status(error.status).json({ error: error.message });
+      } else {
+        return res.status(500).json({ error: "Internal server Errror" });
+      }
       
     }
   }

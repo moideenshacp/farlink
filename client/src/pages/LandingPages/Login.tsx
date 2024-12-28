@@ -119,12 +119,18 @@ const Login = () => {
           }
         }
       } catch (error) {
+        if (axios.isAxiosError(error)) {
+          if (error.response) {
+            setError(error.response.data.error || "Something went wrong.");
+          } else {
+            setError("Something went wrong. Please try again.");
+          }
+        } else {
+          setError("An unexpected error occurred.");
+        }
         console.error("Error decoding Google token:", error);
         toast.error("Google Login failed. Please try again.");
       }
-    } else {
-      console.error("No credential received from Google Login.");
-      toast.error("Google Login failed. Please try again.");
     }
   };
 

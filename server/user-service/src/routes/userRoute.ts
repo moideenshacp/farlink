@@ -8,7 +8,7 @@ const UserController = new userController();
 router.post("/register", UserController.registerUser);
 router.post("/verify-email", UserController.verifyEmail);
 router.post("/logout", UserController.logoutUser as never);
-router.post("/google-login", UserController.googleLogin);
+router.post("/google-login", UserController.googleLogin as never);
 
 //common===========================================================================================================
 router.post("/login", UserController.loginUser as never);

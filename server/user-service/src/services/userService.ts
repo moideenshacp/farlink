@@ -218,19 +218,22 @@ export class userService implements IuserService {
       return null;
     }
   }
-  async googleLogin(email: string, name: string, googleId: string, image: string): Promise<IuserModel | null> {
-    try {
+  async googleLogin(email: string, name: string, googleId: string, image: string): Promise<IuserModel> {
       const data = {email,name,googleId,image}
-      let user = await this._userRepository.findOne({email})
+
+      let user = await this._userRepository.findOne({ email });
+  
       if (!user) {
-        user = await this._userRepository.createUser(data)
+        user = await this._userRepository.createUser(data);
         console.log("New user created:", user);
       }
-      return user; 
-      
-    } catch (error) {
-      console.log(error);
-      return null
-    }
+          if (user && user.isActive === false) {
+        throw new userBlocked();
+      }
+      if (!user) {
+        throw new Error("User creation failed");
+      }
+    
+      return user;     
   }
 }

@@ -1,6 +1,9 @@
 import { Request, Response } from "express";
 import { IsubcriptionController } from "../interfaces/IsubcriptionController";
 import { subcriptionService } from "../services/subcriptionService";
+import Stripe from "stripe";
+
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "");
 
 
 
@@ -101,7 +104,6 @@ export class subcriptionController implements IsubcriptionController {
 
       const data = await this._subcriptionservice.getPaymentHistory(customerId as string)
       if(data){
-        console.log("histroy",data);
         
         res.status(200).json({message:"history fetched successfully",data});
       }else{
@@ -112,5 +114,24 @@ export class subcriptionController implements IsubcriptionController {
       res.status(500).json({ error: "Unable to fetch payment history" });
     }
   };
-  
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  public getAllPaymentHistory = async(req: Request, res: Response): Promise<any> => {
+    try {
+      const invoices = await stripe.invoices.list({
+        limit: 100,
+      });
+      
+    if(invoices){
+      res.json({ invoices: invoices.data });
+    }else{
+      res.status(400).json({message:"No data found"})
+    }
+      
+    } catch (error) {
+      console.log(error); 
+      res.status(500).json({ error: "Unable to fetch payment history" });
+
+      
+    }
+  }
 }

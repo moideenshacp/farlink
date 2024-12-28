@@ -5,8 +5,8 @@ import DashboardSettings from "../../components/superAdmin/DashboardSettings";
 import DashboardAllOrg from "../../components/superAdmin/DashboardAllOrg";
 import CompanyDetails from "../../components/superAdmin/CompanyDetails";
 import DashboardOverview from "../../components/superAdmin/DashboardOverview";
+import PaymentHistoryAdmin from "../../components/superAdmin/Billings";
 
-const Billing = () => <div>Billing Content</div>;
 
 const Dashboard = () => {
 
@@ -26,7 +26,7 @@ const Dashboard = () => {
             <Route path="/" element={<DashboardOverview />} />
             <Route path="/All-organization" element={<DashboardAllOrg />} />
             <Route path="/setting" element={<DashboardSettings />} />
-            <Route path="/billing" element={<Billing />} />
+            <Route path="/billing" element={< PaymentHistoryAdmin/>} />
             <Route path="/organization-details" element={<CompanyDetails />} />
           </Routes>
         </main>

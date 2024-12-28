@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Request, Response } from "express";
 
 export interface IsubcriptionController {
@@ -5,6 +6,6 @@ export interface IsubcriptionController {
   createCheckoutSession(req: Request, res: Response): Promise<void>;
   webhook(req: Request, res: Response): Promise<void>;
   createCustomerPortalSession(req: Request, res: Response): Promise<void>;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   getPaymentHistory(req: Request, res: Response): Promise<any>
+  getAllPaymentHistory(req: Request, res: Response): Promise<any>
 }
