@@ -6,9 +6,9 @@ import Myteam from "../../components/admin/myTeam/Myteam";
 import EmployeeProfile from "../../components/admin/myTeam/EmployeeProfile";
 import Billing from "../../components/admin/billing/Billing"
 import DashboardOverview from "../../components/admin/overview/DashboardOverview";
+import ManageLeave from "../../components/admin/attendence/ManageLeave";
 // Content Components
 const LeaveSummary = () => <div>Leave Summary Content</div>;
-const ManageLeave = () => <div>Manage Leave Content</div>;
 const CreateProject = () => <div>Create Project Content</div>;
 const ManageTasks = () => <div>Manage Tasks Content</div>;
 const ServiceRequest = () => <div>ServiceRequest Content</div>;
@@ -35,7 +35,7 @@ const MyTeamPage = () => {
             <Route path="/my-team" element={<Myteam />} />
             <Route path="/employee-profile" element={<EmployeeProfile />} />
             <Route path="/leave-summary" element={<LeaveSummary />} />
-            <Route path="/manage-leave" element={<ManageLeave />} />
+            <Route path="/manage-leave" element={<ManageLeave/>} />
             <Route path="/create-project" element={<CreateProject />} />
             <Route path="/manage-tasks" element={<ManageTasks />} />
             <Route path="/service-request" element={<ServiceRequest />} />

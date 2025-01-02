@@ -10,4 +10,5 @@ export interface IemployeeService {
     inviteEmployee(email:string):Promise<string>
     setUpPassword(password:string,email:string):Promise<string>
     EmployeesCount(organizationId:string):Promise<any>
+    TerminateEmployee(email:string):Promise<any>
 }

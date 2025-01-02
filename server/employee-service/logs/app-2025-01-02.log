@@ -1,0 +1,3 @@
+{"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"GET\",\"url\":\"/api/employee/fetch-EmployeesCount?organizationId=6772156b15a6f5e05c8a29c9\",\"status\":\"401\",\"responseTime\":\"16.494\"}","timestamp":"2025-01-02T03:48:22.104Z"}
+{"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"GET\",\"url\":\"/api/employee/fetch-EmployeesCount?organizationId=6772156b15a6f5e05c8a29c9\",\"status\":\"200\",\"responseTime\":\"105.035\"}","timestamp":"2025-01-02T03:49:23.254Z"}
+{"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"GET\",\"url\":\"/api/employee/fetch-EmployeesCount?organizationId=6772156b15a6f5e05c8a29c9\",\"status\":\"304\",\"responseTime\":\"51.091\"}","timestamp":"2025-01-02T04:22:01.138Z"}

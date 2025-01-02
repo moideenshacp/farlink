@@ -12,6 +12,7 @@ router.post('/update-employee',(authenticate as never),EmployeeController.update
 router.post('/invite-employee',(authenticate as never),EmployeeController.inviteEmployee)
 router.post('/set-up-password',EmployeeController.setUpPassword)
 router.get('/fetch-EmployeesCount',(authenticate as never),EmployeeController.EmployeesCount)
+router.get('/terminate-employee',(authenticate as never),EmployeeController.TerminateEmployee)
 
 
 

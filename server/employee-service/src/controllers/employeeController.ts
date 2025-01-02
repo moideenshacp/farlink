@@ -157,5 +157,22 @@ export class employeeController implements IemployeeController {
       res.status(500).json({ message: "Internal Server Error" });
     }
   }
+  public TerminateEmployee =  async(req: Request, res: Response): Promise<void>=> {
+    try {
+      const {email} = req.query
+      const result = await this._employeeservice.TerminateEmployee(email as string)
+      if(result){
+        
+        res.status(200).json({message:"Employee terminated successfully"})
+      } else {
+        res.status(400).json({ message: "Employee Termination failed.." });
+     }
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ message: "Internal Server Error" });
+
+      
+    }
+  }
   
 }

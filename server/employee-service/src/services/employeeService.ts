@@ -155,4 +155,16 @@ export class employeeService implements IemployeeService {
       console.log(error);      
     }
   }
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  async TerminateEmployee(email: string): Promise<any> {
+    try {
+
+      console.log(email,"EMployeeeeeeeeeeee email");
+      
+      
+    } catch (error) {
+      console.log(error);
+      
+    }
+  }
 }

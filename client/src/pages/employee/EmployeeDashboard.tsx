@@ -2,9 +2,9 @@ import { Routes, Route } from "react-router-dom";
 import DashBoardSideBar from "../../shared/components/employee/DashBoardSideBar";
 import DashBoardTopBar from "../../shared/components/employee/DashBoardTopBar";
 import DashboardSettings from "../../components/employee/DashboardSettings";
+import AttendanceSummary from "../../components/employee/attendence/AttendenceSummary";
 // Content Components
 const Overview = () => <div>Overview Content</div>;
-const LeaveSummary = () => <div>Leave Summary Content</div>;
 const ApplyLeave = () => <div>Apply Leave Content</div>;
 const MyProject = () => <div>My Project Content</div>;
 const MyTask = () => <div>My Tasks Content</div>;
@@ -29,7 +29,7 @@ const EmployeeDashboard = () => {
         <main className="flex-1 bg-white p-6 sm: mt-14 lg:pt-14">
           <Routes>
             <Route path="/" element={<Overview />} />
-            <Route path="/leave-summary" element={<LeaveSummary />} />
+            <Route path="/attendence-summary" element={<AttendanceSummary />} />
             <Route path="/apply-leave" element={<ApplyLeave />} />
             <Route path="/my-projects" element={<MyProject />} />
             <Route path="/my-tasks" element={<MyTask />} />

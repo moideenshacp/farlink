@@ -22,4 +22,5 @@ export default interface IemployeeModel extends Document {
   verified: boolean;
   image:string;
   organizationId: mongoose.Types.ObjectId;
+  isTerminated:boolean
 }

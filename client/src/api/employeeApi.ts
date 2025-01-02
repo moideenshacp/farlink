@@ -177,3 +177,21 @@ export const fetchEmployeesCount = async (
     console.log(error);
   }
 };
+export const terminateEmployee = async (
+  email: string | undefined
+) => {
+  try {
+    const res = await axiosInstance.get(
+      `${
+        import.meta.env.VITE_SERVER_BASE_URL
+      }/employee-service/api/employee/terminate-employee`,
+      {
+        params: { email },
+        withCredentials: true,
+      }
+    );
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+};

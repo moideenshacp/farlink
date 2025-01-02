@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { sendInvitationEmployee } from "../../../api/employeeApi";
+import { sendInvitationEmployee, terminateEmployee } from "../../../api/employeeApi";
 import { toast, ToastContainer } from "react-toastify";
 
 interface employeeEmail {
@@ -41,6 +41,17 @@ const EmployeeProfile_settings: React.FC<employeeEmail> = ({
     }
   };
 
+  const terminate = async()=>{
+    try {
+      const res = await terminateEmployee(email)
+      console.log(res,"terminae resss");
+      
+    } catch (error) {
+      console.log(error);
+      
+    }
+  }
+
   return (
     <div className="p-6 min-h-screen">
       <div className="mb-6">
@@ -70,7 +81,7 @@ const EmployeeProfile_settings: React.FC<employeeEmail> = ({
           Terminate the employee to remove their access from the FarL
           <span className="text-blue-800">i</span>nk app.
         </p>
-        <button className="bg-red-500 text-white font-semibold py-2 px-4 rounded-lg hover:bg-red-600">
+        <button onClick={terminate} className="bg-red-500 text-white font-semibold py-2 px-4 rounded-lg hover:bg-red-600">
           Terminate Employee
         </button>
       </div>

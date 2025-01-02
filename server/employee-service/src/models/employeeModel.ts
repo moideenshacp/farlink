@@ -76,6 +76,10 @@
     },
     motherProfession:{
       type:String
+    },
+    isTerminated:{
+      type:String,
+      default:false
     }
   });
 
