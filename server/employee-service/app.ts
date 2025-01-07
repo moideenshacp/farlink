@@ -7,7 +7,9 @@ import connectDB from "./src/config/db";
 import logger from "./src/utils/logger";
 import morgan from "morgan";
 import employeeRoutes from './src/routes/employeeRoute'
+import attendenceRoutes from './src/routes/attendenceRoute'
 import { rabbitmqConnect } from "./src/config/rabbitmq";
+import { errorHandler } from "./src/middlewares/errorHandler";
 
 dotenv.config();
 connectDB();
@@ -44,9 +46,10 @@ app.use(
 app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(express.json());
-
 app.use("/api/employee", employeeRoutes);
+app.use("/api/attendence", attendenceRoutes);
 
+app.use(errorHandler);
 
 const port = process.env.PORT;
 

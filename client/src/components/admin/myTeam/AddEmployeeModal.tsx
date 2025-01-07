@@ -3,6 +3,7 @@ import { addEmployee, uploadImageToCloudinary } from "../../../api/employeeApi";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
 import { toast, ToastContainer } from "react-toastify";
+import Input from "../../../shared/components/Input";
 
 const AddEmployeeModal = ({ toggleModal }: { toggleModal: () => void }) => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -107,74 +108,56 @@ const AddEmployeeModal = ({ toggleModal }: { toggleModal: () => void }) => {
       <form onSubmit={handleSubmit} className="grid grid-cols-2 gap-4">
         {/* Personal Data */}
         <div className="col-span-2 font-bold">Personal data</div>
+        <Input
+          label="User Name"
+          type="text"
+          name="userName"
+          value={formData.userName}
+          onChange={handleChange}
+          placeholder="Enter user name"
+        />
+        <Input
+          label="First Name"
+          type="text"
+          name="firstName"
+          value={formData.firstName}
+          onChange={handleChange}
+          placeholder="Enter first name"
+        />
+        <Input
+          label="Position"
+          type="text"
+          name="position"
+          value={formData.position}
+          onChange={handleChange}
+          placeholder="Enter position"
+        />
+        <Input
+          label="Last Name"
+          type="text"
+          name="lastName"
+          value={formData.lastName}
+          onChange={handleChange}
+          placeholder="Enter last name"
+        />
+        <Input
+          label="Email"
+          type="email"
+          name="email"
+          value={formData.email}
+          onChange={handleChange}
+          placeholder="Enter email"
+        />
+        <Input
+          label="Phone Number"
+          type="tel"
+          name="phone"
+          value={formData.phone}
+          onChange={handleChange}
+          placeholder="Enter phone number"
+        />
         <div>
-          <label className="block mb-1">User Name</label>
-          <input
-            type="text"
-            className="w-full p-2 border rounded focus:outline-none"
-            placeholder="Enter user name"
-            name="userName"
-            onChange={handleChange}
-            value={formData.userName}
-          />
-        </div>
-        <div>
-          <label className="block mb-1">First Name</label>
-          <input
-            type="text"
-            className="w-full p-2 border rounded focus:outline-none"
-            placeholder="Enter first name"
-            name="firstName"
-            onChange={handleChange}
-            value={formData.firstName}
-          />
-        </div>
-        <div>
-          <label className="block mb-1">Position</label>
-          <input
-            type="text"
-            className="w-full p-2 border rounded focus:outline-none"
-            placeholder="Enter position"
-            name="position"
-            onChange={handleChange}
-            value={formData.position}
-          />
-        </div>
-        <div>
-          <label className="block mb-1">Last Name</label>
-          <input
-            type="text"
-            className="w-full p-2 border rounded focus:outline-none"
-            placeholder="Enter last name"
-            name="lastName"
-            onChange={handleChange}
-            value={formData.lastName}
-          />
-        </div>
-        <div>
-          <label className="block mb-1">Email</label>
-          <input
-            type="email"
-            className="w-full p-2 border rounded focus:outline-none"
-            placeholder="Enter email"
-            name="email"
-            onChange={handleChange}
-            value={formData.email}
-          />
-        </div>
-        <div>
-          <label className="block mb-1">Phone Number</label>
-          <input
-            type="tel"
-            className="w-full p-2 border rounded focus:outline-none"
-            placeholder="Enter phone number"
-            name="phone"
-            onChange={handleChange}
-            value={formData.phone}
-          />
-        </div>
-        <div>
-          <label className="block mb-1">Gender</label>
+          <label className="block mb-1 font-medium text-[#232360]">Gender</label>
           <select
             className="w-full p-2 border rounded focus:outline-none"
             name="gender"

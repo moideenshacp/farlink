@@ -1,12 +1,18 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import logo from "../../../assets/EmailLogo.png";
-import { useState } from "react";
+import { SetStateAction, useState } from "react";
 
 const DashBoardSideBar = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const location = useLocation();
+  const [selectedPath, setSelectedPath] = useState(location.pathname);
+
+  const handleLinkClick = (path: SetStateAction<string>) => {
+    setSelectedPath(path);
+  };
 
   return (
-    <div >
+    <div>
       <aside
         className={`fixed inset-y-0 left-0 transform ${
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
@@ -26,7 +32,12 @@ const DashBoardSideBar = () => {
                 <li>
                   <Link
                     to="/employee/"
-                    className="text-[#0B0B0B] font-medium px-4 py-2 rounded-md flex items-center gap-3"
+                    onClick={() => handleLinkClick("/admin/")}
+                    className={`text-[#0B0B0B] font-medium px-4 py-2 rounded-md flex items-center gap-3 ${
+                      selectedPath === "/admin/"
+                        ? "text-[#4361EE]  bg-blue-50 border-l-4 border-[#4361EE]"
+                        : ""
+                    }`}
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -62,7 +73,14 @@ const DashBoardSideBar = () => {
                 <li>
                   <Link
                     to="/employee/attendence-summary"
-                    className="text-[#0B0B0B] font-medium px-4 py-2 rounded-md flex items-center gap-3"
+                    onClick={() =>
+                      handleLinkClick("/employee/attendence-summary")
+                    }
+                    className={`text-[#0B0B0B] font-medium px-4 py-2 rounded-md flex items-center gap-3 ${
+                      selectedPath === "/employee/attendence-summary"
+                        ? "text-[#4361EE]  bg-blue-50 border-l-4 border-[#4361EE]"
+                        : ""
+                    }`}
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -84,7 +102,12 @@ const DashBoardSideBar = () => {
                 <li>
                   <Link
                     to="/employee/apply-leave"
-                    className="text-[#0B0B0B] font-medium px-4 py-2 rounded-md flex items-center gap-3"
+                    onClick={() => handleLinkClick("/employee/apply-leave")}
+                    className={`text-[#0B0B0B] font-medium px-4 py-2 rounded-md flex items-center gap-3 ${
+                      selectedPath === "/employee/apply-leave"
+                        ? "text-[#4361EE]  bg-blue-50 border-l-4 border-[#4361EE]"
+                        : ""
+                    }`}
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -115,7 +138,12 @@ const DashBoardSideBar = () => {
                 <li>
                   <Link
                     to="/employee/my-projects"
-                    className="text-[#0B0B0B] font-medium px-4 py-2 rounded-md flex items-center gap-3"
+                    onClick={() => handleLinkClick("/employee/my-projects")}
+                    className={`text-[#0B0B0B] font-medium px-4 py-2 rounded-md flex items-center gap-3 ${
+                      selectedPath === "/employee/my-projects"
+                        ? "text-[#4361EE]  bg-blue-50 border-l-4 border-[#4361EE]"
+                        : ""
+                    }`}
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -137,7 +165,12 @@ const DashBoardSideBar = () => {
                 <li>
                   <Link
                     to="/employee/my-tasks"
-                    className="text-[#0B0B0B] font-medium px-4 py-2 rounded-md flex items-center gap-3"
+                    onClick={() => handleLinkClick("/employee/my-tasks")}
+                    className={`text-[#0B0B0B] font-medium px-4 py-2 rounded-md flex items-center gap-3 ${
+                      selectedPath === "/employee/my-tasks"
+                        ? "text-[#4361EE]  bg-blue-50 border-l-4 border-[#4361EE]"
+                        : ""
+                    }`}
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -168,7 +201,12 @@ const DashBoardSideBar = () => {
                 <li>
                   <Link
                     to="/employee/request-sevice"
-                    className="text-[#0B0B0B] font-medium px-4 py-2 rounded-md flex items-center gap-3"
+                    onClick={() => handleLinkClick("/employee/request-sevice")}
+                    className={`text-[#0B0B0B] font-medium px-4 py-2 rounded-md flex items-center gap-3 ${
+                      selectedPath === "/employee/request-sevice"
+                        ? "text-[#4361EE]  bg-blue-50 border-l-4 border-[#4361EE]"
+                        : ""
+                    }`}
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -190,7 +228,12 @@ const DashBoardSideBar = () => {
                 <li>
                   <Link
                     to="/employee/realtime-alert"
-                    className="text-[#0B0B0B] font-medium px-4 py-2 rounded-md flex items-center gap-3"
+                    onClick={() => handleLinkClick("/employee/realtime-alert")}
+                    className={`text-[#0B0B0B] font-medium px-4 py-2 rounded-md flex items-center gap-3 ${
+                      selectedPath === "/employee/realtime-alert"
+                        ? "text-[#4361EE]  bg-blue-50 border-l-4 border-[#4361EE]"
+                        : ""
+                    }`}
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -221,7 +264,12 @@ const DashBoardSideBar = () => {
                 <li>
                   <Link
                     to="/employee/meeting"
-                    className="text-[#0B0B0B] font-medium px-4 py-2 rounded-md flex items-center gap-3"
+                    onClick={() => handleLinkClick("/employee/meeting")}
+                    className={`text-[#0B0B0B] font-medium px-4 py-2 rounded-md flex items-center gap-3 ${
+                      selectedPath === "/employee/meeting"
+                        ? "text-[#4361EE]  bg-blue-50 border-l-4 border-[#4361EE]"
+                        : ""
+                    }`}
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -243,7 +291,12 @@ const DashBoardSideBar = () => {
                 <li>
                   <Link
                     to="/employee/message"
-                    className="text-[#0B0B0B] font-medium px-4 py-2 rounded-md flex items-center gap-3"
+                    onClick={() => handleLinkClick("/employee/message")}
+                    className={`text-[#0B0B0B] font-medium px-4 py-2 rounded-md flex items-center gap-3 ${
+                      selectedPath === "/employee/message"
+                        ? "text-[#4361EE]  bg-blue-50 border-l-4 border-[#4361EE]"
+                        : ""
+                    }`}
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -274,7 +327,12 @@ const DashBoardSideBar = () => {
                 <li>
                   <Link
                     to="/employee/setting"
-                    className="text-[#0B0B0B] font-medium px-4 py-2 rounded-md flex items-center gap-3"
+                    onClick={() => handleLinkClick("/employee/setting")}
+                    className={`text-[#0B0B0B] font-medium px-4 py-2 rounded-md flex items-center gap-3 ${
+                      selectedPath === "/employee/setting"
+                        ? "text-[#4361EE]  bg-blue-50 border-l-4 border-[#4361EE]"
+                        : ""
+                    }`}
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"

@@ -9,6 +9,7 @@ import {
 } from "../../../interface/IemployeeProfileProps";
 import { toast, ToastContainer } from "react-toastify";
 import { employeeProfileUpdate } from "../../../validations/employeeProfileUpdate";
+import Input from "../../../shared/components/Input";
 
 const EmployeeProfile_Profile: React.FC<EmployeeProfileProps> = ({
   employee,
@@ -147,255 +148,202 @@ const EmployeeProfile_Profile: React.FC<EmployeeProfileProps> = ({
         </div>
 
         <h2 className="text-lg font-semibold mb-4">Personal Details</h2>
+        <Input
+          label="User Name"
+          type="text"
+          placeholder="Enter the userName of employee"
+          onChange={handleChange}
+          name="userName"
+          value={formData.userName}
+          className="w-full border-b border-gray-300 focus:outline-none focus:border-[#4361EE] py-1"
+        />
+        {errors.userName && <p className="text-red-600">{errors.userName}</p>}
+
+        <Input
+          label="First Name"
+          type="text"
+          placeholder="Enter the First name of employee"
+          onChange={handleChange}
+          name="firstName"
+          value={formData.firstName}
+          className="w-full border-b border-gray-300 focus:outline-none focus:border-[#4361EE] py-1"
+        />
+        {errors.firstName && <p className="text-red-600">{errors.firstName}</p>}
+
+        <Input
+          label="Last Name"
+          type="text"
+          placeholder="Enter the Last name of employee"
+          onChange={handleChange}
+          name="lastName"
+          value={formData.lastName}
+          className="w-full border-b border-gray-300 focus:outline-none focus:border-[#4361EE] py-1"
+        />
+        {errors.lastName && <p className="text-red-600">{errors.lastName}</p>}
+
+        <Input
+          label="Position"
+          type="text"
+          placeholder="Enter the position of employee"
+          onChange={handleChange}
+          name="position"
+          value={formData.position}
+          className="w-full border-b border-gray-300 focus:outline-none focus:border-[#4361EE] py-1"
+        />
+        {errors.position && <p className="text-red-600">{errors.position}</p>}
         <div className="mb-4">
-          <label className="block text-sm font-medium text-[#6A7181]">
-            User Name
+          <label className="block mb-1 font-medium text-[#232360]">
+            Gender
           </label>
-          <input
-            type="text"
-            placeholder="Enter the userName of employee"
-            name="userName"
+          <select
+            className="w-full p-2 border rounded focus:outline-none"
+            name="gender"
             onChange={handleChange}
-            value={formData.userName}
-            className="w-full border-b border-gray-300 focus:outline-none focus:border-[#4361EE] py-1"
-          />
-          {errors.userName && <p className="text-red-600">{errors.userName}</p>}
-        </div>
-        <div className="mb-4">
-          <label className="block text-sm font-medium text-[#6A7181]">
-            First Name
-          </label>
-          <input
-            type="text"
-            placeholder="Enter the name of employee"
-            name="firstName"
-            onChange={handleChange}
-            value={formData.firstName}
-            className="w-full border-b border-gray-300 focus:outline-none focus:border-[#4361EE] py-1"
-          />
-          {errors.firstName && (
-            <p className="text-red-600">{errors.firstName}</p>
-          )}
-        </div>
-        <div className="mb-4">
-          <label className="block text-sm font-medium text-[#6A7181]">
-            Last Name
-          </label>
-          <input
-            type="text"
-            placeholder="Enter the name of employee"
-            name="lastName"
-            onChange={handleChange}
-            value={formData.lastName}
-            className="w-full border-b border-gray-300 focus:outline-none focus:border-[#4361EE] py-1"
-          />
-          {errors.lastName && <p className="text-red-600">{errors.lastName}</p>}
-          <div className="mb-4 mt-4">
-            <label className="block text-sm font-medium text-[#6A7181]">
-              Position
-            </label>
-            <input
-              type="text"
-              placeholder="Enter the position of employee"
-              name="position"
-              onChange={handleChange}
-              value={formData.position}
-              className="w-full border-b border-gray-300 focus:outline-none focus:border-[#4361EE] py-1"
-            />
-            {errors.position && (
-              <p className="text-red-600">{errors.position}</p>
-            )}
-          </div>
-          <div className="mb-4">
-            <label className="block text-sm font-medium text-[#6A7181]">
-              Gender
-            </label>
-            <select
-              className="w-full p-2 border rounded focus:outline-none"
-              name="gender"
-              onChange={handleChange}
-              value={formData.gender}
-            >
-              <option value="male">Male</option>
-              <option value="female">Female</option>
-            </select>
-          </div>
-        </div>
-        <div className="mb-4">
-          <label className="block text-sm font-medium text-[#6A7181]">
-            Date of Joining
-          </label>
-          <input
-            type="date"
-            name="dateOfJoining"
-            value={formData.dateOfJoining}
-            onChange={handleChange}
-            className="w-full border-b border-gray-300 focus:outline-none focus:border-[#4361EE] py-1"
-          />
-          {errors.dateOfJoining && (
-            <p className="text-red-600">{errors.dateOfJoining}</p>
-          )}
-        </div>
-        <div className="mb-4">
-          <label className="block text-sm font-medium text-[#6A7181]">
-            Date of Birth
-          </label>
-          <input
-            type="date"
-            name="dateOfBirth"
-            value={formData.dateOfBirth}
-            onChange={handleChange}
-            className="w-full border-b border-gray-300 focus:outline-none focus:border-[#4361EE] py-1"
-          />
-          {errors.dateOfBirth && (
-            <p className="text-red-600">{errors.dateOfBirth}</p>
-          )}
-        </div>
-        <div className="mb-4">
-          <label className="block text-sm font-medium text-[#6A7181]">
-            Contact Number
-          </label>
-          <input
-            type="tel"
-            name="phone"
-            onChange={handleChange}
-            placeholder="Enter the phone number"
-            value={formData.phone}
-            className="w-full border-b border-gray-300 focus:outline-none focus:border-[#4361EE] py-1"
-          />
-          {errors.phone && <p className="text-red-600">{errors.phone}</p>}
+            value={formData.gender}
+          >
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+          </select>
         </div>
 
-        <div className="mb-4">
-          <label className="block text-sm font-medium text-[#6A7181]">
-            Email Address
-          </label>
-          <input
-            type="email"
-            name="email"
-            onChange={handleChange}
-            placeholder="Enter Email"
-            value={formData.email}
-            className="w-full border-b border-gray-300 focus:outline-none focus:border-[#4361EE] py-1"
-          />
-          {errors.email && <p className="text-red-600">{errors.email}</p>}
-        </div>
+        <Input
+          label="Date of Joining"
+          type="date"
+          placeholder="Enter the name of employee"
+          onChange={handleChange}
+          name="dateOfJoining"
+          value={formData.dateOfJoining}
+          className="w-full border-b border-gray-300 focus:outline-none focus:border-[#4361EE] py-1"
+        />
+        {errors.dateOfJoining && (
+          <p className="text-red-600">{errors.dateOfJoining}</p>
+        )}
+
+        <Input
+          label="Date of Birth"
+          type="date"
+          onChange={handleChange}
+          name="dateOfBirth"
+          value={formData.dateOfBirth}
+          className="w-full border-b border-gray-300 focus:outline-none focus:border-[#4361EE] py-1"
+        />
+        {errors.dateOfBirth && (
+          <p className="text-red-600">{errors.dateOfBirth}</p>
+        )}
+
+        <Input
+          label="Contact Number"
+          type="tel"
+          placeholder="Enter the phone number"
+          onChange={handleChange}
+          name="phone"
+          value={formData.phone}
+          className="w-full border-b border-gray-300 focus:outline-none focus:border-[#4361EE] py-1"
+        />
+        {errors.phone && <p className="text-red-600">{errors.phone}</p>}
+        <Input
+          label="Email Address"
+          type="email"
+          placeholder="Enter Email"
+          onChange={handleChange}
+          name="email"
+          value={formData.email}
+          className="w-full border-b border-gray-300 focus:outline-none focus:border-[#4361EE] py-1"
+        />
+        {errors.email && <p className="text-red-600">{errors.email}</p>}
 
         <h2 className="text-lg font-semibold mt-6 mb-4">Educational Details</h2>
-        <div className="mb-4">
-          <label className="block text-sm font-medium text-[#6A7181]">
-            Highest Qualification
-          </label>
-          <input
-            type="text"
-            name="highestQualification"
-            onChange={handleChange}
-            value={formData.highestQualification}
-            placeholder="Enter Education details"
-            className="w-full border-b border-gray-300 focus:outline-none focus:border-[#4361EE] py-1"
-          />
-          {errors.highestQualification && (
-            <p className="text-red-600">{errors.highestQualification}</p>
-          )}
-        </div>
-        <div className="mb-4">
-          <label className="block text-sm font-medium text-[#6A7181]">
-            Name of Institution
-          </label>
-          <input
-            type="text"
-            name="institution"
-            onChange={handleChange}
-            value={formData.institution}
-            placeholder="Enter Name of Institution"
-            className="w-full border-b border-gray-300 focus:outline-none focus:border-[#4361EE] py-1"
-          />
-          {errors.institution && (
-            <p className="text-red-600">{errors.institution}</p>
-          )}
-        </div>
-        <div className="mb-4">
-          <label className="block text-sm font-medium text-[#6A7181]">
-            Year of Qualification
-          </label>
-          <input
-            type="text"
-            name="qualificationYear"
-            onChange={handleChange}
-            value={formData.qualificationYear}
-            placeholder="Enter Year of Qualification"
-            className="w-full border-b border-gray-300 focus:outline-none focus:border-[#4361EE] py-1"
-          />
-          {errors.qualificationYear && (
-            <p className="text-red-600">{errors.qualificationYear}</p>
-          )}
-        </div>
+
+        <Input
+          label="Highest Qualification"
+          type="text"
+          placeholder="Enter the  Highest qualification"
+          onChange={handleChange}
+          name="highestQualification"
+          value={formData.highestQualification}
+          className="w-full border-b border-gray-300 focus:outline-none focus:border-[#4361EE] py-1"
+        />
+        {errors.highestQualification && (
+          <p className="text-red-600">{errors.highestQualification}</p>
+        )}
+        <Input
+          label="Name of Institution"
+          type="text"
+          placeholder="Enter Name of Institution"
+          onChange={handleChange}
+          name="institution"
+          value={formData.institution}
+          className="w-full border-b border-gray-300 focus:outline-none focus:border-[#4361EE] py-1"
+        />
+        {errors.institution && (
+          <p className="text-red-600">{errors.institution}</p>
+        )}
+
+        <Input
+          label="Year of Qualification"
+          type="text"
+          placeholder="Enter Year of Qualification"
+          onChange={handleChange}
+          name="qualificationYear"
+          value={formData.qualificationYear}
+          className="w-full border-b border-gray-300 focus:outline-none focus:border-[#4361EE] py-1"
+        />
+        {errors.qualificationYear && (
+          <p className="text-red-600">{errors.qualificationYear}</p>
+        )}
 
         <h2 className="text-lg font-semibold mt-6 mb-4">Family Details</h2>
-        <div className="mb-4">
-          <label className="block text-sm font-medium text-[#6A7181]">
-            Father's Name
-          </label>
-          <input
-            type="text"
-            name="fatherName"
-            onChange={handleChange}
-            value={formData.fatherName}
-            placeholder="Enter Father's Name"
-            className="w-full border-b border-gray-300 focus:outline-none focus:border-[#4361EE] py-1"
-          />
-          {errors.fatherName && (
-            <p className="text-red-600">{errors.fatherName}</p>
-          )}
-        </div>
-        <div className="mb-4">
-          <label className="block text-sm font-medium text-[#6A7181]">
-            Profession
-          </label>
-          <input
-            type="text"
-            name="fatherProfession"
-            value={formData.fatherProfession}
-            onChange={handleChange}
-            placeholder="Enter Father's Profession"
-            className="w-full border-b border-gray-300 focus:outline-none focus:border-[#4361EE] py-1"
-          />
-          {errors.fatherProfession && (
-            <p className="text-red-600">{errors.fatherProfession}</p>
-          )}
-        </div>
-        <div className="mb-4">
-          <label className="block text-sm font-medium text-[#6A7181]">
-            Mother's Name
-          </label>
-          <input
-            type="text"
-            placeholder="Enter Mother's Name"
-            name="motherName"
-            onChange={handleChange}
-            value={formData.motherName}
-            className="w-full border-b border-gray-300 focus:outline-none focus:border-[#4361EE] py-1"
-          />
-          {errors.motherName && (
-            <p className="text-red-600">{errors.motherName}</p>
-          )}
-        </div>
-        <div className="mb-4">
-          <label className="block text-sm font-medium text-[#6A7181]">
-            Profession
-          </label>
-          <input
-            type="text"
-            name="motherProfession"
-            onChange={handleChange}
-            value={formData.motherProfession}
-            placeholder="Enter Mother's Profession"
-            className="w-full border-b border-gray-300 focus:outline-none focus:border-[#4361EE] py-1"
-          />
-          {errors.motherProfession && (
-            <p className="text-red-600">{errors.motherProfession}</p>
-          )}
-        </div>
+
+        <Input
+          label="Father's Name"
+          type="text"
+          placeholder="Enter Father's Name"
+          onChange={handleChange}
+          name="fatherName"
+          value={formData.fatherName}
+          className="w-full border-b border-gray-300 focus:outline-none focus:border-[#4361EE] py-1"
+        />
+        {errors.fatherName && (
+          <p className="text-red-600">{errors.fatherName}</p>
+        )}
+        <Input
+          label="Profession"
+          type="text"
+          placeholder="Enter Father's Profession"
+          onChange={handleChange}
+          name="fatherProfession"
+          value={formData.fatherProfession}
+          className="w-full border-b border-gray-300 focus:outline-none focus:border-[#4361EE] py-1"
+        />
+        {errors.fatherProfession && (
+          <p className="text-red-600">{errors.fatherProfession}</p>
+        )}
+
+        <Input
+          label="Mother's Name"
+          type="text"
+          placeholder="Enter Mother's Name"
+          onChange={handleChange}
+          name="motherName"
+          value={formData.motherName}
+          className="w-full border-b border-gray-300 focus:outline-none focus:border-[#4361EE] py-1"
+        />
+        {errors.motherName && (
+          <p className="text-red-600">{errors.motherName}</p>
+        )}
+
+        <Input
+          label="Mother's Name"
+          type="text"
+          placeholder="Enter Mother's Profession"
+          onChange={handleChange}
+          name="motherProfession"
+          value={formData.motherProfession}
+          className="w-full border-b border-gray-300 focus:outline-none focus:border-[#4361EE] py-1"
+        />
+        {errors.motherProfession && (
+          <p className="text-red-600">{errors.motherProfession}</p>
+        )}
       </div>
       <ToastContainer />
     </form>

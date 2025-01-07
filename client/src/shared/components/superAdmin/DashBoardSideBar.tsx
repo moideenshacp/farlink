@@ -1,9 +1,15 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import logo from "../../../assets/EmailLogo.png";
-import { useState } from "react";
+import { SetStateAction, useState } from "react";
 
 const DashBoardSideBar = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+    const location = useLocation();
+    const [selectedPath, setSelectedPath] = useState(location.pathname);
+  
+    const handleLinkClick = (path: SetStateAction<string>) => {
+      setSelectedPath(path);
+    };
 
   return (
     <div>
@@ -26,7 +32,12 @@ const DashBoardSideBar = () => {
                 <li>
                   <Link
                     to="/superAdmin/"
-                    className="text-[#0B0B0B] font-medium px-4 py-2 rounded-md flex items-center gap-3"
+                    onClick={() => handleLinkClick("/superAdmin/")}
+                    className={`text-[#0B0B0B] font-medium px-4 py-2 rounded-md flex items-center gap-3 ${
+                      selectedPath === "/superAdmin/"
+                        ? "text-[#4361EE]  bg-blue-50 border-l-4 border-[#4361EE]"
+                        : ""
+                    }`}
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -53,7 +64,12 @@ const DashBoardSideBar = () => {
                 <li>
                   <Link
                     to="/superAdmin/All-organization"
-                    className=" text-[#0B0B0B] font-medium px-4 py-2 rounded-md flex items-center gap-3"
+                    onClick={() => handleLinkClick("/superAdmin/All-organization")}
+                    className={`text-[#0B0B0B] font-medium px-4 py-2 rounded-md flex items-center gap-3 ${
+                      selectedPath === "/superAdmin/All-organization"
+                        ? "text-[#4361EE]  bg-blue-50 border-l-4 border-[#4361EE]"
+                        : ""
+                    }`}
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -84,7 +100,12 @@ const DashBoardSideBar = () => {
                 <li>
                   <Link
                     to="/superAdmin/setting"
-                    className="text-[#0B0B0B] font-medium px-4 py-2 rounded-md flex items-center gap-3"
+                    onClick={() => handleLinkClick("/superAdmin/setting")}
+                    className={`text-[#0B0B0B] font-medium px-4 py-2 rounded-md flex items-center gap-3 ${
+                      selectedPath === "/superAdmin/setting"
+                        ? "text-[#4361EE]  bg-blue-50 border-l-4 border-[#4361EE]"
+                        : ""
+                    }`}
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -106,7 +127,12 @@ const DashBoardSideBar = () => {
                 <li>
                   <Link
                     to="/superAdmin/billing"
-                    className="text-[#0B0B0B] font-medium px-4 py-2 rounded-md flex items-center gap-3"
+                    onClick={() => handleLinkClick("/superAdmin/billing")}
+                    className={`text-[#0B0B0B] font-medium px-4 py-2 rounded-md flex items-center gap-3 ${
+                      selectedPath === "/superAdmin/billing"
+                        ? "text-[#4361EE]  bg-blue-50 border-l-4 border-[#4361EE]"
+                        : ""
+                    }`}
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"

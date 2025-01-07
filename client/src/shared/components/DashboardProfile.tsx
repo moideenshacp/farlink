@@ -6,6 +6,7 @@ import { toast, ToastContainer } from "react-toastify";
 import useProfileValidation from "../hooks/useProfileValidation";
 import { uploadImageToCloudinary } from "../../api/employeeApi";
 import { setImage } from "../../redux/user/userSlice";
+import Input from "./Input";
 
 const DashboardProfile = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -158,87 +159,74 @@ const DashboardProfile = () => {
             </div>
           )}
 
-          <div className="form-group">
-            <label className="block font-medium text-[#232360]">Username</label>
-            <input
-              className="w-full p-2 border rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-200 text-[#333333] font-normal"
-              type="text"
-              value={user?.name || ""}
-              readOnly
-            />
-          </div>
+      
+          <Input
+            label="Username"
+            type="text"
+            value={user?.name || ""}
+            className="w-full p-2 border rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-200 text-[#333333] font-normal"
+            readOnly
+          />
 
-          <div className="form-group">
-            <label className="block font-medium text-[#232360]">
-              First Name
-            </label>
-            <input
-              className="w-full p-2 border rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-200 text-[#333333] font-normal"
-              type="text"
-              placeholder="Enter your first name"
-              onChange={handleChange}
-              name="fName"
-              value={formData.fName}
-              readOnly={user?.role === "employee"}
-            />
-            {validationErrors.fName && (
-              <p className="text-red-500 text-sm">{validationErrors.fName}</p>
-            )}
-          </div>
-
-          <div className="form-group">
-            <label className="block font-medium text-[#232360]">
-              Last Name
-            </label>
-            <input
-              className="w-full p-2 border rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-200 text-[#333333] font-normal"
-              type="text"
-              placeholder="Enter your last name"
-              onChange={handleChange}
-              name="lName"
-              value={formData.lName}
-              readOnly={user?.role === "employee"}
-            />
-            {validationErrors.lName && (
-              <p className="text-red-500 text-sm">{validationErrors.lName}</p>
-            )}
-          </div>
-
-          <div className="form-group">
-            <label className="block font-medium text-[#232360]">Phone</label>
-            <input
-              className="w-full p-2 border rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-200 text-[#333333] font-normal"
-              type="text"
-              placeholder="Enter your phone"
-              onChange={handleChange}
-              name="phone"
-              value={formData.phone}
-              readOnly={user?.role === "employee"}
-            />
-            {validationErrors.phone && (
-              <p className="text-red-500 text-sm">{validationErrors.phone}</p>
-            )}
-          </div>
-          {user?.role === "employee" && (
-            <div className="form-group">
-              <label className="block font-medium text-[#232360]">Email</label>
-              <input
-                className="w-full p-2 border rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-200 text-[#333333] font-normal"
-                type="text"
-                defaultValue={user?.email || ""}
-                readOnly
-              />
-            </div>
+          <Input
+            label="First Name"
+            type="text"
+            placeholder="Enter your first name"
+            onChange={handleChange}
+            name="fName"
+            value={formData.fName}
+            readOnly={user?.role === "employee"}
+            className="w-full p-2 border rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-200 text-[#333333] font-normal"
+          />
+          {validationErrors.fName && (
+            <p className="text-red-500 text-sm">{validationErrors.fName}</p>
           )}
-          <div className="form-group">
-            <label className="block font-medium text-[#232360]">Role</label>
-            <input
-              className="w-full p-2 border rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-200 text-[#333333] font-normal"
+
+          <Input
+            label="Last Name"
+            type="text"
+            placeholder="Enter your last name"
+            onChange={handleChange}
+            name="lName"
+            value={formData.lName}
+            readOnly={user?.role === "employee"}
+            className="w-full p-2 border rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-200 text-[#333333] font-normal"
+          />
+          {validationErrors.lName && (
+            <p className="text-red-500 text-sm">{validationErrors.lName}</p>
+          )}
+
+          <Input
+            label="Phone"
+            type="text"
+            placeholder="Enter your phone"
+            onChange={handleChange}
+            name="phone"
+            value={formData.phone}
+            readOnly={user?.role === "employee"}
+            className="w-full p-2 border rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-200 text-[#333333] font-normal"
+          />
+          {validationErrors.phone && (
+            <p className="text-red-500 text-sm">{validationErrors.phone}</p>
+          )}
+
+          {user?.role === "employee" && (
+            <Input
+              label="Email"
               type="text"
-              defaultValue={user?.role || ""}
+              value={user?.email || ""}
               readOnly
+              className="w-full p-2 border rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-200 text-[#333333] font-normal"
             />
-          </div>
+          )}
+
+          <Input
+            label="Role"
+            type="text"
+            value={user?.role || ""}
+            readOnly
+            className="w-full p-2 border rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-200 text-[#333333] font-normal"
+          />
         </div>
         <ToastContainer />
       </form>

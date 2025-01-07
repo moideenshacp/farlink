@@ -1,4 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { fetchPolicy, updatePolicy } from "../../../api/attendenceApi";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../redux/store";
+import Input from "../../../shared/components/Input";
+import { toast, ToastContainer } from "react-toastify";
 
 const ManageLeave = () => {
   const [policy, setPolicy] = useState({
@@ -7,140 +12,154 @@ const ManageLeave = () => {
     lateMarkAfterMinutes: 0,
     halfDayAfterHours: 0,
     totalWorkingHours: 0,
-    casual: 0,
-    sick: 0,
-    vacation: 0,
+    leaveType: {
+      casual: 0,
+      sick: 0,
+      vacation: 0,
+    },
   });
-
-
-  const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
+  const [error, setError] = useState("");
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    setPolicy((prevData: any) => ({
-      ...prevData,
-      [name]: value,
-    }));
+    const numericValue =
+      e.target.type === "number" ? Math.max(0, Number(value)) : value;
+
+    if (["casual", "sick", "vacation"].includes(name)) {
+      setPolicy((prevData) => ({
+        ...prevData,
+        leaveType: {
+          ...prevData.leaveType,
+          [name]: numericValue,
+        },
+      }));
+    } else {
+      setPolicy((prevData) => ({
+        ...prevData,
+        [name]: numericValue,
+      }));
+    }
+
+    setError("");
   };
 
-  const handleSubmit = () => {
-    
+  const { user } = useSelector((state: RootState) => state.user);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      if (!policy.officeStartTime || !policy.officeEndTime) {
+        setError("Please provide office start time and end time");
+      }
+      const res = await updatePolicy(policy, user?.organizationId);
+      if (res.data.message === "Policy Updated successfully") {
+        toast.success("Policy updated successfully!", {
+          position: "top-right",
+          autoClose: 3000,
+        });
+      } else {
+        toast.error("An error occurred. Please try again.");
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("An error occurred. Please try again.");
+    }
   };
+
+  useEffect(() => {
+    const getPolicy = async () => {
+      try {
+        const res = await fetchPolicy(user?.organizationId);
+
+        if (res.data.message === "Policy fetched successfully") {
+          setPolicy(res.data.result);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getPolicy();
+  }, [user?.organizationId]);
 
   return (
     <form onSubmit={handleSubmit}>
-
-    <div className="p-6 bg-white rounded-lg shadow-lg">
-      <h1 className="text-2xl font-bold mb-6">Attendance Policy Management</h1>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* Office Timings */}
-        <div>
-          <label className="block font-medium mb-2">Office Start Time</label>
-          <input
+      <div className="p-6 bg-white rounded-lg shadow-lg">
+        <h1 className="text-2xl font-bold mb-6">
+          Attendance Policy Management
+        </h1>
+        {error && <p className="text-red-600 text-center">{error}</p>}
+        <br />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <Input
+            label="Office Start Time"
             type="time"
             name="officeStartTime"
             value={policy.officeStartTime}
             onChange={handleInputChange}
-            className="w-full p-3 border rounded-lg"
           />
-        </div>
-        <div>
-          <label className="block font-medium mb-2">Office End Time</label>
-          <input
+          <Input
+            label="Office End Time"
             type="time"
             name="officeEndTime"
             value={policy.officeEndTime}
             onChange={handleInputChange}
-            className="w-full p-3 border rounded-lg"
           />
-        </div>
-
-        {/* Late Mark and Half-Day */}
-        <div>
-          <label className="block font-medium mb-2">
-            Late Mark After (Minutes)
-          </label>
-          <input
+          <Input
+            label="Late Mark After (Minutes)"
             type="number"
             name="lateMarkAfterMinutes"
             value={policy.lateMarkAfterMinutes}
             onChange={handleInputChange}
-            className="w-full p-3 border rounded-lg"
+            min="0"
           />
-        </div>
-        <div>
-          <label className="block font-medium mb-2">
-            Half Day After (Hours)
-          </label>
-          <input
+          <Input
+            label="Half Day After (Hours)"
             type="number"
+            name="halfDayAfterHours"
             value={policy.halfDayAfterHours}
             onChange={handleInputChange}
-            name="halfDayAfterHours"
-            className="w-full p-3 border rounded-lg"
+            min="0"
           />
-        </div>
-
-        {/* Total Working Hours */}
-        <div>
-          <label className="block font-medium mb-2">Total Working Hours</label>
-          <input
+          <Input
+            label="Total Working Hours"
             type="number"
+            name="totalWorkingHours"
             value={policy.totalWorkingHours}
             onChange={handleInputChange}
-            name="totalWorkingHours"
-            className="w-full p-3 border rounded-lg"
+            min="0"
+          />
+          <Input
+            label="Casual"
+            type="number"
+            name="casual"
+            value={policy.leaveType.casual}
+            onChange={handleInputChange}
+            min="0"
+          />
+          <Input
+            label="Sick"
+            type="number"
+            name="sick"
+            value={policy.leaveType.sick}
+            onChange={handleInputChange}
+            min="0"
+          />
+          <Input
+            label="Vacation"
+            type="number"
+            name="vacation"
+            value={policy.leaveType.vacation}
+            onChange={handleInputChange}
+            min="0"
           />
         </div>
-
-        {/* Leave Types */}
-        <div className="col-span-2">
-          <label className="block font-medium mb-2">Leave Types</label>
-          <div className="grid grid-cols-3 gap-4">
-            <div>
-              <label className="block text-sm font-medium mb-1">Casual</label>
-              <input
-                type="number"
-                name="casual"
-                value={policy.casual}
-                onChange={handleInputChange}
-                className="w-full p-2 border rounded-lg"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium mb-1">Sick</label>
-              <input
-                type="number"
-                value={policy.sick}
-                name="sick"
-                onChange={handleInputChange}
-                className="w-full p-2 border rounded-lg"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium mb-1">Vacation</label>
-              <input
-                type="number"
-                value={policy.vacation}
-                name="vacation"
-                onChange={handleInputChange}
-                className="w-full p-2 border rounded-lg"
-              />
-            </div>
-          </div>
-        </div>
+        <button
+          type="submit"
+          className="mt-6 px-6 py-3 bg-[#4361EE] text-white font-medium rounded-lg hover:bg-[#4361EE]"
+        >
+          Save Policy
+        </button>
       </div>
-
-      {/* Save Button */}
-      <button
-        type="submit"
-        className="mt-6 px-6 py-3 bg-blue-500 text-white font-medium rounded-lg hover:bg-blue-600"
-      >
-        Save Policy
-      </button>
-    </div>
+      <ToastContainer />
     </form>
   );
 };

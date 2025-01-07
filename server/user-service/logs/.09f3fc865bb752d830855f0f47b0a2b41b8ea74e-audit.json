@@ -6,26 +6,6 @@
     "auditLog": "logs\\.09f3fc865bb752d830855f0f47b0a2b41b8ea74e-audit.json",
     "files": [
         {
-            "date": 1733198263775,
-            "name": "logs\\app-2024-12-03.log",
-            "hash": "b4dca5077cf66ebf22e54120d5658692e0ac01834da81805da83acbba1530fce"
-        },
-        {
-            "date": 1733283533908,
-            "name": "logs\\app-2024-12-04.log",
-            "hash": "dbad87903c77608816012995c081d4c706bb5dea9c754670121ce4d13a9277fc"
-        },
-        {
-            "date": 1733369849183,
-            "name": "logs\\app-2024-12-05.log",
-            "hash": "a096ae33d53c64aa693d67b7272a8d78e2ae9252da98bc84153be26c9bd17340"
-        },
-        {
-            "date": 1733558028972,
-            "name": "logs\\app-2024-12-07.log",
-            "hash": "d33c902bb3f54a7fe492e1a5a0a1e19762319d3c79f87b0762dce5e63f6b9b76"
-        },
-        {
             "date": 1733726267607,
             "name": "logs\\app-2024-12-09.log",
             "hash": "bb0b0df3d9ef75c00fd781f15b227489e85cc5cf98779c2a8c426338a3a01247"
@@ -119,6 +99,26 @@
             "date": 1735789383692,
             "name": "logs\\app-2025-01-02.log",
             "hash": "90e10682478b1b23e432eeef2f69c4ec72a4a821464bd60db1ad787bb1dc16c6"
+        },
+        {
+            "date": 1735881281990,
+            "name": "logs\\app-2025-01-03.log",
+            "hash": "77b182fd8fd46f039b0997d779289adfd887590cb209a17d7587a61520e5a83a"
+        },
+        {
+            "date": 1735962085292,
+            "name": "logs\\app-2025-01-04.log",
+            "hash": "6fd9f7b31c817fb3a55f07cadb38a3c42224ffd0cc78d1a1afa690dc10bfd89f"
+        },
+        {
+            "date": 1736134428369,
+            "name": "logs\\app-2025-01-06.log",
+            "hash": "e6d849e7a9a9d95fa200732bafdfb1d3db494cceb135e80be004cb15e81feca6"
+        },
+        {
+            "date": 1736223834999,
+            "name": "logs\\app-2025-01-07.log",
+            "hash": "1015570c33ce8788b515e6c15e6d861fcbf277d60551898c09ed8048eace9054"
         }
     ],
     "hashType": "sha256"

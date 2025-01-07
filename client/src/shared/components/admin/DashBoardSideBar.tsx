@@ -1,21 +1,28 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import logo from "../../../assets/EmailLogo.png";
-import { useState } from "react";
+import { SetStateAction, useState } from "react";
 
 const DashBoardSideBar = () => {
+  
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const location = useLocation();
+  const [selectedPath, setSelectedPath] = useState(location.pathname);
+
+  const handleLinkClick = (path: SetStateAction<string>) => {
+    setSelectedPath(path);
+  };
 
   return (
-    <div >
+    <div>
       <aside
         className={`fixed inset-y-0 left-0 transform ${
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
-        }   transition-transform duration-300 ease-in-out w-64 bg-white border-r   border-gray-200 h-screen z-40 lg:translate-x-0 lg:static lg:block`}
+        }   transition-transform duration-300 ease-in-out shadow-md w-64 bg-white border-r   border-gray-200 h-screen z-40 lg:translate-x-0 lg:static lg:block`}
       >
         <div className="text-center mb-6">
           <img src={logo} alt="FarLink Logo" className="mx-auto w-60  mb-1" />
         </div>
-        <nav className="mt-1">
+        <nav className="-mt-1">
           <ul className="space-y-1">
             {/* Realtime Section */}
             <li>
@@ -26,7 +33,12 @@ const DashBoardSideBar = () => {
                 <li>
                   <Link
                     to="/admin/"
-                    className="text-[#0B0B0B] font-medium px-4 py-2 rounded-md flex items-center gap-3"
+                    onClick={() => handleLinkClick("/admin/")}
+                    className={`text-[#0B0B0B] font-medium px-4 py-2 rounded-md flex items-center gap-3 ${
+                      selectedPath === "/admin/"
+                        ? "text-[#4361EE]  bg-blue-50 border-l-4 border-[#4361EE]"
+                        : ""
+                    }`}
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -53,7 +65,12 @@ const DashBoardSideBar = () => {
                 <li>
                   <Link
                     to="/admin/my-team"
-                    className="text-[#0B0B0B] font-medium px-4 py-2 rounded-md flex items-center gap-3"
+                    onClick={() => handleLinkClick("/admin/my-team")}
+                    className={`text-[#0B0B0B] font-medium px-4 py-2 rounded-md flex items-center gap-3 ${
+                      selectedPath === "/admin/my-team"
+                        ? "text-[#4361EE] bg-blue-50 border-l-4 border-[#4361EE]"
+                        : ""
+                    }`}
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -84,7 +101,12 @@ const DashBoardSideBar = () => {
                 <li>
                   <Link
                     to="/admin/leave-summary"
-                    className="text-[#0B0B0B] font-medium px-4 py-2 rounded-md flex items-center gap-3"
+                    onClick={() => handleLinkClick("/admin/leave-summary")}
+                    className={`text-[#0B0B0B] font-medium px-4 py-2 rounded-md flex items-center gap-3 ${
+                      selectedPath === "/admin/leave-summary"
+                        ? "text-[#4361EE] bg-blue-50 border-l-4 border-[#4361EE]"
+                        : ""
+                    }`}
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -106,7 +128,12 @@ const DashBoardSideBar = () => {
                 <li>
                   <Link
                     to="/admin/manage-leave"
-                    className="text-[#0B0B0B] font-medium px-4 py-2 rounded-md flex items-center gap-3"
+                    onClick={() => handleLinkClick("/admin/manage-leave")}
+                    className={`text-[#0B0B0B] font-medium px-4 py-2 rounded-md flex items-center gap-3 ${
+                      selectedPath === "/admin/manage-leave"
+                        ? "text-[#4361EE] bg-blue-50 border-l-4 border-[#4361EE] "
+                        : ""
+                    }`}
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -137,7 +164,12 @@ const DashBoardSideBar = () => {
                 <li>
                   <Link
                     to="/admin/create-project"
-                    className="text-[#0B0B0B] font-medium px-4 py-2 rounded-md flex items-center gap-3"
+                    onClick={() => handleLinkClick("/admin/create-project")}
+                    className={`text-[#0B0B0B] font-medium px-4 py-2 rounded-md flex items-center gap-3 ${
+                      selectedPath === "/admin/create-project"
+                        ? "text-[#4361EE] bg-blue-50 border-l-4 border-[#4361EE]"
+                        : ""
+                    }`}
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -159,7 +191,12 @@ const DashBoardSideBar = () => {
                 <li>
                   <Link
                     to="/admin/manage-tasks"
-                    className="text-[#0B0B0B] font-medium px-4 py-2 rounded-md flex items-center gap-3"
+                    onClick={() => handleLinkClick("/admin/manage-tasks")}
+                    className={`text-[#0B0B0B] font-medium px-4 py-2 rounded-md flex items-center gap-3 ${
+                      selectedPath === "/admin/manage-tasks"
+                        ? "text-[#4361EE] bg-blue-50 border-l-4 border-[#4361EE]"
+                        : ""
+                    }`}
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -190,7 +227,12 @@ const DashBoardSideBar = () => {
                 <li>
                   <Link
                     to="/admin/service-request"
-                    className="text-[#0B0B0B] font-medium px-4 py-2 rounded-md flex items-center gap-3"
+                    onClick={() => handleLinkClick("/admin/service-request")}
+                    className={`text-[#0B0B0B] font-medium px-4 py-2 rounded-md flex items-center gap-3 ${
+                      selectedPath === "/admin/service-request"
+                        ? "text-[#4361EE] bg-blue-50 border-l-4 border-[#4361EE]"
+                        : ""
+                    }`}
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -212,7 +254,12 @@ const DashBoardSideBar = () => {
                 <li>
                   <Link
                     to="/admin/realtime-alert"
-                    className="text-[#0B0B0B] font-medium px-4 py-2 rounded-md flex items-center gap-3"
+                    onClick={() => handleLinkClick("/admin/realtime-alert")}
+                    className={`text-[#0B0B0B] font-medium px-4 py-2 rounded-md flex items-center gap-3 ${
+                      selectedPath === "/admin/realtime-alert"
+                        ? "text-[#4361EE] bg-blue-50 border-l-4 border-[#4361EE]"
+                        : ""
+                    }`}
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -243,7 +290,12 @@ const DashBoardSideBar = () => {
                 <li>
                   <Link
                     to="/admin/meeting"
-                    className="text-[#0B0B0B] font-medium px-4 py-2 rounded-md flex items-center gap-3"
+                    onClick={() => handleLinkClick("/admin/meeting")}
+                    className={`text-[#0B0B0B] font-medium px-4 py-2 rounded-md flex items-center gap-3 ${
+                      selectedPath === "/admin/meeting"
+                        ? "text-[#4361EE] bg-blue-50 border-l-4 border-[#4361EE]"
+                        : ""
+                    }`}
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -265,7 +317,12 @@ const DashBoardSideBar = () => {
                 <li>
                   <Link
                     to="/admin/message"
-                    className="text-[#0B0B0B] font-medium px-4 py-2 rounded-md flex items-center gap-3"
+                    onClick={() => handleLinkClick("/admin/message")}
+                    className={`text-[#0B0B0B] font-medium px-4 py-2 rounded-md flex items-center gap-3 ${
+                      selectedPath === "/admin/message"
+                        ? "text-[#4361EE] bg-blue-50 border-l-4 border-[#4361EE]"
+                        : ""
+                    }`}
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -296,7 +353,12 @@ const DashBoardSideBar = () => {
                 <li>
                   <Link
                     to="/admin/setting"
-                    className="text-[#0B0B0B] font-medium px-4 py-2 rounded-md flex items-center gap-3"
+                    onClick={() => handleLinkClick("/admin/setting")}
+                    className={`text-[#0B0B0B] font-medium px-4 py-2 rounded-md flex items-center gap-3 ${
+                      selectedPath === "/admin/setting"
+                        ? "text-[#4361EE] bg-blue-50 border-l-4 border-[#4361EE]"
+                        : ""
+                    }`}
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -318,7 +380,12 @@ const DashBoardSideBar = () => {
                 <li>
                   <Link
                     to="/admin/billing"
-                    className="text-[#0B0B0B] font-medium px-4 py-2 rounded-md flex items-center gap-3"
+                    onClick={() => handleLinkClick("/admin/billing")}
+                    className={`text-[#0B0B0B] font-medium px-4 py-2 rounded-md flex items-center gap-3 ${
+                      selectedPath === "/admin/billing"
+                        ? "text-[#4361EE] bg-blue-50 border-l-4 border-[#4361EE]"
+                        : ""
+                    }`}
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"

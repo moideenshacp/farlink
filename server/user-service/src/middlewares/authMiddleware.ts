@@ -8,9 +8,13 @@ const token = req.cookies.accessToken;
   if (!token) {
     console.log("Access token is missing or invalid.");
      res.status(401).json({ error: 'Access token is missing or invalid.' });
-  }
+    }
+    
+    const decoded = AuthService.verifyToken(token);
+    if(!decoded){
+    res.status(401).json({ error: 'Access token is missing or invalid.' });
 
-  const decoded = AuthService.verifyToken(token);
+  }
   
   if (decoded) {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

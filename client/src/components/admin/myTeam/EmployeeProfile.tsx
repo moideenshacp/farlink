@@ -18,7 +18,7 @@ const EmployeeProfile = () => {
       case "Tasks":
         return <EmployeeProfile_tasks />;
       case "Attendence":
-        return <EmployeeProfile_attendence />;
+        return <EmployeeProfile_attendence employee={employee} />;
       case "Settings":
         return <EmployeeProfile_settings email={employee.email} verified={employee.verified} />;
       default:

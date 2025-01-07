@@ -6,6 +6,8 @@ const router = express.Router()
 
 const EmployeeController = new employeeController()
 
+
+//admin=====================================================================================================================
 router.post('/register-employee',(authenticate as never),EmployeeController.registerEmployee)
 router.get('/get-employees',(authenticate as never),EmployeeController.getAllEmployees)
 router.post('/update-employee',(authenticate as never),EmployeeController.updateEmployees)

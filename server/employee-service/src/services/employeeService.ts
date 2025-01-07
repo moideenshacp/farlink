@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { publishEvent } from "../rabbitmq/producer/producer";
 import { IemployeeData } from "../interfaces/IemployeeData";
 import IemployeeModel from "../interfaces/IemployeeModel";
@@ -139,7 +140,6 @@ export class employeeService implements IemployeeService {
       return "";
     }
   }
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   async EmployeesCount(organizationId: string): Promise<any> {
     try {
 
@@ -155,7 +155,6 @@ export class employeeService implements IemployeeService {
       console.log(error);      
     }
   }
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   async TerminateEmployee(email: string): Promise<any> {
     try {
 
