@@ -46,10 +46,12 @@ const Billing = () => {
     ? new Date(subscriptionDetails.current_period_end).toLocaleDateString()
     : "";
   const buttonText =
-    subscriptionDetails?.plan === undefined ?"Upgrade Your Plan"  : "Manage Your Plan";
+    subscriptionDetails?.plan === undefined
+      ? "Upgrade Your Plan"
+      : "Manage Your Plan";
 
-    console.log(subscriptionDetails?.plan,"subcription detail plan");
-    
+  console.log(subscriptionDetails?.plan, "subcription detail plan");
+
   const fallbackSubscriptionDetails = {
     plan: "FREE",
     amount: 0,
@@ -66,11 +68,11 @@ const Billing = () => {
     <div>
       <div className="flex flex-col">
         <div className="flex flex-col sm:flex-row gap-20 w-full max-w-4xl">
-          {isLoading ? ( // Show loader when isLoading is true
-            <div className="flex items-center justify-center w-full h-32">
-              <div className="loader"></div>{" "}
-              Loading...
-            </div>
+          {isLoading ? (
+            <div className="absolute inset-0 flex justify-center items-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500 ml-48"></div>
+          </div>
+          
           ) : (
             <>
               <div className="flex-1">
@@ -103,10 +105,15 @@ const Billing = () => {
             </>
           )}
         </div>
+        {!isLoading && (
+          <>
+            <br />
+            <PaymentHistory
+              customerId={displaySubscriptionDetails.customerId}
+            />
+          </>
+        )}
       </div>
-      <br />
-      <PaymentHistory customerId={displaySubscriptionDetails.customerId} />
-
     </div>
   );
 };

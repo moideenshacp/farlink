@@ -179,7 +179,7 @@ const AddEmployeeModal = ({ toggleModal }: { toggleModal: () => void }) => {
               <span className="text-blue-500">📎 {selectedFile.name}</span>
               <button
                 onClick={handleRemoveFile}
-                className="text-gray-500 hover:text-gray-800"
+                className="text-gray-500  hover:text-gray-800"
               >
                 &times;
               </button>

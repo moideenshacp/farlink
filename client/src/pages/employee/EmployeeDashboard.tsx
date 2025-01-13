@@ -3,9 +3,9 @@ import DashBoardSideBar from "../../shared/components/employee/DashBoardSideBar"
 import DashBoardTopBar from "../../shared/components/employee/DashBoardTopBar";
 import DashboardSettings from "../../components/employee/DashboardSettings";
 import AttendanceSummary from "../../components/employee/attendence/AttendenceSummary";
+import ApplyLeave from "../../components/employee/attendence/ApplyLeave";
 // Content Components
 const Overview = () => <div>Overview Content</div>;
-const ApplyLeave = () => <div>Apply Leave Content</div>;
 const MyProject = () => <div>My Project Content</div>;
 const MyTask = () => <div>My Tasks Content</div>;
 const RequestService = () => <div>ServiceRequest Content</div>;

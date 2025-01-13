@@ -12,6 +12,8 @@ const AttendenceController = new attendenceController()
 router.post('/update-policy',(authenticate as never),AttendenceController.UpdateAttendencePolicy)
 router.get('/get-policy',(authenticate as never),AttendenceController.getAttendencePolicy)
 router.post('/handle-attendence',(authenticate as never),AttendenceController.handleAttendence)
+
+//common====================================================================================================================
 router.get('/get-attendence',(authenticate as never),AttendenceController.getAttendenceReport)
 
 

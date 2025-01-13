@@ -40,10 +40,9 @@ const DashboardSettings = () => {
         >
           Password
         </div>
-
       </div>
-        <div>{renderContent()}</div>
-      </div>
+      <div>{renderContent()}</div>
+    </div>
   );
 };
 

@@ -56,13 +56,11 @@ export class employeeService implements IemployeeService {
     organizationId: string
   ): Promise<IemployeeModel[] | null> {
     try {
-      console.log(organizationId, "orgggid----------------------");
 
       const allEmployees = await this._employeeRepository.findByOrganizationId(
         organizationId
       );
 
-      console.log(allEmployees, "allEmployees for company");
       return allEmployees;
     } catch (error) {
       console.log(error);

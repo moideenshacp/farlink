@@ -8,6 +8,7 @@ import logger from "./src/utils/logger";
 import morgan from "morgan";
 import employeeRoutes from './src/routes/employeeRoute'
 import attendenceRoutes from './src/routes/attendenceRoute'
+import leaveRoutes from './src/routes/leaveRoute'
 import { rabbitmqConnect } from "./src/config/rabbitmq";
 import { errorHandler } from "./src/middlewares/errorHandler";
 
@@ -48,6 +49,7 @@ app.use(bodyParser.json());
 app.use(express.json());
 app.use("/api/employee", employeeRoutes);
 app.use("/api/attendence", attendenceRoutes);
+app.use("/api/leave", leaveRoutes);
 
 app.use(errorHandler);
 

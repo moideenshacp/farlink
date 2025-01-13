@@ -65,7 +65,7 @@ const EmployeeProfile_settings: React.FC<employeeEmail> = ({
           className={`bg-[#4361EE] text-white font-semibold py-2 px-4 rounded-lg hover:bg-[#4361EE] ${
             isLoading ? "opacity-50 cursor-not-allowed" : ""
           }`}
-          disabled={isLoading} // Disable button while loading
+          disabled={isLoading} 
         >
           {isLoading
             ? "Sending..."

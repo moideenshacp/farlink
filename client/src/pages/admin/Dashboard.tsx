@@ -7,8 +7,8 @@ import EmployeeProfile from "../../components/admin/myTeam/EmployeeProfile";
 import Billing from "../../components/admin/billing/Billing"
 import DashboardOverview from "../../components/admin/overview/DashboardOverview";
 import ManageLeave from "../../components/admin/attendence/ManageLeave";
+import LeaveSummary from "../../components/admin/leaveSummary/LeaveSummary";
 // Content Components
-const LeaveSummary = () => <div>Leave Summary Content</div>;
 const CreateProject = () => <div>Create Project Content</div>;
 const ManageTasks = () => <div>Manage Tasks Content</div>;
 const ServiceRequest = () => <div>ServiceRequest Content</div>;

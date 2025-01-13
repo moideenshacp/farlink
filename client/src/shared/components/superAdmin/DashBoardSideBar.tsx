@@ -16,7 +16,7 @@ const DashBoardSideBar = () => {
       <aside
         className={`fixed inset-y-0 left-0 transform ${
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
-        } transition-transform duration-300 ease-in-out w-64 bg-white border-r border-gray-200 h-screen z-40 lg:translate-x-0 lg:static lg:block`}
+        } transition-transform duration-300 ease-in-out w-64 bg-white border-r shadow-md border-gray-200 h-screen z-40 lg:translate-x-0 lg:static lg:block`}
       >
         <div className="text-center mb-6">
           <img src={logo} alt="FarLink Logo" className="mx-auto w-60  mb-1" />

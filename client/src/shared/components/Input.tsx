@@ -1,8 +1,8 @@
 interface ReusableInputProps {
-  label: string;
+  label?: string;
   type: string;
   name?: string;
-  value: string | number;
+  value?: string | number;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   placeholder?: string;
   className?: string;

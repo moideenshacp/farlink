@@ -52,7 +52,9 @@ const PaymentHistory: React.FC<historyProps> = ({ customerId }) => {
   return (
     <div className="p-6 bg-white rounded-lg shadow-lg">
       <h1 className="text-2xl font-bold mb-4">Payment History</h1>
-      {loading && <div>Loading...</div>}
+      {loading && <div className="flex justify-center items-center h-full">
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+          </div>}
       {error && <div className="text-red-500">{error}</div>}
       {history ? (
         <div className="overflow-x-auto">

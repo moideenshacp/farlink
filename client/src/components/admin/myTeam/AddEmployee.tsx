@@ -44,7 +44,7 @@ const AddEmployee = () => {
               <h2 className="text-2xl font-semibold">Add Employee</h2>
               <button
                 onClick={toggleModal}
-                className="text-gray-500 hover:text-gray-800"
+                className="text-gray-500 text-2xl hover:text-gray-800"
               >
                 &times;
               </button>

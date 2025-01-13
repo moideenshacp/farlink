@@ -1,4 +1,4 @@
- import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Home from "./pages/LandingPages/Home";
 import SignUp from "./pages/LandingPages/SignUp";
 import Login from "./pages/LandingPages/Login";
@@ -47,26 +47,26 @@ function App() {
               element={<InvalidForgetPass />}
             />
           </Route>
-{/*================================================================================================================================== */}
+          {/*================================================================================================================================== */}
 
           <Route element={<OrganizationPrivateRoute />}>
             <Route path="/step-3" element={<Step3 />} />
           </Route>
 
-{/*================================================================================================================================== */}
+          {/*================================================================================================================================== */}
 
           <Route element={<AdminPrivateRoute />}>
             <Route path="/admin/*" element={<AdminDashboard />} />
-            <Route path="/success" element={<SuccessPayment/>} />
+            <Route path="/success" element={<SuccessPayment />} />
           </Route>
 
-{/*================================================================================================================================== */}
+          {/*================================================================================================================================== */}
           <Route element={<SuperAdminPrivateRoute />}>
             <Route path="/superAdmin/*" element={<Dashboard />} />
           </Route>
-{/*================================================================================================================================== */}
+          {/*================================================================================================================================== */}
 
-              <Route path="/employee/*" element={<EmployeeDashboard />} />
+          <Route path="/employee/*" element={<EmployeeDashboard />} />
         </Routes>
       </div>
     </BrowserRouter>
