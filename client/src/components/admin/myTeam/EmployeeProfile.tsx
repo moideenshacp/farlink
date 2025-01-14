@@ -3,13 +3,13 @@ import EmployeeProfile_Profile from "./EmployeeProfile_Profile";
 import EmployeeProfile_tasks from "./EmployeeProfile_tasks";
 import EmployeeProfile_attendence from "./EmployeeProfile_attendence";
 import EmployeeProfile_settings from "./EmployeeProfile_settings";
-import { useLocation } from "react-router-dom";
-
+import { useLocation, useNavigate } from "react-router-dom";
 
 const EmployeeProfile = () => {
   const [activeTab, setActiveTab] = useState("profile");
-    const location = useLocation();
-    const { employee } = location.state || {};
+  const location = useLocation();
+  const { employee } = location.state || {};
+  const navigate = useNavigate();
 
   const renderContent = () => {
     switch (activeTab) {
@@ -20,20 +20,43 @@ const EmployeeProfile = () => {
       case "Attendence":
         return <EmployeeProfile_attendence employee={employee} />;
       case "Settings":
-        return <EmployeeProfile_settings email={employee.email} verified={employee.verified} />;
+        return (
+          <EmployeeProfile_settings
+            email={employee.email}
+            verified={employee.verified}
+            isActive={employee.isActive}
+          />
+        );
       default:
         return <div>Select a section</div>;
     }
   };
 
-  console.log("employeee from up",employee);
-  
- 
+  console.log("employeee from up", employee);
 
   return (
-    <div className="flex flex-col bg-white shadow-md p-16 rounded-md max-w-full mx-auto">
+    <div className="flex flex-col bg-white shadow-md p-12 rounded-md max-w-full mx-auto">
+      <div
+        onClick={() => navigate("/admin/my-team")}
+        className="cursor-pointer"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          strokeWidth={1.5}
+          stroke="#8C97A8"
+          className="size-6"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3"
+          />
+        </svg>
+      </div>
       {/* Profile Section */}
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex items-center mt-6 justify-between mb-6">
         <div className="flex items-center space-x-4">
           <img
             src={employee.image}
@@ -62,7 +85,10 @@ const EmployeeProfile = () => {
               d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
             />
           </svg>
-          <span>Joined: {employee.dateOfJoining ? employee.dateOfJoining.split("T")[0] : ""}</span>
+          <span>
+            Joined:{" "}
+            {employee.dateOfJoining ? employee.dateOfJoining.split("T")[0] : ""}
+          </span>
 
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -126,7 +152,6 @@ const EmployeeProfile = () => {
         </div>
 
         <div className="flex mb-6">
-            
           <div className="ml-6 w-full">{renderContent()}</div>
         </div>
       </div>

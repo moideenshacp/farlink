@@ -14,5 +14,6 @@ export default interface IuserModel extends Document {
   lastName:string
   phone:string
   image:string
+  position:string
   organizationId: IorgModel | mongoose.Types.ObjectId;
 }

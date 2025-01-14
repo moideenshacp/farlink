@@ -1,5 +1,6 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
+  fetchPositions,
   updateEmployeeDetails,
   uploadImageToCloudinary,
 } from "../../../api/employeeApi";
@@ -10,6 +11,8 @@ import {
 import { toast, ToastContainer } from "react-toastify";
 import { employeeProfileUpdate } from "../../../validations/employeeProfileUpdate";
 import Input from "../../../shared/components/Input";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../redux/store";
 
 const EmployeeProfile_Profile: React.FC<EmployeeProfileProps> = ({
   employee,
@@ -41,7 +44,8 @@ const EmployeeProfile_Profile: React.FC<EmployeeProfileProps> = ({
   });
   const [formData, setFormData] = useState(initialFormData.current);
   const [errors, setErrors] = useState<updateEmployeeFormErrors>({});
-
+  const {user} = useSelector((state:RootState)=>state.user)
+  const [teams, setTeams] = useState([]); 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
@@ -104,6 +108,21 @@ const EmployeeProfile_Profile: React.FC<EmployeeProfileProps> = ({
       console.log(error);
     }
   };
+      useEffect(()=>{
+        const fetchAllPositions = async()=>{
+          try {
+            const res = await fetchPositions(user?.organizationId)
+    
+            console.log(res.data.result.positions,"All positions")
+            setTeams(res.data.result.positions)
+            
+          } catch (error) {
+            console.log(error);
+            
+          }
+        }
+        fetchAllPositions()
+      },[user?.organizationId])
 
   const handleClear = () => {
     setFormData(initialFormData.current);
@@ -181,15 +200,21 @@ const EmployeeProfile_Profile: React.FC<EmployeeProfileProps> = ({
         />
         {errors.lastName && <p className="text-red-600">{errors.lastName}</p>}
 
-        <Input
-          label="Position"
-          type="text"
-          placeholder="Enter the position of employee"
-          onChange={handleChange}
-          name="position"
-          value={formData.position}
-          className="w-full border-b border-gray-300 focus:outline-none focus:border-[#4361EE] py-1"
-        />
+        <div>
+          <label className="block mb-1 font-medium text-[#232360]">Position</label>
+          <select
+            className="w-full p-2 border rounded focus:outline-none"
+            name="position"
+            onChange={handleChange}
+            value={formData.position}
+          >
+            {teams.map((team, index) => (
+                <option key={index} value={team}>
+                  {team}
+                </option>
+              ))}
+          </select>
+        </div>
         {errors.position && <p className="text-red-600">{errors.position}</p>}
         <div className="mb-4">
           <label className="block mb-1 font-medium text-[#232360]">

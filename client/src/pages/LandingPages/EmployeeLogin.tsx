@@ -34,10 +34,20 @@ const EmployeeLogin = () => {
       const res = await LoginAdmin(formData.email, formData.password);
       if (res.data.message === "Login sucessfull") {
         const user = res.data.user;
-        console.log('employee',user);
+        console.log('Logged in user:', user);
         
-        if (user.role === "employee") {
-            navigate("/employee/", { replace: true });
+        // Check the user role and position
+        console.log('User Role:', user.role);
+        console.log('User Position:', user?.position?.trim().toLowerCase());
+  
+        // Fix for case mismatch in position check
+        if (user.role === "employee" && user?.position?.trim().toLowerCase() === "hr") {
+          console.log("Navigating to Admin:", user.position);
+          navigate("/admin/", { replace: true });
+          dispatch(login({ user, token: user.token }));
+        } else {
+          console.log("Navigating to Employee:", user.position);
+          navigate("/employee/", { replace: true });
           dispatch(login({ user, token: user.token }));
         }
       }
@@ -49,6 +59,7 @@ const EmployeeLogin = () => {
       }
     }
   };
+  
 
   return (
     <div>

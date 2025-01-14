@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { logoutUser } from "../../../api/authApi";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../../redux/user/userSlice";
@@ -128,11 +128,13 @@ const DashBoardTopBar = () => {
               <div>
                 <button onClick={toggleDropdown} className="flex items-center">
                   {user?.image ? (
+                    <Link to='/admin/setting' >
                     <img
                       src={user.image}
                       alt="User Avatar"
                       className="w-8 h-8 rounded-full"
                     />
+                    </Link>
                   ) : (
                     <svg
                       xmlns="http://www.w3.org/2000/svg"

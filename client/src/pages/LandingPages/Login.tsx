@@ -117,6 +117,12 @@ const Login = () => {
             dispatch(login({ user, token: user.token }));
             navigate("/superAdmin/", { replace: true });
           }
+          if (user.role === "employee") {
+            toast.error("Please do Login via employee login section!!.", {
+              position: "top-right",
+              autoClose: 2000,
+            });
+          }
         }
       } catch (error) {
         if (axios.isAxiosError(error)) {

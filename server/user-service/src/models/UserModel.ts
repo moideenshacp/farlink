@@ -10,6 +10,9 @@
       enum: ["admin", "superAdmin", "employee"],
       default: "admin",
     },
+    position:{
+      type:String
+    },
     isActive: {
       type:Boolean,
       default:true

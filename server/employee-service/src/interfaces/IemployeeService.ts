@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { IemployeeData } from "./IemployeeData";
 import IemployeeModel from "./IemployeeModel";
+import IpositionModel from "./IpositionModel";
 
 
 export interface IemployeeService {
@@ -11,4 +12,6 @@ export interface IemployeeService {
     setUpPassword(password:string,email:string):Promise<string>
     EmployeesCount(organizationId:string):Promise<any>
     TerminateEmployee(email:string):Promise<any>
+    AddPosition(organizationId:string,position:string):Promise<IpositionModel | null>
+    fetchPosition(organizationId:string):Promise<IpositionModel | null>
 }

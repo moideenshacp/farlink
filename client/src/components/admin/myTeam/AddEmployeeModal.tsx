@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { addEmployee, uploadImageToCloudinary } from "../../../api/employeeApi";
+import { useEffect, useState } from "react";
+import { addEmployee, fetchPositions, uploadImageToCloudinary } from "../../../api/employeeApi";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
 import { toast, ToastContainer } from "react-toastify";
@@ -18,6 +18,8 @@ const AddEmployeeModal = ({ toggleModal }: { toggleModal: () => void }) => {
     lastName: "",
     phone: "",
   });
+  const {user} = useSelector((state:RootState)=>state.user)
+  const [teams, setTeams] = useState([]); 
   const organizationId = useSelector(
     (state: RootState) => state.user?.user?.organizationId
   );
@@ -43,7 +45,21 @@ const AddEmployeeModal = ({ toggleModal }: { toggleModal: () => void }) => {
     setSelectedFile(null);
     setImageUrl(null);
   };
-
+    useEffect(()=>{
+      const fetchAllPositions = async()=>{
+        try {
+          const res = await fetchPositions(user?.organizationId)
+  
+          console.log(res.data.result.positions,"All positions")
+          setTeams(res.data.result.positions)
+          
+        } catch (error) {
+          console.log(error);
+          
+        }
+      }
+      fetchAllPositions()
+    },[user?.organizationId])
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!selectedFile) {
@@ -124,14 +140,22 @@ const AddEmployeeModal = ({ toggleModal }: { toggleModal: () => void }) => {
           onChange={handleChange}
           placeholder="Enter first name"
         />
-        <Input
-          label="Position"
-          type="text"
-          name="position"
-          value={formData.position}
-          onChange={handleChange}
-          placeholder="Enter position"
-        />
+
+         <div>
+          <label className="block mb-1 font-medium text-[#232360]">Position</label>
+          <select
+            className="w-full p-2 border rounded focus:outline-none"
+            name="position"
+            onChange={handleChange}
+            value={formData.position}
+          >
+            {teams.map((team, index) => (
+                <option key={index} value={team}>
+                  {team}
+                </option>
+              ))}
+          </select>
+        </div>
         <Input
           label="Last Name"
           type="text"

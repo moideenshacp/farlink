@@ -16,8 +16,6 @@ export const consumeEvents = async (): Promise<void> => {
         console.log("Event received:", event);
 
         if (event.event === "REGISTER_EMPLOYEE") {
-          console.log("gettttttttttt-------------------");
-
           const {
             id,
             role,
@@ -28,6 +26,7 @@ export const consumeEvents = async (): Promise<void> => {
             phone,
             image,
             organizationId,
+            position
           } = event.payload;
           const employeeData = {
             _id: id,
@@ -39,6 +38,7 @@ export const consumeEvents = async (): Promise<void> => {
             phone,
             image,
             organizationId,
+            position
           };
           const userRepo = new userRepository();
 
@@ -60,6 +60,7 @@ export const consumeEvents = async (): Promise<void> => {
             phone,
             image,
             organizationId,
+            position
           } = event.payload;
           const employeeData = {
             _id: id,
@@ -71,6 +72,7 @@ export const consumeEvents = async (): Promise<void> => {
             phone,
             image,
             organizationId,
+            position
           };
 
           console.log("Updating employee with data:", employeeData);
@@ -117,6 +119,31 @@ export const consumeEvents = async (): Promise<void> => {
             const details = await userRepo.findByEmailWithPopulate(email,"organizationId")
             console.log(details);
             await publishEvent(responseQueue, { success: true, details });
+          }
+          if (event.event === "TERMINATE_EMPLOYEE") {
+            console.log("gettttttttttt-------------------");
+  
+            const {
+              email
+            } = event.payload;
+           console.log(email,"we are from user-service");
+           
+            const userRepo = new userRepository();
+            const employee = await userRepo.findByEmail(email)
+            let TerminateEmployee;
+            if(!employee){
+              return null
+            }
+            if(employee.isActive === true){
+              TerminateEmployee = await userRepo.update({email},{isActive:false})
+            }else{
+              TerminateEmployee  = await userRepo.update({email},{isActive:true})
+            }
+            if (TerminateEmployee) {
+                console.log("Employee terminated");
+            } else {
+                console.log("Employee termination failed");
+            }
           }
 
         // // Acknowledge the message

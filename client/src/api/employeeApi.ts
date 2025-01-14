@@ -195,3 +195,39 @@ export const terminateEmployee = async (
     console.log(error);
   }
 };
+
+export const addPosition = async (
+  organizationId: string | undefined,
+  position: string 
+) => {
+  try {
+    const res = await axiosInstance.post(
+      `${
+        import.meta.env.VITE_SERVER_BASE_URL
+      }/employee-service/api/employee/add-position`,
+      { organizationId, position }
+    );
+    return res;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
+
+export const fetchPositions = async (
+  organizationId: string | undefined,
+) => {
+  try {
+    const res = await axiosInstance.post(
+      `${
+        import.meta.env.VITE_SERVER_BASE_URL
+      }/employee-service/api/employee/fetch-position`,
+      { organizationId }
+    );
+    return res;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};

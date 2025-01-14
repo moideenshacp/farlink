@@ -98,7 +98,8 @@ export class userController implements IuserController {
             token: token,
             image:user.image,
             isOrganizationAdded:user.isOrganizationAdded,
-            organizationId:user.organizationId
+            organizationId:user.organizationId,
+            position:user.position
           },
         });
     } catch (error) {

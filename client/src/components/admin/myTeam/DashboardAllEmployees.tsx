@@ -25,7 +25,7 @@ const DashboardAllEmployees = () => {
     
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pt-4 ">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pt-7 ">
       {employeees.map((employee, index) => (
         <EmployeeCard
           key={index}

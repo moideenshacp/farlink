@@ -1,18 +1,28 @@
 import { useState } from "react";
-import { sendInvitationEmployee, terminateEmployee } from "../../../api/employeeApi";
+import {
+  sendInvitationEmployee,
+  terminateEmployee,
+} from "../../../api/employeeApi";
 import { toast, ToastContainer } from "react-toastify";
+import ConfirmationModal from "../../../shared/components/ConfirmationModal";
 
 interface employeeEmail {
   email: string;
   verified: boolean;
+  isActive: boolean;
 }
 
 const EmployeeProfile_settings: React.FC<employeeEmail> = ({
   email,
   verified,
+  isActive,
 }) => {
   const [emailSendStatus, setEmailSendStatus] = useState(verified);
   const [isLoading, setIsLoading] = useState(false);
+  const [activeStatus, setActiveStatus] = useState(isActive);
+  const [showModal, setShowModal] = useState(false);
+
+  console.log(isActive, "isactive");
 
   const sendInvitation = async () => {
     try {
@@ -26,13 +36,10 @@ const EmployeeProfile_settings: React.FC<employeeEmail> = ({
         });
         setEmailSendStatus(true);
       } else {
-        toast.error(
-          "Failed to send the Invitation. Please try again.",
-          {
-            position: "top-right",
-            autoClose: 2000,
-          }
-        );
+        toast.error("Failed to send the Invitation. Please try again.", {
+          position: "top-right",
+          autoClose: 2000,
+        });
       }
     } catch (error) {
       console.log(error);
@@ -41,16 +48,19 @@ const EmployeeProfile_settings: React.FC<employeeEmail> = ({
     }
   };
 
-  const terminate = async()=>{
+  const terminate = async () => {
+
     try {
-      const res = await terminateEmployee(email)
-      console.log(res,"terminae resss");
-      
+      const res = await terminateEmployee(email);
+      console.log(res, "terminae resss");
+      if (res?.data.message === "Employee terminated successfully") {
+        setActiveStatus(res.data.isActive);
+        console.log(isActive);
+      }
     } catch (error) {
       console.log(error);
-      
     }
-  }
+  };
 
   return (
     <div className="p-6 min-h-screen">
@@ -65,7 +75,7 @@ const EmployeeProfile_settings: React.FC<employeeEmail> = ({
           className={`bg-[#4361EE] text-white font-semibold py-2 px-4 rounded-lg hover:bg-[#4361EE] ${
             isLoading ? "opacity-50 cursor-not-allowed" : ""
           }`}
-          disabled={isLoading} 
+          disabled={isLoading}
         >
           {isLoading
             ? "Sending..."
@@ -81,10 +91,25 @@ const EmployeeProfile_settings: React.FC<employeeEmail> = ({
           Terminate the employee to remove their access from the FarL
           <span className="text-blue-800">i</span>nk app.
         </p>
-        <button onClick={terminate} className="bg-red-500 text-white font-semibold py-2 px-4 rounded-lg hover:bg-red-600">
-          Terminate Employee
+        <button
+          onClick={() => setShowModal(true)}
+          className="bg-red-500 text-white font-semibold py-2 px-4 rounded-lg hover:bg-red-600"
+        >
+          {activeStatus ? "Block Employee" : "Un-Block Employee"}
         </button>
       </div>
+      {showModal && (
+        <ConfirmationModal
+          message={`Are you sure you want to ${
+            activeStatus ? "block" : "unblock"
+          } this employee?`}
+          onConfirm={() => {
+            setShowModal(false);
+            terminate();
+          }}
+          onCancel={() => setShowModal(false)}
+        />
+      )}
       <ToastContainer />
     </div>
   );

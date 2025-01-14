@@ -7,6 +7,7 @@ const AdminPrivateRoute = () => {
     (state: RootState) => state.user.isAuthenticated
   );
   const userRole = useSelector((state: RootState) => state.user?.user?.role);
+  const userPosition = useSelector((state: RootState) => state.user?.user?.position);
   const isOrganizationAdded = useSelector(
     (state: RootState) => state.user?.user?.isOrganizationAdded
   );
@@ -15,6 +16,12 @@ const AdminPrivateRoute = () => {
     console.log("yes it is added");
     
     return isOrganizationAdded ? <Outlet /> : <Navigate to="/step-1" replace />;
+  }
+  if(userRole === "employee" && userPosition === "HR"){
+    console.log("employee hr aan");
+    
+    return isAuthenticated ? <Outlet/> : <Navigate to="/step-1" replace /> ;
+
   }
 
   return <Navigate to="/sign-in" replace />;

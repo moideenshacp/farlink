@@ -15,7 +15,7 @@ const OverviewCard: React.FC<OverviewCardProps> = ({
 }) => {
   return (
     <div>
-      <div className="bg-white shadow-xl rounded-3xl p-4 h-52 w-96">
+      <div className="bg-white shadow-xl rounded-3xl p-4 h-52 w-96 hover:shadow-lg hover:scale-105 transition-transform">
         {/* Header Section */}
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-2 mt-10">

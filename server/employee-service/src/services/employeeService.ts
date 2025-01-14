@@ -6,12 +6,18 @@ import { IemployeeService } from "../interfaces/IemployeeService";
 import { employeeRepository } from "../repositories/employeeRepository";
 import { EmailService } from "../utils/emailVerify";
 import bcrypt from "bcryptjs";
+import { CustomError } from "../errors/CustomError";
+import { positionRepository } from "../repositories/positionsRepo";
+import IpositionModel from "../interfaces/IpositionModel";
+import mongoose from "mongoose";
 
 export class employeeService implements IemployeeService {
   private _employeeRepository: employeeRepository;
+  private _positionRepository: positionRepository;
 
   constructor() {
     this._employeeRepository = new employeeRepository();
+    this._positionRepository = new positionRepository();
   }
 
   async registerEmployee(employeeData: IemployeeData): Promise<IemployeeModel | null> {
@@ -44,6 +50,7 @@ export class employeeService implements IemployeeService {
           role: registeredEmployee?.role,
           image: registeredEmployee?.image,
           organizationId: registeredEmployee?.organizationId,
+          position:registeredEmployee?.position
         },
       });
       return registeredEmployee
@@ -101,6 +108,7 @@ export class employeeService implements IemployeeService {
           role: employeeData?.role,
           image: employeeData?.image,
           organizationId: findEmployee?.organizationId,
+          position:findEmployee?.position
         },
       });
       return findEmployee;
@@ -156,12 +164,76 @@ export class employeeService implements IemployeeService {
   async TerminateEmployee(email: string): Promise<any> {
     try {
 
-      console.log(email,"EMployeeeeeeeeeeee email");
-      
+      console.log(email,"EMployeeeeeeeeeeee email")
+      const employee = await this._employeeRepository.findByEmail(email)
+
+      console.log("employeee",employee);
+      if(!employee){
+        throw new CustomError("employee not found",400)
+      }
+      const queue = "user-service-queue";
+      await publishEvent(queue, {
+        event: "TERMINATE_EMPLOYEE",
+        payload: {
+          email:email
+        },
+      });
+      let TerminateEmployee;
+      if(employee.isActive === true){
+        TerminateEmployee = await this._employeeRepository.update({email},{isActive:false})
+      }else{
+        TerminateEmployee  = await this._employeeRepository.update({email},{isActive:true})
+      }
+      return TerminateEmployee
       
     } catch (error) {
       console.log(error);
       
     }
   }
+  async AddPosition(organizationId: string, position: string): Promise<IpositionModel | null> {
+    try {
+      console.log(organizationId, position);
+  
+      if (organizationId && position) {
+        const organizationObjectId = new mongoose.Types.ObjectId(organizationId);
+        const existingRecord = await this._positionRepository.findByOrganizationId(organizationObjectId);
+        
+        if (existingRecord && existingRecord.positions.includes(position)) {
+          console.error(`Position "${position}" already exists for this organization.`);
+          throw new CustomError(`Position "${position}" already exists for this organization.`,400)
+        }
+        const positionAdded = await this._positionRepository.createPosition(organizationObjectId, position);
+        if (positionAdded) {
+          console.log("Position saved successfully.");
+        }
+  
+        return positionAdded;
+      }
+  
+      return null;
+    } catch (error: any) {
+      console.log(error);
+      throw error;
+    }
+  }
+  async fetchPosition(organizationId: string): Promise<IpositionModel | null> {
+    try {
+      console.log(organizationId);
+      const organizationObjectId = new mongoose.Types.ObjectId(organizationId)
+      const positions =await this._positionRepository.findByOrganizationId(organizationObjectId)
+      if(positions){
+        console.log("allpositons");
+        
+        return positions
+      }
+      return null
+      
+    } catch (error) {
+      console.log(error);
+      return null
+    }
+    
+  }
+  
 }

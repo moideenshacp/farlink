@@ -8,4 +8,6 @@ import { Request, Response } from "express";
         setUpPassword(req:Request,res:Response):Promise<void>
         EmployeesCount(req:Request,res:Response):Promise<void>
         TerminateEmployee(req:Request,res:Response):Promise<void>
+        AddPosition(req:Request,res:Response):Promise<void>
+        fetchPosition(req:Request,res:Response):Promise<void>
     }

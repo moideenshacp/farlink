@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Home from "./pages/LandingPages/Home";
 import SignUp from "./pages/LandingPages/SignUp";
 import Login from "./pages/LandingPages/Login";
@@ -31,12 +31,12 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/sign-up" element={<SignUp />} />
             <Route path="/sign-in" element={<Login />} />
-            <Route path="/employee-login" element={<EmployeeLogin />} />
             <Route path="/verify-email" element={<EmailVerified />} />
             <Route path="/verifyEmail-msg" element={<VerifyMail />} />
             <Route path="/forget-password" element={<ForgetPassEmail />} />
             <Route path="/forget-password-msg" element={<ForgetPassword />} />
             <Route path="/reset-password" element={<ResetPassword />} />
+            <Route path="/employee-login" element={<EmployeeLogin />} />
             <Route path="/set-password" element={<SetUpPassword />} />
             <Route element={<OrganizationPrivateRoute />}>
               <Route path="/step-1" element={<Step1 />} />
@@ -47,26 +47,26 @@ function App() {
               element={<InvalidForgetPass />}
             />
           </Route>
-          {/*================================================================================================================================== */}
+{/*================================================================================================================================== */}
 
           <Route element={<OrganizationPrivateRoute />}>
             <Route path="/step-3" element={<Step3 />} />
           </Route>
 
-          {/*================================================================================================================================== */}
+{/*================================================================================================================================== */}
 
           <Route element={<AdminPrivateRoute />}>
+            <Route path="/success" element={<SuccessPayment/>} />
             <Route path="/admin/*" element={<AdminDashboard />} />
-            <Route path="/success" element={<SuccessPayment />} />
           </Route>
+            <Route path="/employee/*" element={<EmployeeDashboard />} />
 
-          {/*================================================================================================================================== */}
+{/*================================================================================================================================== */}
           <Route element={<SuperAdminPrivateRoute />}>
             <Route path="/superAdmin/*" element={<Dashboard />} />
           </Route>
-          {/*================================================================================================================================== */}
+{/*================================================================================================================================== */}
 
-          <Route path="/employee/*" element={<EmployeeDashboard />} />
         </Routes>
       </div>
     </BrowserRouter>
