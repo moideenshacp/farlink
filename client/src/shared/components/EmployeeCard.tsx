@@ -1,4 +1,6 @@
+import { useSelector } from "react-redux";
 import {  useNavigate } from "react-router-dom";
+import { RootState } from "../../redux/store";
 
 interface EmployeeProfileCardProps {
     image: string;
@@ -41,10 +43,18 @@ const EmployeeCard: React.FC<EmployeeProfileCardProps> = ({
   phone,
   email,
 }) => {
+    const userPosition = useSelector((state: RootState) => state.user?.user?.position);
+
   
   const navigate = useNavigate()
   const handleCardClick = (employee :Employee)=>{
-    navigate("/admin/employee-profile", { state: { employee } });
+    if(userPosition === "HR"){
+
+      navigate("/employee/employee-profile", { state: { employee } });
+    }else{
+
+      navigate("/admin/employee-profile", { state: { employee } });
+    }
   
   }
 

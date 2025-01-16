@@ -4,8 +4,15 @@ import DashBoardTopBar from "../../shared/components/employee/DashBoardTopBar";
 import DashboardSettings from "../../components/employee/DashboardSettings";
 import AttendanceSummary from "../../components/employee/attendence/AttendenceSummary";
 import ApplyLeave from "../../components/employee/attendence/ApplyLeave";
+import Myteam from "../../components/admin/myTeam/Myteam";
+import EmployeeProfile from "../../components/admin/myTeam/EmployeeProfile";
+import LeaveSummary from "../../components/admin/leaveSummary/LeaveSummary";
+import ManageLeave from "../../components/admin/attendence/ManageLeave";
 // Content Components
 const Overview = () => <div>Overview Content</div>;
+const CreateProject = () => <div>Create Project Content</div>;
+const ManageTasks = () => <div>Manage Tasks Content</div>;
+const ServiceRequest = () => <div>ServiceRequest Content</div>;
 const MyProject = () => <div>My Project Content</div>;
 const MyTask = () => <div>My Tasks Content</div>;
 const RequestService = () => <div>ServiceRequest Content</div>;
@@ -28,6 +35,14 @@ const EmployeeDashboard = () => {
         {/* Dynamic Content */}
         <main className="flex-1 bg-white p-6 sm: mt-14 lg:pt-14">
           <Routes>
+          <Route path="/my-team" element={<Myteam />} />
+          <Route path="/employee-profile" element={<EmployeeProfile />} />
+          <Route path="/leave-summary" element={<LeaveSummary />} />
+          <Route path="/manage-leave" element={<ManageLeave/>} />
+             <Route path="/create-project" element={<CreateProject />} />
+                      <Route path="/manage-tasks" element={<ManageTasks />} />
+                      <Route path="/service-request" element={<ServiceRequest />} />
+                      <Route path="/realtime-alert" element={<RealTimeAlert />} />
             <Route path="/" element={<Overview />} />
             <Route path="/attendence-summary" element={<AttendanceSummary />} />
             <Route path="/apply-leave" element={<ApplyLeave />} />

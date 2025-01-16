@@ -6,13 +6,12 @@ import Header from "../../shared/components/landingPageComponents/Header";
 import { FaUser, FaEnvelope, FaLock } from "react-icons/fa";
 import { useState } from "react";
 import axios from "axios";
-import "react-toastify/dist/ReactToastify.css";
-import { toast, ToastContainer } from "react-toastify";
 import { googleLogin, SignUpAdmin } from "../../api/authApi";
 import { CredentialResponse, GoogleLogin } from "@react-oauth/google";
 import { jwtDecode } from "jwt-decode";
 import { useDispatch } from "react-redux";
 import { login, setOrganizationId } from "../../redux/user/userSlice";
+import { message } from "antd";
 
 const SignUp = () => {
   const navigate = useNavigate();
@@ -63,10 +62,7 @@ const SignUp = () => {
       setLoading(false);
       console.log(response.data.message);
       if (response.data.message === "User registered successfully") {
-        toast.success("Sucessfully Registred!!", {
-          position: "top-right",
-          autoClose: 2000,
-        });
+        message.success("User registered successfully", 2);
         navigate("/verifyEmail-msg");
       }
 
@@ -137,16 +133,17 @@ const SignUp = () => {
         }
       } catch (error) {
         console.error("Error decoding Google token:", error);
-        toast.error("Google Login failed. Please try again.");
+        message.error("Google Login Failed. Please try again.", 2);
       }
     } else {
       console.error("No credential received from Google Login.");
-      toast.error("Google Login failed. Please try again.");
+      message.error("Google Login Failed. Please try again.", 2);
     }
   };
 
   const handleGoogleLoginFailure = () => {
-    toast.error("Google Login Failed. Please try again.");
+    message.error("Google Login Failed. Please try again.", 2);
+
   };
   return (
     <div>
@@ -246,7 +243,6 @@ const SignUp = () => {
               {loading ? "Loading..." : "Verify Email"}
             </button>
           </form>
-          <ToastContainer />
           <br />
           <Link to="/forget-password">
             <p className="text-[#4361EE] text-center cursor-pointer">

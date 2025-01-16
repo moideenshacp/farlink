@@ -3,7 +3,7 @@ import { fetchPolicy, updatePolicy } from "../../../api/attendenceApi";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
 import Input from "../../../shared/components/Input";
-import { toast, ToastContainer } from "react-toastify";
+import { message } from "antd";
 
 const ManageLeave = () => {
   const [policy, setPolicy] = useState({
@@ -52,16 +52,16 @@ const ManageLeave = () => {
       }
       const res = await updatePolicy(policy, user?.organizationId);
       if (res.data.message === "Policy Updated successfully") {
-        toast.success("Policy updated successfully!", {
-          position: "top-right",
-          autoClose: 3000,
-        });
+
+        message.success("Policy updated successfully!", 2);
+
       } else {
-        toast.error("An error occurred. Please try again.");
+        message.error("An error occurred. Please try again.", 2);
+
       }
     } catch (error) {
       console.log(error);
-      toast.error("An error occurred. Please try again.");
+      message.error("An error occurred. Please try again.", 2);
     }
   };
 
@@ -82,7 +82,7 @@ const ManageLeave = () => {
 
   return (
     <form onSubmit={handleSubmit}>
-      <div className="p-6 bg-white rounded-lg shadow-lg">
+      <div className="p-6 ">
         <h1 className="text-2xl font-bold mb-6">
           Attendance Policy Management
         </h1>
@@ -154,12 +154,11 @@ const ManageLeave = () => {
         </div>
         <button
           type="submit"
-          className="mt-6 px-6 py-3 bg-[#4361EE] text-white font-medium rounded-lg hover:bg-[#4361EE]"
+          className="mt-4 px-6 py-3 bg-[#4361EE] text-white font-medium rounded-lg hover:bg-[#4361EE]"
         >
           Save Policy
         </button>
       </div>
-      <ToastContainer />
     </form>
   );
 };

@@ -1,16 +1,16 @@
 import { Request, Response } from "express";
 import { IuserController } from "../interfaces/IuserController";
-import { userService } from "../services/userService";
 import { registerUserSchema } from "../validators/RegisterUserValidator";
 import { CustomError } from "../errors/CustomError";
 import { AuthService } from "../utils/jwt";
 import { resetPasswordSchema } from "../validators/ResetPasswordValidation";
+import IuserService from "interfaces/IuserService";
 
 export class userController implements IuserController {
-  private _userService: userService;
+  private _userService: IuserService;
 
-  constructor() {
-    this._userService = new userService();
+  constructor(_userService: IuserService) {
+    this._userService = _userService;
   }
 
   public registerUser = async (req: Request, res: Response) => {

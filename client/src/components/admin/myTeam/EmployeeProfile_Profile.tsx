@@ -8,11 +8,12 @@ import {
   EmployeeProfileProps,
   updateEmployeeFormErrors,
 } from "../../../interface/IemployeeProfileProps";
-import { toast, ToastContainer } from "react-toastify";
 import { employeeProfileUpdate } from "../../../validations/employeeProfileUpdate";
 import Input from "../../../shared/components/Input";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
+import { message } from 'antd';
+
 
 const EmployeeProfile_Profile: React.FC<EmployeeProfileProps> = ({
   employee,
@@ -91,18 +92,10 @@ const EmployeeProfile_Profile: React.FC<EmployeeProfileProps> = ({
       console.log(res?.data.message);
 
       if (res?.data.message === "employee updated") {
-        toast.success("Employee Profile updated successfully!", {
-          position: "top-right",
-          autoClose: 2000,
-        });
+        message.success('Employee Profile updated successfullly!', 2);
+        
       } else {
-        toast.error(
-          "Failed to update the profile employee. Please try again.",
-          {
-            position: "top-right",
-            autoClose: 2000,
-          }
-        );
+        message.error('Failed to update the profile employee. Please try again.', 2);
       }
     } catch (error) {
       console.log(error);
@@ -167,6 +160,8 @@ const EmployeeProfile_Profile: React.FC<EmployeeProfileProps> = ({
         </div>
 
         <h2 className="text-lg font-semibold mb-4">Personal Details</h2>
+        <div className="flex flex-wrap mt-4 mb-4 gap-x-40 gap-y-4">
+
         <Input
           label="User Name"
           type="text"
@@ -199,6 +194,7 @@ const EmployeeProfile_Profile: React.FC<EmployeeProfileProps> = ({
           className="w-full border-b border-gray-300 focus:outline-none focus:border-[#4361EE] py-1"
         />
         {errors.lastName && <p className="text-red-600">{errors.lastName}</p>}
+        </div>
 
         <div>
           <label className="block mb-1 font-medium text-[#232360]">Position</label>
@@ -216,7 +212,7 @@ const EmployeeProfile_Profile: React.FC<EmployeeProfileProps> = ({
           </select>
         </div>
         {errors.position && <p className="text-red-600">{errors.position}</p>}
-        <div className="mb-4">
+        <div className="mb-4 mt-4">
           <label className="block mb-1 font-medium text-[#232360]">
             Gender
           </label>
@@ -230,6 +226,7 @@ const EmployeeProfile_Profile: React.FC<EmployeeProfileProps> = ({
             <option value="female">Female</option>
           </select>
         </div>
+        <div className="flex flex-wrap mt-4 mb-4 gap-x-56 gap-y-4">
 
         <Input
           label="Date of Joining"
@@ -255,7 +252,6 @@ const EmployeeProfile_Profile: React.FC<EmployeeProfileProps> = ({
         {errors.dateOfBirth && (
           <p className="text-red-600">{errors.dateOfBirth}</p>
         )}
-
         <Input
           label="Contact Number"
           type="tel"
@@ -265,6 +261,8 @@ const EmployeeProfile_Profile: React.FC<EmployeeProfileProps> = ({
           value={formData.phone}
           className="w-full border-b border-gray-300 focus:outline-none focus:border-[#4361EE] py-1"
         />
+        </div>
+
         {errors.phone && <p className="text-red-600">{errors.phone}</p>}
         <Input
           label="Email Address"
@@ -278,6 +276,7 @@ const EmployeeProfile_Profile: React.FC<EmployeeProfileProps> = ({
         {errors.email && <p className="text-red-600">{errors.email}</p>}
 
         <h2 className="text-lg font-semibold mt-6 mb-4">Educational Details</h2>
+        <div className="flex flex-wrap gap-x-44 gap-y-4">
 
         <Input
           label="Highest Qualification"
@@ -316,8 +315,9 @@ const EmployeeProfile_Profile: React.FC<EmployeeProfileProps> = ({
         {errors.qualificationYear && (
           <p className="text-red-600">{errors.qualificationYear}</p>
         )}
-
+  </div>
         <h2 className="text-lg font-semibold mt-6 mb-4">Family Details</h2>
+        <div className="flex flex-wrap gap-x-44 gap-y-4">
 
         <Input
           label="Father's Name"
@@ -332,7 +332,7 @@ const EmployeeProfile_Profile: React.FC<EmployeeProfileProps> = ({
           <p className="text-red-600">{errors.fatherName}</p>
         )}
         <Input
-          label="Profession"
+          label="Father's Profession"
           type="text"
           placeholder="Enter Father's Profession"
           onChange={handleChange}
@@ -343,6 +343,8 @@ const EmployeeProfile_Profile: React.FC<EmployeeProfileProps> = ({
         {errors.fatherProfession && (
           <p className="text-red-600">{errors.fatherProfession}</p>
         )}
+  </div>
+  <div className="flex flex-wrap mt-4 gap-x-44 gap-y-4">
 
         <Input
           label="Mother's Name"
@@ -358,7 +360,7 @@ const EmployeeProfile_Profile: React.FC<EmployeeProfileProps> = ({
         )}
 
         <Input
-          label="Mother's Name"
+          label="Mother's Proffession"
           type="text"
           placeholder="Enter Mother's Profession"
           onChange={handleChange}
@@ -370,7 +372,8 @@ const EmployeeProfile_Profile: React.FC<EmployeeProfileProps> = ({
           <p className="text-red-600">{errors.motherProfession}</p>
         )}
       </div>
-      <ToastContainer />
+      </div>
+
     </form>
   );
 };

@@ -1,9 +1,13 @@
 import { useEffect, useState } from "react";
-import { addEmployee, fetchPositions, uploadImageToCloudinary } from "../../../api/employeeApi";
+import {
+  addEmployee,
+  fetchPositions,
+  uploadImageToCloudinary,
+} from "../../../api/employeeApi";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
-import { toast, ToastContainer } from "react-toastify";
 import Input from "../../../shared/components/Input";
+import { message } from "antd";
 
 const AddEmployeeModal = ({ toggleModal }: { toggleModal: () => void }) => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -18,8 +22,8 @@ const AddEmployeeModal = ({ toggleModal }: { toggleModal: () => void }) => {
     lastName: "",
     phone: "",
   });
-  const {user} = useSelector((state:RootState)=>state.user)
-  const [teams, setTeams] = useState([]); 
+  const { user } = useSelector((state: RootState) => state.user);
+  const [teams, setTeams] = useState([]);
   const organizationId = useSelector(
     (state: RootState) => state.user?.user?.organizationId
   );
@@ -45,28 +49,25 @@ const AddEmployeeModal = ({ toggleModal }: { toggleModal: () => void }) => {
     setSelectedFile(null);
     setImageUrl(null);
   };
-    useEffect(()=>{
-      const fetchAllPositions = async()=>{
-        try {
-          const res = await fetchPositions(user?.organizationId)
-  
-          console.log(res.data.result.positions,"All positions")
-          setTeams(res.data.result.positions)
-          
-        } catch (error) {
-          console.log(error);
-          
-        }
+  useEffect(() => {
+    const fetchAllPositions = async () => {
+      try {
+        const res = await fetchPositions(user?.organizationId);
+
+        console.log(res.data.result.positions, "All positions");
+        setTeams(res.data.result.positions);
+      } catch (error) {
+        console.log(error);
       }
-      fetchAllPositions()
-    },[user?.organizationId])
+    };
+    fetchAllPositions();
+  }, [user?.organizationId]);
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!selectedFile) {
-      toast.error("Please upload an image before submitting!", {
-        position: "top-right",
-        autoClose: 2000,
-      });
+
+      message.error("Please upload an image before submitting!", 2);
+
       return;
     }
     let uploadedImageUrl = null;
@@ -90,10 +91,9 @@ const AddEmployeeModal = ({ toggleModal }: { toggleModal: () => void }) => {
       const res = await addEmployee(dataToSubmit);
       console.log(res);
       if (res?.data.message === "Employee added successfully") {
-        toast.success("Employee added successfully!", {
-          position: "top-right",
-          autoClose: 2000,
-        });
+
+        message.success("Employee added successfully!", 2);
+
         setFormData({
           userName: "",
           position: "",
@@ -104,18 +104,16 @@ const AddEmployeeModal = ({ toggleModal }: { toggleModal: () => void }) => {
           phone: "",
         });
         setSelectedFile(null);
-      }else{
-        toast.error("Something went wrong. Please try again.", {
-          position: "top-right",
-          autoClose: 2000,
-        });
+      } else {
+
+        message.error("Something went wrong. Please try again.", 2);
+
       }
     } catch (error) {
       console.log(error);
-      toast.error("Failed to add employee. Please try again.", {
-        position: "top-right",
-        autoClose: 2000,
-      });
+
+      message.error("Failed to add employee. Please try again.", 2);
+
     }
   };
 
@@ -141,8 +139,10 @@ const AddEmployeeModal = ({ toggleModal }: { toggleModal: () => void }) => {
           placeholder="Enter first name"
         />
 
-         <div>
-          <label className="block mb-1 font-medium text-[#232360]">Position</label>
+        <div>
+          <label className="block mb-1 font-medium text-[#232360]">
+            Position
+          </label>
           <select
             className="w-full p-2 border rounded focus:outline-none"
             name="position"
@@ -150,10 +150,10 @@ const AddEmployeeModal = ({ toggleModal }: { toggleModal: () => void }) => {
             value={formData.position}
           >
             {teams.map((team, index) => (
-                <option key={index} value={team}>
-                  {team}
-                </option>
-              ))}
+              <option key={index} value={team}>
+                {team}
+              </option>
+            ))}
           </select>
         </div>
         <Input
@@ -181,7 +181,9 @@ const AddEmployeeModal = ({ toggleModal }: { toggleModal: () => void }) => {
           placeholder="Enter phone number"
         />
         <div>
-          <label className="block mb-1 font-medium text-[#232360]">Gender</label>
+          <label className="block mb-1 font-medium text-[#232360]">
+            Gender
+          </label>
           <select
             className="w-full p-2 border rounded focus:outline-none"
             name="gender"
@@ -253,7 +255,6 @@ const AddEmployeeModal = ({ toggleModal }: { toggleModal: () => void }) => {
           </div>
         </div>
       </form>
-      <ToastContainer />
     </div>
   );
 };

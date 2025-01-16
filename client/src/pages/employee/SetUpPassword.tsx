@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import { toast, ToastContainer } from "react-toastify";
 import logo from "../../assets/EmailLogo.png";
 import { resetPasswordSchema } from "../../validations/employeeSetUpPassword";
 import { useNavigate } from "react-router-dom";
 import { setUpPassword } from "../../api/employeeApi";
 import { useLocation } from "react-router-dom";
+import { message } from "antd";
 
 const SetUpPassword = () => {
   const location = useLocation();
@@ -45,10 +45,8 @@ const SetUpPassword = () => {
             navigate('/employee-login')
         }
       } else {
-        toast.error("Something went wrong!!. Please try again.", {
-          position: "top-right",
-          autoClose: 2000,
-        });
+
+        message.error("Something went wrong!!. Please try again.", 2);
       }
     } catch (error) {
       console.log(error);
@@ -128,7 +126,6 @@ const SetUpPassword = () => {
             Create
           </button>
         </form>
-        <ToastContainer />
       </div>
     </div>
   );

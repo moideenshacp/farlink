@@ -27,6 +27,7 @@ const DashBoardTopBar = () => {
     }
   };
 
+
   const location = useLocation();
   return (
     <div>
@@ -47,6 +48,26 @@ const DashBoardTopBar = () => {
           ) : location.pathname === "/employee/my-projects" ? (
             <h1 className="text-xl font-semibold text-gray-700 lg:block sm: hidden">
               My Projects
+            </h1>
+          ) :
+          location.pathname === "/employee/manage-tasks" ? (
+            <h1 className="text-xl font-semibold text-gray-700 lg:block sm: hidden">
+              Manage Tasks
+            </h1>
+          ) :
+          location.pathname === "/employee/leave-summary" ? (
+            <h1 className="text-xl font-semibold text-gray-700 lg:block sm: hidden">
+              Team Leave Summary
+            </h1>
+          ) :
+          location.pathname === "/employee/create-project" ? (
+            <h1 className="text-xl font-semibold text-gray-700 lg:block sm: hidden">
+              Create Projects
+            </h1>
+          ) :
+           location.pathname === "/employee/my-team" ? (
+            <h1 className="text-xl font-semibold text-gray-700 lg:block sm: hidden">
+              My Team
             </h1>
           ) : location.pathname === "/employee/my-tasks" ? (
             <h1 className="text-xl font-semibold text-gray-700 lg:block sm: hidden">

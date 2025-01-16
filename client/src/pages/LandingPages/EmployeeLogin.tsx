@@ -41,7 +41,7 @@ const EmployeeLogin = () => {
         console.log('User Position:', user?.position?.trim().toLowerCase());
   
         // Fix for case mismatch in position check
-        if (user.role === "employee" && user?.position?.trim().toLowerCase() === "hr") {
+        if (user.role === "employee" && user?.position?.trim().toLowerCase() === "hmmmmmmr") {
           console.log("Navigating to Admin:", user.position);
           navigate("/admin/", { replace: true });
           dispatch(login({ user, token: user.token }));

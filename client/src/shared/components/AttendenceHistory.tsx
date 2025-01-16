@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { getAttendenceReport } from "../../api/attendenceApi";
-import { toast, ToastContainer } from "react-toastify";
 import { IattendenceSummary } from "../../interface/IattendenceSummary";
+import { message } from "antd";
 
 interface AttendanceHistoryProps {
   email: string | undefined;
@@ -63,7 +63,7 @@ const AttendanceHistory: React.FC<AttendanceHistoryProps> = ({
         }
       } catch (error) {
         console.log(error);
-        toast.error("Failed to fetch attendance report.");
+        message.error("Failed to fetch attendance report.", 2);
       } finally {
         setLoading(false);
       }
@@ -77,7 +77,7 @@ const AttendanceHistory: React.FC<AttendanceHistoryProps> = ({
         }
       } catch (error) {
         console.log(error);
-        toast.error("Failed to fetch attendance report.");
+        message.error("Failed to fetch attendance report.", 2);
       }
     };
 
@@ -161,7 +161,6 @@ const AttendanceHistory: React.FC<AttendanceHistoryProps> = ({
           </div>
         </>
       )}
-      <ToastContainer />
     </div>
   );
 };

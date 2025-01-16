@@ -2,9 +2,9 @@ import { useEffect, useState } from "react";
 import logo from "../../../assets/EmailLogo.png";
 import { useLocation, useNavigate } from "react-router-dom";
 import { resetPassword } from "../../../api/authApi";
-import { toast, ToastContainer } from "react-toastify";
 import { jwtDecode } from "jwt-decode";
 import axios from "axios";
+import { message } from "antd";
 
 interface DecodedToken {
   exp: number;
@@ -28,10 +28,9 @@ const ResetPassword = () => {
     const token = urlParams.get("token");
 
     if (!token) {
-      toast.error("Token is missing", {
-        position: "top-right",
-        autoClose: 3000,
-      });
+
+      message.error("Token is missing", 2);
+
       navigate("/invalid-forget-password");
       return;
     }
@@ -42,19 +41,17 @@ const ResetPassword = () => {
 
       if (decoded.exp < currentTime) {
         setIsTokenValid(false);
-        toast.error("Token has expired", {
-          position: "top-right",
-          autoClose: 3000,
-        });
+
+        message.error("Token has expired", 2);
+
         navigate("/invalid-forget-password");
       }
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error: unknown) {
       setIsTokenValid(false);
-      toast.error("Invalid token", {
-        position: "top-right",
-        autoClose: 3000,
-      });
+
+      message.error("Invalid token", 2);
+
       navigate("/invalid-forget-password");
     }
   }, [location, navigate]);
@@ -73,13 +70,8 @@ const ResetPassword = () => {
     e.preventDefault();
 
     if (!isTokenValid) {
-      toast.error(
-        "Token is not valid. Please request a new password reset link.",
-        {
-          position: "top-right",
-          autoClose: 3000,
-        }
-      );
+
+      message.error("Token is not valid. Please request a new password reset link.", 2);
       return;
     }
     setIsLoading(true);
@@ -96,10 +88,9 @@ const ResetPassword = () => {
     try {
       const response = await resetPassword(formData.password, formData.confirmPassword, token);
       if (response.data.message === "Password updated successfully") {
-        toast.success("password changed successfully", {
-          position: "top-right",
-          autoClose: 2000,
-        });
+
+        message.success("password changed successfully", 2);
+
         setTimeout(() => {
           navigate("/sign-in");
         }, 2000);
@@ -175,7 +166,6 @@ const ResetPassword = () => {
               {isLoading ? "Resetting..." : "Reset Password"}
             </button>
           </form>
-          <ToastContainer />
         </div>
       </div>
     </div>

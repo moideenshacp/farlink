@@ -4,7 +4,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
 import { applyLeave } from "../../../api/leaveApi";
-import { toast, ToastContainer } from "react-toastify";
+import { message } from "antd";
 
 interface applyModalProps {
   onClose: () => void;
@@ -69,7 +69,7 @@ const ApplyLeaveModal: React.FC<applyModalProps> = ({
           toDate: new Date(),
           reason: "",
         });
-        toast.success("Leave Applied sucessfully");
+        message.success("Leave Applied sucessfully", 2);
         onLeaveApplied();
         setTimeout(()=>{
 
@@ -81,11 +81,12 @@ const ApplyLeaveModal: React.FC<applyModalProps> = ({
     } catch (error: any) {
       console.log(error);
       if (error.response && error.response.data) {
-        toast.warning(error.response.data.error);
+        message.warning(error.response.data.error, 2);
+
       } else {
-        toast.error(
-          "An error occurred while applying Leave. Please try again."
-        );
+
+        message.error("An error occurred while applying Leave. Please try again", 2);
+
       }
     }
   };
@@ -171,7 +172,6 @@ const ApplyLeaveModal: React.FC<applyModalProps> = ({
           </div>
         </div>
       </div>
-      <ToastContainer />
     </form>
   );
 };

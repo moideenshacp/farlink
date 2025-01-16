@@ -6,7 +6,7 @@ import {
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
 import { useCompanyUpdate } from "../../../shared/hooks/useCompanyValidations";
-import { toast, ToastContainer } from "react-toastify";
+import { message } from "antd";
 
 const DashboardOrg = () => {
   const { user } = useSelector((state: RootState) => state.user);
@@ -35,12 +35,12 @@ const DashboardOrg = () => {
         console.log("Form is valid, submitting the update...");
         const res = await updateCompanyProfile(formData, user?.email);
         if (res?.data.message === "organization data fetched successfully") {
-          toast.success("Organization updated successfully!", {
-            position: "top-right",
-            autoClose: 2000,
-          });
+
+          message.success("Organization updated successfully!", 2);
+
         } else {
-          toast.error("Failed to update profile.");
+          message.error("Failed to update profile.", 2);
+
         }
       } else {
         console.log("Form has errors.");
@@ -127,7 +127,6 @@ const DashboardOrg = () => {
           </div>
         </div>
       </form>
-      <ToastContainer />
     </div>
   );
 };

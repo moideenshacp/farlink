@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useLocation } from "react-router-dom";
 import CompanyDetailsProfile from "./CompanyDetailsProfile";
+import PaymentHistory from "./CompanyDetailsBilling";
 
 const CompanyDetails = () => {
   const location = useLocation();
@@ -13,7 +14,7 @@ const CompanyDetails = () => {
       case "profile":
         return <CompanyDetailsProfile organization={company} />;
       case "payment-history":
-        return 
+        return <PaymentHistory organization={company}/>
       default:
         return <div>Select a section</div>;
     }

@@ -10,9 +10,10 @@ import { useNavigate } from "react-router-dom";
 import { googleLogin, LoginAdmin } from "../../api/authApi";
 import { useDispatch } from "react-redux";
 import { login, setOrganizationId } from "../../redux/user/userSlice";
-import { toast, ToastContainer } from "react-toastify";
 import { jwtDecode } from "jwt-decode";
 import { CredentialResponse, GoogleLogin } from "@react-oauth/google";
+import Input from "../../shared/components/Input";
+import { message } from "antd";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -66,10 +67,7 @@ const Login = () => {
         }
 
         if (user.role === "employee") {
-          toast.error("Please do Login via employee login section!!.", {
-            position: "top-right",
-            autoClose: 2000,
-          });
+          message.error("Please do Login via employee login section!!.", 2);
         }
       }
     } catch (error) {
@@ -118,10 +116,7 @@ const Login = () => {
             navigate("/superAdmin/", { replace: true });
           }
           if (user.role === "employee") {
-            toast.error("Please do Login via employee login section!!.", {
-              position: "top-right",
-              autoClose: 2000,
-            });
+            message.error("Please do Login via employee login section!!.", 2);
           }
         }
       } catch (error) {
@@ -135,13 +130,13 @@ const Login = () => {
           setError("An unexpected error occurred.");
         }
         console.error("Error decoding Google token:", error);
-        toast.error("Google Login failed. Please try again.");
+        message.error("Google Login Failed. Please try again.", 2);
       }
     }
   };
 
   const handleGoogleLoginFailure = () => {
-    toast.error("Google Login Failed. Please try again.");
+    message.error("Google Login Failed. Please try again.", 2);
   };
 
   return (
@@ -167,25 +162,27 @@ const Login = () => {
           {error && <div className=" text-red-700  rounded mt-6">{error}</div>}
 
           <form className="mt-6 space-y-4 " onSubmit={handleSubmit}>
-            <div className="flex items-center border border-[#E0E2E9] rounded-lg px-3 py-2 bg-white">
+            <div className="flex items-center border border-[#E0E2E9] rounded-lg px-3 py-0 bg-white">
               <FaEnvelope className="text-[#ADB0CD] mr-3" />
-              <input
+
+              <Input
                 type="email"
-                placeholder="Email"
                 name="email"
                 onChange={handleChange}
+                placeholder="Enter your Email"
                 className="flex-1 outline-none text-sm text-[#969AB8]"
               />
             </div>
 
-            <div className="flex items-center border border-[#E0E2E9] rounded-lg px-3 py-2 bg-white">
+            <div className="flex items-center border  border-[#E0E2E9] rounded-lg px-3 py-0 bg-white">
               <FaLock className="text-[#ADB0CD] mr-3" />
-              <input
+
+              <Input
                 type="password"
-                placeholder="Password"
                 name="password"
                 onChange={handleChange}
-                className="flex-1 outline-none text-sm text-[#969AB8]"
+                placeholder="Enter your Password"
+                className="flex-1  outline-none text-sm text-[#969AB8]"
               />
             </div>
 
@@ -229,7 +226,6 @@ const Login = () => {
           <img src={signup} alt="Signup" className="max-w-full h-auto" />
         </div>
       </div>
-      <ToastContainer />
       <Footer />
     </div>
   );

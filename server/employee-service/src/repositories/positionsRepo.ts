@@ -1,7 +1,7 @@
 import BaseRepository from "./baseRepository";
 import IpositionModel from "../interfaces/IpositionModel";
 import IpositionRepo from "../interfaces/IpositionRepo";
-import positionModel from "../models/positionModel";
+import positionModel from "../models/positionMode";
 import mongoose from "mongoose";
 
 export class positionRepository

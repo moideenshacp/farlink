@@ -2,17 +2,17 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import React, { useEffect, useState } from "react";
 import { fetchProfile, updateProfile } from "../../api/authApi";
-import { toast, ToastContainer } from "react-toastify";
 import useProfileValidation from "../hooks/useProfileValidation";
 import { uploadImageToCloudinary } from "../../api/employeeApi";
 import { setImage } from "../../redux/user/userSlice";
 import Input from "./Input";
+import { message } from "antd";
 
 const DashboardProfile = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const { user } = useSelector((state: RootState) => state.user);
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   const {
     formData,
@@ -41,7 +41,7 @@ const DashboardProfile = () => {
       if (imageUrl) {
         setFormData({ ...formData, image: imageUrl });
       } else {
-        toast.error("Image upload failed. Please try again.");
+        message.error("Image upload failed. Please try again.", 2);
       }
       setIsUploading(false);
     }
@@ -51,6 +51,7 @@ const DashboardProfile = () => {
       try {
         if (user?.email) {
           const res = await fetchProfile(user.email);
+
           if (res?.data) {
             const userProfile = {
               fName: res.data.userProfile.firstName || "",
@@ -92,16 +93,15 @@ const DashboardProfile = () => {
       );
 
       if (res?.data.message === "Profile updated successfully") {
-        toast.success("Profile updated successfully!", {
-          position: "top-right",
-          autoClose: 2000,
-        });
-        dispatch(setImage(formData.image))
+        message.success("Profile updated successfully!", 2);
+
+        dispatch(setImage(formData.image));
       } else {
-        toast.error("Failed to update profile.");
+        message.error("Failed to update profile. Please try again.", 2);
       }
     } catch (err) {
-      toast.error("An error occurred. Please try again.");
+      message.error("An error occurred. Please try again.", 2);
+
       console.log(err);
     } finally {
       setIsLoading(false);
@@ -159,7 +159,6 @@ const DashboardProfile = () => {
             </div>
           )}
 
-      
           <Input
             label="Username"
             type="text"
@@ -219,7 +218,15 @@ const DashboardProfile = () => {
               className="w-full p-2 border rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-200 text-[#333333] font-normal"
             />
           )}
-
+          {user?.position && (
+            <Input
+              label="Position"
+              type="text"
+              value={user?.position || ""}
+              readOnly
+              className="w-full p-2 border rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-200 text-[#333333] font-normal"
+            />
+          )}
           <Input
             label="Role"
             type="text"
@@ -228,7 +235,6 @@ const DashboardProfile = () => {
             className="w-full p-2 border rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-200 text-[#333333] font-normal"
           />
         </div>
-        <ToastContainer />
       </form>
     </div>
   );

@@ -115,6 +115,8 @@ export class subcriptionService implements Isubcriptionservice {
         status: "initiated",
         sessionId: session.id,
       };
+      console.log(subcriptionData,"123");
+      
       const updatedSub = await this._subcriptionRepository.update(
         { organizationId: new mongoose.Types.ObjectId(organizationId) },
         subcriptionData

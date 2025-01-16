@@ -1,9 +1,16 @@
 import express from "express";
 import { userController } from "../controllers/userController";
 import { authenticate } from "../middlewares/authMiddleware";
+import IuserRepo from "interfaces/IuserRepository";
+import { userRepository } from "../repositories/userRepository"
+import IuserService from "interfaces/IuserService";
+import { userService } from "../services/userService";
+import { IuserController } from "interfaces/IuserController";
 const router = express.Router();
 
-const UserController = new userController();
+const UserRepository:IuserRepo = new userRepository()
+const UserService :IuserService = new userService(UserRepository)
+const UserController:IuserController = new userController(UserService);
 //admin===========================================================================================================
 router.post("/register", UserController.registerUser);
 router.post("/verify-email", UserController.verifyEmail);

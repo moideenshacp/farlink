@@ -3,8 +3,8 @@ import {
   sendInvitationEmployee,
   terminateEmployee,
 } from "../../../api/employeeApi";
-import { toast, ToastContainer } from "react-toastify";
 import ConfirmationModal from "../../../shared/components/ConfirmationModal";
+import { message } from "antd";
 
 interface employeeEmail {
   email: string;
@@ -30,16 +30,14 @@ const EmployeeProfile_settings: React.FC<employeeEmail> = ({
       const res = await sendInvitationEmployee(email);
       console.log(res);
       if (res.data.message === "Invitation sended successfully") {
-        toast.success("Invitation sended successfully!", {
-          position: "top-right",
-          autoClose: 2000,
-        });
+
+        message.success("Invitation sended successfully!", 2);
+
         setEmailSendStatus(true);
       } else {
-        toast.error("Failed to send the Invitation. Please try again.", {
-          position: "top-right",
-          autoClose: 2000,
-        });
+
+        message.error("Failed to send the Invitation. Please try again.", 2);
+
       }
     } catch (error) {
       console.log(error);
@@ -110,7 +108,6 @@ const EmployeeProfile_settings: React.FC<employeeEmail> = ({
           onCancel={() => setShowModal(false)}
         />
       )}
-      <ToastContainer />
     </div>
   );
 };

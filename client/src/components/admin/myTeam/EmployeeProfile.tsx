@@ -4,6 +4,8 @@ import EmployeeProfile_tasks from "./EmployeeProfile_tasks";
 import EmployeeProfile_attendence from "./EmployeeProfile_attendence";
 import EmployeeProfile_settings from "./EmployeeProfile_settings";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../redux/store";
 
 const EmployeeProfile = () => {
   const [activeTab, setActiveTab] = useState("profile");
@@ -31,13 +33,22 @@ const EmployeeProfile = () => {
         return <div>Select a section</div>;
     }
   };
+  const userPosition = useSelector((state: RootState) => state.user?.user?.position);
 
-  console.log("employeee from up", employee);
 
   return (
-    <div className="flex flex-col bg-white shadow-md p-12 rounded-md max-w-full mx-auto">
+    <div className="flex flex-col  p-12 rounded-md max-w-full mx-auto">
       <div
-        onClick={() => navigate("/admin/my-team")}
+        onClick={() => {
+          if(userPosition === "HR"){
+
+            navigate("/employee/my-team")
+          }else{
+            navigate("/admin/my-team")
+
+          }
+        }
+        }
         className="cursor-pointer"
       >
         <svg

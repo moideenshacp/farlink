@@ -1,16 +1,37 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from "react";
-import { getPaymentHistory } from "../../../api/subcriptionApi";
+import { getPaymentHistory, getSubcriptionPlans } from "../../api/subcriptionApi";
 
-interface historyProps {
-  customerId: string;
-}
 
-const PaymentHistory: React.FC<historyProps> = ({ customerId }) => {
+interface Organization {
+    admin: {
+      email: string;
+      phone: string;
+      isActive: boolean
+    };
+    _id:string
+    name: string;
+    description: string;
+    city: string;
+    country: string;
+    industry: string;
+    state: string;
+    street: string;
+    subscriptionType: string;
+    zipcode: string;
+  }
+  
+  interface CompanyDetailsProfileProps {
+    organization: Organization;
+  }
+  
+
+const PaymentHistory: React.FC<CompanyDetailsProfileProps>= ({ organization }) => {
   const [history, setHistory] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
-  
+  const [subscriptionDetails, setSubscriptionDetails] = useState<any>(null);
+
 
   const filterInvoiceData = (invoices: any[]) => {
     return invoices.map((invoice) => ({
@@ -24,18 +45,36 @@ const PaymentHistory: React.FC<historyProps> = ({ customerId }) => {
       invoice_pdf: invoice.invoice_pdf,
     }));
   };
+ 
+  useEffect(() => {
+    const fetchSubscription = async () => {
+      if (!organization?._id) return;
+      try {
+        const res = await getSubcriptionPlans(organization._id);
+        if (res.data) {
+          setSubscriptionDetails(res.data.companyDetails);
+        }
+      } catch (error) {
+        console.error("Error fetching subscription details:", error);
+      }
+    };
+
+    fetchSubscription();
+  }, [organization?._id]);
 
   useEffect(() => {
     const fetchPaymentHistory = async () => {
+      if (!subscriptionDetails?.customerId) return;
+
       setLoading(true);
       try {
-        const res = await getPaymentHistory(customerId);
+        const res = await getPaymentHistory(subscriptionDetails.customerId);
 
-        if (res && res.data) {
+        if (res?.data) {
           const filteredInvoices = filterInvoiceData(res.data.invoices);
           setHistory(filteredInvoices);
         } else {
-          setError("No data found.");
+          setError("No payment history found.");
         }
       } catch (err) {
         setError("Failed to fetch payment history.");
@@ -45,13 +84,11 @@ const PaymentHistory: React.FC<historyProps> = ({ customerId }) => {
       }
     };
 
-    if (customerId) {
-      fetchPaymentHistory();
-    }
-  }, [customerId]);
+    fetchPaymentHistory();
+  }, [subscriptionDetails?.customerId]);
 
   return (
-    <div className="p-6 bg-white rounded-lg shadow-lg">
+    <div className="p-6  rounded-lg ">
       <h1 className="text-2xl font-bold mb-4">Payment History</h1>
       {loading && <div className="flex justify-center items-center h-full">
             <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
@@ -106,7 +143,7 @@ const PaymentHistory: React.FC<historyProps> = ({ customerId }) => {
           </table>
         </div>
       ) : (
-        <div>No payment history found.</div>
+        <div></div>
       )}
     </div>
   );

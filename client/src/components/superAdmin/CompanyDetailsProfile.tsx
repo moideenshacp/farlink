@@ -134,7 +134,7 @@ const CompanyDetailsProfile: React.FC<CompanyDetailsProfileProps> = ({
             readOnly
           />
         </div>
-        <div className="form-group">
+        {/* <div className="form-group">
           <label className="block font-medium text-[#232360]">
             Subscription Type
           </label>
@@ -144,7 +144,7 @@ const CompanyDetailsProfile: React.FC<CompanyDetailsProfileProps> = ({
             value={organization.subscriptionType}
             readOnly
           />
-        </div>
+        </div> */}
       </div>
     </div>
   );

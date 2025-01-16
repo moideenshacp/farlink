@@ -4,66 +4,71 @@ import DashboardAllEmployees from "./DashboardAllEmployees";
 import { addPosition, fetchPositions } from "../../../api/employeeApi";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
-import { toast, ToastContainer } from "react-toastify";
+import Input from "../../../shared/components/Input";
+import { message } from "antd";
 
 const Myteam = () => {
-  const {user} = useSelector((state:RootState)=>state.user)
-  const [teams, setTeams] = useState([]); 
+  const { user } = useSelector((state: RootState) => state.user);
+  const [teams, setTeams] = useState([]);
   const [newTeam, setNewTeam] = useState("");
+  const [selectedPosition, setSelectedPosition] = useState("");
 
-
-  
-  const refreshPositions = async()=>{
+  const refreshPositions = async () => {
     try {
-      const res = await fetchPositions(user?.organizationId)
-      setTeams(res.data.result.positions)
+      const res = await fetchPositions(user?.organizationId);
+      setTeams(res.data.result.positions);
     } catch (error) {
       console.log(error);
-      
     }
-  }
+  };
   const addTeam = async () => {
     try {
-      if(!newTeam.trim()){
-        toast.error("Please Add a valid position")
+      if (!newTeam.trim()) {
+        message.error("Please Add a valid position", 2);
+
       }
       if (newTeam.trim()) {
-        const res = await addPosition(user?.organizationId, newTeam.trim().toLocaleUpperCase());
+        const res = await addPosition(
+          user?.organizationId,
+          newTeam.trim().toLocaleUpperCase()
+        );
         console.log("res from position", res);
-        if(res.data.message === "Position added successfully"){
-
-          toast.success("Team added successfully!");
-          setNewTeam("")
-          refreshPositions()
+        if (res.data.message === "Position added successfully") {
+          message.success("Team added successfully!", 2);
+          setNewTeam("");
+          refreshPositions();
         }
 
       }
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (error:any) {
-        if (error.response && error.response.data && error.response.data.message) {
-        toast.error(error.response.data.message);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      if (
+        error.response &&
+        error.response.data &&
+        error.response.data.message
+      ) {
+        message.error(error.response.data.message, 2);
+
       } else {
-        toast.error("An unexpected error occurred. Please try again.");
+        message.error("An unexpected error occurred. Please try again.", 2);
+
       }
     }
   };
 
-  useEffect(()=>{
-    const fetchAllPositions = async()=>{
+  useEffect(() => {
+    const fetchAllPositions = async () => {
       try {
-        const res = await fetchPositions(user?.organizationId)
+        const res = await fetchPositions(user?.organizationId);
 
-        console.log(res.data.result.positions,"All positions")
-        setTeams(res.data.result.positions)
-        
+        console.log(res.data.result.positions, "All positions");
+        setTeams(res.data.result.positions);
       } catch (error) {
         console.log(error);
-        
       }
-    }
-    fetchAllPositions()
-  },[user?.organizationId])
-
+    };
+    fetchAllPositions();
+  }, [user?.organizationId]);
 
   return (
     <div className="p-6">
@@ -71,9 +76,13 @@ const Myteam = () => {
         <div className="flex items-center gap-4">
           {/* Dropdown */}
           <div className="relative">
-            <select className="block appearance-none bg-white border border-gray-300 text-gray-700 py-2 px-4 pr-8 rounded shadow focus:outline-none focus:shadow-outline">
+            <select
+              className="block appearance-none bg-white border border-gray-300 text-gray-700 py-2 px-4 pr-8 rounded shadow focus:outline-none focus:shadow-outline"
+              value={selectedPosition}
+              onChange={(e) => setSelectedPosition(e.target.value)}
+            >
               <option value="" disabled selected>
-                My Teams
+                All positions
               </option>
               {teams.map((team, index) => (
                 <option key={index} value={team}>
@@ -94,13 +103,16 @@ const Myteam = () => {
 
           {/* Add Team Input and Button */}
           <div className="flex items-center gap-2">
-            <input
+            <div className="mt-2">
+
+            <Input
               type="text"
               value={newTeam}
               onChange={(e) => setNewTeam(e.target.value)}
               placeholder="Enter new team name"
-              className="border border-gray-300 py-2 px-4 rounded shadow focus:outline-none"
+              className="border border-gray-300 py-2 px-5 rounded shadow focus:outline-none"
             />
+            </div>
             <button
               onClick={addTeam}
               className="bg-blue-500 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-600"
@@ -115,8 +127,7 @@ const Myteam = () => {
       </div>
 
       {/* Employee Dashboard */}
-      <DashboardAllEmployees />
-      <ToastContainer/>
+      <DashboardAllEmployees selectedPosition={selectedPosition} />
     </div>
   );
 };

@@ -7,7 +7,7 @@ const PublicRoute = () => {
     (state: RootState) => state.user.isAuthenticated
   );
   const userRole = useSelector((state: RootState) => state.user?.user?.role);
-  const userPosition = useSelector((state: RootState) => state.user?.user?.position);
+  // const userPosition = useSelector((state: RootState) => state.user?.user?.position);
   const isOrganizationAdded = useSelector(
     (state: RootState) => state.user?.user?.isOrganizationAdded
   );
@@ -26,19 +26,19 @@ const PublicRoute = () => {
       return <Outlet  />;
     }
   }
-  if(userRole === "employee" && userPosition==="HR"){
-    if(isAuthenticated){
-      return <Navigate to="/admin/" replace />;
+  // if(userRole === "employee" && userPosition==="HR"){
+  //   if(isAuthenticated){
+  //     return <Navigate to="/admin/" replace />;
 
-    }else{
-      return <Outlet/>
-    }
-  }
+  //   }else{
+  //     return <Outlet/>
+  //   }
+  // }
 
   if (userRole === "superAdmin") {
     return <Navigate to="/superAdmin/" replace />;
   }
-  if(userRole === "employee" && userPosition !== "HR"){
+  if(userRole === "employee" ){
     return <Navigate to='/employee/' replace />
   }
   // Default for unknown roles

@@ -1,3 +1,4 @@
+import IuserRepo from "interfaces/IuserRepository";
 import {
   CustomError,
   LoginUserError,
@@ -10,7 +11,6 @@ import {
 } from "../errors/CustomError";
 import IuserModel from "../interfaces/IuserModel";
 import IuserService from "../interfaces/IuserService";
-import { userRepository } from "../repositories/userRepository";
 import { EmailService } from "../utils/emailVerify";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
@@ -18,10 +18,10 @@ import jwt from "jsonwebtoken";
 const EMAIL_SECRET = process.env.EMAIL_SECRET || "email_secret_key";
 
 export class userService implements IuserService {
-  private _userRepository!: userRepository;
+  private _userRepository: IuserRepo;
 
-  constructor() {
-    this._userRepository = new userRepository();
+  constructor(_userRepository: IuserRepo) {
+    this._userRepository = _userRepository;
   }
 
   async registersUser(
@@ -222,7 +222,7 @@ export class userService implements IuserService {
   async googleLogin(email: string, name: string, googleId: string, image: string): Promise<IuserModel> {
       const data = {email,name,googleId,image}
 
-      let user = await this._userRepository.findOne({ email });
+      let user = await this._userRepository.findByEmail(email );
   
       if (!user) {
         user = await this._userRepository.createUser(data);

@@ -132,7 +132,7 @@ const Sidebar: React.FC<SidebarProps> = ({ onSelectEmail }) => {
               </li>
             ))
           ) : (
-            <p className="text-gray-500 text-sm">No members found.</p>
+            <p className="text-gray-500 text-sm ml-10">No members found.</p>
           )}
         </ul>
       </div>
