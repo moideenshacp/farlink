@@ -13,9 +13,8 @@ const ApplyLeave = () => {
   const { user } = useSelector((state: RootState) => state.user);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [leaves, setLeaves] = useState<AllLeaves[]>([]);
-  console.log(setLeaves);
-  const [fromDate, setFromDate] = useState<Date | null>(null);
-  const [toDate, setToDate] = useState<Date | null>(null);
+    const [fromDate, setFromDate] = useState<Date | null>(null);
+    const [toDate, setToDate] = useState<Date | null>(null);
   const [selectedLeave, setSelectedLeave] = useState<AllLeaves | null>(null);
   const [approvedLeaveCount, setApprovedLeaveCount] = useState<number>(0);
   const isInitialLoad = useRef(true);
@@ -143,7 +142,7 @@ const ApplyLeave = () => {
             <h2 className="text-lg font-semibold  mb-2">
               Total Appplied Leaves:
               <span className="text-2xl font-bold text-[#4361EE]">
-                {leaves.length - approvedLeaveCount}
+                {leaves.length }
               </span>
             </h2>
             <h2 className="text-lg font-semibold  mb-2">

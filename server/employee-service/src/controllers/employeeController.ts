@@ -1,16 +1,16 @@
 import { IemployeeController } from "../interfaces/IemployeeController";
 import { Request, Response } from "express";
-import { employeeService } from "../services/employeeService";
 import { registerEmployeeSchema } from "../validators/RegisterEmployeeValidator";
 import { employeeProfileUpdate } from "../validators/EmployeeProfileUpdate";
 import { setUpPasswordSchema } from "../validators/SetUpPassword";
 import { CustomError } from "../errors/CustomError";
+import { IemployeeService } from "../interfaces/IemployeeService";
 
 export class employeeController implements IemployeeController {
-  private _employeeservice: employeeService;
+  private _employeeservice: IemployeeService;
 
-  constructor() {
-    this._employeeservice = new employeeService();
+  constructor(_employeeservice: IemployeeService) {
+    this._employeeservice = _employeeservice
   }
 
   public registerEmployee = async (

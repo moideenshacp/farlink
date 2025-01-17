@@ -1,17 +1,18 @@
 import IcompanyService from "../interfaces/IcompanyService";
-import { userRepository } from "../repositories/userRepository";
-import { organizationRepository } from "../repositories/organizationRepository";
+
 import IorgModel from "../interfaces/IorganizationModel";
 import IuserModel from "interfaces/IuserModel";
 import { publishEvent } from "../rabbitmq/producer/producer";
+import IuserRepo from "interfaces/IuserRepository";
+import IorganizationRepository from "interfaces/IorganizationRepository";
 
 export class companyService implements IcompanyService {
-  private _userrepository!: userRepository;
-  private _organizationRepository: organizationRepository;
+  private _userrepository: IuserRepo
+  private _organizationRepository: IorganizationRepository;
 
-  constructor() {
-    this._userrepository = new userRepository();
-    this._organizationRepository = new organizationRepository();
+  constructor(_userrepository: IuserRepo,_organizationRepository: IorganizationRepository) {
+    this._userrepository = _userrepository
+    this._organizationRepository = _organizationRepository
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -22,7 +23,7 @@ export class companyService implements IcompanyService {
       if (!email) {
         throw new Error("Email is required to register an organization.");
       }
-      const admin = await this._userrepository.findOne({ email });
+      const admin = await this._userrepository.findByEmail( email );
       if (!admin) {
         throw new Error("Admin with the provided email does not exist.");
       }

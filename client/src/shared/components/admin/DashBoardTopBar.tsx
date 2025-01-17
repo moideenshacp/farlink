@@ -46,11 +46,11 @@ const DashBoardTopBar = () => {
             </h1>
           ) : location.pathname === "/admin/manage-leave" ? (
             <h1 className="text-xl font-semibold text-gray-700 lg:block sm: hidden">
-              Manage Leave
+              Manage Policy
             </h1>
           ) : location.pathname === "/admin/create-project" ? (
             <h1 className="text-xl font-semibold text-gray-700 lg:block sm: hidden">
-              Creat Project
+              Create Project
             </h1>
           ) : location.pathname === "/admin/manage-tasks" ? (
             <h1 className="text-xl font-semibold text-gray-700 lg:block sm: hidden">

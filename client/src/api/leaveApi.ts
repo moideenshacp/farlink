@@ -51,4 +51,24 @@ export const manageLeaveApplication = async(leaveId:string | undefined,status:st
     throw error
     
   }
+
+}
+
+export const fetchRemainingLeaves = async(organizationId:string | undefined,employeeEmail:string | undefined)=>{
+  try {
+    
+    const res = await axiosInstance.post(
+      `${
+        import.meta.env.VITE_SERVER_BASE_URL
+      }/employee-service/api/leave/fetch-remainingLeaves`,
+       { organizationId,employeeEmail}, {withCredentials: true }
+    );
+    return res;
+    
+  } catch (error) {
+    console.log(error);
+    throw error
+    
+  }
+
 }

@@ -1,16 +1,16 @@
 import Stripe from "stripe";
 import { Isubcriptionservice } from "../interfaces/IsubcriptionService";
-import { subcriptionRepository } from "../repositories/subcriptionRepository";
 import IsubcriptionModel from "../interfaces/IsubcriptionModel";
 import mongoose from "mongoose";
+import IsubcriptionRepository from "../interfaces/IsubcriptionRepository";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "");
 
 export class subcriptionService implements Isubcriptionservice {
-  private _subcriptionRepository: subcriptionRepository;
+  private _subcriptionRepository: IsubcriptionRepository;
 
-  constructor() {
-    this._subcriptionRepository = new subcriptionRepository();
+  constructor(_subcriptionRepository: IsubcriptionRepository) {
+    this._subcriptionRepository = _subcriptionRepository
   }
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   async getSubscriptionDetails(organizationId: string | null): Promise<any> {

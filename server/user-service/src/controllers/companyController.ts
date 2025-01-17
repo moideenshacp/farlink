@@ -1,13 +1,13 @@
 import  { Request, Response } from "express";
 import { IcompanyController } from "../interfaces/IcompanyController";
-import { companyService } from "../services/companyService";
 import { companyValidationSchema } from "../validators/CompanyValidation";
+import IcompanyService from "interfaces/IcompanyService";
 
 export class companyController implements IcompanyController {
-  private _companyservice: companyService;
+  private _companyservice: IcompanyService;
 
-  constructor() {
-    this._companyservice = new companyService();
+  constructor(_companyservice: IcompanyService) {
+    this._companyservice = _companyservice
   }
 
   public registerCompany = async (

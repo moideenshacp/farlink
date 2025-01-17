@@ -1,13 +1,13 @@
 import { Request, Response } from "express";
 import { IattendenceController } from "../interfaces/IattendenceController";
-import { attendenceService } from "../services/attendenceService";
 import { CustomError } from "../errors/CustomError";
+import { IattendenceService } from "../interfaces/IattendenceService";
 
 export class attendenceController implements IattendenceController {
-  private _attendenceservice: attendenceService
+  private _attendenceservice: IattendenceService
 
-  constructor() {
-    this._attendenceservice = new attendenceService()
+  constructor(_attendenceservice: IattendenceService) {
+    this._attendenceservice = _attendenceservice
   }
 
 

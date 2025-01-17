@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
-import { applyLeave } from "../../../api/leaveApi";
+import { applyLeave, fetchRemainingLeaves } from "../../../api/leaveApi";
 import { message } from "antd";
 
 interface applyModalProps {
@@ -24,7 +24,23 @@ const ApplyLeaveModal: React.FC<applyModalProps> = ({
     toDate: new Date(),
     reason: "",
   });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [leaveBalance, setLeaveBalance] = useState<any>([]);
   const [reasonErr, setReasonErr] = useState("");
+  useEffect(() => {
+    const fetchBalanceLeaves = async () => {
+      try {
+        const res = await fetchRemainingLeaves(organizationId, employeeEmail);
+        setLeaveBalance(res.data.result);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    if (organizationId && employeeEmail) {
+      fetchBalanceLeaves();
+    }
+  }, [organizationId, employeeEmail]);
+
   const handleDateChange = (
     date: Date | null,
     field: "fromDate" | "toDate"
@@ -53,6 +69,7 @@ const ApplyLeaveModal: React.FC<applyModalProps> = ({
     try {
       if (!formData.reason.trim()) {
         setReasonErr("Please enter a valid Reason! ");
+        return;
       }
       const leaveData = {
         formData,
@@ -71,10 +88,9 @@ const ApplyLeaveModal: React.FC<applyModalProps> = ({
         });
         message.success("Leave Applied sucessfully", 2);
         onLeaveApplied();
-        setTimeout(()=>{
-
-          onClose()
-        },2000)
+        setTimeout(() => {
+          onClose();
+        }, 1000);
       }
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -82,11 +98,11 @@ const ApplyLeaveModal: React.FC<applyModalProps> = ({
       console.log(error);
       if (error.response && error.response.data) {
         message.warning(error.response.data.error, 2);
-
       } else {
-
-        message.error("An error occurred while applying Leave. Please try again", 2);
-
+        message.error(
+          "An error occurred while applying Leave. Please try again",
+          2
+        );
       }
     }
   };
@@ -115,9 +131,25 @@ const ApplyLeaveModal: React.FC<applyModalProps> = ({
               name="leaveType"
               onChange={handleChange}
             >
-              <option value="sick">Sick</option>
-              <option value="casual">Casual</option>
-              <option value="vacation">Vacation</option>
+              <option value="sick">
+                Sick
+                <span>
+                  ({leaveBalance?.sick})
+                </span>
+              </option>
+
+              <option value="casual">
+              Casual
+                <span>
+                  ({leaveBalance?.casual})
+                </span>
+              </option>
+              <option value="vacation">
+              Vacation
+                <span>
+                  ({leaveBalance?.vacation})
+                </span>
+              </option>
             </select>
           </div>
 

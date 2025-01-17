@@ -1,4 +1,4 @@
-import { FilterQuery } from "mongoose";
+import mongoose, { FilterQuery } from "mongoose";
 import IAttendancePolicy from "./IpolicyModel"
 
 export default interface IpolicyRepo {
@@ -7,5 +7,8 @@ export default interface IpolicyRepo {
   updatePolicy(
     filter: FilterQuery<IAttendancePolicy>,
     update: Partial<IAttendancePolicy>
+  ): Promise<IAttendancePolicy | null>;
+  findByOrganizationId(
+    organizationId: mongoose.Types.ObjectId
   ): Promise<IAttendancePolicy | null>;
 }

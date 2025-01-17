@@ -8,4 +8,6 @@ export default interface IemployeeRepo {
     filter: FilterQuery<IemployeeModel>,
     update: Partial<IemployeeModel>
   ): Promise<IemployeeModel | null>;
+  findByEmailWithPopulate(email: string, populateField: string): Promise<IemployeeModel | null>;
+  findByOrganizationId(organizationId: string): Promise<IemployeeModel[]>;
 }

@@ -1,10 +1,19 @@
 import express from 'express'
 import { employeeController } from '../controllers/employeeController'
 import { authenticate } from '../middlewares/authMiddleware'
+import IemployeeRepo from '../interfaces/IemployeeRepository'
+import { employeeRepository } from '../repositories/employeeRepository'
+import IpositionRepo from '../interfaces/IpositionRepo'
+import { positionRepository } from '../repositories/positionsRepo'
+import { IemployeeService } from '../interfaces/IemployeeService'
+import { employeeService } from '../services/employeeService'
 
 const router = express.Router()
 
-const EmployeeController = new employeeController()
+const EmployeeRepository:IemployeeRepo = new employeeRepository()
+const PositionRepository:IpositionRepo = new positionRepository()
+const EmployeeService:IemployeeService = new employeeService(EmployeeRepository,PositionRepository)
+const EmployeeController = new employeeController(EmployeeService)
 
 
 //admin=====================================================================================================================

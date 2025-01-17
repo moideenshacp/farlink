@@ -1,17 +1,17 @@
 import { Request, Response } from "express";
 import { IsubcriptionController } from "../interfaces/IsubcriptionController";
-import { subcriptionService } from "../services/subcriptionService";
 import Stripe from "stripe";
+import { Isubcriptionservice } from "../interfaces/IsubcriptionService";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "");
 
 
 
 export class subcriptionController implements IsubcriptionController {
-  private _subcriptionservice: subcriptionService;
+  private _subcriptionservice: Isubcriptionservice;
 
-  constructor() {
-    this._subcriptionservice = new subcriptionService();
+  constructor(_subcriptionservice: Isubcriptionservice) {
+    this._subcriptionservice = _subcriptionservice
   }
   public getSubscriptionDetails = async(req: Request, res: Response): Promise<void>=> {
       try {

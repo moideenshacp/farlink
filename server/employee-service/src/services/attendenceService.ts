@@ -2,28 +2,31 @@ import mongoose from "mongoose";
 import { IattendencePolicy } from "../interfaces/IattendencePolicy";
 import { IattendenceService } from "../interfaces/IattendenceService";
 import IAttendancePolicyModel from "../interfaces/IpolicyModel";
-import { AttendancePolicyRepository } from "../repositories/policyRepository";
-import { AttendanceRepository } from "../repositories/attendenceRepo";
 import { DateTime } from "luxon";
 import { IattendanceSummary } from "../interfaces/IattendenceSummary";
 import { CustomError } from "../errors/CustomError";
+import IpolicyRepo from "../interfaces/IpolicyRepo";
+import IattendenceRepo from "../interfaces/IattendenceRepo";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function convertToIST(date:any) {
-  if (!date) return 'N/A';
-  
+function convertToIST(date: any) {
+  if (!date) return "N/A";
+
   return DateTime.fromISO(date.toISOString())
-      .setZone('Asia/Kolkata')
-      .toFormat('yyyy-MM-dd HH:mm:ss');
+    .setZone("Asia/Kolkata")
+    .toFormat("yyyy-MM-dd HH:mm:ss");
 }
 
 export class attendenceService implements IattendenceService {
-  private _policyRepository: AttendancePolicyRepository;
-  private _attendenceRepository: AttendanceRepository;
+  private _policyRepository: IpolicyRepo;
+  private _attendenceRepository: IattendenceRepo;
 
-  constructor() {
-    this._policyRepository = new AttendancePolicyRepository();
-    this._attendenceRepository = new AttendanceRepository();
+  constructor(
+    _policyRepository: IpolicyRepo,
+    _attendenceRepository: IattendenceRepo
+  ) {
+    this._policyRepository = _policyRepository;
+    this._attendenceRepository = _attendenceRepository;
   }
 
   async UpdateAttendencePolicy(
@@ -80,7 +83,7 @@ export class attendenceService implements IattendenceService {
       return null;
     }
   }
-  
+
   async handleAttendence(
     organizationId: string,
     employeeEmail: string
@@ -88,46 +91,56 @@ export class attendenceService implements IattendenceService {
     try {
       const policy = await this.getAttendencePolicy(organizationId);
       if (!policy) throw new Error("Attendance policy not found");
-      
+
       const currentTime = new Date();
       const currentTimeIST = new Date(
-        DateTime.fromJSDate(currentTime).setZone("Asia/Kolkata").toISO() || currentTime.toISOString()
+        DateTime.fromJSDate(currentTime).setZone("Asia/Kolkata").toISO() ||
+          currentTime.toISOString()
       );
-  
+            const dayOfWeek = currentTimeIST.getDay();
+            console.log("daaayyyyyy",dayOfWeek);
+
+      if (dayOfWeek == 0 || dayOfWeek == 6) {
+        throw new CustomError("Attendance cannot be marked on weekends.", 400);
+      }
+
       const officeStartTimeIST = new Date(
         `${currentTimeIST.toDateString()} ${policy.officeStartTime}`
       );
-  
+
       const officeEndTimeIST = new Date(
         `${currentTimeIST.toDateString()} ${policy.officeEndTime}`
       );
-  
+
       const lateMarkAfterMinutes = Number(policy.lateMarkAfterMinutes);
       if (isNaN(lateMarkAfterMinutes)) {
         throw new Error("Invalid late mark threshold in attendance policy");
       }
-  
+
       const lateMarkThresholdIST = new Date(
         officeStartTimeIST.getTime() + lateMarkAfterMinutes * 60000
       );
-      console.log("policy.halfday after",policy.halfDayAfterHours);
-      
-  
+      console.log("policy.halfday after", policy.halfDayAfterHours);
+
       const halfDayThresholdHours =
-        typeof policy.halfDayAfterHours === "number" ? policy.halfDayAfterHours : 0;
+        typeof policy.halfDayAfterHours === "number"
+          ? policy.halfDayAfterHours
+          : 0;
 
-        console.log("halfDayThresholdHours",halfDayThresholdHours);
-        
+      console.log("halfDayThresholdHours", halfDayThresholdHours);
+
       const totalWorkingHoursRequired =
-        typeof policy.totalWorkingHours === "number" ? policy.totalWorkingHours : 0;
-  
+        typeof policy.totalWorkingHours === "number"
+          ? policy.totalWorkingHours
+          : 0;
 
-        const recentAttendance = await this._attendenceRepository.findAttendanceByDate(
+      const recentAttendance =
+        await this._attendenceRepository.findAttendanceByDate(
           organizationId,
           employeeEmail,
           new Date()
         );
-  
+
       if (recentAttendance) {
         if (!recentAttendance.checkOut) {
           recentAttendance.checkOut = currentTimeIST;
@@ -135,87 +148,99 @@ export class attendenceService implements IattendenceService {
             const workingHours =
               (currentTimeIST.getTime() - recentAttendance.checkIn.getTime()) /
               3600000;
-            console.log("workingHours",workingHours);
-            
+            console.log("workingHours", workingHours);
+
             recentAttendance.workingHours = workingHours;
-  
-            if (workingHours < halfDayThresholdHours) {              
+
+            if (workingHours < halfDayThresholdHours) {
               recentAttendance.status = "halfDay";
-            } else if (workingHours >= totalWorkingHoursRequired) {              
+            } else if (workingHours >= totalWorkingHoursRequired) {
               recentAttendance.status = "present";
             } else {
               recentAttendance.status = "late";
             }
           }
-  
+
           await this._attendenceRepository.updateAttendance(
             { _id: recentAttendance._id },
             recentAttendance
           );
           console.log("Checked out successfully", recentAttendance);
-        }else{
-          console.log("You have already completed your attendance for the day.");
-          throw new CustomError("You have already completed your attendance for the day.", 400);
-
+        } else {
+          console.log(
+            "You have already completed your attendance for the day."
+          );
+          throw new CustomError(
+            "You have already completed your attendance for the day.",
+            400
+          );
         }
       } else {
         let status: "late" | "present" | "absent" = "absent";
-  
+
         if (currentTimeIST > officeEndTimeIST) {
           status = "absent";
+          throw new CustomError("Office time has ended, check-in is not allowed.", 400);
         } else if (currentTimeIST > lateMarkThresholdIST) {
           status = "late";
         } else {
           status = "present";
         }
-  
+
         const attendanceData = {
           organizationId: new mongoose.Types.ObjectId(organizationId),
           employeeEmail,
           checkIn: currentTimeIST,
           status,
         };
-  
+
         await this._attendenceRepository.createattendence(attendanceData);
         console.log("Checked in successfully");
       }
-    } catch (error:unknown) {
+    } catch (error: unknown) {
       console.error("Error handling attendance:", error);
-      throw error
+      throw error;
     }
   }
-  async getAttendenceReport(employeeEmail: string): Promise<IattendanceSummary[] | null> {
+  async getAttendenceReport(
+    employeeEmail: string
+  ): Promise<IattendanceSummary[] | null> {
     try {
-      const attendanceData = await this._attendenceRepository.findAllByEmployeeEmail(employeeEmail);
-  
+      const attendanceData =
+        await this._attendenceRepository.findAllByEmployeeEmail(employeeEmail);
+
       console.log("attendanceData", attendanceData);
-  
+
       if (!attendanceData || attendanceData.length === 0) {
-        console.log('No attendance data found for employee:', employeeEmail);
+        console.log("No attendance data found for employee:", employeeEmail);
         return null;
       }
-  
-      const attendanceSummary: IattendanceSummary[] = attendanceData.map((attendance) => {
-        const checkInDate = attendance.checkIn ? convertToIST(attendance.checkIn).split(' ')[0] : 'N/A';
-        const checkInTime = attendance.checkIn ? convertToIST(attendance.checkIn).split(' ')[1] : 'N/A';
-        const checkOutTime = attendance.checkOut ? convertToIST(attendance.checkOut).split(' ')[1] : 'N/A';
-  
-        return {
-          date: checkInDate,
-          checkIn: checkInTime,
-          checkOut: checkOutTime,
-          status: attendance.status,
-        };
-      });
-  
+
+      const attendanceSummary: IattendanceSummary[] = attendanceData.map(
+        (attendance) => {
+          const checkInDate = attendance.checkIn
+            ? convertToIST(attendance.checkIn).split(" ")[0]
+            : "N/A";
+          const checkInTime = attendance.checkIn
+            ? convertToIST(attendance.checkIn).split(" ")[1]
+            : "N/A";
+          const checkOutTime = attendance.checkOut
+            ? convertToIST(attendance.checkOut).split(" ")[1]
+            : "N/A";
+
+          return {
+            date: checkInDate,
+            checkIn: checkInTime,
+            checkOut: checkOutTime,
+            status: attendance.status,
+          };
+        }
+      );
+
       return attendanceSummary;
     } catch (error) {
-      console.error('Error fetching attendance report:', error);
+      console.error("Error fetching attendance report:", error);
       return null;
     }
   }
-  
-  
-  
-  
 }

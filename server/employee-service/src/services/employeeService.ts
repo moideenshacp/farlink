@@ -3,21 +3,21 @@ import { publishEvent } from "../rabbitmq/producer/producer";
 import { IemployeeData } from "../interfaces/IemployeeData";
 import IemployeeModel from "../interfaces/IemployeeModel";
 import { IemployeeService } from "../interfaces/IemployeeService";
-import { employeeRepository } from "../repositories/employeeRepository";
 import { EmailService } from "../utils/emailVerify";
 import bcrypt from "bcryptjs";
 import { CustomError } from "../errors/CustomError";
-import { positionRepository } from "../repositories/positionsRepo";
 import IpositionModel from "../interfaces/IpositionModel";
 import mongoose from "mongoose";
+import IemployeeRepo from "../interfaces/IemployeeRepository";
+import IpositionRepo from "../interfaces/IpositionRepo";
 
 export class employeeService implements IemployeeService {
-  private _employeeRepository: employeeRepository;
-  private _positionRepository: positionRepository;
+  private _employeeRepository: IemployeeRepo;
+  private _positionRepository: IpositionRepo;
 
-  constructor() {
-    this._employeeRepository = new employeeRepository();
-    this._positionRepository = new positionRepository();
+  constructor(_employeeRepository: IemployeeRepo,_positionRepository: IpositionRepo) {
+    this._employeeRepository = _employeeRepository
+    this._positionRepository = _positionRepository
   }
 
   async registerEmployee(employeeData: IemployeeData): Promise<IemployeeModel | null> {
@@ -85,8 +85,8 @@ export class employeeService implements IemployeeService {
 
       console.log(employeeId, "fromservice");
 
-      const findEmployee = await this._employeeRepository.findByIdAndUpdate(
-        employeeId,
+      const findEmployee = await this._employeeRepository.update(
+        new mongoose.Types.ObjectId(employeeId),
         employeeData
       );
       console.log(employeeData,"employeeee");

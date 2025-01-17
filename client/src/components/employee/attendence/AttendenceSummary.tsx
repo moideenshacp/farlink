@@ -19,17 +19,15 @@ const AttendanceSummary = () => {
       }
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
-      if (
-        error.response &&
-        error.response.data?.error ===
-          "You have already completed your attendance for the day."
-      ) {
+      if (error) {
+        console.log("response fron backend", error.response?.data?.error);
 
-        message.warning("You have already completed your attendance for the day.", 2);
-
+        message.warning(error.response?.data?.error, 2);
       } else {
-
-        message.error("An error occurred while marking attendance. Please try again.", 2);
+        message.error(
+          "An error occurred while marking attendance. Please try again.",
+          2
+        );
       }
     }
   };

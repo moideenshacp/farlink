@@ -1,13 +1,13 @@
 import { Request, Response } from "express";
 import { IleaveController } from "../interfaces/IleaveController";
-import { leaveService } from "../services/leaveService";
 import { CustomError } from "../errors/CustomError";
+import { IleaveService } from "../interfaces/IleaveService";
 
 export class leaveController implements IleaveController {
-  private _leaveservice: leaveService;
+  private _leaveservice: IleaveService;
 
-  constructor() {
-    this._leaveservice = new leaveService();
+  constructor(_leaveservice: IleaveService) {
+    this._leaveservice = _leaveservice
   }
   public handleLeaveApplication = async (
     req: Request,
@@ -58,6 +58,24 @@ export class leaveController implements IleaveController {
       res.status(500).json({ error: "Internal Server Error" });
 
       
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ error: "Internal Server Error" });
+
+    }
+    
+  }
+  fetchRemainingLeaves = async(req: Request, res: Response): Promise<void> =>{
+    try {
+      const {organizationId,employeeEmail}= req.body
+      const result = await this._leaveservice.fetchRemainingLeaves(organizationId,employeeEmail)
+      if(result){
+        console.log("geyinngggg",result);
+        
+        res.status(200).json({message:"Remaining leaves fetched sucessfully",result})
+        return
+      }
+      res.status(500).json({ error: "Internal Server Error" });
     } catch (error) {
       console.log(error);
       res.status(500).json({ error: "Internal Server Error" });

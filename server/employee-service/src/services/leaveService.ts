@@ -1,21 +1,20 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { AttendancePolicyRepository } from "../repositories/policyRepository";
-import { AttendanceRepository } from "../repositories/attendenceRepo";
 
 import { IleaveService } from "../interfaces/IleaveService";
-import { leaveRepository } from "../repositories/leaveRepository";
 import { CustomError } from "../errors/CustomError";
 import IleaveModel from "../interfaces/IleaveModel";
+import IleaveRepo from "../interfaces/IleaveRepository";
+import IpolicyRepo from "../interfaces/IpolicyRepo";
+import mongoose from "mongoose";
+import IAttendancePolicyModel from "../interfaces/IpolicyModel";
 
 export class leaveService implements IleaveService {
-  private _policyRepository: AttendancePolicyRepository;
-  private _attendenceRepository: AttendanceRepository;
-  private _leaveRepository: leaveRepository;
+  private _policyRepository: IpolicyRepo;
+  private _leaveRepository: IleaveRepo;
 
-  constructor() {
-    this._policyRepository = new AttendancePolicyRepository();
-    this._attendenceRepository = new AttendanceRepository();
-    this._leaveRepository = new leaveRepository();
+  constructor(_policyRepository: IpolicyRepo, _leaveRepository: IleaveRepo) {
+    this._policyRepository = _policyRepository;
+    this._leaveRepository = _leaveRepository;
   }
 
   async handleLeaveApplication(data: any): Promise<IleaveModel | null> {
@@ -33,6 +32,64 @@ export class leaveService implements IleaveService {
           throw new Error(`Invalid leave type: ${leaveType}`);
         }
 
+        const startDate = new Date(data.formData.fromDate.split("T")[0]);
+        const endDate = new Date(data.formData.toDate.split("T")[0]);
+
+        const currentDate = new Date();
+        currentDate.setHours(0, 0, 0, 0);
+        const officeStartTime = policy.officeStartTime;
+        if (officeStartTime) {
+          const [officeStartHour, officeStartMinute] = officeStartTime
+            .toString()
+            .split(":")
+            .map(Number);
+
+          const leaveApplicationDate = new Date(data.formData.fromDate);
+          if (
+            leaveApplicationDate.getDate() === currentDate.getDate() &&
+            leaveApplicationDate.getMonth() === currentDate.getMonth() &&
+            leaveApplicationDate.getFullYear() === currentDate.getFullYear()
+          ) {
+            if (
+              leaveApplicationDate.getHours() > officeStartHour ||
+              (leaveApplicationDate.getHours() === officeStartHour &&
+                leaveApplicationDate.getMinutes() > officeStartMinute)
+            ) {
+              throw new CustomError(
+                `Leave cannot be applied after the office start time (${policy.officeStartTime}) on the same day.`,
+                400
+              );
+            }
+          }
+        }
+
+        if (startDate < currentDate || endDate < currentDate) {
+          throw new CustomError("Leave dates cannot be in the past.", 400);
+        }
+
+        if (endDate < startDate) {
+          throw new CustomError(
+            "The end date must be greater than the start date.",
+            400
+          );
+        }
+        const overlappingLeaves =
+          await this._leaveRepository.getApprovedLeavesInDateRange(
+            data.organizationId,
+            data.employeeEmail,
+            startDate,
+            endDate
+          );
+
+        console.log("ovelapppp", overlappingLeaves);
+
+        if (overlappingLeaves.length > 0) {
+          throw new CustomError(
+            "You already have approved leave's during the selected date range.",
+            400
+          );
+        }
+
         const currentMonth = new Date(data.formData.fromDate).getMonth() + 1;
         const currentYear = new Date(data.formData.fromDate).getFullYear();
 
@@ -44,6 +101,7 @@ export class leaveService implements IleaveService {
             currentMonth,
             currentYear
           );
+          
         console.log(
           `Leaves taken this month for ${leaveType}:`,
           leavesTakenThisMonth
@@ -53,9 +111,6 @@ export class leaveService implements IleaveService {
           policy.leaveType[leaveType as keyof typeof policy.leaveType]
         );
         console.log(`Allowed leaves for ${leaveType}:`, allowedLeaves);
-
-        const startDate = new Date(data.formData.fromDate);
-        const endDate = new Date(data.formData.toDate);
 
         const requestedDays =
           Math.ceil(
@@ -78,6 +133,8 @@ export class leaveService implements IleaveService {
           reason: data.formData.reason,
         };
 
+        console.log("njamle leave data", leaveData);
+
         const savedLeave = await this._leaveRepository.createleave(leaveData);
         return savedLeave;
       }
@@ -97,7 +154,7 @@ export class leaveService implements IleaveService {
           const dateA = a.startDate ? new Date(a.startDate) : new Date(0);
           const dateB = b.startDate ? new Date(b.startDate) : new Date(0);
 
-          return  dateB.getTime() - dateA.getTime() ;
+          return dateB.getTime() - dateA.getTime();
         });
         return sortedLeaves;
       }
@@ -108,18 +165,61 @@ export class leaveService implements IleaveService {
       return null;
     }
   }
-  async ManageAppliedLeaves(leaveId: string,status: "pending" | "approved" | "rejected"): Promise<IleaveModel | null> {
+  async ManageAppliedLeaves(
+    leaveId: string,
+    status: "pending" | "approved" | "rejected"
+  ): Promise<IleaveModel | null> {
     try {
-
-      const updated  = await this._leaveRepository.updateStatus({_id:leaveId},{status:status})      
-      if(updated){
-        return updated
+      const updated = await this._leaveRepository.updateStatus(
+        { _id: leaveId },
+        { status: status }
+      );
+      if (updated) {
+        return updated;
       }
-      return null
+      return null;
     } catch (error) {
       console.log(error);
-      return null
-      
+      return null;
     }
   }
+  async fetchRemainingLeaves(organizationId: string, employeeEmail: string): Promise<any | null> {
+    try {
+      const organizationObjectId = new mongoose.Types.ObjectId(organizationId)
+      const policy = await this._policyRepository.findByOrganizationId(organizationObjectId);
+      console.log("Policy fetched:", policy);
+  
+      if (!policy) {
+        throw new Error("Policy not found for organization.");
+      }
+  
+      const leaveTypes = Object.keys(policy.leaveType) as Array<keyof IAttendancePolicyModel['leaveType']>
+      const remainingLeaves:any = {};
+  
+      for (const leaveType of leaveTypes) {
+        const allowedLeaves = Number(policy.leaveType[leaveType]) ;
+  
+        const currentMonth = new Date().getMonth() + 1; 
+        const currentYear = new Date().getFullYear();
+  
+        const approvedLeavesThisMonth = await this._leaveRepository.getLeavesTakenInMonth(
+          organizationId,
+          employeeEmail,
+          leaveType,
+          currentMonth,
+          currentYear
+        );
+  
+        remainingLeaves[leaveType] = allowedLeaves - approvedLeavesThisMonth;
+  
+        console.log(`Remaining leaves for ${leaveType}:`, remainingLeaves[leaveType]);
+      }
+  
+      return remainingLeaves;
+    } catch (error) {
+      console.log(error);
+      return null;
+    }
+  }
+  
 }

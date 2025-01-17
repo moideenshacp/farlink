@@ -10,4 +10,5 @@ export default interface IorganizationRepository {
     filter: FilterQuery<IorganizationModel>,
     update: Partial<IorganizationModel>
   ): Promise<IorganizationModel | null>;
+  findAll(): Promise<IorganizationModel[]>;
 }

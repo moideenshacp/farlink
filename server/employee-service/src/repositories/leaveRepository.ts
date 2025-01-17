@@ -34,6 +34,7 @@ export class leaveRepository
             $gte: new Date(`${year}-${month}-01`),
             $lt: new Date(`${year}-${month + 1}-01`),
           },
+          status: "approved" 
         },
       },
       {
@@ -61,7 +62,14 @@ export class leaveRepository
   async findByEmail(employeeEmail: string): Promise<IleaveModel[]> {
     return this.model.find({ employeeEmail });
   }
-  async findOverlappingLeaves(
+
+  async updateStatus(
+    filter: FilterQuery<IleaveModel>,
+    update: Partial<IleaveModel>
+  ): Promise<IleaveModel | null> {
+    return this.model.findOneAndUpdate(filter, update, { new: true });
+  }
+  async getApprovedLeavesInDateRange(
     organizationId: string,
     employeeEmail: string,
     startDate: Date,
@@ -70,13 +78,20 @@ export class leaveRepository
     return this.model.find({
       organizationId: new mongoose.Types.ObjectId(organizationId),
       employeeEmail,
-      $or: [{ startDate: { $lte: endDate }, endDate: { $gte: startDate } }],
+      status: "approved", // Replace "approved" with the actual status used in your schema for approved leaves
+      $or: [
+        {
+          startDate: { $lte: endDate }, // Overlaps when startDate is before or equal to the new leave's endDate
+          endDate: { $gte: startDate }, // Overlaps when endDate is after or equal to the new leave's startDate
+        },
+        {
+          startDate: { $gte: startDate, $lte: endDate }, // New leave start is inside the range
+        },
+        {
+          endDate: { $gte: startDate, $lte: endDate }, // New leave end is inside the range
+        },
+      ],
     });
   }
-  async updateStatus(
-    filter: FilterQuery<IleaveModel>,
-    update: Partial<IleaveModel>
-  ): Promise<IleaveModel | null> {
-    return this.model.findOneAndUpdate(filter, update, { new: true });
-  }
+  
 }

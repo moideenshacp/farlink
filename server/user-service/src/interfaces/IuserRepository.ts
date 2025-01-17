@@ -8,4 +8,8 @@ export default interface IuserRepo {
     filter: FilterQuery<IuserModel>,
     update: Partial<IuserModel>
   ): Promise<IuserModel | null>;
+  findByEmailWithPopulate(
+    email: string,
+    populateField: string
+  ): Promise<IuserModel | null>;
 }

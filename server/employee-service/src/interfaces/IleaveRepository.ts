@@ -12,6 +12,12 @@ export default interface IleaveRepo {
   ): Promise<number>;
 
   findByEmail(employeeEmail: string): Promise<IleaveModel[]>;
+  getApprovedLeavesInDateRange(
+    organizationId: string,
+    employeeEmail: string,
+    startDate: Date,
+    endDate: Date
+  ): Promise<IleaveModel[]>;
   updateStatus(
     filter: FilterQuery<IleaveModel>,
     update: Partial<IleaveModel>
