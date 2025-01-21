@@ -7,6 +7,7 @@ import LeaveHistoryTable from "../../../shared/components/LeaveHistoryTable";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
 import DatePicker from "react-datepicker";
+import ShimmerHistory from "../../../shared/components/ShimmerHistory";
 
 const LeaveSummary = () => {
   const [selectedLeave, setSelectedLeave] = useState<AllLeaves | null>(null);
@@ -90,7 +91,7 @@ const LeaveSummary = () => {
   return (
     <div className="flex h-screen">
       {/* Sidebar */}
-      <div className="w-60 h-full">
+      <div className="w-60 overflow-auto h-full">
         <Sidebar onSelectEmail={(email: string) => setSelectedEmail(email)} />
       </div>
       {selectedLeave && (
@@ -102,14 +103,14 @@ const LeaveSummary = () => {
         />
       )}
       {/* Table Container */}
-      <div className="flex-1 p-4 overflow-auto">
+      <div className="flex-1 p-4 overflow-auto  scrollbar-none">
         <div className="flex gap-20">
           <div>
             <label className="block text-gray-600 mb-1">From</label>
             <DatePicker
               selected={fromDate}
               onChange={(date: Date | null) => setFromDate(date)}
-              className="border px-3 py-2 rounded-lg w-full focus:outline-none"
+              className="border px-3 py-2  rounded-lg w-full focus:outline-none"
             />
           </div>
           <div>
@@ -123,15 +124,13 @@ const LeaveSummary = () => {
           <div>
 
           <p className="text-[#4361EE] font-semibold" >Sick Leave: <span>{leaveBalance.sick}</span>&nbsp;Left</p>
-          <p className="text-[#4361EE] font-semibold">Casual Leave: <span>{leaveBalance.leave}</span>&nbsp;Left</p>
+          <p className="text-[#4361EE] font-semibold">Casual Leave: <span>{leaveBalance.casual}</span>&nbsp;Left</p>
           <p className="text-[#4361EE] font-semibold">Vacation Leave: <span>{leaveBalance.vacation}</span>&nbsp;Left</p>
           </div>
         </div>
         <br />
         {loading ? (
-          <div className="flex justify-center items-center h-full">
-            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
-          </div>
+         <ShimmerHistory/>
         ) : (
           <LeaveHistoryTable
             leaves={filteredLeaves}

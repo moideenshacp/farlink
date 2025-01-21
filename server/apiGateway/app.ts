@@ -13,7 +13,7 @@ app.use(express.static('public'));
 app.use(morgan('tiny'))
 app.use(cors({
     origin:"http://localhost:5173",
-    methods: ["GET", "POST","PUT","PATCH",],
+    methods: ["GET","POST","PUT","PATCH"],
     allowedHeaders: ["Content-Type"],
     credentials: true,
 },))

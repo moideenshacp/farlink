@@ -10,4 +10,7 @@ export default interface IemployeeRepo {
   ): Promise<IemployeeModel | null>;
   findByEmailWithPopulate(email: string, populateField: string): Promise<IemployeeModel | null>;
   findByOrganizationId(organizationId: string): Promise<IemployeeModel[]>;
+  getDistinctOrganizationIds(): Promise<string[]>;
+  getAllEmployeesByOrganization(organizationId: string): Promise<IemployeeModel[]>;
+
 }

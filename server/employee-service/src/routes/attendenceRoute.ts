@@ -7,23 +7,26 @@ import { IattendenceService } from '../interfaces/IattendenceService'
 import { attendenceService } from '../services/attendenceService'
 import IpolicyRepo from '../interfaces/IpolicyRepo'
 import { AttendanceRepository } from '../repositories/attendenceRepo'
+import IemployeeRepo from '../interfaces/IemployeeRepository'
+import { employeeRepository } from '../repositories/employeeRepository'
 
 const router = express.Router()
 
 const policyRepository :IpolicyRepo = new AttendancePolicyRepository()
 const attendenceRepository:IattendenceRepo = new AttendanceRepository()
-const AttendenceService :IattendenceService = new attendenceService(policyRepository,attendenceRepository)
+const EmployeeRepository:IemployeeRepo = new employeeRepository()
+const AttendenceService :IattendenceService = new attendenceService(policyRepository,attendenceRepository,EmployeeRepository)
 const AttendenceController = new attendenceController(AttendenceService)
 
 
 //admin=====================================================================================================================
 
-router.post('/update-policy',(authenticate as never),AttendenceController.UpdateAttendencePolicy)
-router.get('/get-policy',(authenticate as never),AttendenceController.getAttendencePolicy)
-router.post('/handle-attendence',(authenticate as never),AttendenceController.handleAttendence)
+router.patch('/update-policy',authenticate,AttendenceController.UpdateAttendencePolicy)
+router.get('/get-policy',authenticate,AttendenceController.getAttendencePolicy)
+router.post('/handle-attendence',authenticate,AttendenceController.handleAttendence)
 
 //common====================================================================================================================
-router.get('/get-attendence',(authenticate as never),AttendenceController.getAttendenceReport)
+router.get('/get-attendence',authenticate,AttendenceController.getAttendenceReport)
 
 
 

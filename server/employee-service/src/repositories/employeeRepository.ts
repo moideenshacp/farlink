@@ -8,6 +8,9 @@ export class employeeRepository
   extends BaseRepository<IemployeeModel>
   implements IemployeeRepo
 {
+  static getDistinctOrganizationIds() {
+      throw new Error("Method not implemented.");
+  }
   constructor() {
     super(EmployeeModel);
   }
@@ -31,5 +34,13 @@ export class employeeRepository
     const objectId = new Types.ObjectId(organizationId); 
     return this.model.find({ organizationId: objectId }).exec();
   }
-
+  async getDistinctOrganizationIds(): Promise<string[]> {
+    return this.model.distinct("organizationId").exec().then(ids => ids.map(id => id.toHexString()));
+  }
+  async getAllEmployeesByOrganization(
+    organizationId: string
+  ): Promise<IemployeeModel[]> {
+    const objectId = new Types.ObjectId(organizationId);
+    return this.model.find({ organizationId: objectId }).exec();
+  }
 }

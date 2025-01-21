@@ -48,6 +48,7 @@ export const addEmployee = async (employeeData: EmployeeData) => {
     return res;
   } catch (error) {
     console.log(error);
+    throw error
   }
 };
 
@@ -107,7 +108,7 @@ export const getAllEmployees = async (organizationId: string | undefined) => {
 
 export const updateEmployeeDetails = async (data: EmployeeDetails) => {
   try {
-    const res = await axiosInstance.post(
+    const res = await axiosInstance.patch(
       `${
         import.meta.env.VITE_SERVER_BASE_URL
       }/employee-service/api/employee/update-employee`,
@@ -219,11 +220,13 @@ export const fetchPositions = async (
   organizationId: string | undefined,
 ) => {
   try {
-    const res = await axiosInstance.post(
-      `${
-        import.meta.env.VITE_SERVER_BASE_URL
-      }/employee-service/api/employee/fetch-position`,
-      { organizationId }
+    const res = await axiosInstance.get(
+      `${import.meta.env.VITE_SERVER_BASE_URL}/employee-service/api/employee/fetch-position`, {
+        params: {
+          organizationId, 
+        },
+        withCredentials: true, 
+      }
     );
     return res;
   } catch (error) {

@@ -6,7 +6,7 @@ export const updatePolicy = async (
   organizationId: string | undefined
 ) => {
   try {
-    const res = await axiosInstance.post(
+    const res = await axiosInstance.patch(
       `${
         import.meta.env.VITE_SERVER_BASE_URL
       }/employee-service/api/attendence/update-policy`,

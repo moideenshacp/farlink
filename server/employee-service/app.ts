@@ -11,6 +11,7 @@ import attendenceRoutes from './src/routes/attendenceRoute'
 import leaveRoutes from './src/routes/leaveRoute'
 import { rabbitmqConnect } from "./src/config/rabbitmq";
 import { errorHandler } from "./src/middlewares/errorHandler";
+import { jobStart } from "./src/services/automaticAttendence";
 
 dotenv.config();
 connectDB();
@@ -19,7 +20,7 @@ const app = express();
 app.use(
   cors({
     origin: process.env.FRONT_URL,
-    methods: ["GET", "POST"],
+    methods: ["GET","POST","PUT","PATCH"],
     allowedHeaders: ["Content-Type"],
     credentials: true,
   })
@@ -53,6 +54,7 @@ app.use("/api/leave", leaveRoutes);
 
 app.use(errorHandler);
 
+jobStart.start()
 const port = process.env.PORT;
 
 app.listen(port, () => {

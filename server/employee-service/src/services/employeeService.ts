@@ -28,7 +28,8 @@ export class employeeService implements IemployeeService {
         employeeData.email
       );
       if (employeeExist) {
-        throw new Error("already exist");
+        throw new CustomError("Email already Exist",400)
+
       }
 
       const registeredEmployee = await this._employeeRepository.createEmployee(
@@ -56,7 +57,7 @@ export class employeeService implements IemployeeService {
       return registeredEmployee
     } catch (error) {
       console.log(error);
-      return null
+      throw error
     }
   }
   async getAllEmployees(

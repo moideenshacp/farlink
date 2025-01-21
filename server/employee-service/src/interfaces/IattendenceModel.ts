@@ -7,4 +7,5 @@ export default interface IattendenceModel extends Document {
   checkOut?: Date | null;
   status: 'present' | 'absent' | 'late'| 'halfDay' | 'onLeave'
   workingHours?: number;
+  date:Date | null
 }

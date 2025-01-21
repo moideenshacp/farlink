@@ -44,7 +44,7 @@ export const registerEmployeeSchema = Joi.object({
     "string.pattern.base": '"phone" must only contain numeric digits',
     "any.required": '"phone" is required',
   }),
-  position: Joi.string().trim().min(3).max(50).required().messages({
+  position: Joi.string().trim().min(2).max(50).required().messages({
     "any.required": "Invalid Position",
     "string.empty": "Invalid Position",
     "string.min": "Invalid Position",

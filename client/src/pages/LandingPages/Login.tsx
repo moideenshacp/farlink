@@ -12,8 +12,9 @@ import { useDispatch } from "react-redux";
 import { login, setOrganizationId } from "../../redux/user/userSlice";
 import { jwtDecode } from "jwt-decode";
 import { CredentialResponse, GoogleLogin } from "@react-oauth/google";
-import Input from "../../shared/components/Input";
+// import Input from "../../shared/components/Input";
 import { message } from "antd";
+import { Input } from "antd";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -161,31 +162,30 @@ const Login = () => {
 
           {error && <div className=" text-red-700  rounded mt-6">{error}</div>}
 
-          <form className="mt-6 space-y-4 " onSubmit={handleSubmit}>
-            <div className="flex items-center border border-[#E0E2E9] rounded-lg px-3 py-0 bg-white">
-              <FaEnvelope className="text-[#ADB0CD] mr-3" />
+          <form className="mt-6 space-y-4 w-full" onSubmit={handleSubmit}>
+            {/* Email Input */}
+           
+            <Input
+              type="email"
+              name="email"
+              onChange={handleChange}
+              placeholder="Enter your Email"
+              className="flex-1 w-full pl-5 outline-none p-2 px-2 text-sm text-[#969AB8]"
+              prefix={<FaEnvelope className="text-[#ADB0CD] mr-3" />}
+            />
 
-              <Input
-                type="email"
-                name="email"
-                onChange={handleChange}
-                placeholder="Enter your Email"
-                className="flex-1 outline-none text-sm text-[#969AB8]"
-              />
-            </div>
+            {/* Password Input */}
+            
+            <Input
+              type="password"
+              name="password"
+              onChange={handleChange}
+              placeholder="Enter your Password"
+              className="flex-1 w-full pl-5 outline-none p-2 px-2 text-sm text-[#969AB8]"
+              prefix={<FaLock className="text-[#ADB0CD] mr-3" />}
+            />
 
-            <div className="flex items-center border  border-[#E0E2E9] rounded-lg px-3 py-0 bg-white">
-              <FaLock className="text-[#ADB0CD] mr-3" />
-
-              <Input
-                type="password"
-                name="password"
-                onChange={handleChange}
-                placeholder="Enter your Password"
-                className="flex-1  outline-none text-sm text-[#969AB8]"
-              />
-            </div>
-
+            {/* Submit Button */}
             <button
               type="submit"
               className="w-full bg-[#4361EE] text-white py-3 rounded-lg font-medium hover:bg-blue-700 transition duration-300"
@@ -193,6 +193,7 @@ const Login = () => {
               Login
             </button>
           </form>
+
           <br />
           <Link to="/forget-password">
             <p className="text-[#4361EE] cursor-pointer text-center">

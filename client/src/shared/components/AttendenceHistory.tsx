@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { getAttendenceReport } from "../../api/attendenceApi";
 import { IattendenceSummary } from "../../interface/IattendenceSummary";
 import { message } from "antd";
+import ShimmerHistory from "./ShimmerHistory";
 
 interface AttendanceHistoryProps {
   email: string | undefined;
@@ -31,6 +32,7 @@ const AttendanceHistory: React.FC<AttendanceHistoryProps> = ({
         setLoading(true);
         const res = await getAttendenceReport(email);
         if (res?.data?.attendancereport) {
+            
           setAttendanceHistory(res.data.attendancereport);
 
           const todayAttendance = res.data.attendancereport.find(
@@ -105,9 +107,7 @@ const AttendanceHistory: React.FC<AttendanceHistoryProps> = ({
         </div>
       )}
       {loading ? (
-        <div className="flex justify-center items-center h-full">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
-        </div>
+        <ShimmerHistory/>
       ) : (
         <>
           <h2 className="text-lg font-semibold mb-4">Attendance History</h2>

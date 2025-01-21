@@ -21,11 +21,13 @@ export const applyLeave = async(leaveData:IleaveData)=>{
 
 export const fetchLeave = async(employeeEmail:string | undefined)=>{
   try {
-    const res = await axiosInstance.post(
-      `${
-        import.meta.env.VITE_SERVER_BASE_URL
-      }/employee-service/api/leave/fetch-leave`,
-       { employeeEmail}, {withCredentials: true }
+    const res = await axiosInstance.get(
+      `${import.meta.env.VITE_SERVER_BASE_URL}/employee-service/api/leave/fetch-leave`, {
+        params: {
+          employeeEmail,
+        },
+        withCredentials: true,
+      }
     );
     return res;
     
@@ -38,7 +40,7 @@ export const fetchLeave = async(employeeEmail:string | undefined)=>{
 export const manageLeaveApplication = async(leaveId:string | undefined,status:string | undefined)=>{
   try {
     
-    const res = await axiosInstance.post(
+    const res = await axiosInstance.patch(
       `${
         import.meta.env.VITE_SERVER_BASE_URL
       }/employee-service/api/leave/manage-leave`,
@@ -57,11 +59,14 @@ export const manageLeaveApplication = async(leaveId:string | undefined,status:st
 export const fetchRemainingLeaves = async(organizationId:string | undefined,employeeEmail:string | undefined)=>{
   try {
     
-    const res = await axiosInstance.post(
-      `${
-        import.meta.env.VITE_SERVER_BASE_URL
-      }/employee-service/api/leave/fetch-remainingLeaves`,
-       { organizationId,employeeEmail}, {withCredentials: true }
+    const res = await axiosInstance.get(
+      `${import.meta.env.VITE_SERVER_BASE_URL}/employee-service/api/leave/fetch-remainingLeaves`, {
+        params: {
+          organizationId,
+          employeeEmail,
+        },
+        withCredentials: true,
+      }
     );
     return res;
     

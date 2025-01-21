@@ -22,7 +22,7 @@ export const updateCompanyProfile = async(
 
 )=>{
     try {
-        const res = await axiosInstance.post(
+        const res = await axiosInstance.patch(
             `${import.meta.env.VITE_SERVER_BASE_URL}/auth-service/api/company/update-companyProfile`,
             {
               FormData,

@@ -7,6 +7,7 @@ import { IattendanceSummary } from "../interfaces/IattendenceSummary";
 import { CustomError } from "../errors/CustomError";
 import IpolicyRepo from "../interfaces/IpolicyRepo";
 import IattendenceRepo from "../interfaces/IattendenceRepo";
+import IemployeeRepo from "../interfaces/IemployeeRepository";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function convertToIST(date: any) {
@@ -20,13 +21,16 @@ function convertToIST(date: any) {
 export class attendenceService implements IattendenceService {
   private _policyRepository: IpolicyRepo;
   private _attendenceRepository: IattendenceRepo;
+  private _employeeRepository: IemployeeRepo;
 
   constructor(
     _policyRepository: IpolicyRepo,
-    _attendenceRepository: IattendenceRepo
+    _attendenceRepository: IattendenceRepo,
+    _employeeRepository: IemployeeRepo
   ) {
     this._policyRepository = _policyRepository;
     this._attendenceRepository = _attendenceRepository;
+    this._employeeRepository = _employeeRepository;
   }
 
   async UpdateAttendencePolicy(
@@ -97,10 +101,10 @@ export class attendenceService implements IattendenceService {
         DateTime.fromJSDate(currentTime).setZone("Asia/Kolkata").toISO() ||
           currentTime.toISOString()
       );
-            const dayOfWeek = currentTimeIST.getDay();
-            console.log("daaayyyyyy",dayOfWeek);
+      const dayOfWeek = currentTimeIST.getDay();
+      console.log("daaayyyyyy", dayOfWeek);
 
-      if (dayOfWeek == 0 || dayOfWeek == 6) {
+      if (dayOfWeek == 0 ) {
         throw new CustomError("Attendance cannot be marked on weekends.", 400);
       }
 
@@ -180,7 +184,10 @@ export class attendenceService implements IattendenceService {
 
         if (currentTimeIST > officeEndTimeIST) {
           status = "absent";
-          throw new CustomError("Office time has ended, check-in is not allowed.", 400);
+          throw new CustomError(
+            "Office time has ended, check-in is not allowed.",
+            400
+          );
         } else if (currentTimeIST > lateMarkThresholdIST) {
           status = "late";
         } else {
@@ -220,7 +227,7 @@ export class attendenceService implements IattendenceService {
         (attendance) => {
           const checkInDate = attendance.checkIn
             ? convertToIST(attendance.checkIn).split(" ")[0]
-            : "N/A";
+            : convertToIST(attendance.date).split(" ")[0];
           const checkInTime = attendance.checkIn
             ? convertToIST(attendance.checkIn).split(" ")[1]
             : "N/A";
@@ -241,6 +248,75 @@ export class attendenceService implements IattendenceService {
     } catch (error) {
       console.error("Error fetching attendance report:", error);
       return null;
+    }
+  }
+
+  async markAbsentees(organizationId: string): Promise<void> {
+    try {
+      const organizationObjectId = new mongoose.Types.ObjectId(organizationId);
+      const policy = await this._policyRepository.findByOrganizationId(
+        organizationObjectId
+      );
+      if (!policy) throw new Error("Attendance policy not found");
+
+      const currentTime = new Date();
+      const currentTimeIST = new Date(
+        DateTime.fromJSDate(currentTime).setZone("Asia/Kolkata").toISO() ||
+          currentTime.toISOString()
+      );
+      const dayOfWeek = currentTimeIST.getDay();
+      console.log("daaayyyyyy", dayOfWeek);
+
+      if (dayOfWeek == 0 ) {
+        throw new CustomError("Attendance cannot be marked on weekends.", 400);
+      }
+
+      const officeEndTimeIST = new Date(
+        `${currentTimeIST.toDateString()} ${policy.officeEndTime}`
+      );
+
+      if (currentTimeIST < officeEndTimeIST) {
+        throw new CustomError(
+          "Cannot mark absentees before office hours end.",
+          400
+        );
+      }
+
+      const allEmployees =
+        await this._employeeRepository.getAllEmployeesByOrganization(
+          organizationId
+        );
+
+      for (const employee of allEmployees) {
+        const recentAttendance =
+          await this._attendenceRepository.findAttendanceByDate(
+            organizationId,
+            employee.email,
+            new Date()
+          );
+
+        if (!recentAttendance) {
+          // Mark as absent
+          type AttendanceStatus =
+            | "present"
+            | "absent"
+            | "late"
+            | "halfDay"
+            | "onLeave";
+          const attendanceData = {
+            organizationId: new mongoose.Types.ObjectId(organizationId),
+            employeeEmail: employee.email,
+            status: "absent" as AttendanceStatus,
+            date: currentTimeIST,
+          };
+
+          await this._attendenceRepository.createattendence(attendanceData);
+          console.log(`Marked absent for ${employee.email}`);
+        }
+      }
+    } catch (error: unknown) {
+      console.error("Error marking absentees:", error);
+      throw error;
     }
   }
 }

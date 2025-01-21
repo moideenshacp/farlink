@@ -41,8 +41,12 @@ export class employeeController implements IemployeeController {
         res.status(200).json({ message: "Employee added successfully" });
       }
     } catch (error) {
-      console.log(error);
-      res.status(500).json({ message: "Internal server error" });
+      if (error instanceof CustomError) {
+        res.status(error.statusCode).json({ message: error.message });
+      } else {
+        console.log(error);
+        res.status(500).json({ message: "Internal Server Error" });
+      }
     }
   };
   public getAllEmployees = async (
@@ -214,9 +218,9 @@ export class employeeController implements IemployeeController {
 
   public fetchPosition = async (req: Request, res: Response): Promise<void> => {
     try {
-      const { organizationId } = req.body;
+      const { organizationId } = req.query;
 
-      const result = await this._employeeservice.fetchPosition(organizationId);
+      const result = await this._employeeservice.fetchPosition(organizationId as string);
       if (result) {
         res.status(200).json({ message: "Positions fetched sucessfully..", result });
         return;

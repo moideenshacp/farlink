@@ -27,7 +27,7 @@ const DashboardSettings = () => {
       <div className="flex space-x-6 mb-6">
         <div
           onClick={() => setActiveTab("profile")}
-          className={`py-2 px-4 cursor-pointer ${
+          className={`py-2 px-4 cursor-pointer transition-all duration-300 ease-in-out ${
             activeTab === "profile"
               ? "border-b-2 border-[#4361EE] text-[#4361EE]"
               : "text-[#6A7181]"
@@ -37,7 +37,7 @@ const DashboardSettings = () => {
         </div>
         <div
           onClick={() => setActiveTab("organization")}
-          className={`py-2 px-4 cursor-pointer ${
+          className={`py-2 px-4 cursor-pointer transition-all duration-300 ease-in-out ${
             activeTab === "organization"
               ? "border-b-2 border-[#4361EE] text-[#4361EE]"
               : "text-[#6A7181]"
@@ -47,7 +47,7 @@ const DashboardSettings = () => {
         </div>
         <div
           onClick={() => setActiveTab("password")}
-          className={`py-2 px-4 cursor-pointer ${
+          className={`py-2 px-4 cursor-pointer transition-all duration-300 ease-in-out ${
             activeTab === "password"
               ? "border-b-2 border-[#4361EE] text-[#4361EE]"
               : "text-[#6A7181]"
@@ -57,7 +57,7 @@ const DashboardSettings = () => {
         </div>
         <div
           onClick={() => setActiveTab("email")}
-          className={`py-2 px-4 cursor-pointer ${
+          className={`py-2 px-4 cursor-pointer transition-all duration-300 ease-in-out ${
             activeTab === "email"
               ? "border-b-2 border-[#4361EE] text-[#4361EE]"
               : "text-[#6A7181]"

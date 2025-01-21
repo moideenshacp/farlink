@@ -11,5 +11,6 @@ export interface IattendenceService {
   ): Promise<IattendencePolicy | null>;
   handleAttendence(organizationId: string,employeeEmail:string):Promise<void>
   getAttendenceReport(employeeEmail:string):Promise<IattendanceSummary[] | null>
+  markAbsentees(organizationId: string): Promise<void>;
 
 }

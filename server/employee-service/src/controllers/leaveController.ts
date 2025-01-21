@@ -33,8 +33,8 @@ export class leaveController implements IleaveController {
   };
   public fetchAppliedLeaves = async(req: Request, res: Response): Promise<void> =>{
     try {
-      const {employeeEmail} = req.body
-      const leaves = await this._leaveservice.fetchAppliedLeaves(employeeEmail)
+      const {employeeEmail} = req.query
+      const leaves = await this._leaveservice.fetchAppliedLeaves(employeeEmail as string)
       if(leaves){
 
         res.status(200).json({message:"Fetched Applied leaves",leaves})
@@ -67,8 +67,8 @@ export class leaveController implements IleaveController {
   }
   fetchRemainingLeaves = async(req: Request, res: Response): Promise<void> =>{
     try {
-      const {organizationId,employeeEmail}= req.body
-      const result = await this._leaveservice.fetchRemainingLeaves(organizationId,employeeEmail)
+      const {organizationId,employeeEmail}= req.query
+      const result = await this._leaveservice.fetchRemainingLeaves(organizationId as string,employeeEmail as string)
       if(result){
         console.log("geyinngggg",result);
         

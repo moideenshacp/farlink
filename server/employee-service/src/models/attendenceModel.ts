@@ -20,6 +20,9 @@ const AttendanceSchema: Schema = new Schema({
   },
   workingHours:{
     type:Number
+  },
+  date:{
+    type:Date
   }
 });
 

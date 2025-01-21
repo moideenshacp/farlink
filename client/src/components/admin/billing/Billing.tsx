@@ -5,6 +5,7 @@ import { getSubcriptionPlans } from "../../../api/subcriptionApi";
 import { RootState } from "../../../redux/store";
 import { useSelector } from "react-redux";
 import PaymentHistory from "./PaymentHistory";
+import Shimmer from "./ShimmerCard";
 
 const benefits = [
   "Unlimited video conference",
@@ -12,6 +13,7 @@ const benefits = [
   "Add unlimited employees",
   "Get-unlimited features!",
 ];
+
 
 const Billing = () => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -69,9 +71,9 @@ const Billing = () => {
       <div className="flex flex-col">
         <div className="flex flex-col sm:flex-row gap-20 w-full max-w-4xl">
           {isLoading ? (
-            <div className="absolute inset-0 flex justify-center items-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500 ml-48"></div>
-          </div>
+                <div className="flex-1">
+                <Shimmer />
+              </div>
           
           ) : (
             <>

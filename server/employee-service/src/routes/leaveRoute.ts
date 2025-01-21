@@ -19,10 +19,10 @@ const LeaveController = new leaveController(LeaveService)
 
 //employee=====================================================================================================================
 
-router.post('/apply-leave',(authenticate as never),LeaveController.handleLeaveApplication)
-router.post('/fetch-leave',(authenticate as never),LeaveController.fetchAppliedLeaves)
-router.post('/manage-leave',(authenticate as never),LeaveController.ManageAppliedLeaves)
-router.post('/fetch-remainingLeaves',(authenticate as never),LeaveController.fetchRemainingLeaves)
+router.post('/apply-leave',authenticate,LeaveController.handleLeaveApplication)
+router.get('/fetch-leave',authenticate,LeaveController.fetchAppliedLeaves)
+router.patch('/manage-leave',authenticate,LeaveController.ManageAppliedLeaves)
+router.get('/fetch-remainingLeaves',authenticate,LeaveController.fetchRemainingLeaves)
 
 
 

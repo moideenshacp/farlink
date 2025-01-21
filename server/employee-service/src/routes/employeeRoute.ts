@@ -17,15 +17,15 @@ const EmployeeController = new employeeController(EmployeeService)
 
 
 //admin=====================================================================================================================
-router.post('/register-employee',(authenticate as never),EmployeeController.registerEmployee)
-router.get('/get-employees',(authenticate as never),EmployeeController.getAllEmployees)
-router.post('/update-employee',(authenticate as never),EmployeeController.updateEmployees)
-router.post('/invite-employee',(authenticate as never),EmployeeController.inviteEmployee)
+router.post('/register-employee',authenticate,EmployeeController.registerEmployee)
+router.get('/get-employees',authenticate,EmployeeController.getAllEmployees)
+router.patch('/update-employee',authenticate,EmployeeController.updateEmployees)
+router.post('/invite-employee',authenticate,EmployeeController.inviteEmployee)
 router.post('/set-up-password',EmployeeController.setUpPassword)
-router.get('/fetch-EmployeesCount',(authenticate as never),EmployeeController.EmployeesCount)
-router.get('/terminate-employee',(authenticate as never),EmployeeController.TerminateEmployee)
-router.post('/add-position',(authenticate as never),EmployeeController.AddPosition)
-router.post('/fetch-position',(authenticate as never),EmployeeController.fetchPosition)
+router.get('/fetch-EmployeesCount',authenticate,EmployeeController.EmployeesCount)
+router.get('/terminate-employee',authenticate,EmployeeController.TerminateEmployee)
+router.post('/add-position',authenticate,EmployeeController.AddPosition)
+router.get('/fetch-position',authenticate,EmployeeController.fetchPosition)
 
 
 

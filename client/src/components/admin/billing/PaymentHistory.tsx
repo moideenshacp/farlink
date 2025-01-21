@@ -1,13 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from "react";
 import { getPaymentHistory } from "../../../api/subcriptionApi";
+import ShimmerHistory from "../../../shared/components/ShimmerHistory";
 
 interface historyProps {
   customerId: string;
 }
 
 const PaymentHistory: React.FC<historyProps> = ({ customerId }) => {
-  const [history, setHistory] = useState<any>(null);
+  const [history, setHistory] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
   
@@ -28,6 +29,7 @@ const PaymentHistory: React.FC<historyProps> = ({ customerId }) => {
   useEffect(() => {
     const fetchPaymentHistory = async () => {
       setLoading(true);
+      setError("");
       try {
         const res = await getPaymentHistory(customerId);
 
@@ -35,9 +37,11 @@ const PaymentHistory: React.FC<historyProps> = ({ customerId }) => {
           const filteredInvoices = filterInvoiceData(res.data.invoices);
           setHistory(filteredInvoices);
         } else {
+          setHistory([]);
           setError("No data found.");
         }
       } catch (err) {
+        setHistory([]);
         setError("Failed to fetch payment history.");
         console.error(err);
       } finally {
@@ -53,11 +57,11 @@ const PaymentHistory: React.FC<historyProps> = ({ customerId }) => {
   return (
     <div className="p-6 bg-white rounded-lg shadow-lg">
       <h1 className="text-2xl font-bold mb-4">Payment History</h1>
-      {loading && <div className="flex justify-center items-center h-full">
-            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
-          </div>}
+      {loading &&
+            <ShimmerHistory/>
+         }
       {error && <div className="text-red-500">{error}</div>}
-      {history ? (
+      {history.length > 0 ? (
         <div className="overflow-x-auto">
           <table className="min-w-full text-sm text-left text-gray-500 border-collapse">
             <thead className="bg-gray-100 text-gray-700 uppercase text-xs">
@@ -106,7 +110,7 @@ const PaymentHistory: React.FC<historyProps> = ({ customerId }) => {
           </table>
         </div>
       ) : (
-        <div>No payment history found.</div>
+        !loading && <div>No payment history found.</div> 
       )}
     </div>
   );

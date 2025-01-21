@@ -132,7 +132,7 @@ export const updateProfile = async (
   image:string
 )=>{
   try {
-    const res = await axiosInstance.post(
+    const res = await axiosInstance.patch(
       `${import.meta.env.VITE_SERVER_BASE_URL}/auth-service/api/auth/update-profile`, 
       {fName:fName,
         lName:lName,

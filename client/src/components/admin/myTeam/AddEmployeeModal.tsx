@@ -22,6 +22,8 @@ const AddEmployeeModal = ({ toggleModal }: { toggleModal: () => void }) => {
     lastName: "",
     phone: "",
   });
+  console.log(imageUrl);
+
   const { user } = useSelector((state: RootState) => state.user);
   const [teams, setTeams] = useState([]);
   const organizationId = useSelector(
@@ -65,11 +67,29 @@ const AddEmployeeModal = ({ toggleModal }: { toggleModal: () => void }) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!selectedFile) {
-
       message.error("Please upload an image before submitting!", 2);
 
       return;
     }
+    if (!formData.userName.trim() || formData.userName.trim().length < 2) {
+      message.error("Please enter a valid userName with at least 2 characters");
+      return;
+    }
+    if (!formData.firstName.trim() || formData.firstName.trim().length < 2) {
+      message.error(
+        "Please enter a valid FirstName with at least 2 characters"
+      );
+      return;
+    }
+    if (!formData.lastName.trim() || formData.lastName.trim().length < 1) {
+      message.error("Please enter a valid LastName with at least 2 characters");
+      return;
+    }
+    if (!formData.email.trim() || !/\S+@\S+\.\S+/.test(formData.email.trim())) {
+      message.error("Please enter a valid email address");
+      return;
+    }
+    
     let uploadedImageUrl = null;
     if (selectedFile) {
       console.log("selected file is there");
@@ -80,8 +100,7 @@ const AddEmployeeModal = ({ toggleModal }: { toggleModal: () => void }) => {
       );
       setImageUrl(uploadedImageUrl);
     }
-    console.log("imggggggggggggggggggggggg", uploadedImageUrl);
-    console.log("imgggggggggggggggggggggggurl----", imageUrl);
+
     const dataToSubmit = {
       ...formData,
       image: uploadedImageUrl,
@@ -91,7 +110,6 @@ const AddEmployeeModal = ({ toggleModal }: { toggleModal: () => void }) => {
       const res = await addEmployee(dataToSubmit);
       console.log(res);
       if (res?.data.message === "Employee added successfully") {
-
         message.success("Employee added successfully!", 2);
 
         setFormData({
@@ -105,15 +123,19 @@ const AddEmployeeModal = ({ toggleModal }: { toggleModal: () => void }) => {
         });
         setSelectedFile(null);
       } else {
-
         message.error("Something went wrong. Please try again.", 2);
-
       }
-    } catch (error) {
-      console.log(error);
-
-      message.error("Failed to add employee. Please try again.", 2);
-
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      if (
+        error.response &&
+        error.response.data &&
+        error.response.data.message
+      ) {
+        message.error(error.response.data.message, 2);
+      } else {
+        message.error("An unexpected error occurred. Please try again.", 2);
+      }
     }
   };
 
