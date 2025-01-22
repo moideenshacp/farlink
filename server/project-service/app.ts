@@ -6,26 +6,17 @@ import cookieParser from "cookie-parser";
 import connectDB from "./src/config/db";
 import logger from "./src/utils/logger";
 import morgan from "morgan";
-import subscriptionRoutes from './src/routes/subcriptionRoute';
 import { rabbitmqConnect } from "./src/config/rabbitmq";
-import { consumeEvents } from "./src/rabbitmq/consumer/consumer";
+import { errorHandler } from "./src/middlewares/errorHandler";
+
 dotenv.config();
 connectDB();
-const startApplication = async () => {
-  try {
-      await rabbitmqConnect();
-      await consumeEvents(); 
-
-  } catch (error) {
-      console.error("Failed to start application:", error);
-  }
-};
-startApplication();
+rabbitmqConnect()
 const app = express();
 app.use(
   cors({
     origin: process.env.FRONT_URL,
-    methods: ["GET", "POST"],
+    methods: ["GET","POST","PUT","PATCH"],
     allowedHeaders: ["Content-Type"],
     credentials: true,
   })
@@ -51,15 +42,12 @@ app.use(
 );
 
 app.use(cookieParser());
-app.use('/api/subscription/webhook', bodyParser.raw({ type: 'application/json' })); 
 app.use(bodyParser.json());
 app.use(express.json());
 
-app.use('/api/subscription', subscriptionRoutes);
-
+app.use(errorHandler);
 const port = process.env.PORT;
 
 app.listen(port, () => {
-  console.log(`subcription-service started on port ${port}`);
+  console.log(`project-service started on port ${port}`);
 });
-
