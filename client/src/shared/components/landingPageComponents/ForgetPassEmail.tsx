@@ -3,6 +3,7 @@ import logo from "../../../assets/EmailLogo.png";
 import { forgetPassword } from "../../../api/authApi";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { IoArrowBackCircle } from "react-icons/io5";
 
 const ForgetPassEmail = () => {
   const navigate = useNavigate();
@@ -11,12 +12,11 @@ const ForgetPassEmail = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>)=>{
-    setError(null)
-    const email = e.target.value
-    setEmail(email)
-  }
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setError(null);
+    const email = e.target.value;
+    setEmail(email);
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     setIsLoading(true);
@@ -49,10 +49,17 @@ const ForgetPassEmail = () => {
       setIsLoading(false);
     }
   };
+  const handleBack = () => [navigate("/sign-in")];
   return (
     <div>
       <div className="flex items-center justify-center min-h-screen bg-gray-100">
         <div className="bg-white shadow-2xl rounded-2xl p-6 md:p-10 max-w-md text-center">
+          <IoArrowBackCircle
+            size={32}
+            color="#4361EE"
+            className="hover:cursor-pointer"
+            onClick={handleBack}
+          />
           <img
             src={logo}
             alt="FarLink Logo"
@@ -64,12 +71,8 @@ const ForgetPassEmail = () => {
           <p className="mt-4 text-[#000000]">
             Please enter your registered email to reset your password.
           </p>
-          
-          {error && (
-            <div className=" text-red-700  rounded mt-6">
-              {error}
-            </div>
-          )}
+
+          {error && <div className=" text-red-700  rounded mt-6">{error}</div>}
           <form onSubmit={handleSubmit} className="mt-6 space-y-4">
             <input
               type="email"

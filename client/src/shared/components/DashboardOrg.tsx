@@ -2,10 +2,10 @@ import React, { useEffect, useState } from "react";
 import {
   fetchCompanyProfile,
   updateCompanyProfile,
-} from "../../../api/companyApi";
+} from "../../api/companyApi";
 import { useSelector } from "react-redux";
-import { RootState } from "../../../redux/store";
-import { useCompanyUpdate } from "../../../shared/hooks/useCompanyValidations";
+import { RootState } from "../../redux/store";
+import { useCompanyUpdate } from "../hooks/useCompanyValidations";
 import { message } from "antd";
 
 const DashboardOrg = () => {
@@ -87,22 +87,24 @@ const DashboardOrg = () => {
     <div>
       <form onSubmit={handleSubmit}>
         <div className="space-y-3">
-          <div className="mt-2 flex justify-end space-x-4">
-            <button
-              type="button"
-              className="bg-white border-2 border-[#D9DADE] py-2 px-6 rounded-xl"
-              onClick={handleClear}
-            >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              className="bg-[#4361EE] py-2 px-6 rounded-xl text-white"
-              disabled={isLoading}
-            >
-              {isLoading ? "Saving..." : "Save"}
-            </button>
-          </div>
+        {user?.role !== "employee" && (
+            <div className="mt-2 flex justify-end space-x-4">
+              <button
+                type="button"
+                className="bg-white border-2 border-[#D9DADE] py-2 px-6 rounded-xl"
+                onClick={handleClear}
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                className="bg-[#4361EE] py-2 px-6 rounded-xl text-white"
+                disabled={isLoading}
+              >
+                {isLoading ? "Saving..." : "Save"}
+              </button>
+            </div>
+          )}
 
           {/* Flexbox container for side-by-side layout */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
@@ -118,6 +120,8 @@ const DashboardOrg = () => {
                   value={formData[key]}
                   name={key}
                   onChange={handleChange}
+                  readOnly={user?.role === "employee"}
+
                 />
                 {errors[key] && (
                   <p className="text-red-500 text-sm">{errors[key]}</p>

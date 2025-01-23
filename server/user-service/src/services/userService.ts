@@ -14,6 +14,7 @@ import IuserService from "../interfaces/IuserService";
 import { EmailService } from "../utils/emailVerify";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import { AuthService } from "../utils/jwt";
 
 const EMAIL_SECRET = process.env.EMAIL_SECRET || "email_secret_key";
 
@@ -100,6 +101,42 @@ export class userService implements IuserService {
         throw error;
       }
       throw new CustomError(500, "Internal Server Error");
+    }
+  }
+  async refreshToken(refreshToken: string): Promise<string> {
+    try {
+
+      console.log(refreshToken,"tokennnnnnn");
+      if (!refreshToken) {
+        console.log("1010====================================================");
+        
+        throw new CustomError(401,"Refresh token is required")
+      }
+      const decoded = AuthService.verifyRefreshToken(refreshToken);
+      if(decoded){
+
+        const userExist = await this._userRepository.findByEmail(decoded.email);
+        if(userExist && userExist.isActive === false){
+          throw new userBlocked()
+        }
+      }
+
+
+      if (!decoded) {
+        console.log("2020===============================");
+        
+        throw new CustomError(403,"Invalid or expired refresh token" )
+      }
+      const newAccessToken = AuthService.generateToken({
+        email: decoded.email,
+        role: decoded.role,
+      });
+      return newAccessToken
+      
+    } catch (error) {
+      console.log(error);
+      throw error
+      
     }
   }
 

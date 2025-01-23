@@ -7,6 +7,7 @@ export default interface IuserService {
     password: string
   ): Promise<IuserModel>;
   verifyEmail(token: string): Promise<void>;
+  refreshToken(refreshToken: string): Promise<string>;
   loginUser(email: string, password: string): Promise<IuserModel>;
   generatePasswordResetToken(email: string): Promise<void>;
   resetPassword(password: string, token: string): Promise<IuserModel>;

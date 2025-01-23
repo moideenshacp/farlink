@@ -7,7 +7,7 @@ const Header = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   return (
-    <nav className="flex justify-between items-center px-6 py-4 shadow-md bg-white fixed w-full">
+    <nav className="flex justify-between items-center px-6 py-4  z-10 shadow-md bg-white fixed w-full">
       <div className="flex items-center">
         <img src={logo} alt="Logo" className="w-14 h-14" />
         <h1 className="text-xl font-bold -ml-2 text-[#172C56]">

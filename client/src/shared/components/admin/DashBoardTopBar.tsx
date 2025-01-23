@@ -4,6 +4,8 @@ import { logoutUser } from "../../../api/authApi";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../../redux/user/userSlice";
 import { RootState } from "../../../redux/store";
+import { MdOutlineNotificationsActive } from "react-icons/md";
+import { FiLogOut } from "react-icons/fi";
 
 const DashBoardTopBar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -26,7 +28,7 @@ const DashBoardTopBar = () => {
       navigate("/sign-in", { replace: true });
     }
   };
-  
+
   const location = useLocation();
   return (
     <div>
@@ -109,31 +111,18 @@ const DashBoardTopBar = () => {
             </div>
 
             <button aria-label="Notifications" className="flex items-center">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="#8C97A8"
-                className="size-6"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0M3.124 7.5A8.969 8.969 0 0 1 5.292 3m13.416 0a8.969 8.969 0 0 1 2.168 4.5"
-                />
-              </svg>
+              <MdOutlineNotificationsActive size={24} color="#8C97A8" />
             </button>
             <div className="relative inline-block text-left">
               <div>
                 <button onClick={toggleDropdown} className="flex items-center">
                   {user?.image ? (
-                    <Link to='/admin/setting' >
-                    <img
-                      src={user.image}
-                      alt="User Avatar"
-                      className="w-8 h-8 rounded-full"
-                    />
+                    <Link to="/admin/setting">
+                      <img
+                        src={user.image}
+                        alt="User Avatar"
+                        className="w-8 h-8 rounded-full"
+                      />
                     </Link>
                   ) : (
                     <svg
@@ -178,23 +167,9 @@ const DashBoardTopBar = () => {
                     <a
                       href="#"
                       onClick={handleLogout}
-                      className=" px-4 py-2 text-sm text-gray-700 flex items-center"
+                      className=" px-4 py-2 gap-2 text-sm text-gray-700 flex items-center"
                     >
-                      <svg
-                        className="h-4 w-4 text-[#4361EE] mr-2"
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        stroke-width="2"
-                        stroke="currentColor"
-                        fill="none"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                      >
-                        <path stroke="none" d="M0 0h24v24H0z" />
-                        <path d="M14 8v-2a2 2 0 0 0 -2 -2h-7a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h7a2 2 0 0 0 2 -2v-2" />
-                        <path d="M7 12h14l-3 -3m0 6l3 -3" />
-                      </svg>
+                      <FiLogOut size={16} color="#4361EE" />
                       Logout
                     </a>
                   </div>

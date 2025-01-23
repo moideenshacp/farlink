@@ -4,7 +4,7 @@ import { JwtPayloadInput } from "../interfaces/IjwtPayloadInput";
 
 const JWT_SECRET = process.env.JWT_SECRET || "your_secret_key";
 const REFRESH_SECRET = process.env.REFRESH_SECRET || "your_secret_key"
-const JWT_EXPIRATION = "1h";
+const JWT_EXPIRATION = "1m";
 const REFRESH_EXPIRATION = "7d"
 
 export class AuthService {
@@ -25,8 +25,13 @@ export class AuthService {
       const decoded = jwt.verify(token, JWT_SECRET);
       return decoded as JwtPayload;
     } catch (error) {
-      console.log(error);
-      
+      if (error instanceof jwt.TokenExpiredError) {
+        console.error("Token expired:", token);
+      } else if (error instanceof jwt.JsonWebTokenError) {
+        console.error("Invalid token:", token);
+      } else {
+        console.error("Unknown error during token verification:", error);
+      }
       return null;
     }
   }

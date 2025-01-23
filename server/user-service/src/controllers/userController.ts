@@ -182,25 +182,9 @@ export class userController implements IuserController {
       const refreshToken = req.cookies.refreshToken;
       console.log("refresh token----------------",refreshToken);
       
-  
-      if (!refreshToken) {
-        console.log("1010====================================================");
-        
-        return res.status(401).json({ error: "Refresh token is required" });
-      }
-  
-      const decoded = AuthService.verifyRefreshToken(refreshToken);
-      if (!decoded) {
-        console.log("2020===============================");
-        
-        return res.status(403).json({ error: "Invalid or expired refresh token" });
-      }
-   
-      const newAccessToken = AuthService.generateToken({
-        email: decoded.email,
-        role: decoded.role,
-      });
-  
+      const newAccessToken = await this._userService.refreshToken(refreshToken)
+      console.log("newaccess",newAccessToken);
+      
       res.cookie("accessToken", newAccessToken, {
         httpOnly: true,
         sameSite: "strict",
@@ -213,7 +197,13 @@ export class userController implements IuserController {
       });
     } catch (error) {
       console.error(error);
-      return res.status(500).json({ error: "Internal server error" });
+      if (error instanceof CustomError) {
+        console.log("msg", error.message);
+        return res.status(error.status).json({ error: error.message });
+      } else {
+        console.log(error);
+        return res.status(400).json({ error: error });
+      }
     }
   };
 

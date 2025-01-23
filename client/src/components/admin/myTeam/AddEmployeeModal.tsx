@@ -141,7 +141,7 @@ const AddEmployeeModal = ({ toggleModal }: { toggleModal: () => void }) => {
 
   return (
     <div>
-      <form onSubmit={handleSubmit} className="grid grid-cols-2 gap-4">
+      <form onSubmit={handleSubmit} className="grid grid-cols-2  gap-4">
         {/* Personal Data */}
         <div className="col-span-2 font-bold">Personal data</div>
         <Input

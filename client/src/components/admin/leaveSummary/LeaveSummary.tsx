@@ -105,12 +105,12 @@ const LeaveSummary = () => {
       {/* Table Container */}
       <div className="flex-1 p-4 overflow-auto  scrollbar-none">
         <div className="flex gap-20">
-          <div>
+          <div className="z-auto">
             <label className="block text-gray-600 mb-1">From</label>
             <DatePicker
               selected={fromDate}
               onChange={(date: Date | null) => setFromDate(date)}
-              className="border px-3 py-2  rounded-lg w-full focus:outline-none"
+              className="border px-3 py-2   rounded-lg w-full focus:outline-none"
             />
           </div>
           <div>
