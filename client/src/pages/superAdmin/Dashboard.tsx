@@ -1,15 +1,8 @@
-import { Routes, Route } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import DashBoardSideBar from "../../shared/components/superAdmin/DashBoardSideBar";
 import DashBoardTopBar from "../../shared/components/superAdmin/DashBoardTopBar";
-import DashboardSettings from "../../components/superAdmin/DashboardSettings";
-import DashboardAllOrg from "../../components/superAdmin/DashboardAllOrg";
-import CompanyDetails from "../../components/superAdmin/CompanyDetails";
-import DashboardOverview from "../../components/superAdmin/DashboardOverview";
-import PaymentHistoryAdmin from "../../components/superAdmin/Billings";
-
 
 const Dashboard = () => {
-
   return (
     <div className="min-h-screen bg-gray-100 flex">
       <div className="lg:fixed lg:left-0 lg:top-0 lg:h-full lg:w-64 bg-white lg:border-r lg:z-10">
@@ -22,13 +15,7 @@ const Dashboard = () => {
         </div>
 
         <main className="flex-1 bg-white p-6 sm: mt-14 lg:pt-14">
-          <Routes>
-            <Route path="/" element={<DashboardOverview />} />
-            <Route path="/All-organization" element={<DashboardAllOrg />} />
-            <Route path="/setting" element={<DashboardSettings />} />
-            <Route path="/billing" element={< PaymentHistoryAdmin/>} />
-            <Route path="/organization-details" element={<CompanyDetails />} />
-          </Routes>
+          <Outlet />
         </main>
       </div>
     </div>

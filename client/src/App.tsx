@@ -1,4 +1,4 @@
- import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Home from "./pages/LandingPages/Home";
 import SignUp from "./pages/LandingPages/SignUp";
 import Login from "./pages/LandingPages/Login";
@@ -6,9 +6,7 @@ import EmailVerified from "./shared/components/email/EmailVerified";
 import Step1 from "./components/admin/companyRegister/Step1";
 import Step2 from "./components/admin/companyRegister/Step2";
 import Step3 from "./components/admin/companyRegister/Step3";
-import AdminDashboard from "./pages/admin/Dashboard";
 import VerifyMail from "./pages/admin/VerifyMail";
-import Dashboard from "./pages/superAdmin/Dashboard";
 import AdminPrivateRoute from "./routes/AdminPrivateRoute";
 import SuperAdminPrivateRoute from "./routes/SuperAdminPrivateRoute";
 import PublicRoute from "./routes/PublicRoute";
@@ -19,8 +17,10 @@ import InvalidForgetPass from "./shared/components/landingPageComponents/Invalid
 import OrganizationPrivateRoute from "./routes/OrganizationPrivateRoute";
 import SetUpPassword from "./pages/employee/SetUpPassword";
 import EmployeeLogin from "./pages/LandingPages/EmployeeLogin";
-import EmployeeDashboard from "./pages/employee/EmployeeDashboard";
 import SuccessPayment from "./pages/admin/SuccessPayment";
+import AdminRoutes from "./routes/adminRoute/AdminRoutes";
+import EmployeeRoutes from "./routes/employeeRoute/EmployeeRoutes";
+import SuperAdminRoutes from "./routes/superAdminRoute/SuperAdminRoutes";
 
 function App() {
   return (
@@ -47,26 +47,26 @@ function App() {
               element={<InvalidForgetPass />}
             />
           </Route>
-{/*================================================================================================================================== */}
+          {/*================================================================================================================================== */}
 
           <Route element={<OrganizationPrivateRoute />}>
             <Route path="/step-3" element={<Step3 />} />
           </Route>
 
-{/*================================================================================================================================== */}
+          {/*================================================================================================================================== */}
 
           <Route element={<AdminPrivateRoute />}>
-            <Route path="/success" element={<SuccessPayment/>} />
-            <Route path="/admin/*" element={<AdminDashboard />} />
+            <Route path="/success" element={<SuccessPayment />} />
+            <Route path="/admin/*" element={<AdminRoutes />} />
           </Route>
-            <Route path="/employee/*" element={<EmployeeDashboard />} />
 
-{/*================================================================================================================================== */}
+          <Route path="/employee/*" element={<EmployeeRoutes />} />
+
+          {/*================================================================================================================================== */}
           <Route element={<SuperAdminPrivateRoute />}>
-            <Route path="/superAdmin/*" element={<Dashboard />} />
+            <Route path="/superAdmin/*" element={<SuperAdminRoutes />} />
           </Route>
-{/*================================================================================================================================== */}
-
+          {/*================================================================================================================================== */}
         </Routes>
       </div>
     </BrowserRouter>

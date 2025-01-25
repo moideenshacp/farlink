@@ -20,9 +20,10 @@ const CreateProject = () => {
         const projectData = res.data.result;
         const allEmployeeIds = [
           ...new Set(
-            projectData.flatMap(
-              (project: { members: string[] }) => project.members
-            )
+            projectData.flatMap((project: any) => [
+              ...project.members,
+              project.manager,
+            ])
           ),
         ];
         const employeeRes = await fetchEmployeesByIds(allEmployeeIds);
@@ -36,15 +37,16 @@ const CreateProject = () => {
           );
 
           // Map employee details back to projects
-          const projectsWithEmployeeData = projectData.map(
-            (project: any) => ({
-              ...project,
-              members: project.members.map(
-                (memberId: string) =>
-                  employeeMap.get(memberId) || { _id: memberId }
-              ),
-            })
-          );
+          const projectsWithEmployeeData = projectData.map((project: any) => ({
+            ...project,
+            members: project.members.map(
+              (memberId: string) =>
+                employeeMap.get(memberId) || { _id: memberId }
+            ),
+            manager: employeeMap.get(project.manager) || {
+              _id: project.manager,
+            },
+          }));
 
           setProjects(projectsWithEmployeeData);
         }
@@ -60,8 +62,9 @@ const CreateProject = () => {
     if (user?.organizationId) {
       fetchAllProjects();
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user?.organizationId]);
+  console.log("all projectsss", projects);
 
   return (
     <div>
