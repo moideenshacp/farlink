@@ -8,4 +8,5 @@ export default interface IprojectModel extends Document {
   manager: mongoose.Types.ObjectId;
   members: mongoose.Types.ObjectId[];
   organizationId: mongoose.Types.ObjectId;
+  priority:"high" | "medium" | "low"
 }

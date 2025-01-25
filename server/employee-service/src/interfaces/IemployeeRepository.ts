@@ -12,5 +12,6 @@ export default interface IemployeeRepo {
   findByOrganizationId(organizationId: string): Promise<IemployeeModel[]>;
   getDistinctOrganizationIds(): Promise<string[]>;
   getAllEmployeesByOrganization(organizationId: string): Promise<IemployeeModel[]>;
+  findEmployeesByIds(employeeIds: string[]): Promise<IemployeeModel[]> 
 
 }

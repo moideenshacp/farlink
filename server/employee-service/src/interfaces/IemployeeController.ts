@@ -10,4 +10,5 @@ import { Request, Response } from "express";
         TerminateEmployee(req:Request,res:Response):Promise<void>
         AddPosition(req:Request,res:Response):Promise<void>
         fetchPosition(req:Request,res:Response):Promise<void>
+        fetchEmployeesId(req:Request,res:Response):Promise<void>
     }

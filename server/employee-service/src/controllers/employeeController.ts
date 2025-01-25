@@ -231,4 +231,15 @@ export class employeeController implements IemployeeController {
       res.status(500).json({ message: "Internal Server Error" });
     }
   };
+  public fetchEmployeesId = async(req: Request, res: Response): Promise<void> =>{
+    try {
+      const {employeeIds} = req.query
+      
+      const employees = await this._employeeservice.fetchEmployeesId(employeeIds as string[])
+      res.status(200).json({message:"Employees fetched succesfuly",employees})
+    } catch (error) {
+      console.log(error);
+      
+    }
+  }
 }

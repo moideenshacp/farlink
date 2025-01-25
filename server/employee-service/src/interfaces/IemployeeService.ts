@@ -14,4 +14,5 @@ export interface IemployeeService {
     TerminateEmployee(email:string):Promise<any>
     AddPosition(organizationId:string,position:string):Promise<IpositionModel | null>
     fetchPosition(organizationId:string):Promise<IpositionModel | null>
+    fetchEmployeesId(employeeId:string[]):Promise<IemployeeModel[] | null>
 }

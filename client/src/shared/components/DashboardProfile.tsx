@@ -158,6 +158,7 @@ const DashboardProfile = () => {
               </button>
             </div>
           )}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mt-4" >
 
           <Input
             label="Username"
@@ -234,6 +235,8 @@ const DashboardProfile = () => {
             readOnly
             className="w-full p-2 border rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-200 text-[#333333] font-normal"
           />
+          </div>
+
         </div>
       </form>
     </div>

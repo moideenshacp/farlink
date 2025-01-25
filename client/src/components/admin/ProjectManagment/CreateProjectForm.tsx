@@ -5,16 +5,25 @@ import { IEmployee } from "../../../interface/IemployeeDetails";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
 import { getAllEmployees } from "../../../api/employeeApi";
-import Select, { MultiValue } from "react-select";
+import Select, { MultiValue, SingleValue } from "react-select";
 import { createProject } from "../../../api/projectApi";
 import moment from "moment";
+import { projectDetailsSchema } from "../../../validations/CreateProjectValidation";
 
 interface OptionType {
   value: string;
-  label: JSX.Element;
+  label: JSX.Element | string;
 }
+interface CreateProjectFormProps {
+  fetchAllProjects: () => void;
+}
+const priorityOptions: OptionType[] = [
+  { value: "high", label: "High" },
+  { value: "medium", label: "Medium" },
+  { value: "low", label: "Low" },
+];
 
-const CreateProjectForm = () => {
+const CreateProjectForm = ({ fetchAllProjects }: CreateProjectFormProps) => {
   const [employeees, setEmployeees] = useState<IEmployee[]>([]);
   const organizationId = useSelector(
     (state: RootState) => state.user?.user?.organizationId
@@ -27,6 +36,7 @@ const CreateProjectForm = () => {
     endDate: null as Date | null,
     manager: null as OptionType | null,
     members: [] as OptionType[],
+    priority: null as OptionType | null,
     organizationId: organizationId,
   });
 
@@ -71,6 +81,13 @@ const CreateProjectForm = () => {
       members: [...selectedOption],
     }));
   };
+
+  const handlePriorityChange = (selectedOption: SingleValue<OptionType>) => {
+    setProjectDetails((prevDetails) => ({
+      ...prevDetails,
+      priority: selectedOption,
+    }));
+  };
   const employeeOptions = employeees.map((emp) => ({
     value: emp._id,
     label: (
@@ -91,7 +108,18 @@ const CreateProjectForm = () => {
       ...projectDetails,
       manager: projectDetails.manager ? projectDetails.manager.value : null,
       members: projectDetails.members.map((member) => member.value),
+      priority: projectDetails.priority ? projectDetails.priority.value : null,
     };
+    const { error } = projectDetailsSchema.validate(formattedProjectDetails, {
+      abortEarly: false,
+    });
+
+    if (error) {
+      error.details.forEach((err) => {
+        message.error(err.message, 3);
+      });
+      return;
+    }
     try {
       const res = await createProject(formattedProjectDetails);
       if (res.data.message === "Project added successfully...") {
@@ -103,6 +131,7 @@ const CreateProjectForm = () => {
           endDate: null,
           manager: null,
           members: [],
+          priority: null,
           organizationId: organizationId,
         });
         const drawerCheckbox = document.getElementById(
@@ -111,6 +140,7 @@ const CreateProjectForm = () => {
         if (drawerCheckbox) {
           drawerCheckbox.checked = false;
         }
+        fetchAllProjects();
       }
 
       console.log("Project created successfully:", res.data);
@@ -136,8 +166,10 @@ const CreateProjectForm = () => {
         className="drawer-overlay"
       ></label>
       <div className="menu bg-white text-base-content min-h-full w-96 p-4">
-        <h1 className="text-center text-[#232360] font-bold">Create your project</h1>
-        <div className="border-b-2 mt-5 " ></div>
+        <h1 className="text-center text-[#232360] font-bold">
+          Create your project
+        </h1>
+        <div className="border-b-2 mt-5 "></div>
         <form onSubmit={handleSubmit} className="space-y-4 p-4">
           <div>
             <Input
@@ -218,6 +250,19 @@ const CreateProjectForm = () => {
               value={projectDetails.members}
               onChange={handleMembersChange}
               placeholder="Select Members"
+              className="w-full"
+              classNamePrefix="react-select"
+            />
+          </div>
+          <div>
+            <label className="block mb-1 font-semibold text-sm text-[#232360]">
+              Set Priority
+            </label>
+            <Select
+              options={priorityOptions}
+              value={projectDetails.priority}
+              onChange={handlePriorityChange}
+              placeholder="Select Priority"
               className="w-full"
               classNamePrefix="react-select"
             />

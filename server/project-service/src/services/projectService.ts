@@ -30,4 +30,23 @@ export class projectService implements IprojectService {
       throw error;
     }
   }
+  async fetchAllProject(
+    organizationId: string
+  ): Promise<IprojectModel[] | null> {
+    try {
+      console.log(organizationId, "projects fetching orgId");
+      const result = await this._projectRepository.fetchProjects(
+        organizationId
+      );
+      if (result) {
+        console.log(result, "all projects");
+        return result;
+      } else {
+        return null;
+      }
+    } catch (error) {
+      console.log(error);
+      return null;
+    }
+  }
 }

@@ -236,5 +236,22 @@ export class employeeService implements IemployeeService {
     }
     
   }
+  async fetchEmployeesId(employeeId: string[]): Promise<IemployeeModel[] | null> {
+    try {
+      console.log(employeeId);
+      const employees = await this._employeeRepository.findEmployeesByIds(employeeId);
+      if(employees){
+        console.log(employees,"gotacha project empmlyees");
+        
+        return employees
+      }
+      return null
+      
+    } catch (error) {
+      console.log(error);
+      return null
+      
+    }
+  }
   
 }

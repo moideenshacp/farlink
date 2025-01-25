@@ -1,4 +1,4 @@
-import ShimmerCard from "../../shimmers/Card";
+import ShimmerCard from "../../shimmers/PaymentCard";
 
 const Shimmer = () => (
   <div className="flex gap-16 p-7">

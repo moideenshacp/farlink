@@ -154,7 +154,7 @@ const ManageLeave = () => {
         </div>
         <button
           type="submit"
-          className="mt-4 px-6 py-3 bg-[#4361EE] text-white font-medium rounded-lg hover:bg-[#4361EE]"
+          className="mt-4 sm: ml-24 lg:ml-0 px-6 py-3 bg-[#4361EE] text-white font-medium rounded-lg hover:bg-[#4361EE]"
         >
           Save Policy
         </button>

@@ -16,4 +16,14 @@ export class projectRepository
   ): Promise<IprojectModel | null> {
     return this.save(projectDetails);
   }
+  async fetchProjects(organizationId: string): Promise<IprojectModel[]> {
+    try {
+      const projects = await this.model.find({ organizationId}); 
+      return projects;
+    } catch (error) {
+      console.error("Error fetching projects:", error);
+      throw error;
+    }
+  }
+  
 }

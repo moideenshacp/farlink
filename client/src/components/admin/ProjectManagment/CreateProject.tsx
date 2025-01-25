@@ -1,8 +1,68 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import CreateProjectForm from "./CreateProjectForm";
 import { VscGitPullRequestCreate } from "react-icons/vsc";
-import ProjectViewCard from "./ProjectViewCard";
+import ProjectViewCard from "../../../shared/components/ProjectViewCard";
+import { IProject } from "../../../interface/IprojectDetails";
+import { useEffect, useState } from "react";
+import { RootState } from "../../../redux/store";
+import { useSelector } from "react-redux";
+import { fetchProjects } from "../../../api/projectApi";
+import { fetchEmployeesByIds } from "../../../api/employeeApi";
 
 const CreateProject = () => {
+  const [projects, setProjects] = useState<IProject[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const { user } = useSelector((state: RootState) => state.user);
+  const fetchAllProjects = async () => {
+    try {
+      const res = await fetchProjects(user?.organizationId);
+      if (res.data.result) {
+        const projectData = res.data.result;
+        const allEmployeeIds = [
+          ...new Set(
+            projectData.flatMap(
+              (project: { members: string[] }) => project.members
+            )
+          ),
+        ];
+        const employeeRes = await fetchEmployeesByIds(allEmployeeIds);
+
+        if (employeeRes.data) {
+          const employeeMap = new Map(
+            employeeRes.data.employees.map((employee: any) => [
+              employee._id,
+              employee,
+            ])
+          );
+
+          // Map employee details back to projects
+          const projectsWithEmployeeData = projectData.map(
+            (project: any) => ({
+              ...project,
+              members: project.members.map(
+                (memberId: string) =>
+                  employeeMap.get(memberId) || { _id: memberId }
+              ),
+            })
+          );
+
+          setProjects(projectsWithEmployeeData);
+        }
+      }
+      setIsLoading(false);
+    } catch (error) {
+      console.log("Error fetching projects:", error);
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (user?.organizationId) {
+      fetchAllProjects();
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user?.organizationId]);
+
   return (
     <div>
       <div className="drawer drawer-end ">
@@ -20,16 +80,10 @@ const CreateProject = () => {
         </div>
         {/* Include Sidebar component */}
 
-        <CreateProjectForm />
+        <CreateProjectForm fetchAllProjects={fetchAllProjects} />
       </div>
-      <div className="mt-3 grid grid-cols-1  md:grid-cols-2 lg:grid-cols-3">
-        <ProjectViewCard />
-        <ProjectViewCard />
-        <ProjectViewCard />
-        <ProjectViewCard />
-        <ProjectViewCard />
-        <ProjectViewCard />
-        <ProjectViewCard />
+      <div className="mt-3 gap-5">
+        <ProjectViewCard projects={projects} isLoading={isLoading} />
       </div>
     </div>
   );

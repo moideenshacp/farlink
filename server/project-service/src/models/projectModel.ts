@@ -20,6 +20,15 @@ const ProjectSchema: Schema = new Schema({
   manager: {
     type: mongoose.Types.ObjectId,
   },
+  priority:{
+    type:String,
+    enum:["high","medium","low"]
+  },
+  status:{
+    type:String,
+    enum:["planning","in_progress","completed"],
+    default: "planning"
+  },
   members: [
     {
       type: mongoose.Types.ObjectId,

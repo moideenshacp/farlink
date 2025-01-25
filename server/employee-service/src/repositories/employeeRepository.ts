@@ -43,4 +43,14 @@ export class employeeRepository
     const objectId = new Types.ObjectId(organizationId);
     return this.model.find({ organizationId: objectId }).exec();
   }
+  public async findEmployeesByIds(employeeIds: string[]): Promise<IemployeeModel[]> {
+    try {
+      console.log(employeeIds,"ellaare id yum repository il und_______________________________________");
+      const employees = await this.model.find({ _id: { $in: employeeIds } });
+      return employees;
+    } catch (error) {
+      console.error("Error fetching employees from the database:", error);
+      throw error;
+    }
+  }
 }

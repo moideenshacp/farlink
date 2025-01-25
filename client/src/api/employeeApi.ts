@@ -234,3 +234,22 @@ export const fetchPositions = async (
     throw error;
   }
 };
+
+export const fetchEmployeesByIds = async (
+  employeeIds: string[] | unknown,
+) => {
+  try {
+    const res = await axiosInstance.get(
+      `${import.meta.env.VITE_SERVER_BASE_URL}/employee-service/api/employee/fetch-employeesById`, {
+        params: {
+          employeeIds, 
+        },
+        withCredentials: true, 
+      }
+    );
+    return res;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};

@@ -26,6 +26,7 @@ router.get('/fetch-EmployeesCount',authenticate,EmployeeController.EmployeesCoun
 router.get('/terminate-employee',authenticate,EmployeeController.TerminateEmployee)
 router.post('/add-position',authenticate,EmployeeController.AddPosition)
 router.get('/fetch-position',authenticate,EmployeeController.fetchPosition)
+router.get('/fetch-employeesById',authenticate,EmployeeController.fetchEmployeesId)
 
 
 

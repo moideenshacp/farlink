@@ -14,6 +14,7 @@ const ProjectService:IprojectService = new projectService(ProjectRepository)
 const ProjectController = new projectController(ProjectService)
 
 router.post('/create-project',authenticate, ProjectController.createProject);
+router.get('/fetch-projects',authenticate, ProjectController.fetchAllProject);
 
 
 export default router;

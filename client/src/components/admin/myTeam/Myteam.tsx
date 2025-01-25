@@ -71,13 +71,13 @@ const Myteam = () => {
   }, [user?.organizationId]);
 
   return (
-    <div className="p-6">
-      <div className="flex justify-between items-center mb-6">
-        <div className="flex items-center gap-4">
+<div className="p-6">
+      <div className="flex flex-wrap justify-between items-center mb-6 gap-4">
+        <div className="flex flex-col md:flex-row items-center gap-4 w-full md:w-auto">
           {/* Dropdown */}
-          <div className="relative">
+          <div className="relative w-full md:w-auto">
             <select
-              className="block appearance-none bg-white border border-gray-300 text-gray-700 py-2 px-4 pr-8 rounded shadow focus:outline-none focus:shadow-outline"
+              className="block w-full appearance-none bg-white border border-gray-300 text-gray-700 py-2 px-4 pr-8 rounded shadow focus:outline-none focus:shadow-outline"
               value={selectedPosition}
               onChange={(e) => setSelectedPosition(e.target.value)}
             >
@@ -102,20 +102,17 @@ const Myteam = () => {
           </div>
 
           {/* Add Team Input and Button */}
-          <div className="flex items-center gap-2">
-            <div className="mt-2">
-
+          <div className="flex flex-col md:flex-row items-center gap-2 w-full md:w-auto">
             <Input
               type="text"
               value={newTeam}
               onChange={(e) => setNewTeam(e.target.value)}
               placeholder="Enter new team name"
-              className="border border-gray-300 py-2 px-5 rounded shadow focus:outline-none"
+              className="border lg:mt-2 border-gray-300 py-2 px-4 rounded shadow focus:outline-none w-full md:w-auto"
             />
-            </div>
             <button
               onClick={addTeam}
-              className="bg-blue-500 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-600"
+              className="bg-blue-500 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-600 w-full md:w-auto"
             >
               Add Position
             </button>
@@ -123,7 +120,9 @@ const Myteam = () => {
         </div>
 
         {/* Add Employee Button */}
-        <AddEmployee />
+        <div className="w-full md:w-auto">
+          <AddEmployee />
+        </div>
       </div>
 
       {/* Employee Dashboard */}
