@@ -25,7 +25,6 @@ const Myteam = () => {
     try {
       if (!newTeam.trim()) {
         message.error("Please Add a valid position", 2);
-
       }
       if (newTeam.trim()) {
         const res = await addPosition(
@@ -38,7 +37,6 @@ const Myteam = () => {
           setNewTeam("");
           refreshPositions();
         }
-
       }
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
@@ -48,10 +46,8 @@ const Myteam = () => {
         error.response.data.message
       ) {
         message.error(error.response.data.message, 2);
-
       } else {
         message.error("An unexpected error occurred. Please try again.", 2);
-
       }
     }
   };
@@ -71,7 +67,7 @@ const Myteam = () => {
   }, [user?.organizationId]);
 
   return (
-<div className="p-6">
+    <div className="p-6">
       <div className="flex flex-wrap justify-between items-center mb-6 gap-4">
         <div className="flex flex-col md:flex-row items-center gap-4 w-full md:w-auto">
           {/* Dropdown */}

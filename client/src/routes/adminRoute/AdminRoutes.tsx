@@ -8,7 +8,7 @@ import ManageLeave from "../../components/admin/attendence/ManageLeave";
 import CreateProject from "../../components/admin/ProjectManagment/CreateProject";
 import DashboardSettings from "../../components/admin/settingss/DashboardSettings";
 import Billing from "../../components/admin/billing/Billing";
-const ManageTasks = () => <div>Manage Tasks Content</div>;
+import TaskSummary from "../../components/admin/TaskManagement/TaskSummary";
 const ServiceRequest = () => <div>ServiceRequest Content</div>;
 const RealTimeAlert = () => <div>RealTimeAlert Content</div>;
 const Meeting = () => <div>Meeting Content</div>;
@@ -23,7 +23,7 @@ const AdminRoutes = () => (
       <Route path="/leave-summary" element={<LeaveSummary />} />
       <Route path="/manage-leave" element={<ManageLeave />} />
       <Route path="/create-project" element={<CreateProject />} />
-      <Route path="/manage-tasks" element={<ManageTasks />} />
+      <Route path="/manage-tasks" element={<TaskSummary />} />
       <Route path="/service-request" element={<ServiceRequest />} />
       <Route path="/realtime-alert" element={<RealTimeAlert />} />
       <Route path="/meeting" element={<Meeting />} />

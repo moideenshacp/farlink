@@ -12,6 +12,8 @@ import { fetchEmployeesByIds } from "../../../api/employeeApi";
 const CreateProject = () => {
   const [projects, setProjects] = useState<IProject[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [selectedProject, setSelectedProject] = useState<IProject | null>(null);
+
   const { user } = useSelector((state: RootState) => state.user);
   const fetchAllProjects = async () => {
     try {
@@ -57,6 +59,24 @@ const CreateProject = () => {
       setIsLoading(false);
     }
   };
+  const openDrawerWithProject = (project: IProject) => {
+    setSelectedProject(project);
+    const drawerCheckbox = document.getElementById("my-drawer-4") as HTMLInputElement;
+    if (drawerCheckbox) drawerCheckbox.checked = true;
+  };   
+  useEffect(() => {
+    const drawerCheckbox = document.getElementById("my-drawer-4") as HTMLInputElement;
+    const handleDrawerClose = () => {
+      if (!drawerCheckbox?.checked) {
+        setSelectedProject(null);
+      }
+    };
+
+    drawerCheckbox?.addEventListener("change", handleDrawerClose);
+    return () => {
+      drawerCheckbox?.removeEventListener("change", handleDrawerClose);
+    };
+  }, []);
 
   useEffect(() => {
     if (user?.organizationId) {
@@ -83,10 +103,10 @@ const CreateProject = () => {
         </div>
         {/* Include Sidebar component */}
 
-        <CreateProjectForm fetchAllProjects={fetchAllProjects} />
+        <CreateProjectForm fetchAllProjects={fetchAllProjects}  project={selectedProject} />
       </div>
       <div className="mt-3 gap-5">
-        <ProjectViewCard projects={projects} isLoading={isLoading} />
+        <ProjectViewCard projects={projects} isLoading={isLoading} onProjectClick={openDrawerWithProject} />
       </div>
     </div>
   );

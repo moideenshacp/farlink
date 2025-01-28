@@ -26,6 +26,22 @@ export const createProject = async (projectDetails: IprojectDetails) => {
   }
 };
 
+export const updateProject = async (projectId:string | undefined ,projectDetails: IprojectDetails) => {
+  try {
+    const res = await axiosInstance.patch(
+      `${
+        import.meta.env.VITE_SERVER_BASE_URL
+      }/project-service/api/project/update-project`,
+      { projectDetails ,projectId},
+      { withCredentials: true }
+    );
+    return res;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
 export const fetchProjects = async (organizationId: string | undefined) => {
   try {
     const res = await axiosInstance.get(

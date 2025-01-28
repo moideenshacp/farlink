@@ -1,49 +1,83 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from "react";
-import { DatePicker, message } from "antd";
+import { message } from "antd";
 import Input from "../../../shared/components/Input";
-import { IEmployee } from "../../../interface/IemployeeDetails";
 import { useSelector } from "react-redux";
-import { RootState } from "../../../redux/store";
+import { MultiValue, SingleValue } from "react-select";
 import { getAllEmployees } from "../../../api/employeeApi";
-import Select, { MultiValue, SingleValue } from "react-select";
-import { createProject } from "../../../api/projectApi";
-import moment from "moment";
+import { createProject, updateProject } from "../../../api/projectApi";
 import { projectDetailsSchema } from "../../../validations/CreateProjectValidation";
+import { RootState } from "../../../redux/store";
+import { IEmployee } from "../../../interface/IemployeeDetails";
+import { IProject } from "../../../interface/IprojectDetails";
+import DatePickerField from "../../../shared/components/DatePickerField";
+import SelectField from "../../../shared/components/SelectField";
 
 interface OptionType {
   value: string;
   label: JSX.Element | string;
 }
+
 interface CreateProjectFormProps {
   fetchAllProjects: () => void;
+  project?: IProject | null;
 }
+
 const priorityOptions: OptionType[] = [
   { value: "high", label: "High" },
   { value: "medium", label: "Medium" },
   { value: "low", label: "Low" },
 ];
 
-const CreateProjectForm = ({ fetchAllProjects }: CreateProjectFormProps) => {
-  const [employeees, setEmployeees] = useState<IEmployee[]>([]);
+const statusOptions: OptionType[] = [
+  { value: "planning", label: "Planning" },
+  { value: "in_progress", label: "In Progress" },
+  { value: "completed", label: "Completed" },
+];
+
+const CreateProjectForm = ({
+  fetchAllProjects,
+  project,
+}: CreateProjectFormProps) => {
+  const [employees, setEmployees] = useState<IEmployee[]>([]);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+console.log(isDrawerOpen);
+
   const organizationId = useSelector(
     (state: RootState) => state.user?.user?.organizationId
   );
 
   const [projectDetails, setProjectDetails] = useState({
-    projectName: "",
-    projectDescription: "",
-    startDate: null as Date | null,
-    endDate: null as Date | null,
-    manager: null as OptionType | null,
-    members: [] as OptionType[],
-    priority: null as OptionType | null,
-    organizationId: organizationId,
+    projectName: project?.projectName || "",
+    projectDescription: project?.projectDescription || "",
+    startDate: project?.startDate ? new Date(project.startDate) : null,
+    endDate: project?.endDate ? new Date(project.endDate) : null,
+    manager: project?.manager
+      ? { value: project.manager._id, label: project.manager.firstName }
+      : null,
+    members:
+      project?.members.map((member: any) => ({
+        value: member._id,
+        label: member.firstName,
+      })) || [],
+    priority: project?.priority
+      ? { value: project.priority, label: project.priority }
+      : null,
+    status: project?.status
+      ? { value: project.status, label: project.status }
+      : null,
+    organizationId: project?.organizationId || organizationId,
   });
 
   useEffect(() => {
     const fetchEmployees = async () => {
-      const res = await getAllEmployees(organizationId);
-      setEmployeees(res?.data.employees);
+      try {
+        const res = await getAllEmployees(organizationId);
+        setEmployees(res?.data.employees);
+      } catch (error) {
+        console.log(error);
+        message.error("Failed to fetch employees");
+      }
     };
     fetchEmployees();
   }, [organizationId]);
@@ -52,43 +86,31 @@ const CreateProjectForm = ({ fetchAllProjects }: CreateProjectFormProps) => {
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target;
-    setProjectDetails((prevDetails) => ({
-      ...prevDetails,
-      [name]: value,
-    }));
+    updateProjectDetails(name, value);
   };
 
   const handleDateChange = (
     name: "startDate" | "endDate",
     date: Date | null
   ) => {
+    updateProjectDetails(name, date);
+  };
+
+  const handleSelectChange = (
+    name: keyof typeof projectDetails,
+    selectedOption: SingleValue<OptionType> | MultiValue<OptionType>
+  ) => {
+    updateProjectDetails(name, selectedOption);
+  };
+
+  const updateProjectDetails = (key: string, value: any) => {
     setProjectDetails((prevDetails) => ({
       ...prevDetails,
-      [name]: date,
+      [key]: value,
     }));
   };
 
-  const handleManagerChange = (selectedOption: OptionType | null) => {
-    setProjectDetails((prevDetails) => ({
-      ...prevDetails,
-      manager: selectedOption,
-    }));
-  };
-
-  const handleMembersChange = (selectedOption: MultiValue<OptionType>) => {
-    setProjectDetails((prevDetails) => ({
-      ...prevDetails,
-      members: [...selectedOption],
-    }));
-  };
-
-  const handlePriorityChange = (selectedOption: SingleValue<OptionType>) => {
-    setProjectDetails((prevDetails) => ({
-      ...prevDetails,
-      priority: selectedOption,
-    }));
-  };
-  const employeeOptions = employeees.map((emp) => ({
+  const employeeOptions = employees.map((emp) => ({
     value: emp._id,
     label: (
       <div className="flex items-center">
@@ -104,84 +126,142 @@ const CreateProjectForm = ({ fetchAllProjects }: CreateProjectFormProps) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
     const formattedProjectDetails = {
       ...projectDetails,
-      manager: projectDetails.manager ? projectDetails.manager.value : null,
-      members: projectDetails.members.map((member) => member.value),
-      priority: projectDetails.priority ? projectDetails.priority.value : null,
+      manager: projectDetails.manager?.value || null,
+      members: projectDetails.members.map((member: any) => member.value),
+      priority: projectDetails.priority?.value || null,
+      status: projectDetails.status?.value || null,
     };
+
     const { error } = projectDetailsSchema.validate(formattedProjectDetails, {
       abortEarly: false,
     });
 
     if (error) {
-      error.details.forEach((err) => {
-        message.error(err.message, 3);
-      });
+      error.details.forEach((err) => message.error(err.message));
       return;
     }
-    try {
-      const res = await createProject(formattedProjectDetails);
-      if (res.data.message === "Project added successfully...") {
-        message.success("Project created successfully");
-        setProjectDetails({
-          projectName: "",
-          projectDescription: "",
-          startDate: null,
-          endDate: null,
-          manager: null,
-          members: [],
-          priority: null,
-          organizationId: organizationId,
-        });
-        const drawerCheckbox = document.getElementById(
-          "my-drawer-4"
-        ) as HTMLInputElement;
-        if (drawerCheckbox) {
-          drawerCheckbox.checked = false;
-        }
-        fetchAllProjects();
-      }
 
-      console.log("Project created successfully:", res.data);
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (error: any) {
-      console.log("Error creating project:", error);
-      if (error.response && error.response.data) {
-        message.warning(error.response.data.errors, 2);
+    try {
+      if (project) {
+        const res = await updateProject(project._id, formattedProjectDetails);
+        console.log("project indt tooo");
+        
+        console.log(res.data.message, "updateeeeeeeeeeeeeeeeeeeeeee");
+        if(res.data.message === "Project updated sucessfully.."){
+          message.success("project updated successfully")
+        }
       } else {
-        message.error(
-          "An error occurred while creating project. Please try again",
-          2
-        );
+        const res = await createProject(formattedProjectDetails);
+        if (res.data.message === "Project added successfully...") {
+          message.success("Project created successfully");
+        }
       }
+      resetForm();
+      fetchAllProjects();
+    } catch (error: any) {
+      const errorMsg =
+        error.response?.data?.errors ||
+        "An error occurred while creating the project.";
+      message.error(errorMsg);
     }
   };
+
+  const resetForm = () => {
+    setProjectDetails({
+      projectName: "",
+      projectDescription: "",
+      startDate: null,
+      endDate: null,
+      manager: null,
+      members: [],
+      priority: null,
+      status: null,
+      organizationId,
+    });
+    const drawerCheckbox = document.getElementById(
+      "my-drawer-4"
+    ) as HTMLInputElement;
+    if (drawerCheckbox) drawerCheckbox.checked = false;
+  };
+  useEffect(() => {
+    const drawerCheckbox = document.getElementById(
+      "my-drawer-4"
+    ) as HTMLInputElement;
+
+    const handleDrawerChange = () => {
+      setIsDrawerOpen(drawerCheckbox.checked);
+
+      if (!drawerCheckbox.checked) {
+        resetForm();
+      }
+    };
+    drawerCheckbox?.addEventListener("change", handleDrawerChange);
+    return () => {
+      drawerCheckbox?.removeEventListener("change", handleDrawerChange);
+    };
+  });
+  useEffect(() => {
+    if (project) {
+      setProjectDetails({
+        projectName: project.projectName,
+        projectDescription: project.projectDescription,
+        startDate: new Date(project.startDate),
+        endDate: new Date(project.endDate),
+        manager: project.manager
+          ? { value: project.manager._id, label: project.manager.firstName }
+          : null,
+        members: project.members.map((member) => ({
+          value: member._id,
+          label: member.firstName,
+        })),
+        priority: project.priority
+          ? { value: project.priority, label: project.priority }
+          : null,
+        status: project.status
+          ? { value: project.status, label: project.status }
+          : null,
+        organizationId: project.organizationId,
+      });
+    } else {
+      setProjectDetails({
+        projectName: "",
+        projectDescription: "",
+        startDate: null,
+        endDate: null,
+        manager: null,
+        members: [],
+        priority: null,
+        status: null,
+        organizationId,
+      });
+    }
+  }, [project, organizationId]);
 
   return (
     <div className="drawer-side z-30">
       <label
         htmlFor="my-drawer-4"
-        aria-label="close sidebar"
         className="drawer-overlay"
+        aria-label="close sidebar"
       ></label>
       <div className="menu bg-white text-base-content min-h-full w-96 p-4">
         <h1 className="text-center text-[#232360] font-bold">
-          Create your project
+          {project ? "Edit Project" : "Create Your Project"}
         </h1>
-        <div className="border-b-2 mt-5 "></div>
+
+        <div className="border-b-2 mt-5"></div>
         <form onSubmit={handleSubmit} className="space-y-4 p-4">
-          <div>
-            <Input
-              type="text"
-              label="Project Name"
-              name="projectName"
-              value={projectDetails.projectName}
-              onChange={handleInputChange}
-              className="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="Enter Project Name"
-            />
-          </div>
+          <Input
+            type="text"
+            label="Project Name"
+            name="projectName"
+            value={projectDetails.projectName}
+            onChange={handleInputChange}
+            placeholder="Enter Project Name"
+          />
           <div>
             <label className="block mb-1 font-semibold text-sm text-[#232360]">
               Project Description
@@ -191,87 +271,55 @@ const CreateProjectForm = ({ fetchAllProjects }: CreateProjectFormProps) => {
               value={projectDetails.projectDescription}
               onChange={handleInputChange}
               placeholder="Enter Project Description"
-              className="w-full border border-gray-300 rounded-md p-2 h-24 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full border border-gray-300 rounded-md p-2 h-24"
             ></textarea>
           </div>
           <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="block mb-1 font-semibold text-sm text-[#232360]">
-                Start Date
-              </label>
-              <DatePicker
-                className="w-full border rounded-lg p-2 focus:outline-none"
-                value={
-                  projectDetails.startDate
-                    ? moment(projectDetails.startDate)
-                    : null
-                }
-                onChange={(date) =>
-                  handleDateChange("startDate", date ? date.toDate() : null)
-                }
-              />
-            </div>
-            <div>
-              <label className="block mb-1 font-semibold text-sm text-[#232360]">
-                End Date
-              </label>
-
-              <DatePicker
-                className="w-full border rounded-lg p-2 focus:outline-none"
-                value={
-                  projectDetails.endDate ? moment(projectDetails.endDate) : null
-                }
-                onChange={(date) =>
-                  handleDateChange("endDate", date ? date.toDate() : null)
-                }
-              />
-            </div>
-          </div>
-          <div>
-            <label className="block mb-1 font-semibold text-sm text-[#232360]">
-              Choose Manager
-            </label>
-            <Select
-              options={employeeOptions}
-              value={projectDetails.manager}
-              onChange={handleManagerChange}
-              placeholder="Select Manager"
-              className="w-full"
-              classNamePrefix="react-select"
+            <DatePickerField
+              label="Start Date"
+              value={projectDetails.startDate}
+              onChange={(date: any) =>
+                handleDateChange("startDate", date?.toDate() || null)
+              }
+            />
+            <DatePickerField
+              label="End Date"
+              value={projectDetails.endDate}
+              onChange={(date: any) =>
+                handleDateChange("endDate", date?.toDate() || null)
+              }
             />
           </div>
-          <div>
-            <label className="block mb-1 font-semibold text-sm text-[#232360]">
-              Choose Members
-            </label>
-            <Select
-              options={employeeOptions}
-              isMulti
-              value={projectDetails.members}
-              onChange={handleMembersChange}
-              placeholder="Select Members"
-              className="w-full"
-              classNamePrefix="react-select"
-            />
-          </div>
-          <div>
-            <label className="block mb-1 font-semibold text-sm text-[#232360]">
-              Set Priority
-            </label>
-            <Select
-              options={priorityOptions}
-              value={projectDetails.priority}
-              onChange={handlePriorityChange}
-              placeholder="Select Priority"
-              className="w-full"
-              classNamePrefix="react-select"
-            />
-          </div>
+          <SelectField
+            label="Choose Manager"
+            options={employeeOptions}
+            value={projectDetails.manager}
+            onChange={(option: any) => handleSelectChange("manager", option)}
+          />
+          <SelectField
+            label="Choose Members"
+            options={employeeOptions}
+            isMulti
+            value={projectDetails.members}
+            onChange={(option: any) => handleSelectChange("members", option)}
+          />
+          <SelectField
+            label="Set Priority"
+            options={priorityOptions}
+            value={projectDetails.priority}
+            onChange={(option: any) => handleSelectChange("priority", option)}
+          />
+          <SelectField
+            label="Set Status"
+            options={statusOptions}
+            value={projectDetails.status}
+            onChange={(option: any) => handleSelectChange("status", option)}
+          />
           <button
             type="submit"
-            className="bg-[#4361EE] text-white font-semibold px-4 py-2 rounded-md hover:bg-[#4361EE]"
+            className="bg-[#4361EE] text-white font-semibold px-4 py-2 rounded-md"
           >
-            Create Project
+            {project ? "Save Changes" : "Create Project"}
           </button>
         </form>
       </div>

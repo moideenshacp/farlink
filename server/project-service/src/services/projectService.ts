@@ -49,4 +49,14 @@ export class projectService implements IprojectService {
       return null;
     }
   }
+  async updateProject(projectId: string, projectDetails: IprojectDetails): Promise<IprojectModel | null> {
+    try {
+      console.log(projectId, projectDetails, "frommmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm");
+      return null
+    } catch (error) {
+      console.log(error);
+      return null
+    }
+  }
+  
 }

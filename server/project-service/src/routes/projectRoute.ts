@@ -15,6 +15,7 @@ const ProjectController = new projectController(ProjectService)
 
 router.post('/create-project',authenticate, ProjectController.createProject);
 router.get('/fetch-projects',authenticate, ProjectController.fetchAllProject);
+router.patch('/update-project',authenticate, ProjectController.updateProject);
 
 
 export default router;

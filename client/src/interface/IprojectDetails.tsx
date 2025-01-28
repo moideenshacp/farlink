@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { IEmployee } from "./IemployeeDetails";
 
 export  interface IProject {
@@ -7,8 +8,10 @@ export  interface IProject {
     projectDescription: string;
     startDate:Date
     endDate:Date
-    manager:string
+    manager:any
     members:IEmployee[]
+    status:any,
+    priority:any
   }
   
   

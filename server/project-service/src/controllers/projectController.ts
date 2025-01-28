@@ -74,4 +74,21 @@ export class projectController implements IprojectController {
       }
     }
   };
+
+  public updateProject = async(req: Request, res: Response): Promise<Response> =>{
+    try {
+      const {projectId,projectDetails} = req.body
+      console.log("projcetID:",projectId);
+      
+      await this._projectservice.updateProject(projectId,projectDetails)
+      return res.status(200).json({message:"Project updated sucessfully.."})
+      
+    } catch (error) {
+    console.log(error);
+    return res.status(500).json({message:"An error occured while updating project"})
+    
+      
+    }
+    
+  }
 }

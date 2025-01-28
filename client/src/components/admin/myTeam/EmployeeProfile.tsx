@@ -9,8 +9,7 @@ import { RootState } from "../../../redux/store";
 import { GrTasks } from "react-icons/gr";
 import { BookCheck } from "lucide-react";
 import { HiOutlineCalendarDateRange } from "react-icons/hi2";
-import { ArrowBigLeftDash } from 'lucide-react';
-
+import { ArrowBigLeftDash } from "lucide-react";
 
 const EmployeeProfile = () => {
   const location = useLocation();
@@ -53,23 +52,23 @@ const EmployeeProfile = () => {
     <div className="flex flex-col p-12 rounded-md max-w-full mx-auto">
       {/* Back Button */}
       <div
-  onClick={() => {
-    if (userPosition === "HR") {
-      navigate("/employee/my-team");
-    } else {
-      navigate("/admin/my-team");
-    }
-  }}
-  className="flex items-center space-x-2 cursor-pointer text-[#4361EE] hover:text-[#2542AA] transition-colors duration-300 group"
->
-  <ArrowBigLeftDash 
-    color="currentColor" 
-    strokeWidth={1.5} 
-    size={28} 
-    className="group-hover:-translate-x-1 transition-transform duration-300" 
-  />
-  {/* <span className="text-lg">Go Back</span> */}
-</div>
+        onClick={() => {
+          if (userPosition === "HR") {
+            navigate("/employee/my-team");
+          } else {
+            navigate("/admin/my-team");
+          }
+        }}
+        className="flex items-center space-x-2 cursor-pointer text-[#4361EE] hover:text-[#2542AA] transition-colors duration-300 group"
+      >
+        <ArrowBigLeftDash
+          color="currentColor"
+          strokeWidth={1.5}
+          size={28}
+          className="group-hover:-translate-x-1 transition-transform duration-300"
+        />
+        {/* <span className="text-lg">Go Back</span> */}
+      </div>
 
       {/* Profile Section */}
       <div className="flex items-center mt-6 justify-between mb-6">
@@ -87,7 +86,11 @@ const EmployeeProfile = () => {
 
         {/* Task Stats Section */}
         <div className="grid grid-cols-2 items-center justify-center text-sm text-gray-500 gap-y-2">
-          <HiOutlineCalendarDateRange size={18} className="ml-16" color="#8C97A8" />
+          <HiOutlineCalendarDateRange
+            size={18}
+            className="ml-16"
+            color="#8C97A8"
+          />
 
           <span>
             Joined:{" "}

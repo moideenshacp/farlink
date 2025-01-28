@@ -38,6 +38,9 @@ export const projectDetailsSchema = Joi.object({
   priority: Joi.string().trim().required().messages({
     "string.empty": "Please choose a valid priority",
   }),
+  status: Joi.string().trim().required().messages({
+    "string.empty": "Please choose a valid status",
+  }),
   organizationId: Joi.string().required().messages({
     "string.empty": "Organization ID is required",
   }),

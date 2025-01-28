@@ -1,0 +1,17 @@
+{"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"POST\",\"url\":\"/api/subscription/webhook\",\"status\":\"200\",\"responseTime\":\"732.474\"}","timestamp":"2025-01-27T05:43:22.180Z"}
+{"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"POST\",\"url\":\"/api/subscription/webhook\",\"status\":\"200\",\"responseTime\":\"182.213\"}","timestamp":"2025-01-27T06:03:56.928Z"}
+{"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"POST\",\"url\":\"/api/subscription/webhook\",\"status\":\"200\",\"responseTime\":\"99.306\"}","timestamp":"2025-01-27T06:14:03.067Z"}
+{"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"POST\",\"url\":\"/api/subscription/webhook\",\"status\":\"200\",\"responseTime\":\"2028.630\"}","timestamp":"2025-01-27T06:26:00.574Z"}
+{"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"POST\",\"url\":\"/api/subscription/webhook\",\"status\":\"200\",\"responseTime\":\"107.575\"}","timestamp":"2025-01-27T06:32:10.259Z"}
+{"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"POST\",\"url\":\"/api/subscription/webhook\",\"status\":\"200\",\"responseTime\":\"514.741\"}","timestamp":"2025-01-27T06:37:41.556Z"}
+{"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"POST\",\"url\":\"/api/subscription/webhook\",\"status\":\"200\",\"responseTime\":\"173.072\"}","timestamp":"2025-01-27T06:39:36.433Z"}
+{"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"POST\",\"url\":\"/api/subscription/webhook\",\"status\":\"200\",\"responseTime\":\"110.775\"}","timestamp":"2025-01-27T07:04:16.877Z"}
+{"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"POST\",\"url\":\"/api/subscription/webhook\",\"status\":\"200\",\"responseTime\":\"74.615\"}","timestamp":"2025-01-27T07:14:55.938Z"}
+{"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"POST\",\"url\":\"/api/subscription/webhook\",\"status\":\"200\",\"responseTime\":\"67.580\"}","timestamp":"2025-01-27T07:26:48.476Z"}
+{"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"POST\",\"url\":\"/api/subscription/webhook\",\"status\":\"200\",\"responseTime\":\"66.012\"}","timestamp":"2025-01-27T07:32:23.395Z"}
+{"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"POST\",\"url\":\"/api/subscription/webhook\",\"status\":\"200\",\"responseTime\":\"62.097\"}","timestamp":"2025-01-27T07:38:43.009Z"}
+{"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"POST\",\"url\":\"/api/subscription/webhook\",\"status\":\"200\",\"responseTime\":\"93.306\"}","timestamp":"2025-01-27T07:40:34.563Z"}
+{"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"POST\",\"url\":\"/api/subscription/webhook\",\"status\":\"200\",\"responseTime\":\"1601.449\"}","timestamp":"2025-01-27T10:54:29.885Z"}
+{"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"POST\",\"url\":\"/api/subscription/webhook\",\"status\":\"200\",\"responseTime\":\"77.860\"}","timestamp":"2025-01-27T11:02:10.535Z"}
+{"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"POST\",\"url\":\"/api/subscription/webhook\",\"status\":\"200\",\"responseTime\":\"75.846\"}","timestamp":"2025-01-27T11:08:01.280Z"}
+{"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"POST\",\"url\":\"/api/subscription/webhook\",\"status\":\"200\",\"responseTime\":\"134.389\"}","timestamp":"2025-01-27T11:21:44.527Z"}
