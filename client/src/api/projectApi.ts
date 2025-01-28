@@ -60,3 +60,21 @@ export const fetchProjects = async (organizationId: string | undefined) => {
     throw error;
   }
 };
+export const fetchEmployeesProject = async (organizationId: string | undefined,employeeId:string | undefined) => {
+  try {
+    const res = await axiosInstance.get(
+      `${
+        import.meta.env.VITE_SERVER_BASE_URL
+      }/project-service/api/project/fetchEmployees-projects`,
+      {
+        params: {organizationId,employeeId},
+
+        withCredentials: true,
+      }
+    );
+    return res;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};

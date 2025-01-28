@@ -4,7 +4,6 @@ import { getAllEmployees } from "../../../api/employeeApi";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
 import { IEmployee } from "../../../interface/IemployeeDetails";
-import Card from "../../shimmers/Card";
 
 interface DashboardAllEmployeesProps {
   selectedPosition:string
@@ -13,22 +12,14 @@ interface DashboardAllEmployeesProps {
 
 const DashboardAllEmployees:React.FC<DashboardAllEmployeesProps> = ({ selectedPosition }) => {
     const [employeees,setEmployeees] = useState<IEmployee[]>([])
-    const [isLoading, setIsLoading] = useState(true);
       const organizationId = useSelector(
         (state: RootState) => state.user?.user?.organizationId
       );
     useEffect(()=>{
         const fetchEmployees = async()=>{
-          try {
-            
             const res = await getAllEmployees(organizationId)
             setEmployeees(res?.data.employees)
-            setIsLoading(false);
-          } catch (error) {
-            console.log(error);
-            setIsLoading(false);
             
-          }
         }
         fetchEmployees()
     },[organizationId])
@@ -39,10 +30,8 @@ const DashboardAllEmployees:React.FC<DashboardAllEmployeesProps> = ({ selectedPo
     ? employeees.filter((employee:any) => employee.position === selectedPosition)
     : employeees;
     return (
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 pt-7">
-        {isLoading ? (
-        Array.from({ length: 6 }).map((_, index) => <Card key={index} />)
-      ) : filteredEmployees.length > 0 ? (
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pt-7">
+        {filteredEmployees.length > 0 ? (
           filteredEmployees.map((employee, index) => (
             <EmployeeCard
               key={index}

@@ -18,10 +18,45 @@ export class projectRepository
   }
   async fetchProjects(organizationId: string): Promise<IprojectModel[]> {
     try {
-      const projects = await this.model.find({ organizationId}); 
+      const projects = await this.model.find({ organizationId });
       return projects;
     } catch (error) {
       console.error("Error fetching projects:", error);
+      throw error;
+    }
+  }
+  async updateProject(
+    projectId: string,
+    projectDetails: IprojectDetails
+  ): Promise<IprojectModel | null> {
+    try {
+      const updatedProject = await this.model.findByIdAndUpdate(
+        projectId,
+        { $set: projectDetails },
+        { new: true }
+      );
+
+      return updatedProject;
+    } catch (error) {
+      console.error("Error updating project:", error);
+      throw error;
+    }
+  }
+  async fetchEmployeesProjects(
+    organizationId: string,
+    employeeId: string
+  ): Promise<IprojectModel[]> {
+    try {
+      const projects = await this.model.find({
+        organizationId,
+        $or: [
+          { "members": employeeId },
+          { "manager": employeeId },
+        ],
+      });
+      return projects;
+    } catch (error) {
+      console.error("Error fetching employee's projects:", error);
       throw error;
     }
   }

@@ -66,12 +66,6 @@ const AddEmployeeModal = ({ toggleModal }: { toggleModal: () => void }) => {
   }, [user?.organizationId]);
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.position && teams.length > 0) {
-      setFormData((prev) => ({
-        ...prev,
-        position: teams[0],
-      }));
-    }
     if (!selectedFile) {
       message.error("Please upload an image before submitting!", 2);
 

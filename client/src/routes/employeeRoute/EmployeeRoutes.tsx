@@ -7,11 +7,11 @@ import ManageLeave from "../../components/admin/attendence/ManageLeave";
 import AttendanceSummary from "../../components/employee/attendence/AttendenceSummary";
 import ApplyLeave from "../../components/employee/attendence/ApplyLeave";
 import DashboardSettings from "../../components/employee/DashboardSettings";
+import Myproject from "../../components/employee/projectManagment/Myproject";
 const Overview = () => <div>Overview Content</div>;
 const CreateProject = () => <div>Create Project Content</div>;
 const ManageTasks = () => <div>Manage Tasks Content</div>;
 const ServiceRequest = () => <div>ServiceRequest Content</div>;
-const MyProject = () => <div>My Project Content</div>;
 const MyTask = () => <div>My Tasks Content</div>;
 const RequestService = () => <div>ServiceRequest Content</div>;
 const RealTimeAlert = () => <div>RealTimeAlert Content</div>;
@@ -32,7 +32,7 @@ const EmployeeRoutes = () => (
       <Route path="/" element={<Overview />} />
       <Route path="/attendence-summary" element={<AttendanceSummary />} />
       <Route path="/apply-leave" element={<ApplyLeave />} />
-      <Route path="/my-projects" element={<MyProject />} />
+      <Route path="/my-projects" element={<Myproject />} />
       <Route path="/my-tasks" element={<MyTask />} />
       <Route path="/request-sevice" element={<RequestService />} />
       <Route path="/realtime-alert" element={<RealTimeAlert />} />

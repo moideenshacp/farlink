@@ -75,20 +75,60 @@ export class projectController implements IprojectController {
     }
   };
 
-  public updateProject = async(req: Request, res: Response): Promise<Response> =>{
+  public updateProject = async (
+    req: Request,
+    res: Response
+  ): Promise<Response> => {
     try {
-      const {projectId,projectDetails} = req.body
-      console.log("projcetID:",projectId);
-      
-      await this._projectservice.updateProject(projectId,projectDetails)
-      return res.status(200).json({message:"Project updated sucessfully.."})
-      
+      const { projectId, projectDetails } = req.body;
+      console.log("projcetID:", projectId);
+      const updatedProject = await this._projectservice.updateProject(
+        projectId,
+        projectDetails
+      );
+      if (updatedProject) {
+        return res
+          .status(200)
+          .json({ message: "Project updated sucessfully.." });
+      } else {
+        return res
+          .status(400)
+          .json({ message: "Something went wrong,please try again..." });
+      }
     } catch (error) {
-    console.log(error);
-    return res.status(500).json({message:"An error occured while updating project"})
-    
-      
+      console.log(error);
+      if (error instanceof CustomError) {
+        return res.status(error.statusCode).json({ error: error.message });
+      } else {
+        return res.status(500).json({ error: "Internal Server Error" });
+      }
     }
-    
-  }
+  };
+  public fetchEmployeesProject = async (
+    req: Request,
+    res: Response
+  ): Promise<Response> => {
+    try {
+      const { employeeId,organizationId } = req.query;
+      const result = await this._projectservice.fetchEmployeesProject(
+        employeeId as string,
+        organizationId as string
+      );
+      if (result) {
+        return res
+          .status(200)
+          .json({ message: "Projects fetched sucessfully..",result });
+      } else {
+        return res
+          .status(400)
+          .json({ message: "Something went wrong,please try again..." });
+      }
+    } catch (error) {
+      if (error instanceof CustomError) {
+        return res.status(error.statusCode).json({ error: error.message });
+      } else {
+        return res.status(500).json({ error: "Internal Server Error" });
+      }
+    }
+  };
 }

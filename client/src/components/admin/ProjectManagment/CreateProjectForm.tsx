@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from "react";
 import { message } from "antd";
-import Input from "../../../shared/components/Input";
 import { useSelector } from "react-redux";
 import { MultiValue, SingleValue } from "react-select";
 import { getAllEmployees } from "../../../api/employeeApi";
@@ -12,6 +11,7 @@ import { IEmployee } from "../../../interface/IemployeeDetails";
 import { IProject } from "../../../interface/IprojectDetails";
 import DatePickerField from "../../../shared/components/DatePickerField";
 import SelectField from "../../../shared/components/SelectField";
+import Input from "antd/es/input/Input";
 
 interface OptionType {
   value: string;
@@ -41,11 +41,12 @@ const CreateProjectForm = ({
 }: CreateProjectFormProps) => {
   const [employees, setEmployees] = useState<IEmployee[]>([]);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-console.log(isDrawerOpen);
+  console.log(isDrawerOpen);
 
   const organizationId = useSelector(
     (state: RootState) => state.user?.user?.organizationId
   );
+  // const {user}  = useSelector((state:RootState)=>state.user)
 
   const [projectDetails, setProjectDetails] = useState({
     projectName: project?.projectName || "",
@@ -146,12 +147,9 @@ console.log(isDrawerOpen);
 
     try {
       if (project) {
-        const res = await updateProject(project._id, formattedProjectDetails);
-        console.log("project indt tooo");
-        
-        console.log(res.data.message, "updateeeeeeeeeeeeeeeeeeeeeee");
-        if(res.data.message === "Project updated sucessfully.."){
-          message.success("project updated successfully")
+        const res = await updateProject(project._id, formattedProjectDetails);        
+        if (res.data.message === "Project updated sucessfully..") {
+          message.success("project updated successfully");
         }
       } else {
         const res = await createProject(formattedProjectDetails);
@@ -163,13 +161,13 @@ console.log(isDrawerOpen);
       fetchAllProjects();
     } catch (error: any) {
       const errorMsg =
-        error.response?.data?.errors ||
-        "An error occurred while creating the project.";
+      error.response?.data?.errors ||
+      "An error occurred while creating the project.";
       message.error(errorMsg);
     }
   };
-
-  const resetForm = () => {
+  
+  const resetForm = () => {    
     setProjectDetails({
       projectName: "",
       projectDescription: "",
@@ -180,7 +178,7 @@ console.log(isDrawerOpen);
       priority: null,
       status: null,
       organizationId,
-    });
+    });    
     const drawerCheckbox = document.getElementById(
       "my-drawer-4"
     ) as HTMLInputElement;
@@ -195,6 +193,7 @@ console.log(isDrawerOpen);
       setIsDrawerOpen(drawerCheckbox.checked);
 
       if (!drawerCheckbox.checked) {
+        
         resetForm();
       }
     };
@@ -226,6 +225,7 @@ console.log(isDrawerOpen);
         organizationId: project.organizationId,
       });
     } else {
+      
       setProjectDetails({
         projectName: "",
         projectDescription: "",
@@ -247,19 +247,22 @@ console.log(isDrawerOpen);
         className="drawer-overlay"
         aria-label="close sidebar"
       ></label>
-      <div className="menu bg-white text-base-content min-h-full w-96 p-4">
+      <div className="menu bg-white text-base-content min-h-full w-96 p-3">
         <h1 className="text-center text-[#232360] font-bold">
-          {project ? "Edit Project" : "Create Your Project"}
+          {project ? "Update Project" : "Create Your Project"}
         </h1>
 
-        <div className="border-b-2 mt-5"></div>
-        <form onSubmit={handleSubmit} className="space-y-4 p-4">
+        <div className="border-b-2 mt-2"></div>
+        <form onSubmit={handleSubmit} className="space-y-4 p-3">
+          <label className="block -mb-3 font-semibold text-sm text-[#232360]">
+            Project Name
+          </label>
           <Input
             type="text"
-            label="Project Name"
             name="projectName"
             value={projectDetails.projectName}
             onChange={handleInputChange}
+            className="p-2"
             placeholder="Enter Project Name"
           />
           <div>
@@ -271,7 +274,7 @@ console.log(isDrawerOpen);
               value={projectDetails.projectDescription}
               onChange={handleInputChange}
               placeholder="Enter Project Description"
-              className="w-full border border-gray-300 rounded-md p-2 h-24"
+              className="w-full border focus:outline-[#1677ff] border-gray-300 rounded-md p-2 h-24"
             ></textarea>
           </div>
           <div className="grid grid-cols-2 gap-4">

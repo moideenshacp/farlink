@@ -49,14 +49,47 @@ export class projectService implements IprojectService {
       return null;
     }
   }
-  async updateProject(projectId: string, projectDetails: IprojectDetails): Promise<IprojectModel | null> {
+  async updateProject(
+    projectId: string,
+    projectDetails: IprojectDetails
+  ): Promise<IprojectModel | null> {
     try {
-      console.log(projectId, projectDetails, "frommmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm");
-      return null
+      console.log(projectId, projectDetails, "Updating project");
+      if (
+        new Date(projectDetails.endDate) <= new Date(projectDetails.startDate)
+      ) {
+        throw new CustomError("End date must be after start date", 400);
+      }
+      const updatedProject = await this._projectRepository.updateProject(
+        projectId,
+        projectDetails
+      );
+
+      if (!updatedProject) {
+        throw new CustomError("Project not found or could not be updated", 404);
+      }
+
+      return updatedProject;
     } catch (error) {
-      console.log(error);
-      return null
+      console.error("Error updating project:", error);
+      throw error;
     }
   }
-  
+  async fetchEmployeesProject(
+    employeeId: string,organizationId:string
+  ): Promise<IprojectModel[] | null> {
+    try {
+      console.log(employeeId, "projects fetching orgId");
+      const result = await this._projectRepository.fetchEmployeesProjects(organizationId,employeeId);
+      if (result) {
+        console.log(result, "all projects");
+        return result;
+      } else {
+        return null;
+      }
+    } catch (error) {
+      console.log(error);
+      return null;
+    }
+  }
 }
