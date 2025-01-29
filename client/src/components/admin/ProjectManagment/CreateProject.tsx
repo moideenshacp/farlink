@@ -1,20 +1,32 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { Input, Select } from "antd";
+import { useEffect, useState } from "react";
 import CreateProjectForm from "./CreateProjectForm";
 import { VscGitPullRequestCreate } from "react-icons/vsc";
 import ProjectViewCard from "../../../shared/components/ProjectViewCard";
 import { IProject } from "../../../interface/IprojectDetails";
-import { useEffect, useState } from "react";
 import { RootState } from "../../../redux/store";
 import { useSelector } from "react-redux";
 import { fetchProjects } from "../../../api/projectApi";
 import { fetchEmployeesByIds } from "../../../api/employeeApi";
+import {
+  CheckCircleOutlined,
+  ClockCircleOutlined,
+  PlayCircleOutlined,
+  SearchOutlined,
+} from "@ant-design/icons";
 
 const CreateProject = () => {
   const [projects, setProjects] = useState<IProject[]>([]);
+  const [filteredProjects, setFilteredProjects] = useState<IProject[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedProject, setSelectedProject] = useState<IProject | null>(null);
+  const [filterStatus, setFilterStatus] = useState<string>("All");
+  const [searchTerm, setSearchTerm] = useState<string>("");
 
+  const { Option } = Select;
   const { user } = useSelector((state: RootState) => state.user);
+
   const fetchAllProjects = async () => {
     try {
       const res = await fetchProjects(user?.organizationId);
@@ -38,7 +50,6 @@ const CreateProject = () => {
             ])
           );
 
-          // Map employee details back to projects
           const projectsWithEmployeeData = projectData.map((project: any) => ({
             ...project,
             members: project.members.map(
@@ -51,6 +62,7 @@ const CreateProject = () => {
           }));
 
           setProjects(projectsWithEmployeeData);
+          setFilteredProjects(projectsWithEmployeeData);
         }
       }
       setIsLoading(false);
@@ -59,13 +71,19 @@ const CreateProject = () => {
       setIsLoading(false);
     }
   };
+
   const openDrawerWithProject = (project: IProject) => {
     setSelectedProject(project);
-    const drawerCheckbox = document.getElementById("my-drawer-4") as HTMLInputElement;
+    const drawerCheckbox = document.getElementById(
+      "my-drawer-4"
+    ) as HTMLInputElement;
     if (drawerCheckbox) drawerCheckbox.checked = true;
-  };   
+  };
+
   useEffect(() => {
-    const drawerCheckbox = document.getElementById("my-drawer-4") as HTMLInputElement;
+    const drawerCheckbox = document.getElementById(
+      "my-drawer-4"
+    ) as HTMLInputElement;
     const handleDrawerClose = () => {
       if (!drawerCheckbox?.checked) {
         setSelectedProject(null);
@@ -84,29 +102,99 @@ const CreateProject = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user?.organizationId]);
+
+  // Filter projects based on filterStatus and search term
+  useEffect(() => {
+    let filtered = projects;
+
+    if (filterStatus !== "All") {
+      filtered = filtered.filter((project) => project.status === filterStatus);
+    }
+
+    if (searchTerm) {
+      filtered = filtered.filter((project) =>
+        project.projectName.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+
+    setFilteredProjects(filtered);
+  }, [filterStatus, searchTerm, projects]);
+
   console.log("all projectsss", projects);
 
   return (
     <div>
-      <div className="drawer drawer-end ">
+      <div className="drawer drawer-end">
         <input id="my-drawer-4" type="checkbox" className="drawer-toggle" />
-        <div className="flex mt-3 justify-end">
+        <div className="flex mt-3 justify-between items-center gap-4">
+          <Input
+            placeholder="Search Projects here..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="w-60"
+            prefix={
+              <SearchOutlined style={{ color: "#8C97A8", fontSize: "16px" }} />
+            }
+            allowClear
+            size="large"
+          />
+          <Select
+            value={filterStatus}
+            onChange={(value) => setFilterStatus(value)}
+            className="w-40"
+            placeholder="Filter Projects"
+          >
+            <Option value="All">
+              <span className="flex items-center gap-2">
+                <CheckCircleOutlined style={{ color: "#52c41a" }} />
+                All
+              </span>
+            </Option>
+            <Option value="planning">
+              <span className="flex items-center gap-2">
+                <ClockCircleOutlined style={{ color: "#faad14" }} />
+                Planning
+              </span>
+            </Option>
+            <Option value="in_progress">
+              <span className="flex items-center gap-2">
+                <PlayCircleOutlined style={{ color: "#1890ff" }} />
+                In Progress
+              </span>
+            </Option>
+            <Option value="completed">
+              <span className="flex items-center gap-2">
+                <CheckCircleOutlined style={{ color: "#52c41a" }} />
+                Completed
+              </span>
+            </Option>
+          </Select>
+          
           <div className="drawer-content">
             <label
               htmlFor="my-drawer-4"
-              className="btn  text font-semibold z-10 text-white hover:bg-[#4361EE] bg-[#4361EE] flex items-center justify-center gap-2"
+              className="btn text font-semibold z-10 text-white hover:bg-[#4361EE] bg-[#4361EE] flex items-center justify-center gap-2"
             >
               <VscGitPullRequestCreate size={16} />
               Create New Project
             </label>
           </div>
         </div>
-        {/* Include Sidebar component */}
 
-        <CreateProjectForm fetchAllProjects={fetchAllProjects}  project={selectedProject} />
+        {/* Include Sidebar component */}
+        <CreateProjectForm
+          fetchAllProjects={fetchAllProjects}
+          project={selectedProject}
+        />
       </div>
+
+      {/* Project Cards */}
       <div className="mt-3 gap-5">
-        <ProjectViewCard projects={projects} isLoading={isLoading} onProjectClick={openDrawerWithProject} />
+        <ProjectViewCard
+          projects={filteredProjects}
+          isLoading={isLoading}
+          onProjectClick={openDrawerWithProject}
+        />
       </div>
     </div>
   );

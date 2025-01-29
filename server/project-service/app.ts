@@ -9,6 +9,7 @@ import morgan from "morgan";
 import { rabbitmqConnect } from "./src/config/rabbitmq";
 import { errorHandler } from "./src/middlewares/errorHandler";
 import projectRoute from './src/routes/projectRoute'
+import taskRoute from './src/routes/taskRoute'
 
 dotenv.config();
 connectDB();
@@ -47,6 +48,7 @@ app.use(bodyParser.json());
 app.use(express.json());
 
 app.use('/api/project',projectRoute );
+app.use('/api/task',taskRoute );
 
 app.use(errorHandler);
 const port = process.env.PORT;

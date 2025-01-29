@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import {
   addEmployee,
   fetchPositions,
-  uploadImageToCloudinary,
+  uploadFileToCloudinary,
 } from "../../../api/employeeApi";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
@@ -94,7 +94,7 @@ const AddEmployeeModal = ({ toggleModal }: { toggleModal: () => void }) => {
     if (selectedFile) {
       console.log("selected file is there");
 
-      uploadedImageUrl = await uploadImageToCloudinary(
+      uploadedImageUrl = await uploadFileToCloudinary(
         selectedFile,
         setIsUploading
       );

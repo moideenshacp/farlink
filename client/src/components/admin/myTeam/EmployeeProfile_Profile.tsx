@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import {
   fetchPositions,
   updateEmployeeDetails,
-  uploadImageToCloudinary,
+  uploadFileToCloudinary,
 } from "../../../api/employeeApi";
 import {
   EmployeeProfileProps,
@@ -62,7 +62,7 @@ const EmployeeProfile_Profile: React.FC<EmployeeProfileProps> = ({
     const selectedFile = e.target.files?.[0];
     if (selectedFile) {
       setIsUploading(true);
-      const imageUrl = await uploadImageToCloudinary(
+      const imageUrl = await uploadFileToCloudinary(
         selectedFile,
         setIsUploading
       );

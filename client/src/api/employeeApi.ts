@@ -48,42 +48,42 @@ export const addEmployee = async (employeeData: EmployeeData) => {
     return res;
   } catch (error) {
     console.log(error);
-    throw error
+    throw error;
   }
 };
 
-export const uploadImageToCloudinary = async (
+export const uploadFileToCloudinary = async (
   selectedFile: File,
   setIsUploading?: (state: boolean) => void
 ) => {
   if (!selectedFile) return null;
   setIsUploading?.(true);
+
   const formData = new FormData();
   formData.append("file", selectedFile);
   formData.append(
     "upload_preset",
     (import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET as string) ||
-      "EMPLOYEE_PHOTO"
+      "YOUR_DEFAULT_PRESET"
   );
-  try {
-    console.log("CLOUDINARY_NAME:", import.meta.env.VITE_CLOUDINARY_NAME);
-    console.log(
-      "UPLOAD_PRESET:",
-      import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET
-    );
 
+  const fileType = selectedFile.type.split("/")[0];
+  const resourceType =
+    fileType === "image" ? "image" : fileType === "video" ? "video" : "raw";
+
+  try {
     const res = await axios.post(
       `https://api.cloudinary.com/v1_1/${
-        import.meta.env.VITE_CLOUDINARY_NAME || "jMaf1ySQB98TlqeDVQDD_6RbQCE"
-      }/image/upload`,
+        import.meta.env.VITE_CLOUDINARY_NAME
+      }/${resourceType}/upload`,
       formData
     );
     setIsUploading?.(false);
-    console.log("res.data.secure_url", res.data.secure_url);
+    console.log("Upload response:", res.data);
 
     return res.data.secure_url;
   } catch (error) {
-    console.log("error uploading image:", error);
+    console.error("Error uploading file:", error);
     setIsUploading?.(false);
     return null;
   }
@@ -178,9 +178,7 @@ export const fetchEmployeesCount = async (
     console.log(error);
   }
 };
-export const terminateEmployee = async (
-  email: string | undefined
-) => {
+export const terminateEmployee = async (email: string | undefined) => {
   try {
     const res = await axiosInstance.get(
       `${
@@ -199,7 +197,7 @@ export const terminateEmployee = async (
 
 export const addPosition = async (
   organizationId: string | undefined,
-  position: string 
+  position: string
 ) => {
   try {
     const res = await axiosInstance.post(
@@ -215,17 +213,17 @@ export const addPosition = async (
   }
 };
 
-
-export const fetchPositions = async (
-  organizationId: string | undefined,
-) => {
+export const fetchPositions = async (organizationId: string | undefined) => {
   try {
     const res = await axiosInstance.get(
-      `${import.meta.env.VITE_SERVER_BASE_URL}/employee-service/api/employee/fetch-position`, {
+      `${
+        import.meta.env.VITE_SERVER_BASE_URL
+      }/employee-service/api/employee/fetch-position`,
+      {
         params: {
-          organizationId, 
+          organizationId,
         },
-        withCredentials: true, 
+        withCredentials: true,
       }
     );
     return res;
@@ -235,16 +233,17 @@ export const fetchPositions = async (
   }
 };
 
-export const fetchEmployeesByIds = async (
-  employeeIds: string[] | unknown,
-) => {
+export const fetchEmployeesByIds = async (employeeIds: string[] | unknown) => {
   try {
     const res = await axiosInstance.get(
-      `${import.meta.env.VITE_SERVER_BASE_URL}/employee-service/api/employee/fetch-employeesById`, {
+      `${
+        import.meta.env.VITE_SERVER_BASE_URL
+      }/employee-service/api/employee/fetch-employeesById`,
+      {
         params: {
-          employeeIds, 
+          employeeIds,
         },
-        withCredentials: true, 
+        withCredentials: true,
       }
     );
     return res;

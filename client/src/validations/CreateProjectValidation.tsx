@@ -6,7 +6,7 @@ export const projectDetailsSchema = Joi.object({
     "string.min": "Project name must be at least 3 characters",
     "string.max": "Project name must not exceed 100 characters",
   }),
-  projectDescription: Joi.string().trim().min(5).max(500).required().messages({
+  projectDescription: Joi.string().trim().min(5).max(1000).required().messages({
     "string.empty": "Project description is required",
     "string.min": "Project description must be at least 5 characters",
     "string.max": "Project description must not exceed 500 characters",

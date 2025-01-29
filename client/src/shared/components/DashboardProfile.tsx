@@ -3,7 +3,7 @@ import { RootState } from "../../redux/store";
 import React, { useEffect, useState } from "react";
 import { fetchProfile, updateProfile } from "../../api/authApi";
 import useProfileValidation from "../hooks/useProfileValidation";
-import { uploadImageToCloudinary } from "../../api/employeeApi";
+import { uploadFileToCloudinary } from "../../api/employeeApi";
 import { setImage } from "../../redux/user/userSlice";
 import Input from "./Input";
 import { message } from "antd";
@@ -37,7 +37,7 @@ const DashboardProfile = () => {
     const file = e.target.files?.[0];
     if (file) {
       setIsUploading(true);
-      const imageUrl = await uploadImageToCloudinary(file, setIsUploading);
+      const imageUrl = await uploadFileToCloudinary(file, setIsUploading);
       if (imageUrl) {
         setFormData({ ...formData, image: imageUrl });
       } else {

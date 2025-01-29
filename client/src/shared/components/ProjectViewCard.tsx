@@ -15,7 +15,7 @@ const ProjectViewCard = ({ projects, isLoading,onProjectClick }: ProjectViewCard
           Array.from({ length: 6 }).map((_, index) => <Card key={index} />)
         ) : projects.length === 0 ? (
           <div className="text-center">
-            <h3 className="text-lg font-semibold text-gray-500">
+            <h3 className="text-lg font-semibold text-[#8C97A8]">
               No Projects Found
             </h3>
           </div>
@@ -64,7 +64,7 @@ const ProjectViewCard = ({ projects, isLoading,onProjectClick }: ProjectViewCard
                     {project.members.length} Participants
                   </span>
                 </div>
-                <div className="text-sm text-gray-500">
+                <div className="text-sm text-[#8C97A8]">
                   <span className="block text-black font-normal">
                     Start Date:{" "}
                     {new Date(project.startDate).toLocaleDateString()}

@@ -21,6 +21,7 @@ import SuccessPayment from "./pages/admin/SuccessPayment";
 import AdminRoutes from "./routes/adminRoute/AdminRoutes";
 import EmployeeRoutes from "./routes/employeeRoute/EmployeeRoutes";
 import SuperAdminRoutes from "./routes/superAdminRoute/SuperAdminRoutes";
+import EmployeePrivateRoute from "./routes/EmployeePrivateRoute";
 
 function App() {
   return (
@@ -59,8 +60,10 @@ function App() {
             <Route path="/success" element={<SuccessPayment />} />
             <Route path="/admin/*" element={<AdminRoutes />} />
           </Route>
+    <Route element={<EmployeePrivateRoute/>} >
 
           <Route path="/employee/*" element={<EmployeeRoutes />} />
+    </Route>
 
           {/*================================================================================================================================== */}
           <Route element={<SuperAdminPrivateRoute />}>
