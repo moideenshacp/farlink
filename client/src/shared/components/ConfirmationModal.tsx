@@ -4,7 +4,7 @@ const ConfirmationModal: React.FC<{
     onCancel: () => void;
   }> = ({ message, onConfirm, onCancel }) => {
     return (
-      <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+      <div className="fixed inset-0 z-30 flex items-center justify-center bg-black bg-opacity-50">
         <div className="bg-white p-6 rounded-lg shadow-lg w-1/3">
           <p className="text-lg mb-4">{message}</p>
           <div className="flex justify-end gap-4">

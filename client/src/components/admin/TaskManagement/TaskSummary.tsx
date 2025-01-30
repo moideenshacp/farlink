@@ -24,7 +24,7 @@ const TaskSummary = () => {
               <ProjectDetails project={selectedProject} />
             </div>
             
-            <div className="space-y-2">
+            <div className="space-y-5">
             <StatCard
               title="Total Tasks"
               value={120}

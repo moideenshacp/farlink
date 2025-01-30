@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
 import Input from "../../../shared/components/Input";
 import { CiSearch } from "react-icons/ci";
-import { FaSpinner } from "react-icons/fa"; // Import spinner icon
+import { FaSpinner } from "react-icons/fa"; 
 import { IProject } from "../../../interface/IprojectDetails";
 import { fetchProjects } from "../../../api/projectApi";
 import { fetchEmployeesByIds } from "../../../api/employeeApi";

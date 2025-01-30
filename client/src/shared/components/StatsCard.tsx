@@ -14,7 +14,7 @@ const StatCard: React.FC<StatCardProps> = ({ title, value, percentage, color = "
       <div className={`text-sm ${color} flex items-center gap-2`}>
         {icon} {title}
       </div>
-      <div className="text-3xl font-bold">{value}</div>
+      <div className="text-3xl text-[#232360] font-bold">{value}</div>
       {percentage && <div className="text-sm text-gray-500 mt-2">{percentage}</div>}
     </div>
   );

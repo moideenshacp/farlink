@@ -42,4 +42,31 @@ export class taskController implements ItaskController {
       }
     }
   };
+  public fetchTasks = async (
+    req: Request,
+    res: Response
+  ): Promise<Response> => {
+    try {
+      const { projectId } = req.query;
+      const result = await this._taskservice.fetchTasks(
+        projectId as string
+      );
+      if (result) {
+        return res
+          .status(200)
+          .json({ message: "Tasks fetched successfully...", result });
+      } else {
+        return res
+          .status(400)
+          .json({ message: "Something went wrong,please try again..." });
+      }
+    } catch (error) {
+      console.log(error);
+      if (error instanceof CustomError) {
+        return res.status(error.statusCode).json({ error: error.message });
+      } else {
+        return res.status(500).json({ error: "Internal Server Error" });
+      }
+    }
+  };
 }

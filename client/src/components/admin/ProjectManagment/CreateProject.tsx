@@ -18,8 +18,8 @@ import {
 
 const CreateProject = () => {
   const [projects, setProjects] = useState<IProject[]>([]);
-  const [filteredProjects, setFilteredProjects] = useState<IProject[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [filteredProjects, setFilteredProjects] = useState<IProject[]>([]);
   const [selectedProject, setSelectedProject] = useState<IProject | null>(null);
   const [filterStatus, setFilterStatus] = useState<string>("All");
   const [searchTerm, setSearchTerm] = useState<string>("");

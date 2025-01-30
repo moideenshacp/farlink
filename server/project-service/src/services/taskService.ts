@@ -18,13 +18,32 @@ export class taskService implements ItaskService {
       ) {
         throw new CustomError("End date must be after start date", 400);
       }
-      const project = await this._taskRepository.createTask(
+      const task = await this._taskRepository.createTask(
         taskDetails
       );
-      return project
+      return task
     } catch (error) {
       console.log(error);
       throw error
     }
   }
+    async fetchTasks(
+      projectId: string
+    ): Promise<ItaskModel[] | null> {
+      try {
+        console.log(projectId, "takss fetching orgId");
+        const result = await this._taskRepository.fetchTasks(
+          projectId
+        );
+        if (result) {
+          console.log(result, "all Tasks");
+          return result;
+        } else {
+          return null;
+        }
+      } catch (error) {
+        console.log(error);
+        return null;
+      }
+    }
 }

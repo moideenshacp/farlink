@@ -1,18 +1,19 @@
+import { IEmployee } from "./IemployeeDetails";
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
-export interface IMember {
-    value: string;
-    label: string;
-  }
+
   
   export interface ITaskDetails {
-    TaskName: string;
-    TaskDescription: string;
+    _id?:string
+    taskName: string;
+    taskDescription: string;
     startDate: Date | null;
     endDate: Date | null;
-    members: IMember[];
+    members: IEmployee[];
     priority: any;
     file?: string | File | null;
     organizationId:string | undefined,
     projectId:string 
+    status?:any
   }
   

@@ -1,12 +1,12 @@
 import Joi from "joi";
 
 export const TaskValidationSchema = Joi.object({
-  TaskName: Joi.string().trim().min(2).required().messages({
+  taskName: Joi.string().trim().min(2).required().messages({
     "string.base": "Task Name must be a string",
     "string.empty": "Task Name is required",
     "any.required": "Task Name is required",
   }),
-  TaskDescription: Joi.string().trim().min(2).required().messages({
+  taskDescription: Joi.string().trim().min(2).required().messages({
     "string.base": "Task Description must be a string",
     "string.empty": "Task Description is required",
     "any.required": "Task Description is required",

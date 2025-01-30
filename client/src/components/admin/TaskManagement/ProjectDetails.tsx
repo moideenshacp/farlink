@@ -17,6 +17,7 @@ import { DownOutlined, UserOutlined } from "@ant-design/icons";
 import { FaFileCirclePlus } from "react-icons/fa6";
 import { FaTasks } from "react-icons/fa";
 import AssignTaskDrawer from "./AssignTaskDrawer"; 
+import TaskViewTable from "./TaskviewTable";
 
 interface ProjectDetailsProps {
   project: IProject;
@@ -44,7 +45,7 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ project }) => {
           All Tasks
         </span>
       ),
-      children: <>alllll</>,
+      children: <TaskViewTable project_id={project._id} />,
     },
     {
       key: "Completed Tasks",
@@ -96,7 +97,7 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ project }) => {
             </Button>
           </div>
         }
-        className="rounded-lg p-3"
+        className="rounded-lg shadow-md p-3"
         style={{ maxWidth: 650, margin: "auto" }}
       >
         <Paragraph className="text-gray-600 mt-2">
@@ -183,7 +184,7 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ project }) => {
           </Col>
         </Row>
       </Card>
-      <div className="container ml-8 p-6">
+      <div className="container ml-8 p-8">
         <Tabs
           defaultActiveKey="All Tasks"
           items={items}

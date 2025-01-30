@@ -17,5 +17,13 @@ export class taskRepository
   ): Promise<ItaskModel | null> {
     return this.save(taskDetails);
   }
-
+    async fetchTasks(projectId: string): Promise<ItaskModel[]> {
+      try {
+        const projects = await this.model.find({ projectId });
+        return projects;
+      } catch (error) {
+        console.error("Error fetching projects:", error);
+        throw error;
+      }
+    }
 }

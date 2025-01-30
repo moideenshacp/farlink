@@ -34,18 +34,19 @@ const AssignTaskDrawer: React.FC<AssignTaskDrawerProps> = ({
     value: member._id,
     label: `${member.firstName} ${member.lastName}`,
   }));
-  const {user}= useSelector((state:RootState)=>state.user)
+  const { user } = useSelector((state: RootState) => state.user);
   const [taskDetails, setTaskDetails] = useState<ITaskDetails>({
-    TaskName: "",
-    TaskDescription: "",
+    taskName: "",
+    taskDescription: "",
     startDate: null,
     endDate: null,
     members: [],
     priority: null,
     file: null,
-    projectId:project._id,
-    organizationId:user?.organizationId
+    projectId: project._id,
+    organizationId: user?.organizationId,
   });
+  console.log(project, "rpoerject iddddddddddddd=============================");
 
   const [isUploading, setIsUploading] = useState(false);
 
@@ -89,7 +90,7 @@ const AssignTaskDrawer: React.FC<AssignTaskDrawerProps> = ({
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-  
+
     // Map the members to match the expected structure of IMember[]
     const formattedTaskDetails = {
       ...taskDetails,
@@ -99,50 +100,48 @@ const AssignTaskDrawer: React.FC<AssignTaskDrawerProps> = ({
       endDate: taskDetails.endDate ? dayjs(taskDetails.endDate).toDate() : null,
       priority: taskDetails.priority?.value,
       members: taskDetails.members.map((member: any) => member.value),
-
+      projectId: project._id,
     };
-  
+
     console.log(formattedTaskDetails, "all task details");
-  
+
     const { error } = TaskValidationSchema.validate(formattedTaskDetails, {
       abortEarly: false,
     });
-  
+
     if (error) {
       error.details.forEach((err) => {
         message.error(err.message);
       });
       return;
     }
-  
+
     try {
       const res = await createTask(formattedTaskDetails);
 
-      console.log(res,"from backendndndndnndndndndndn");
-      if(res.data.message === "Task added successfully..."){
-
-          message.success("Task submitted successfully!");
+      console.log(res, "from backendndndndnndndndndndn");
+      if (res.data.message === "Task added successfully...") {
+        message.success("Task submitted successfully!");
       }
       setTaskDetails({
-        TaskName: "",
-        TaskDescription: "",
+        taskName: "",
+        taskDescription: "",
         startDate: null,
         endDate: null,
         members: [],
         priority: null,
         file: null,
         organizationId: user?.organizationId,
-        projectId: project._id,
+        projectId: "",
       });
-    } catch (error:any) {
+    } catch (error: any) {
       console.log(error);
       const errorMsg =
-      error.response?.data?.errors ||
-      "An error occurred while creating the project.";
+        error.response?.data?.errors ||
+        "An error occurred while creating the project.";
       message.error(errorMsg);
     }
   };
-  
 
   return (
     <Drawer
@@ -161,8 +160,8 @@ const AssignTaskDrawer: React.FC<AssignTaskDrawerProps> = ({
         </label>
         <Input
           type="text"
-          name="TaskName"
-          value={taskDetails.TaskName}
+          name="taskName"
+          value={taskDetails.taskName}
           onChange={handleInputChange}
           className="p-2 border-gray-300 rounded-md"
           placeholder="Enter Task Name"
@@ -173,8 +172,8 @@ const AssignTaskDrawer: React.FC<AssignTaskDrawerProps> = ({
             Task Description
           </label>
           <textarea
-            name="TaskDescription"
-            value={taskDetails.TaskDescription}
+            name="taskDescription"
+            value={taskDetails.taskDescription}
             onChange={handleInputChange}
             placeholder="Enter Task Description"
             className="w-full border focus:outline-[#1677ff] border-gray-300 rounded-md p-2 h-24"
@@ -182,20 +181,20 @@ const AssignTaskDrawer: React.FC<AssignTaskDrawerProps> = ({
         </div>
 
         <div className="grid grid-cols-2 gap-4">
-        <DatePickerField
-              label="Start Date"
-              value={taskDetails.startDate}
-              onChange={(date: any) =>
-                handleDateChange("startDate", date?.toDate() || null)
-              }
-            />
-            <DatePickerField
-              label="End Date"
-              value={taskDetails.endDate}
-              onChange={(date: any) =>
-                handleDateChange("endDate", date?.toDate() || null)
-              }
-            />
+          <DatePickerField
+            label="Start Date"
+            value={taskDetails.startDate}
+            onChange={(date: any) =>
+              handleDateChange("startDate", date?.toDate() || null)
+            }
+          />
+          <DatePickerField
+            label="End Date"
+            value={taskDetails.endDate}
+            onChange={(date: any) =>
+              handleDateChange("endDate", date?.toDate() || null)
+            }
+          />
         </div>
 
         <SelectField

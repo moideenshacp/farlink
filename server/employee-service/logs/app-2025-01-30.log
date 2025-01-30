@@ -1,0 +1,1 @@
+{"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"GET\",\"url\":\"/api/employee/fetch-employeesById?employeeIds[]=67936b8fa37f9d4b8f5d23b3&employeeIds[]=67936bdca37f9d4b8f5d23b6&employeeIds[]=67869f7defffdbe0c161c74a\",\"status\":\"200\",\"responseTime\":\"3099.213\"}","timestamp":"2025-01-30T03:32:44.583Z"}
