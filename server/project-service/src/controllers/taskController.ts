@@ -124,4 +124,30 @@ export class taskController implements ItaskController {
       }
     }
   };
+  public fetchAllTasksOfEmployee = async (
+    req: Request,
+    res: Response
+  ): Promise<Response> => {
+    try {
+      const { employeeId } = req.query;
+      const result = await this._taskservice.fetchAllTasksOfEmployee(
+        employeeId as string,
+      );
+      if (result) {
+        return res
+          .status(200)
+          .json({ message: "Tasks fetched sucessfully..",result });
+      } else {
+        return res
+          .status(400)
+          .json({ message: "Something went wrong,please try again..." });
+      }
+    } catch (error) {
+      if (error instanceof CustomError) {
+        return res.status(error.statusCode).json({ error: error.message });
+      } else {
+        return res.status(500).json({ error: "Internal Server Error" });
+      }
+    }
+  };
 }

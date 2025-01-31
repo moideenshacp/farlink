@@ -8,6 +8,7 @@ export interface ItaskService {
     taskId: string,
     taskDetails: ItaskDetails
   ): Promise<ItaskModel | null>;
-      fetchEmployeesTask(employeeId:string,projectId:string):Promise<ItaskModel[] | null>
+  fetchEmployeesTask(employeeId:string,projectId:string):Promise<ItaskModel[] | null>
+  fetchAllTasksOfEmployee(employeeId: string): Promise<ItaskModel[] | null>;
   
 }

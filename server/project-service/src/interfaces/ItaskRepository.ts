@@ -12,4 +12,7 @@ export default interface ItaskRepository {
     projectId: string,
     employeeId: string
   ): Promise<ItaskModel[]>;
+  fetchAllTasksOfEmployee(
+    employeeId: string
+  ): Promise<ItaskModel[]>;
 }

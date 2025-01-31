@@ -17,6 +17,7 @@ router.post('/create-task',authenticate, TaskController.createTask);
 router.get('/fetch-tasks',authenticate, TaskController.fetchTasks);
 router.patch('/update-task',authenticate, TaskController.updateTask);
 router.get('/fetchEmployees-tasks',authenticate, TaskController.fetchEmployeesTask);
+router.get('/fetchEmployees-Alltasks',authenticate, TaskController.fetchAllTasksOfEmployee);
 
 
 

@@ -1,6 +1,5 @@
 import { Tabs } from "antd";
 import EmployeeProfile_Profile from "./EmployeeProfile_Profile";
-import EmployeeProfile_tasks from "./EmployeeProfile_tasks";
 import EmployeeProfile_attendence from "./EmployeeProfile_attendence";
 import EmployeeProfile_settings from "./EmployeeProfile_settings";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -25,11 +24,7 @@ const EmployeeProfile = () => {
       label: "Profile",
       children: <EmployeeProfile_Profile employee={employee} />,
     },
-    {
-      key: "tasks",
-      label: "Tasks",
-      children: <EmployeeProfile_tasks />,
-    },
+    
     {
       key: "attendence",
       label: "Attendance",

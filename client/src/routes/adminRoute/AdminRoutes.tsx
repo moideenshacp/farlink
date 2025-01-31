@@ -9,9 +9,10 @@ import CreateProject from "../../components/admin/ProjectManagment/CreateProject
 import DashboardSettings from "../../components/admin/settingss/DashboardSettings";
 import Billing from "../../components/admin/billing/Billing";
 import TaskSummary from "../../components/admin/TaskManagement/TaskSummary";
+import SubscriptionRoute from "../SubscriptionRoute";
+import Meeting from "../../components/admin/meeting/Meeting";
 const ServiceRequest = () => <div>ServiceRequest Content</div>;
 const RealTimeAlert = () => <div>RealTimeAlert Content</div>;
-const Meeting = () => <div>Meeting Content</div>;
 const Message = () => <div>Message Content</div>;
 
 const AdminRoutes = () => (
@@ -26,10 +27,14 @@ const AdminRoutes = () => (
       <Route path="/manage-tasks" element={<TaskSummary />} />
       <Route path="/service-request" element={<ServiceRequest />} />
       <Route path="/realtime-alert" element={<RealTimeAlert />} />
-      <Route path="/meeting" element={<Meeting />} />
-      <Route path="/message" element={<Message />} />
       <Route path="/setting" element={<DashboardSettings />} />
       <Route path="/billing" element={<Billing />} />
+
+
+      <Route element={<SubscriptionRoute />}> 
+      <Route path="/meeting" element={<Meeting />} />
+      <Route path="/message" element={<Message />} />
+      </Route>
     </Route>
   </Routes>
 );

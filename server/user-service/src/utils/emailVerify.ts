@@ -10,7 +10,7 @@ export class EmailService {
     const verificationToken = jwt.sign({ email }, EMAIL_SECRET, {
       expiresIn: EMAIL_EXPIRATION,
     });
-
+    
     const verificationLink = `${process.env.FRONT_URL}/verify-email?token=${verificationToken}`;
 
     const transporter = nodeMailer.createTransport({
