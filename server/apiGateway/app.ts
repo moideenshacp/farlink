@@ -22,6 +22,7 @@ app.use('/auth-service',proxy(`${process.env.AUTH_SERVICE_URL}`))
 app.use('/employee-service',proxy(`${process.env.EMPLOYEE_SERVICE_URL}`))
 app.use('/subcription-service',proxy(`${process.env.SUBCRIPTION_SERVICE_URL}`))
 app.use('/project-service',proxy(`${process.env.PROJECT_SERVICE_URL}`))
+app.use('/chat-meet-service',proxy(`${process.env.CHAT_MEET_SERVICE_URL}`))
 
 const port = process.env.SERVER_PORT || 4000
 

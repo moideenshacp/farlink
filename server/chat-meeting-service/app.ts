@@ -7,6 +7,7 @@ import logger from "./src/utils/logger";
 import morgan from "morgan";
 import { rabbitmqConnect } from "./src/config/rabbitmq";
 import { errorHandler } from "./src/middleware/errorHandler";
+import meetRoute from './src/routes/meetRoute'
 
 dotenv.config();
 connectDB();
@@ -43,9 +44,9 @@ app.use(
 app.use(cookieParser());
 app.use(express.json());
 
+app.use('/api/meet',meetRoute)
 
 app.use(errorHandler);
-
 const port = process.env.PORT;
 
 app.listen(port, () => {

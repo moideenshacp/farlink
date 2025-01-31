@@ -7,20 +7,24 @@ import { getAllEmployees } from "../../../api/employeeApi";
 import { IEmployee } from "../../../interface/IemployeeDetails";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
-
+import { createMeet } from "../../../api/meetApi";
 
 interface CreateMeetDrawerProps {
   open: boolean;
   onClose: () => void;
 }
 
-const AssignMeetingDrawer: React.FC<CreateMeetDrawerProps> = ({ open, onClose }) => {
+const AssignMeetingDrawer: React.FC<CreateMeetDrawerProps> = ({
+  open,
+  onClose,
+}) => {
   const { user } = useSelector((state: RootState) => state.user);
   const [meetDetails, setMeetDetails] = useState({
-    meetingTitle: "",
+    meetTitle: "",
     meetDate: new Date(),
     meetTime: "",
     members: [],
+    organizationId: user?.organizationId || "",
   });
   const [employees, setEmployees] = useState<IEmployee[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
@@ -54,9 +58,40 @@ const AssignMeetingDrawer: React.FC<CreateMeetDrawerProps> = ({ open, onClose })
     setMeetDetails({ ...meetDetails, [field]: option });
   };
 
-  const handleSubmit = (e: any) => {
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
-    console.log("Submitted meet details:", meetDetails);
+    if (!meetDetails.meetTitle.trim()) {
+      message.error("Please enter a valid Title");
+    }
+    if (!meetDetails.meetTime.trim()) {
+      message.error("Please select a valid Time");
+    }
+    if (meetDetails.members.length === 0) {
+      message.error("Please select a atleast one member");
+    }
+    const submitMeetDetails = {
+      ...meetDetails,
+      members: meetDetails.members.map((member: any) => member.value),
+    };
+    console.log("Submitted meet details:", submitMeetDetails);
+    try {
+      const res = await createMeet(submitMeetDetails);
+      if (res.data.message === "Meet created sucessfully..") {
+        message.success("Meet created successfully.");
+        onClose();
+        setMeetDetails({
+          meetTitle: "",
+          meetDate: new Date(),
+          meetTime: "",
+          members: [],
+          organizationId: user?.organizationId || "",
+        });
+      } else {
+        message.error("Failed to create Meet,please try again..");
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const memberOptions = employees.map((emp) => ({
@@ -90,8 +125,8 @@ const AssignMeetingDrawer: React.FC<CreateMeetDrawerProps> = ({ open, onClose })
         </label>
         <Input
           type="text"
-          name="meetingTitle"
-          value={meetDetails.meetingTitle}
+          name="meetTitle"
+          value={meetDetails.meetTitle}
           onChange={handleInputChange}
           className="p-2 border-gray-300 rounded-md"
           placeholder="Enter Title"

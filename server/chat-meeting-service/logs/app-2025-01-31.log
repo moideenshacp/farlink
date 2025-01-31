@@ -1,0 +1,7 @@
+{"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"POST\",\"url\":\"/api/meet/create-meet\",\"status\":\"400\",\"responseTime\":\"34.002\"}","timestamp":"2025-01-31T16:58:10.388Z"}
+{"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"POST\",\"url\":\"/api/meet/create-meet\",\"status\":\"401\",\"responseTime\":\"44.571\"}","timestamp":"2025-01-31T17:16:48.283Z"}
+{"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"POST\",\"url\":\"/api/meet/create-meet\",\"status\":\"200\",\"responseTime\":\"155.575\"}","timestamp":"2025-01-31T17:16:48.692Z"}
+{"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"POST\",\"url\":\"/api/meet/create-meet\",\"status\":\"200\",\"responseTime\":\"226.963\"}","timestamp":"2025-01-31T17:20:26.220Z"}
+{"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"POST\",\"url\":\"/api/meet/create-meet\",\"status\":\"200\",\"responseTime\":\"119.214\"}","timestamp":"2025-01-31T17:20:59.800Z"}
+{"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"POST\",\"url\":\"/api/meet/create-meet\",\"status\":\"400\",\"responseTime\":\"12.899\"}","timestamp":"2025-01-31T17:22:10.970Z"}
+{"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"POST\",\"url\":\"/api/meet/create-meet\",\"status\":\"200\",\"responseTime\":\"223.881\"}","timestamp":"2025-01-31T17:22:16.329Z"}
