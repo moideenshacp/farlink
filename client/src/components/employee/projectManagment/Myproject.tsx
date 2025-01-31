@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { IProject } from "../../../interface/IprojectDetails";
 import { fetchEmployeesByIds } from "../../../api/employeeApi";
 import ProjectViewCard from "../../../shared/components/ProjectViewCard";
-import ViewProjectDetail from "./viewProjectDetail";
+import ViewProjectDetail from "./ViewProjectDetail";
 
 const Myproject = () => {
   const [projects, setProjects] = useState<IProject[]>([]);

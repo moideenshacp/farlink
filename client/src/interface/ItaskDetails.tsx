@@ -4,12 +4,12 @@ import { IEmployee } from "./IemployeeDetails";
 
   
   export interface ITaskDetails {
-    _id?:string
+    _id?:string | undefined
     taskName: string;
     taskDescription: string;
     startDate: Date | null;
     endDate: Date | null;
-    members: IEmployee[];
+    members: IEmployee[] | any;
     priority: any;
     file?: string | File | null;
     organizationId:string | undefined,

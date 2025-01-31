@@ -80,7 +80,8 @@ export const uploadFileToCloudinary = async (
     );
     setIsUploading?.(false);
     console.log("Upload response:", res.data);
-
+    console.log("ress from uploading",res);
+    
     return res.data.secure_url;
   } catch (error) {
     console.error("Error uploading file:", error);

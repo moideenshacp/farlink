@@ -2,11 +2,13 @@
 import { useEffect, useState } from "react";
 
 import { fetchEmployeesByIds } from "../../../api/employeeApi";
-import { fetchTasks } from "../../../api/taskApi";
+import { fetchEmployeesTask, fetchTasks } from "../../../api/taskApi";
 import { ITaskDetails } from "../../../interface/ItaskDetails";
-import AssignTaskDrawer from "./AssignTaskDrawer";
 import { IProject } from "../../../interface/IprojectDetails";
 import TaskTable from "../../../shared/components/TaskTable";
+import AssignTaskDrawer from "../../admin/TaskManagement/AssignTaskDrawer";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../redux/store";
 
 interface TaskViewTableProps {
   project: IProject;
@@ -20,11 +22,17 @@ const TaskViewTable: React.FC<
   const [isLoading, setIsLoading] = useState(true);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [selectedTask, setSelectedTask] = useState<ITaskDetails | null>(null);
-
+  const { user } = useSelector((state: RootState) => state.user);
   const fetchAllTasks = async () => {
     setIsLoading(true);
     try {
-      const res = await fetchTasks(project._id);
+      let res
+      if(user?.email === project.manager.email){
+        res = await fetchTasks(project._id)
+      }else{
+
+        res = await fetchEmployeesTask(project._id,user?._id);
+      }
       if (res.data.result) {
         let projectData = res.data.result;
         if (statusFilter) {
@@ -79,16 +87,18 @@ const TaskViewTable: React.FC<
 
   return (
     <div className="w-[650px] bg-white rounded-lg shadow-sm">
-      <AssignTaskDrawer
-        open={isDrawerOpen}
-        onClose={() => {
-          setIsDrawerOpen(false);
-          setSelectedTask(null);
-        }}
-        project={project}
-        editTask={selectedTask}
-        onSuccess={fetchAllTasks}
-      />
+      {user?.email === project.manager.email && (
+        <AssignTaskDrawer
+          open={isDrawerOpen}
+          onClose={() => {
+            setIsDrawerOpen(false);
+            setSelectedTask(null);
+          }}
+          project={project}
+          editTask={selectedTask}
+          onSuccess={fetchAllTasks}
+        />
+      )}
       <TaskTable
         tasks={tasks}
         isLoading={isLoading}
@@ -104,6 +114,7 @@ const TaskViewTable: React.FC<
           setSelectedTask(task);
           setIsDrawerOpen(true);
         }}
+        project={project}
       />
     </div>
   );

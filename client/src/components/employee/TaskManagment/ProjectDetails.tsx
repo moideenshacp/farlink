@@ -14,12 +14,12 @@ import {
   Typography,
 } from "antd";
 import { DownOutlined, UserOutlined } from "@ant-design/icons";
-import { FaFileCirclePlus } from "react-icons/fa6";
 import { FaTasks } from "react-icons/fa";
-import AssignTaskDrawer from "./AssignTaskDrawer";
 import TaskViewTable from "./TaskviewTable";
+import AssignTaskDrawer from "../../admin/TaskManagement/AssignTaskDrawer";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
+import { FaFileCirclePlus } from "react-icons/fa6";
 
 interface ProjectDetailsProps {
   project: IProject;
@@ -44,7 +44,6 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({
     setOpen(false);
     setRefreshKey((prevKey) => prevKey + 1);
   };
-
   const items = [
     {
       key: "All Tasks",
@@ -64,13 +63,7 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({
           Completed Tasks
         </span>
       ),
-      children: (
-        <TaskViewTable
-          refreshKey={refreshKey}
-          project={project}
-          statusFilter="completed"
-        />
-      ),
+      children: <TaskViewTable refreshKey={refreshKey} project={project} statusFilter="completed" />,
     },
     {
       key: "Pending Tasks",
@@ -80,13 +73,7 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({
           Pending Tasks
         </span>
       ),
-      children: (
-        <TaskViewTable
-          refreshKey={refreshKey}
-          project={project}
-          statusFilter="in_progress"
-        />
-      ),
+      children: <TaskViewTable refreshKey={refreshKey} project={project} statusFilter="in_progress" />,
     },
   ];
 
@@ -108,7 +95,7 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({
             <Title level={4} style={{ color: "#4361EE" }}>
               {project.projectName}
             </Title>
-            {user?.role === "admin"&& (
+            {user?.email === project.manager.email && (
 
             <Button
               type="primary"
@@ -212,8 +199,8 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({
         />
       </div>
 
-      {/* Use the AssignTaskDrawer component */}
-      <AssignTaskDrawer open={open} project={project} onClose={onClose} />
+            {/* Use the AssignTaskDrawer component */}
+            <AssignTaskDrawer open={open} project={project} onClose={onClose} />
     </div>
   );
 };

@@ -54,4 +54,7 @@ export const TaskValidationSchema = Joi.object({
   projectId: Joi.string().required().messages({
     "string.empty": "ProjectID is required",
   }),
+  _id:Joi.string().optional(),
+  status:Joi.string().optional(),
+  __v:Joi.optional()
 });

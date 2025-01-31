@@ -34,3 +34,36 @@ export const createTask= async (taskDetails: ITaskDetails) => {
       throw error;
     }
   };
+  export const updateTask = async (taskId:string | undefined ,taskDetails: ITaskDetails) => {
+    try {
+      const res = await axiosInstance.patch(
+        `${
+          import.meta.env.VITE_SERVER_BASE_URL
+        }/project-service/api/task/update-task`,
+        { taskDetails ,taskId},
+        { withCredentials: true }
+      );
+      return res;
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  };
+  export const fetchEmployeesTask = async (projectId: string | undefined,employeeId:string | undefined) => {
+    try {
+      const res = await axiosInstance.get(
+        `${
+          import.meta.env.VITE_SERVER_BASE_URL
+        }/project-service/api/task/fetchEmployees-tasks`,
+        {
+          params: {projectId,employeeId},
+  
+          withCredentials: true,
+        }
+      );
+      return res;
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  };

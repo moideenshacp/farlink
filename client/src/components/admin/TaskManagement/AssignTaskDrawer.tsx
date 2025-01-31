@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { Drawer, Input, message } from "antd";
 import DatePickerField from "../../../shared/components/DatePickerField";
 import SelectField from "../../../shared/components/SelectField";
@@ -11,12 +11,14 @@ import dayjs from "dayjs";
 import { ITaskDetails } from "../../../interface/ItaskDetails";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
-import { createTask } from "../../../api/taskApi";
+import { createTask, updateTask } from "../../../api/taskApi";
 
 interface AssignTaskDrawerProps {
   open: boolean;
   onClose: () => void;
   project: IProject;
+  editTask?: ITaskDetails | null;
+  onSuccess?: () => void;
 }
 
 const priorityOptions = [
@@ -29,11 +31,23 @@ const AssignTaskDrawer: React.FC<AssignTaskDrawerProps> = ({
   open,
   onClose,
   project,
+  editTask,
+  onSuccess,
 }) => {
   const memberOptions = project?.members?.map((member) => ({
     value: member._id,
-    label: `${member.firstName} ${member.lastName}`,
+    label: (
+      <div className="flex items-center">
+        <img
+          src={member.image}
+          alt={member.firstName}
+          className="w-6 h-6 rounded-full mr-2"
+        />
+        {member.firstName + " " + member.lastName}
+      </div>
+    ),
   }));
+
   const { user } = useSelector((state: RootState) => state.user);
   const [taskDetails, setTaskDetails] = useState<ITaskDetails>({
     taskName: "",
@@ -46,9 +60,50 @@ const AssignTaskDrawer: React.FC<AssignTaskDrawerProps> = ({
     projectId: project._id,
     organizationId: user?.organizationId,
   });
-  console.log(project, "rpoerject iddddddddddddd=============================");
-
   const [isUploading, setIsUploading] = useState(false);
+
+  // Populate form when editing
+  useEffect(() => {
+    if (editTask) {
+      const formattedMembers = editTask.members.map((member: any) => ({
+        value: member._id,
+        label: (
+          <div className="flex items-center">
+            <img
+              src={member.image}
+              alt={member.firstName}
+              className="w-6 h-6 rounded-full mr-2"
+            />
+            {member.firstName + " " + member.lastName}
+          </div>
+        ),
+      }));
+
+      const formattedPriority = priorityOptions.find(
+        (option) => option.value === editTask.priority?.toLowerCase()
+      );
+
+      setTaskDetails({
+        ...editTask,
+        members: formattedMembers,
+        priority: formattedPriority || null,
+        startDate: editTask.startDate ? new Date(editTask.startDate) : null,
+        endDate: editTask.endDate ? new Date(editTask.endDate) : null,
+      });
+    } else {
+      setTaskDetails({
+        taskName: "",
+        taskDescription: "",
+        startDate: null,
+        endDate: null,
+        members: [],
+        priority: null,
+        file: null,
+        projectId: project._id,
+        organizationId: user?.organizationId,
+      });
+    }
+  }, [editTask, project._id, user?.organizationId]);
 
   const handleInputChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -91,7 +146,6 @@ const AssignTaskDrawer: React.FC<AssignTaskDrawerProps> = ({
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    // Map the members to match the expected structure of IMember[]
     const formattedTaskDetails = {
       ...taskDetails,
       startDate: taskDetails.startDate
@@ -102,8 +156,6 @@ const AssignTaskDrawer: React.FC<AssignTaskDrawerProps> = ({
       members: taskDetails.members.map((member: any) => member.value),
       projectId: project._id,
     };
-
-    console.log(formattedTaskDetails, "all task details");
 
     const { error } = TaskValidationSchema.validate(formattedTaskDetails, {
       abortEarly: false,
@@ -117,28 +169,39 @@ const AssignTaskDrawer: React.FC<AssignTaskDrawerProps> = ({
     }
 
     try {
-      const res = await createTask(formattedTaskDetails);
-
-      console.log(res, "from backendndndndnndndndndndn");
-      if (res.data.message === "Task added successfully...") {
-        message.success("Task submitted successfully!");
+      let response;
+      if (editTask) {
+        response = await updateTask(editTask._id, formattedTaskDetails);
+        message.success("Task updated successfully!");
+      } else {
+        response = await createTask(formattedTaskDetails);
+        message.success("Task created successfully!");
+        if (response.data) {
+          setTaskDetails({
+            taskName: "",
+            taskDescription: "",
+            startDate: null,
+            endDate: null,
+            members: [],
+            priority: null,
+            file: null,
+            projectId: project._id,
+            organizationId: user?.organizationId,
+          });
+        }
       }
-      setTaskDetails({
-        taskName: "",
-        taskDescription: "",
-        startDate: null,
-        endDate: null,
-        members: [],
-        priority: null,
-        file: null,
-        organizationId: user?.organizationId,
-        projectId: "",
-      });
+
+      if (response.data) {
+        onSuccess?.();
+        onClose();
+      }
     } catch (error: any) {
-      console.log(error);
+      console.error(error);
       const errorMsg =
         error.response?.data?.errors ||
-        "An error occurred while creating the project.";
+        `An error occurred while ${
+          editTask ? "updating" : "creating"
+        } the task.`;
       message.error(errorMsg);
     }
   };
@@ -147,7 +210,7 @@ const AssignTaskDrawer: React.FC<AssignTaskDrawerProps> = ({
     <Drawer
       title={
         <div className="text-center text-[#232360] font-semibold">
-          Assign Task
+          {editTask ? "Update Task" : "Assign Task"}
         </div>
       }
       closable={false}
@@ -221,7 +284,7 @@ const AssignTaskDrawer: React.FC<AssignTaskDrawerProps> = ({
           type="submit"
           className="bg-[#4361EE] hover:bg-[#3549bb] transition text-white font-semibold px-4 py-2 rounded-md w-full"
         >
-          Create Task
+          {editTask ? "Update Task" : "Create Task"}
         </button>
       </form>
     </Drawer>

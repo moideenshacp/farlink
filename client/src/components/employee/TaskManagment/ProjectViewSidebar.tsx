@@ -3,25 +3,30 @@ import { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
 import { IProject } from "../../../interface/IprojectDetails";
-import { fetchProjects } from "../../../api/projectApi";
+import { fetchEmployeesProject } from "../../../api/projectApi";
 import { fetchEmployeesByIds } from "../../../api/employeeApi";
 import ProjectSidebar from "../../../shared/components/ProjectSidebar";
 
-const ProjectViewSidebar = ({ setSelectedProject }: { setSelectedProject: React.Dispatch<React.SetStateAction<IProject | null>> }) => {
+const ProjectViewSidebar = ({
+  setSelectedProject,
+}: {
+  setSelectedProject: React.Dispatch<React.SetStateAction<IProject | null>>;
+}) => {
   const [projects, setProjects] = useState<IProject[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const [activeProject, setActiveProject] = useState<string>("");
- 
   const organizationId = useSelector(
     (state: RootState) => state.user?.user?.organizationId
   );
+  const { user } = useSelector((state: RootState) => state.user);
+  const [activeProject, setActiveProject] = useState<string>("");
+
   const isInitialLoad = useRef(true);
 
   useEffect(() => {
     const fetchEmployees = async () => {
       setLoading(true);
       try {
-        const res = await fetchProjects(organizationId);
+        const res = await fetchEmployeesProject(organizationId, user?._id);
         if (res.data.result) {
           const projectData = res.data.result;
           const allEmployeeIds = [
@@ -72,17 +77,16 @@ const ProjectViewSidebar = ({ setSelectedProject }: { setSelectedProject: React.
     };
 
     fetchEmployees();
-  }, [organizationId, setSelectedProject]);
-
+  }, [organizationId, setSelectedProject, user?._id]);
 
   return (
     <ProjectSidebar
       items={projects}
       selectedItem={projects.length > 0 ? projects[0] : null}
       setSelectedItem={setSelectedProject}
-      loading={loading}
       setActiveProject={setActiveProject}
       activeProject={activeProject}
+      loading={loading}
       searchPlaceholder="Search Projects..."
       title="My Projects"
     />

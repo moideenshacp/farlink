@@ -1,21 +1,30 @@
 import { useEffect, useState } from "react";
-import Sidebar from "./ProjectViewSidebar";
-import ProjectDetails from "./ProjectDetails";
 import { IProject } from "../../../interface/IprojectDetails";
 import StatCard from "../../../shared/components/StatsCard";
 import { FaTasks } from "react-icons/fa";
-import { fetchTasks } from "../../../api/taskApi";
+import { fetchEmployeesTask, fetchTasks } from "../../../api/taskApi";
 import { ITaskDetails } from "../../../interface/ItaskDetails";
+import ProjectViewSidebar from "./ProjectViewSidebar";
+import ProjectDetails from "./ProjectDetails";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../redux/store";
 
 const TaskSummary = () => {
   const [selectedProject, setSelectedProject] = useState<IProject | null>(null);
   const [allTasks, setAllTasks] = useState(0);
   const [completedTasks, setCompletedTasks] = useState(0);
   const [pendingTasks, setPendingTasks] = useState(0);
+  const {user} = useSelector((state:RootState)=>state.user)
 
   const fetchAllTasks = async () => {
     try {
-      const res = await fetchTasks(selectedProject?._id);
+      let res
+      if(selectedProject?.manager.email === user?.email){
+       res = await fetchTasks(selectedProject?._id);
+      }else{
+
+        res = await fetchEmployeesTask(selectedProject?._id,user?._id);
+      }
       const task = res.data.result;
       setAllTasks(task.length);
 
@@ -31,17 +40,18 @@ const TaskSummary = () => {
       console.log(error);
     }
   };
-  const progress = allTasks > 0 ? Math.round((completedTasks / allTasks) * 100) : 0;
+  const progress =
+    allTasks > 0 ? Math.round((completedTasks / allTasks) * 100) : 0;
 
   useEffect(() => {
     fetchAllTasks();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[selectedProject]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedProject]);
   return (
     <div className="flex h-screen">
       {/* Sidebar */}
       <div className="w-60 overflow-auto h-full">
-        <Sidebar setSelectedProject={setSelectedProject}  />
+        <ProjectViewSidebar setSelectedProject={setSelectedProject} />
       </div>
 
       {/* Project Details Section */}

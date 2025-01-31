@@ -7,8 +7,8 @@ import { MdOutlineSummarize } from "react-icons/md";
 import { MdOutlinePolicy } from "react-icons/md";
 import { VscGitPullRequestCreate } from "react-icons/vsc";
 import { GrTasks } from "react-icons/gr";
-import { GiAutoRepair } from "react-icons/gi";
-import { MdAddAlert } from "react-icons/md";
+// import { GiAutoRepair } from "react-icons/gi";
+// import { MdAddAlert } from "react-icons/md";
 import { IoIosVideocam } from "react-icons/io";
 import { TiMessages } from "react-icons/ti";
 import { MdOutlineSettingsSuggest } from "react-icons/md";
@@ -147,7 +147,7 @@ const DashBoardSideBar = () => {
             </li>
 
             {/* support and notification hub */}
-            <li className="mt-4">
+            {/* <li className="mt-4">
               <p className="text-xs ml-2  text-[#8C97A8] font-semibold uppercase">
                 Support and Notifications Hub
               </p>
@@ -181,7 +181,7 @@ const DashBoardSideBar = () => {
                   </Link>
                 </li>
               </ul>
-            </li>
+            </li> */}
 
             {/* communication */}
             <li className="mt-4">
