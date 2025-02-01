@@ -20,6 +20,7 @@ const LeaveController = new leaveController(LeaveService)
 //employee=====================================================================================================================
 
 router.post('/apply-leave',authenticate,LeaveController.handleLeaveApplication)
+router.patch('/edit-leave',authenticate,LeaveController.editLeave)
 router.get('/fetch-leave',authenticate,LeaveController.fetchAppliedLeaves)
 router.patch('/manage-leave',authenticate,LeaveController.ManageAppliedLeaves)
 router.get('/fetch-remainingLeaves',authenticate,LeaveController.fetchRemainingLeaves)

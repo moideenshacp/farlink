@@ -221,5 +221,122 @@ export class leaveService implements IleaveService {
       return null;
     }
   }
+  async editLeave(leaveId:string,data: any): Promise<IleaveModel | null> {
+    try {
+      console.log(data, "edit data");
+  
+      // Fetch the existing leave application
+      const existingLeave = await this._leaveRepository.findById(leaveId);
+      if (!existingLeave) {
+        throw new CustomError("Leave application not found.", 404);
+      }
+  
+      // Fetch the organization's leave policy
+      const policy = await this._policyRepository.findByOrganizationId(
+        data.organizationId
+      );
+  
+      if (!policy) {
+        throw new CustomError("Leave policy not found.", 400);
+      }
+  
+      const leaveType = data.formData.leaveType;
+      if (!policy.leaveType || !(leaveType in policy.leaveType)) {
+        throw new CustomError(`Invalid leave type: ${leaveType}`, 400);
+      }
+  
+      const startDate = new Date(data.formData.fromDate.split("T")[0]);
+      const endDate = new Date(data.formData.toDate.split("T")[0]);
+      const currentDate = new Date();
+      currentDate.setHours(0, 0, 0, 0);
+  
+      // Validate office start time for same-day leave applications
+      const officeStartTime = policy.officeStartTime;
+      if (officeStartTime) {
+        const [officeStartHour, officeStartMinute] = officeStartTime
+          .toString()
+          .split(":")
+          .map(Number);
+  
+        const leaveApplicationDate = new Date(data.formData.fromDate);
+        if (
+          leaveApplicationDate.getDate() === currentDate.getDate() &&
+          leaveApplicationDate.getMonth() === currentDate.getMonth() &&
+          leaveApplicationDate.getFullYear() === currentDate.getFullYear()
+        ) {
+          if (
+            leaveApplicationDate.getHours() > officeStartHour ||
+            (leaveApplicationDate.getHours() === officeStartHour &&
+              leaveApplicationDate.getMinutes() > officeStartMinute)
+          ) {
+            throw new CustomError(
+              `Leave cannot be edited after the office start time (${policy.officeStartTime}) on the same day.`,
+              400
+            );
+          }
+        }
+      }
+  
+      // Validate leave dates
+      if (startDate < currentDate || endDate < currentDate) {
+        throw new CustomError("Leave dates cannot be in the past.", 400);
+      }
+      if (endDate < startDate) {
+        throw new CustomError("The end date must be greater than the start date.", 400);
+      }
+  
+      // Check for overlapping approved leaves
+      const overlappingLeaves = await this._leaveRepository.getApprovedLeavesInDateRange(
+        data.organizationId,
+        data.employeeEmail,
+        startDate,
+        endDate,
+        leaveId // Exclude the current leave application from overlap check
+      );
+  
+      if (overlappingLeaves.length > 0) {
+        throw new CustomError(
+          "You already have approved leave's during the selected date range.",
+          400
+        );
+      }
+  
+      // Check leave balance
+      const currentMonth = startDate.getMonth() + 1;
+      const currentYear = startDate.getFullYear();
+  
+      const leavesTakenThisMonth = await this._leaveRepository.getLeavesTakenInMonth(
+        data.organizationId,
+        data.employeeEmail,
+        leaveType,
+        currentMonth,
+        currentYear
+      );
+  
+      const allowedLeaves = Number(policy.leaveType[leaveType as keyof typeof policy.leaveType]);
+      const requestedDays =
+        Math.ceil((endDate.getTime() - startDate.getTime()) / (1000 * 3600 * 24)) + 1;
+  
+      if (leavesTakenThisMonth + requestedDays > allowedLeaves) {
+        throw new CustomError(
+          `Insufficient leave balance for ${leaveType} in the current month.`,
+          400
+        );
+      }
+  
+      // Update leave details
+      existingLeave.leaveType = leaveType;
+      existingLeave.startDate = startDate;
+      existingLeave.endDate = endDate;
+      existingLeave.reason = data.formData.reason;
+  
+      const updatedLeave = await this._leaveRepository.updateLeave(existingLeave);
+      return updatedLeave;
+    } catch (error) {
+      console.error("Error editing leave application:", error);
+      throw error;
+    }
+  }
+  
   
 }

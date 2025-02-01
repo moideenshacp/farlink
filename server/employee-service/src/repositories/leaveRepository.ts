@@ -93,5 +93,12 @@ export class leaveRepository
       ],
     });
   }
+  async findById(leaveId: string): Promise<IleaveModel | null> {
+    return this.model.findById(new mongoose.Types.ObjectId(leaveId));
+  }
+
+  async updateLeave(leave: IleaveModel): Promise<IleaveModel | null> {
+    return this.model.findByIdAndUpdate(leave._id, leave, { new: true });
+  }
   
 }

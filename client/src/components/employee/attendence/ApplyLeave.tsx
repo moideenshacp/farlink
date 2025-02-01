@@ -111,6 +111,7 @@ const ApplyLeave = () => {
         <LeaveDetailsModel
           leave={selectedLeave}
           onClose={() => setSelectedLeave(null)}
+          onLeaveApplied={refreshLeaves}
         />
       )}
 

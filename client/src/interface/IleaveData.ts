@@ -5,6 +5,6 @@ export interface IleaveData {
     toDate: Date;
     reason: string;
   };
-  organizationId: string | undefined;
-  employeeEmail: string | undefined;
+  organizationId?: string | undefined;
+  employeeEmail?: string | undefined;
 }

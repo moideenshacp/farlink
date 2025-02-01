@@ -65,7 +65,7 @@ export class leaveController implements IleaveController {
     }
     
   }
-  fetchRemainingLeaves = async(req: Request, res: Response): Promise<void> =>{
+  public fetchRemainingLeaves = async(req: Request, res: Response): Promise<void> =>{
     try {
       const {organizationId,employeeEmail}= req.query
       const result = await this._leaveservice.fetchRemainingLeaves(organizationId as string,employeeEmail as string)
@@ -83,4 +83,27 @@ export class leaveController implements IleaveController {
     }
     
   }
+  public editLeave = async(req: Request, res: Response): Promise<void>=> {
+    try {
+      const {leaveId,formData} = req.body
+      const savedLeave = await this._leaveservice.editLeave(leaveId,formData)
+      if(savedLeave){
+
+        res.status(200).json({ message: "Leave edited successfully" });
+      }else{
+
+        res.status(400).json({ error: "Error in updating leave" });
+      }
+    } catch (error) {
+      if (error instanceof CustomError) {
+        console.log("custom error underyyyy");
+
+        res.status(error.statusCode).json({ error: error.message });
+      } else {
+        res.status(500).json({ error: "Internal Server Error" });
+      }
+    }
+    
+  }
+  
 }

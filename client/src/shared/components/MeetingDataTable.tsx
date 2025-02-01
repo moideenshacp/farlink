@@ -11,7 +11,7 @@ const isMeetingActive = (meetDate: string, meetTime: string) => {
 
   // Check if the meeting is within a window (e.g., 5 minutes before the meeting starts)
   const timeBeforeMeeting = new Date(meetingDateTime.getTime() - 1 * 60 * 1000); // 5 minutes before
-  const timeAfterMeeting = new Date(meetingDateTime.getTime() + 10 * 60 * 1000); // 5 minutes after
+  const timeAfterMeeting = new Date(meetingDateTime.getTime() + 30 * 60 * 1000); // 5 minutes after
 
   return now >= timeBeforeMeeting && now <= timeAfterMeeting;
 };
@@ -27,7 +27,7 @@ const MeetingDataTable: React.FC<any> = ({ meetData, onEdit, onDelete }) => {
 
   const isMeetingExpired = (meetDate: string, meetTime: string) => {
     const meetingDateTime = new Date(`${meetDate}T${meetTime}`);
-    meetingDateTime.setMinutes(meetingDateTime.getMinutes() + 10);
+    meetingDateTime.setMinutes(meetingDateTime.getMinutes() + 30);
     const now = new Date();
     return meetingDateTime < now;
   };
