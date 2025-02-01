@@ -14,7 +14,7 @@ RUN npm install
 COPY . .
 
 # Expose the service port
-EXPOSE 3001
+EXPOSE 3005
 
 # Start the application
 CMD ["node", "dist/app.js"]
