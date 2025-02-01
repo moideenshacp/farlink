@@ -3,20 +3,26 @@ import { useEffect, useState } from "react";
 import { Drawer, Input, message } from "antd";
 import DatePickerField from "../../../shared/components/DatePickerField";
 import SelectField from "../../../shared/components/SelectField";
-import { getAllEmployees } from "../../../api/employeeApi";
+import { fetchEmployeesByIds, getAllEmployees } from "../../../api/employeeApi";
 import { IEmployee } from "../../../interface/IemployeeDetails";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
-import { createMeet } from "../../../api/meetApi";
+import { createMeet, editMeet } from "../../../api/meetApi";
 
 interface CreateMeetDrawerProps {
   open: boolean;
   onClose: () => void;
+  fetchMeetings: () => void;
+  isEditMode?: boolean;
+  editMeetDetails?: any;
 }
 
 const AssignMeetingDrawer: React.FC<CreateMeetDrawerProps> = ({
   open,
   onClose,
+  fetchMeetings,
+  isEditMode,
+  editMeetDetails,
 }) => {
   const { user } = useSelector((state: RootState) => state.user);
   const [meetDetails, setMeetDetails] = useState({
@@ -26,6 +32,79 @@ const AssignMeetingDrawer: React.FC<CreateMeetDrawerProps> = ({
     members: [],
     organizationId: user?.organizationId || "",
   });
+
+  useEffect(() => {
+    const fetchMembers = async () => {
+      if (isEditMode && editMeetDetails) {
+        try {
+          const allEmployeeIds = [...new Set(editMeetDetails.members)];
+
+          // Fetch employee details based on IDs
+          const employeeRes = await fetchEmployeesByIds(allEmployeeIds);
+
+          if (employeeRes?.data?.employees) {
+            const employeeMap = new Map(
+              employeeRes.data.employees.map((employee: any) => [
+                employee._id,
+                employee,
+              ])
+            );
+
+            // Format members with names and images
+            const formattedMembers = editMeetDetails.members
+              .map((memberId: string) => {
+                const employee = employeeMap.get(memberId) as
+                  | IEmployee
+                  | undefined;
+
+                if (!employee) {
+                  // Skip invalid member IDs
+                  return null;
+                }
+
+                return {
+                  value: employee._id,
+                  label: (
+                    <div className="flex items-center">
+                      {employee.image && (
+                        <img
+                          src={employee.image}
+                          alt={employee.firstName}
+                          className="w-6 h-6 rounded-full mr-2"
+                        />
+                      )}
+                      {employee.firstName + " " + employee.lastName}
+                    </div>
+                  ),
+                };
+              })
+              .filter((member: any) => member !== null); // Filter out null values
+
+            setMeetDetails({
+              meetTitle: editMeetDetails.meetTitle,
+              meetDate: new Date(editMeetDetails.meetDate),
+              meetTime: editMeetDetails.meetTime,
+              members: formattedMembers,
+              organizationId: user?.organizationId || "",
+            });
+
+            setMeetDetails({
+              meetTitle: editMeetDetails.meetTitle,
+              meetDate: new Date(editMeetDetails.meetDate),
+              meetTime: editMeetDetails.meetTime,
+              members: formattedMembers,
+              organizationId: user?.organizationId || "",
+            });
+          }
+        } catch (error) {
+          console.error("Failed to fetch members", error);
+        }
+      }
+    };
+
+    fetchMembers();
+  }, [isEditMode, editMeetDetails, user?.organizationId]);
+
   const [employees, setEmployees] = useState<IEmployee[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -62,23 +141,35 @@ const AssignMeetingDrawer: React.FC<CreateMeetDrawerProps> = ({
     e.preventDefault();
     if (!meetDetails.meetTitle.trim()) {
       message.error("Please enter a valid Title");
+      return;
     }
     if (!meetDetails.meetTime.trim()) {
       message.error("Please select a valid Time");
+      return;
     }
     if (meetDetails.members.length === 0) {
       message.error("Please select a atleast one member");
+      return;
     }
     const submitMeetDetails = {
       ...meetDetails,
       members: meetDetails.members.map((member: any) => member.value),
     };
-    console.log("Submitted meet details:", submitMeetDetails);
     try {
-      const res = await createMeet(submitMeetDetails);
-      if (res.data.message === "Meet created sucessfully..") {
-        message.success("Meet created successfully.");
+      let res;
+      if (isEditMode) {
+        res = await editMeet(editMeetDetails._id,submitMeetDetails);
+      } else {
+        res = await createMeet(submitMeetDetails);
+      }
+      if (res.data.message.includes("sucessfully..")) {
+        message.success(
+          isEditMode
+            ? "Meeting updated successfully."
+            : "Meeting created successfully."
+        );
         onClose();
+        fetchMeetings();
         setMeetDetails({
           meetTitle: "",
           meetDate: new Date(),
@@ -112,7 +203,7 @@ const AssignMeetingDrawer: React.FC<CreateMeetDrawerProps> = ({
     <Drawer
       title={
         <div className="text-center text-[#232360] font-semibold">
-          Create Meeting
+          {isEditMode ? "Edit Meeting" : "Create Meeting"}
         </div>
       }
       closable={false}
@@ -165,7 +256,7 @@ const AssignMeetingDrawer: React.FC<CreateMeetDrawerProps> = ({
           type="submit"
           className="bg-[#4361EE] hover:bg-[#3549bb] transition text-white font-semibold px-4 py-2 rounded-md w-full"
         >
-          Create Meet
+          {isEditMode ? "Update Meet" : "Create Meet"}
         </button>
       </form>
     </Drawer>

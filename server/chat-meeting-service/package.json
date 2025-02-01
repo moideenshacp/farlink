@@ -39,6 +39,7 @@
     "morgan": "^1.10.0",
     "nodemon": "^3.1.9",
     "undici-types": "^6.20.0",
+    "uuidv4": "^6.2.13",
     "v8-compile-cache-lib": "^3.0.1",
     "winston": "^3.17.0",
     "winston-daily-rotate-file": "^5.0.0",

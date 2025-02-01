@@ -3,6 +3,7 @@ import { ImeetDetails } from "../interfaces/ImeetDetails";
 import { ImeetingService } from "../interfaces/ImeetingService";
 import ImeetModel from "../interfaces/ImeetModel";
 import ImeetRepository from "../interfaces/ImeetRepository";
+import generateRandomId from "../utils/generateMeetId";
 
 export class meetService implements ImeetingService {
   private _meetRepository: ImeetRepository;
@@ -45,6 +46,8 @@ export class meetService implements ImeetingService {
           );
         }
       }
+      const meetId = generateRandomId(10)
+      meetDetails.meetId = meetId
       const meeting = await this._meetRepository.createMeet(meetDetails);
       if (meeting) {
         return meeting;
@@ -54,6 +57,74 @@ export class meetService implements ImeetingService {
     } catch (error) {
       console.log(error);
       throw error;
+    }
+  }
+  async fetchMeeting(organizationId: string): Promise<ImeetModel[] | null> {
+    try {
+      console.log("fetch meting",organizationId);
+      const meetings = await this._meetRepository.fetchMeet(organizationId)
+      if (meetings) {
+        const sortedMeetings = meetings.sort((a, b) => {
+          const meetingA = new Date(`${a.meetDate}`);
+          const meetingB = new Date(`${b.meetDate}`);
+          
+          return meetingB.getTime() - meetingA.getTime();
+        });
+        console.log(sortedMeetings,"meettss");
+        
+        return sortedMeetings;
+      }
+      return null
+    } catch (error) {
+      console.log(error);
+      throw error
+      
+    }
+  }
+  async editMeeting(meetId: string, meetDetails: ImeetDetails): Promise<ImeetModel | null> {
+    try {
+      const updatedMeet = await this._meetRepository.editMeet(meetId,meetDetails)
+      if(updatedMeet){
+        return updatedMeet
+      }
+      return null
+    } catch (error) {
+      console.log(error);
+      throw error
+    }
+  }
+  async deleteMeeting(meetId: string): Promise<ImeetModel | null> {
+    try {
+
+      const deleteMeet = await this._meetRepository.deleteMeet(meetId)
+      return deleteMeet
+      
+    } catch (error) {
+      console.log(error);
+      throw error
+      
+    }
+  }
+  async fetchAllMeetsOfEmployee(employeeId: string): Promise<ImeetModel[] | null> {
+    try {
+      const meetings = await this._meetRepository.fetchAllMeetsOfEmployee(employeeId)
+      if (meetings) {
+        const sortedMeetings = meetings.sort((a, b) => {
+          const meetingA = new Date(`${a.meetDate}`);
+          const meetingB = new Date(`${b.meetDate}`);
+          
+          return meetingB.getTime() - meetingA.getTime();
+        });
+        console.log(sortedMeetings,"meettss emplyees");
+        
+        return sortedMeetings;
+      }
+      return null
+      
+    } catch (error) {
+      console.log(error)
+      throw error
+      
     }
   }
 }

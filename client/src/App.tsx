@@ -22,6 +22,7 @@ import AdminRoutes from "./routes/adminRoute/AdminRoutes";
 import EmployeeRoutes from "./routes/employeeRoute/EmployeeRoutes";
 import SuperAdminRoutes from "./routes/superAdminRoute/SuperAdminRoutes";
 import EmployeePrivateRoute from "./routes/EmployeePrivateRoute";
+import VideoCall from "./shared/components/VideoCall";
 
 function App() {
   return (
@@ -48,6 +49,7 @@ function App() {
               element={<InvalidForgetPass />}
             />
           </Route>
+            <Route path="/video-call" element={<VideoCall />} />
           {/*================================================================================================================================== */}
 
           <Route element={<OrganizationPrivateRoute />}>

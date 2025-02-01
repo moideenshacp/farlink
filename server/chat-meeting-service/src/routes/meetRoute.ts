@@ -14,6 +14,10 @@ const MeetService:ImeetingService = new meetService(MeetRepository)
 const MeetConstroller:ImeetingController = new meetController(MeetService)
 
 router.post('/create-meet',authenticate,MeetConstroller.createMeeting)
+router.patch('/edit-meet',authenticate,MeetConstroller.editMeeting)
+router.get('/fetch-meets',authenticate,MeetConstroller.fetchMeeting)
+router.get('/fetchEmployees-Allmeets',authenticate,MeetConstroller.fetchAllMeetsOfEmployee)
+router.delete('/delete-meet',authenticate,MeetConstroller.deleteMeeting)
 
 
 export default router

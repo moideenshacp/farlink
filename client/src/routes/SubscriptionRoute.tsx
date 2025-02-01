@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import { getSubcriptionPlans } from "../api/subcriptionApi";
 import { RootState } from "../redux/store";
 import { FaSpinner } from "react-icons/fa";
+import { Modal } from "antd";
 
 const SubscriptionRoute = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -21,7 +22,6 @@ const SubscriptionRoute = () => {
 
         const response = await getSubcriptionPlans(user.organizationId);
         const subscriptionData = response.data.companyDetails;
-        console.log(subscriptionData, "susbcriptionData");
 
         if (
           subscriptionData &&
@@ -51,7 +51,19 @@ const SubscriptionRoute = () => {
     );
   }
 
-  return isSubscribed ? <Outlet /> : <Navigate to="/admin/billing" replace />;
+  if (!isSubscribed) {
+    if (user?.role !== "admin") {
+      Modal.warning({
+        title: "Subscription Required",
+        content: "Your organization needs an active subscription to access this section. Please contact your admin.",
+        centered: true,
+      });
+      return <Navigate to="/employee/" replace />;
+    }
+    return <Navigate to="/admin/billing" replace />;
+  }
+
+  return <Outlet />;
 };
 
 export default SubscriptionRoute;

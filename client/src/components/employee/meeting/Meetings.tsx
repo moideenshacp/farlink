@@ -1,14 +1,14 @@
 import { Button } from "antd";
 import { useEffect, useState } from "react";
-import AssignMeetingDrawer from "./AssignMeetingDrawer";
 import { Video } from "lucide-react";
-import MeetingTable from "./MeetingTable";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
-import { fetchMeets } from "../../../api/meetApi";
+import { fetchAllMeetsOfEmployee } from "../../../api/meetApi";
 import { FaSpinner } from "react-icons/fa";
+import AssignMeetingDrawer from "../../admin/meeting/AssignMeetingDrawer";
+import MeetingTable from "../../admin/meeting/MeetingTable";
 
-const Meeting = () => {
+const Meetings = () => {
   const [open, setOpen] = useState(false);
   const { user } = useSelector((state: RootState) => state.user);
   const [meetDatas, setMeetDatas] = useState([]);
@@ -24,7 +24,7 @@ const Meeting = () => {
   const fetchMeetings = async () => {
     if (!user?.organizationId) return;
     setLoading(true);
-    const res = await fetchMeets(user.organizationId);
+    const res = await fetchAllMeetsOfEmployee(user._id);
     if (res.data.message === "Meetings fetched sucessfully..") {
       setMeetDatas(res.data.result);
     }
@@ -34,7 +34,9 @@ const Meeting = () => {
   useEffect(() => {
     fetchMeetings();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user?.organizationId]);
+  }, [user?._id]);
+  console.log("meeeeeeeeeeeeeeeeeee demplye",meetDatas);
+  
 
   return (
     <div>
@@ -69,4 +71,4 @@ const Meeting = () => {
   );
 };
 
-export default Meeting;
+export default Meetings;
