@@ -1,34 +1,24 @@
 import { useEffect, useState } from "react";
-import { fetchEmployeesCount } from "../../../api/employeeApi";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
 import StatCard from "../../../shared/components/StatsCard";
-import { RiTeamLine } from "react-icons/ri";
-import { fetchProjects } from "../../../api/projectApi";
+import { fetchEmployeesProject } from "../../../api/projectApi";
 import { IProject } from "../../../interface/IprojectDetails";
-import { FaUsers, FaProjectDiagram, FaCheckCircle } from "react-icons/fa";
-import { DashboardChart } from "./DashBoardChart";
+import {  FaProjectDiagram, FaCheckCircle } from "react-icons/fa";
+import { fetchAllTasksOfEmployee } from "../../../api/taskApi";
+import { ITaskDetails } from "../../../interface/ItaskDetails";
+import { GrTasks } from "react-icons/gr";
+import { DashboardChart } from "../../admin/overview/DashBoardChart";
 const DashboardOverview = () => {
   const { user } = useSelector((state: RootState) => state.user);
-  const [activeEmployees, setActiveEmployees] = useState(0);
-  const [TerminatedEmployeesCount, SetTerminatedEmployeesCount] = useState(0);
   const [allProjects, setAllProjects] = useState(0);
+  const [allTasks, setAllTasks] = useState(0);
   const [completedProjects, setCompletedProjects] = useState(0);
-  useEffect(() => {
-    const fetchData = async () => {
-      const res = await fetchEmployeesCount(user?.organizationId);
+  const [completedTasks, setCompletedTasks] = useState(0);
 
-      console.log(res?.data.data);
-      if (res?.data.data) {
-        setActiveEmployees(res?.data.data.ActiveEmployeesCount);
-        SetTerminatedEmployeesCount(res?.data.data.TerminatedEmployeesCount);
-      }
-    };
-    fetchData();
-  }, [user?.organizationId]);
   useEffect(() => {
     const fetchProject = async () => {
-      const res = await fetchProjects(user?.organizationId);
+      const res = await fetchEmployeesProject(user?.organizationId,user?._id);
       const project = res.data.result;
       if (project) {
         setAllProjects(project.length);
@@ -40,21 +30,28 @@ const DashboardOverview = () => {
       }
     };
     fetchProject();
-  }, [user?.organizationId]);
+  }, [user?._id,user?.organizationId]);
 
+  useEffect(() => {
+    const fetchTasks = async () => {
+      const res = await fetchAllTasksOfEmployee(user?._id);
+      const tasks = res.data.result;
+      if (tasks) {
+        setAllTasks(tasks.length);
 
+        const completedTasks = tasks.filter(
+          (t: ITaskDetails) => t.status === "completed"
+        );
+        setCompletedTasks(completedTasks.length);
+        
+      }
+    };
+    fetchTasks();
+  }, [user?._id]);
   
   const stats = [
-    {
-      title: "Active Employees",
-      value: activeEmployees,
-      icon: <FaUsers size={20} color="#4361EE" />,
-    },
-    {
-      title: "Ex Employees",
-      value: TerminatedEmployeesCount,
-      icon: <RiTeamLine size={20} color="#FF5733" />,
-    },
+
+
     {
       title: "Total Projects",
       value: allProjects,
@@ -63,6 +60,16 @@ const DashboardOverview = () => {
     {
       title: "Completed Projects",
       value: completedProjects,
+      icon: <FaCheckCircle size={20} color="#28A745" />,
+    },
+    {
+      title: "Total Tasks",
+      value: allTasks,
+      icon: <GrTasks size={20} color="#4361EE" />,
+    },
+    {
+      title: "Completed Tasks",
+      value: completedTasks,
       icon: <FaCheckCircle size={20} color="#28A745" />,
     },
   ];

@@ -243,7 +243,12 @@ export class attendenceService implements IattendenceService {
           };
         }
       );
-
+      attendanceSummary.sort((a, b) => {
+        const dateA = a.date ? new Date(a.date).getTime() : 0;
+        const dateB = b.date ? new Date(b.date).getTime() : 0;
+        return dateB - dateA; // Newest first
+      });
+      
       return attendanceSummary;
     } catch (error) {
       console.error("Error fetching attendance report:", error);
