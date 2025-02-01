@@ -1,0 +1,113 @@
+version: '3.8'
+
+networks:
+  farlink-network:
+    driver: bridge
+
+services:
+  # API Gateway
+  api-gateway:
+    build:
+      context: ./apiGateway
+    image:moideenshacp/farlink-api-gateway:latest
+    ports:
+      - "4000:4000"
+    depends_on:
+      - rabbitmq
+      - user-service
+      - employee-service
+      - subscription-service
+      - project-service
+      - chat-meeting-service
+    networks:
+      - farlink-network
+
+  # User Service
+  user-service:
+    build:
+      context: ./user-service
+    image:moideenshacp/farlink-user-service:latest
+    container_name: user-service
+    ports:
+      - "3001:3001"
+    depends_on:
+      - rabbitmq
+    environment:
+      RABBITMQ_HOST: rabbitmq
+      RABBITMQ_PORT: 5672
+    networks:
+      - farlink-network
+
+  # Employee Service
+  employee-service:
+    build:
+      context: ./employee-service
+    image:moideenshacp/farlink-employee-service:latest
+    container_name: employee-service
+    ports:
+      - "3002:3002"
+    depends_on:
+      - rabbitmq
+    environment:
+      RABBITMQ_HOST: rabbitmq
+      RABBITMQ_PORT: 5672
+    networks:
+      - farlink-network
+
+  # Subscription Service
+  subscription-service:
+    build:
+      context: ./subscription-service
+    image:moideenshacp/farlink-subscription-service:latest
+    container_name: subscription-service
+    ports:
+      - "3003:3003"
+    depends_on:
+      - rabbitmq
+    environment:
+      RABBITMQ_HOST: rabbitmq
+      RABBITMQ_PORT: 5672
+    networks:
+      - farlink-network
+
+  # Project Service
+  project-service:
+    build:
+      context: ./project-service
+    image:moideenshacp/farlink-project-service:latest
+    container_name: project-service
+    ports:
+      - "3004:3004"
+    depends_on:
+      - rabbitmq
+    environment:
+      RABBITMQ_HOST: rabbitmq
+      RABBITMQ_PORT: 5672
+    networks:
+      - farlink-network
+
+  # Chat Meeting Service
+  chat-meeting-service:
+    build:
+      context: ./chat-meeting-service
+    image:moideenshacp/farlink-chat-meeting-service:latest
+    container_name: chat-meeting-service
+    ports:
+      - "3005:3005"
+    depends_on:
+      - rabbitmq
+    environment:
+      RABBITMQ_HOST: rabbitmq
+      RABBITMQ_PORT: 5672
+    networks:
+      - farlink-network
+
+  # RabbitMQ
+  rabbitmq:
+    image: rabbitmq:management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"  # Management UI (http://localhost:15672)
+    networks:
+      - farlink-network

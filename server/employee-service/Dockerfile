@@ -17,4 +17,4 @@ COPY . .
 EXPOSE 3002
 
 # Start the application
-CMD ["node", "dist/app.js"]
+CMD ["npm", "start"]
