@@ -20,4 +20,12 @@
       --chart-5: 340 75% 55%;
     }
   }
-  
+  .custom-pagination {
+    @apply flex justify-center items-center space-x-2;
+  }
+  .custom-pagination .ant-pagination-item {
+    @apply rounded-md border border-gray-300;
+  }
+  .custom-pagination .ant-pagination-item-active {
+    @apply bg-blue-500 text-white border-blue-500;
+  }

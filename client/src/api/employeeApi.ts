@@ -90,14 +90,14 @@ export const uploadFileToCloudinary = async (
   }
 };
 
-export const getAllEmployees = async (organizationId: string | undefined) => {
+export const getAllEmployees = async (organizationId: string | undefined,page?:number, pageSize?:number) => {
   try {
     const res = await axiosInstance.get(
       `${
         import.meta.env.VITE_SERVER_BASE_URL
       }/employee-service/api/employee/get-employees`,
       {
-        params: { organizationId },
+        params: { organizationId ,page,pageSize},
         withCredentials: true,
       }
     );

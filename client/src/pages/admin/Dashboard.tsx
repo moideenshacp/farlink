@@ -15,7 +15,7 @@ const AdminDashboard = () => {
         </div>
 
         {/* Dynamic Content */}
-        <main className="flex-1 bg-white p-6 sm: mt-14 lg:pt-14">
+        <main className="flex-1 bg-white p-6 sm: mt-14 lg:pt-8">
           <Outlet />
         </main>
       </div>

@@ -61,20 +61,24 @@ export class employeeService implements IemployeeService {
     }
   }
   async getAllEmployees(
-    organizationId: string
-  ): Promise<IemployeeModel[] | null> {
+    organizationId: string,
+    page?: number,
+    pageSize?: number
+  ): Promise<{ employees: IemployeeModel[]; totalEmployees: number }> {
     try {
-
-      const allEmployees = await this._employeeRepository.findByOrganizationId(
-        organizationId
-      );
-
-      return allEmployees;
+      // Count total employees
+      const totalEmployees = await this._employeeRepository.countEmployeesByOrganization(organizationId);
+  
+      // Fetch employees with optional pagination
+      const employees = await this._employeeRepository.findByOrganizationId(organizationId, page, pageSize);
+  
+      return { employees, totalEmployees };
     } catch (error) {
-      console.log(error);
-      return null;
+      console.error("Error in fetching employees:", error);
+      throw error;
     }
   }
+  
   async updateEmployee(
     employeeId: string,
     employeeData: IemployeeModel | null

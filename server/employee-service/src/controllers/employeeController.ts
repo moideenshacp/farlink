@@ -56,14 +56,16 @@ export class employeeController implements IemployeeController {
     try {
       console.log("gte in allllll");
 
-      const { organizationId } = req.query;
+      const { organizationId,page,pageSize } = req.query;
       if (!organizationId) {
         throw new Error("organix=zation id is needed");
       }
-      const employees = await this._employeeservice.getAllEmployees(
-        organizationId as string
+      const pageNumber = page ? parseInt(page as string, 10) : undefined;
+      const pageSizeNumber = pageSize ? parseInt(pageSize as string, 10) : undefined;
+      const {employees,totalEmployees} = await this._employeeservice.getAllEmployees(
+        organizationId as string,pageNumber,pageSizeNumber
       );
-      res.status(200).json({ message: "sucess", employees });
+      res.status(200).json({ message: "sucess", employees,totalEmployees });
     } catch (error) {
       console.log(error);
       res.status(500).json({ message: "Interval server error" });

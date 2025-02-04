@@ -30,9 +30,17 @@ export class employeeRepository
   ): Promise<IemployeeModel | null> {
     return this.model.findOneAndUpdate(filter, update, { new: true });
   }
-  async findByOrganizationId(organizationId: string): Promise<IemployeeModel[]> {
-    const objectId = new Types.ObjectId(organizationId); 
-    return this.model.find({ organizationId: objectId }).exec();
+  async findByOrganizationId(organizationId: string, page?: number, pageSize?: number): Promise<IemployeeModel[]> {
+    const objectId = new Types.ObjectId(organizationId);
+    let query = this.model.find({ organizationId: objectId });
+  
+    // Apply pagination only if both page and pageSize exist
+    if (page !== undefined && pageSize !== undefined) {
+      const skip = (page - 1) * pageSize;
+      query = query.skip(skip).limit(pageSize);
+    }
+  
+    return query.exec();
   }
   async getDistinctOrganizationIds(): Promise<string[]> {
     return this.model.distinct("organizationId").exec().then(ids => ids.map(id => id.toHexString()));
@@ -53,4 +61,10 @@ export class employeeRepository
       throw error;
     }
   }
+  async countEmployeesByOrganization(organizationId: string): Promise<number> {
+    const objectId = new Types.ObjectId(organizationId);
+    return this.model.countDocuments({ organizationId: objectId }).exec();
+  }
+
+  
 }

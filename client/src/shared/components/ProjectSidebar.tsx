@@ -38,7 +38,7 @@ const ProjectSidebar = ({
   }, [searchQuery, items]);
 
   return (
-    <div className="w-64 border-r -ml-6 sm: -mt-0 lg:-mt-9 h-full shadow-md fixed overflow-y-auto max-h-screen scrollbar-none scrollbar-thumb-gray-300 scrollbar-track-gray-100">
+    <div className="w-64 border-r -ml-6 sm: -mt-0 lg:-mt-3 h-full shadow-md fixed overflow-y-auto max-h-screen scrollbar-none scrollbar-thumb-gray-300 scrollbar-track-gray-100">
       <div className="flex items-center p-4">
         <Input
           type="text"

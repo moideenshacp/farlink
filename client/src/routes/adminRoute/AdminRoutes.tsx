@@ -11,9 +11,9 @@ import Billing from "../../components/admin/billing/Billing";
 import TaskSummary from "../../components/admin/TaskManagement/TaskSummary";
 import SubscriptionRoute from "../SubscriptionRoute";
 import Meeting from "../../components/admin/meeting/Meeting";
+import ChatContainer from "../../components/admin/message/Message";
 const ServiceRequest = () => <div>ServiceRequest Content</div>;
 const RealTimeAlert = () => <div>RealTimeAlert Content</div>;
-const Message = () => <div>Message Content</div>;
 
 const AdminRoutes = () => (
   <Routes>
@@ -33,7 +33,7 @@ const AdminRoutes = () => (
 
       <Route element={<SubscriptionRoute />}> 
       <Route path="/meeting" element={<Meeting />} />
-      <Route path="/message" element={<Message />} />
+      <Route path="/message" element={<ChatContainer />} />
       </Route>
     </Route>
   </Routes>
