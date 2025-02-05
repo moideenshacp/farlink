@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { getAttendenceReport } from "../../api/attendenceApi";
 import { IattendenceSummary } from "../../interface/IattendenceSummary";
-import { message } from "antd";
+import { message, Pagination } from "antd";
 import ShimmerHistory from "./ShimmerHistory";
 
 interface AttendanceHistoryProps {
@@ -25,6 +25,8 @@ const AttendanceHistory: React.FC<AttendanceHistoryProps> = ({
     IattendenceSummary[]
   >([]);
   const [loading, setLoading] = useState<boolean>(false);
+  const [currentPage,setCurrentPage] = useState(1)
+  const pageSize = 10
 
   useEffect(() => {
     const fetchAttendenceReportEmp = async () => {
@@ -92,6 +94,15 @@ const AttendanceHistory: React.FC<AttendanceHistoryProps> = ({
     }
   }, [isCheckedIn, email, setIsCheckedIn, role]);
 
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [attendanceHistory]);
+
+  // Apply pagination
+  const paginatedData = attendanceHistory.slice(
+    (currentPage - 1) * pageSize,
+    currentPage * pageSize
+  );
   return (
     <div className="p-6 bg-white rounded-lg shadow-lg">
       {showCheckInButton && handleAttendance && (
@@ -123,8 +134,8 @@ const AttendanceHistory: React.FC<AttendanceHistoryProps> = ({
                 </tr>
               </thead>
               <tbody>
-                {attendanceHistory.length > 0 ? (
-                  attendanceHistory.map((attendance, index) => (
+                {paginatedData.length > 0 ? (
+                  paginatedData.map((attendance, index) => (
                     <tr key={index} className="border-b hover:bg-gray-50">
                       <td className="px-4 py-2">{index + 1}</td>
                       <td className="px-4 py-2">{attendance.date || "N/A"}</td>
@@ -159,6 +170,18 @@ const AttendanceHistory: React.FC<AttendanceHistoryProps> = ({
               </tbody>
             </table>
           </div>
+
+          {attendanceHistory.length > pageSize && (
+            <div className="flex justify-end mt-4">
+              <Pagination
+                current={currentPage}
+                total={attendanceHistory.length}
+                pageSize={pageSize}
+                onChange={(page) => setCurrentPage(page)}
+                simple
+              />
+            </div>
+          )}
         </>
       )}
     </div>

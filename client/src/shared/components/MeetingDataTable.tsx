@@ -15,7 +15,7 @@ const isMeetingActive = (meetDate: string, meetTime: string) => {
 
   return now >= timeBeforeMeeting && now <= timeAfterMeeting;
 };
-const MeetingDataTable: React.FC<any> = ({ meetData, onEdit, onDelete }) => {
+const MeetingDataTable: React.FC<any> = ({ meetData, onEdit, onDelete ,currentPage,pageSize}) => {
   const { user } = useSelector((state: RootState) => state.user);
 
   const formatTime = (time: string) => {
@@ -66,7 +66,7 @@ const MeetingDataTable: React.FC<any> = ({ meetData, onEdit, onDelete }) => {
             return (
               <tr key={index} className="border-b hover:bg-gray-50">
                 <td className="py-2 px-4 text-gray-600 font-medium">
-                  {index + 1}
+                  {(currentPage - 1) * pageSize + index + 1}
                 </td>
                 <td className="py-2 px-4 text-[#1677ff] font-medium">
                   {meet.meetTitle}

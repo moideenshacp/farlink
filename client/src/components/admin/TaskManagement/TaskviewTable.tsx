@@ -7,6 +7,7 @@ import { ITaskDetails } from "../../../interface/ItaskDetails";
 import AssignTaskDrawer from "./AssignTaskDrawer";
 import { IProject } from "../../../interface/IprojectDetails";
 import TaskTable from "../../../shared/components/TaskTable";
+import { Pagination } from "antd";
 
 interface TaskViewTableProps {
   project: IProject;
@@ -20,6 +21,11 @@ const TaskViewTable: React.FC<
   const [isLoading, setIsLoading] = useState(true);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [selectedTask, setSelectedTask] = useState<ITaskDetails | null>(null);
+
+  
+  const [currentPage,setCurrentPage] = useState(1)
+  const pageSize = 1
+
 
   const fetchAllTasks = async () => {
     setIsLoading(true);
@@ -76,6 +82,15 @@ const TaskViewTable: React.FC<
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [project._id, statusFilter, refreshKey]);
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [statusFilter]);
+
+  const paginatedTasks = tasks.slice(
+    (currentPage - 1) * pageSize,
+    currentPage * pageSize
+  );
+
 
   return (
     <div className="w-[650px] bg-white rounded-lg shadow-sm">
@@ -90,7 +105,7 @@ const TaskViewTable: React.FC<
         onSuccess={fetchAllTasks}
       />
       <TaskTable
-        tasks={tasks}
+        tasks={paginatedTasks}
         isLoading={isLoading}
         columns={[
           "taskName",
@@ -105,6 +120,19 @@ const TaskViewTable: React.FC<
           setIsDrawerOpen(true);
         }}
       />
+      {tasks.length > pageSize && (
+              <div className="mt-10 flex">
+                <Pagination
+                  current={currentPage}
+                  total={tasks.length}
+                  pageSize={pageSize}
+                  onChange={(page) => setCurrentPage(page)}
+                  simple={{ readOnly: true }}
+                />
+              </div>
+            )}
+        
+  
     </div>
   );
 };

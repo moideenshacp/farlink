@@ -4,11 +4,15 @@ import { AllLeaves } from "../../interface/IfetchLeave";
 interface LeaveHistoryTableProps {
   leaves: AllLeaves[];
   onLeaveSelect: (leave: AllLeaves) => void;
+  currentPage:number
+  pageSize:number
 }
 
 const LeaveHistoryTable: React.FC<LeaveHistoryTableProps> = ({
   leaves,
   onLeaveSelect,
+  currentPage,
+  pageSize
 }) => {
   return (
     <div className="overflow-x-auto">
@@ -26,7 +30,7 @@ const LeaveHistoryTable: React.FC<LeaveHistoryTableProps> = ({
           {leaves.length > 0 ? (
             leaves.map((leave, index) => (
               <tr key={index} className="border-b hover:bg-gray-50">
-                <td className="lg:px-5 sm: px-4 py-2 ">{index + 1}</td>
+                <td className="lg:px-5 sm: px-4 py-2 "> {(currentPage - 1) * pageSize + index + 1}</td>
                 <td className="lg:px-16 sm: px-4 py-2 whitespace-nowrap">
                   {new Date(leave.startDate).toISOString().split("T")[0]}
                 </td>

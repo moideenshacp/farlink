@@ -19,10 +19,13 @@ import {
 const CreateProject = () => {
   const [projects, setProjects] = useState<IProject[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [filteredProjects, setFilteredProjects] = useState<IProject[]>([]);
   const [selectedProject, setSelectedProject] = useState<IProject | null>(null);
   const [filterStatus, setFilterStatus] = useState<string>("All");
   const [searchTerm, setSearchTerm] = useState<string>("");
+
+  // Pagination State
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 6; // Number of projects per page
 
   const { Option } = Select;
   const { user } = useSelector((state: RootState) => state.user);
@@ -62,7 +65,6 @@ const CreateProject = () => {
           }));
 
           setProjects(projectsWithEmployeeData);
-          setFilteredProjects(projectsWithEmployeeData);
         }
       }
       setIsLoading(false);
@@ -81,52 +83,39 @@ const CreateProject = () => {
   };
 
   useEffect(() => {
-    const drawerCheckbox = document.getElementById(
-      "my-drawer-4"
-    ) as HTMLInputElement;
-    const handleDrawerClose = () => {
-      if (!drawerCheckbox?.checked) {
-        setSelectedProject(null);
-      }
-    };
-
-    drawerCheckbox?.addEventListener("change", handleDrawerClose);
-    return () => {
-      drawerCheckbox?.removeEventListener("change", handleDrawerClose);
-    };
-  }, []);
-
-  useEffect(() => {
     if (user?.organizationId) {
       fetchAllProjects();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user?.organizationId]);
 
-  // Filter projects based on filterStatus and search term
+  // Apply filtering first (before pagination)
+  const filteredResults = projects.filter((project) => {
+    return (
+      (filterStatus === "All" || project.status === filterStatus) &&
+      (searchTerm === "" ||
+        project.projectName.toLowerCase().includes(searchTerm.toLowerCase()))
+    );
+  });
+
+  // Reset to page 1 when filtering changes
   useEffect(() => {
-    let filtered = projects;
+    setCurrentPage(1);
+  }, [filterStatus, searchTerm]);
 
-    if (filterStatus !== "All") {
-      filtered = filtered.filter((project) => project.status === filterStatus);
-    }
-
-    if (searchTerm) {
-      filtered = filtered.filter((project) =>
-        project.projectName.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-    }
-
-    setFilteredProjects(filtered);
-  }, [filterStatus, searchTerm, projects]);
-
-  console.log("all projectsss", projects);
+  // Paginate filtered projects
+  const totalPages = Math.ceil(filteredResults.length / pageSize);
+  const paginatedProjects = filteredResults.slice(
+    (currentPage - 1) * pageSize,
+    currentPage * pageSize
+  );
 
   return (
     <div>
       <div className="drawer drawer-end">
         <input id="my-drawer-4" type="checkbox" className="drawer-toggle" />
         <div className="flex mt-3 justify-between items-center gap-4">
+          {/* Search Input */}
           <Input
             placeholder="Search Projects here..."
             value={searchTerm}
@@ -138,6 +127,8 @@ const CreateProject = () => {
             allowClear
             size="large"
           />
+
+          {/* Status Filter */}
           <Select
             value={filterStatus}
             onChange={(value) => setFilterStatus(value)}
@@ -169,7 +160,8 @@ const CreateProject = () => {
               </span>
             </Option>
           </Select>
-          
+
+          {/* Create Project Button */}
           <div className="drawer-content">
             <label
               htmlFor="my-drawer-4"
@@ -181,7 +173,7 @@ const CreateProject = () => {
           </div>
         </div>
 
-        {/* Include Sidebar component */}
+        {/* Sidebar Component */}
         <CreateProjectForm
           fetchAllProjects={fetchAllProjects}
           project={selectedProject}
@@ -191,11 +183,41 @@ const CreateProject = () => {
       {/* Project Cards */}
       <div className="mt-3 gap-5">
         <ProjectViewCard
-          projects={filteredProjects}
+          projects={paginatedProjects}
           isLoading={isLoading}
           onProjectClick={openDrawerWithProject}
         />
       </div>
+
+      {/* Pagination using DaisyUI */}
+      {filteredResults.length > pageSize && (
+        <div className="flex justify-center mt-6">
+          <div className="join">
+            {/* Previous Page */}
+            <button
+              className="join-item btn bg-[#4361EE] text-white hover:bg-blue-700"
+              onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+              disabled={currentPage === 1}
+            >
+              «
+            </button>
+
+            {/* Page Number Display */}
+            <button className="join-item p-3 text-xs font-medium cursor-default">
+              Page {currentPage} of {totalPages}
+            </button>
+
+            {/* Next Page */}
+            <button
+              className="join-item btn bg-[#4361EE] text-white hover:bg-blue-700"
+              onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+              disabled={currentPage === totalPages}
+            >
+              »
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

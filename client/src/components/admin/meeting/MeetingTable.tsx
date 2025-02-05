@@ -6,7 +6,7 @@ import ConfirmationModal from "../../../shared/components/ConfirmationModal";
 import { deleteMeet } from "../../../api/meetApi";
 import { message } from "antd";
 
-const MeetingTable: React.FC<any> = ({ meetDatas, fetchMeetings }) => {
+const MeetingTable: React.FC<any> = ({ meetDatas, fetchMeetings,currentPage,pageSize }) => {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [editMeetDetails, setEditMeetDetails] = useState(null);
   const [isEditMode, setIsEditMode] = useState(false);
@@ -47,7 +47,7 @@ const MeetingTable: React.FC<any> = ({ meetDatas, fetchMeetings }) => {
 
   return (
     <div>
-      <MeetingDataTable meetData={meetDatas} onEdit={handleEdit} onDelete={handleDeleteClick} />
+      <MeetingDataTable meetData={meetDatas} currentPage={currentPage} pageSize={pageSize} onEdit={handleEdit} onDelete={handleDeleteClick} />
 
       <AssignMeetingDrawer
         open={drawerOpen}

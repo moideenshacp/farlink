@@ -8,6 +8,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
 import DatePicker from "react-datepicker";
 import ShimmerHistory from "../../../shared/components/ShimmerHistory";
+import { Pagination } from "antd";
 
 const LeaveSummary = () => {
   const [selectedLeave, setSelectedLeave] = useState<AllLeaves | null>(null);
@@ -17,8 +18,9 @@ const LeaveSummary = () => {
   const { user } = useSelector((state: RootState) => state.user);
   const [fromDate, setFromDate] = useState<Date | null>(null);
   const [toDate, setToDate] = useState<Date | null>(null);
-  const [filteredLeaves, setFilteredLeaves] = useState<AllLeaves[]>([]);
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 2;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [leaveBalance, setLeaveBalance] = useState<any>([]);
   const organizationId = user?.organizationId;
@@ -60,24 +62,12 @@ const LeaveSummary = () => {
     }
   }, [selectedEmail]);
 
-
-  useEffect(() => {
-    if (fromDate || toDate) {
-      const filtered = leaves.filter((leave) => {
-        const leaveDate = new Date(leave.startDate);
-        console.log(leaveDate,"leave date");
-        
-        return (
-          (!fromDate || leaveDate >= fromDate) &&
-          (!toDate || leaveDate <= toDate)
-        );
-      });
-      setFilteredLeaves(filtered);
-    } else {
-      setFilteredLeaves(leaves);
-    }
-  }, [fromDate, toDate, leaves]);
-
+  const filteredLeaves = leaves.filter((leave) => {
+    const leaveDate = new Date(leave.startDate);
+    return (
+      (!fromDate || leaveDate >= fromDate) && (!toDate || leaveDate <= toDate)
+    );
+  });
 
   const refreshLeaves = async () => {
     if (selectedEmail) {
@@ -88,6 +78,10 @@ const LeaveSummary = () => {
     }
   };
 
+  const paginatedLeaves = filteredLeaves.slice(
+    (currentPage - 1) * pageSize,
+    currentPage * pageSize
+  );
   return (
     <div className="flex h-screen">
       {/* Sidebar */}
@@ -122,20 +116,41 @@ const LeaveSummary = () => {
             />
           </div>
           <div>
-
-          <p className="text-[#4361EE] font-semibold" >Sick Leave: <span>{leaveBalance.sick}</span>&nbsp;Left</p>
-          <p className="text-[#4361EE] font-semibold">Casual Leave: <span>{leaveBalance.casual}</span>&nbsp;Left</p>
-          <p className="text-[#4361EE] font-semibold">Vacation Leave: <span>{leaveBalance.vacation}</span>&nbsp;Left</p>
+            <p className="text-[#4361EE] font-semibold">
+              Sick Leave: <span>{leaveBalance.sick}</span>&nbsp;Left
+            </p>
+            <p className="text-[#4361EE] font-semibold">
+              Casual Leave: <span>{leaveBalance.casual}</span>&nbsp;Left
+            </p>
+            <p className="text-[#4361EE] font-semibold">
+              Vacation Leave: <span>{leaveBalance.vacation}</span>&nbsp;Left
+            </p>
           </div>
         </div>
         <br />
         {loading ? (
-         <ShimmerHistory/>
+          <ShimmerHistory />
         ) : (
-          <LeaveHistoryTable
-            leaves={filteredLeaves}
-            onLeaveSelect={(leave) => setSelectedLeave(leave)}
-          />
+          <>
+            <LeaveHistoryTable
+              leaves={paginatedLeaves}
+              onLeaveSelect={(leave) => setSelectedLeave(leave)}
+              currentPage={currentPage}
+              pageSize={pageSize}
+            />
+
+{filteredLeaves.length > pageSize && (
+              <div className="flex justify-end mt-6">
+                <Pagination
+                  current={currentPage}
+                  total={filteredLeaves.length}
+                  pageSize={pageSize}
+                  onChange={(page) => setCurrentPage(page)}
+                  simple={{ readOnly: true }}
+                />
+              </div>
+            )}
+          </>
         )}
       </div>
     </div>
