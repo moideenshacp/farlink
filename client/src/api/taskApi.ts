@@ -16,6 +16,23 @@ export const createTask= async (taskDetails: ITaskDetails) => {
       throw error;
     }
   };
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  export const createSubTask= async (taskDetails: any) => {
+    try {
+      const res = await axiosInstance.post(
+        `${
+          import.meta.env.VITE_SERVER_BASE_URL
+        }/project-service/api/task/create-subTask`,
+        { taskDetails },
+        { withCredentials: true }
+      );
+      return res;
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  };
   export const fetchTasks = async (projectId: string | undefined) => {
     try {
       const res = await axiosInstance.get(

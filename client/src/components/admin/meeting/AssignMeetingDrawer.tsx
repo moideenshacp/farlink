@@ -158,7 +158,7 @@ const AssignMeetingDrawer: React.FC<CreateMeetDrawerProps> = ({
     try {
       let res;
       if (isEditMode) {
-        res = await editMeet(editMeetDetails._id,submitMeetDetails);
+        res = await editMeet(editMeetDetails._id, submitMeetDetails);
       } else {
         res = await createMeet(submitMeetDetails);
       }

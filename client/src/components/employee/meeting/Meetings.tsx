@@ -13,7 +13,8 @@ const Meetings = () => {
   const { user } = useSelector((state: RootState) => state.user);
   const [meetDatas, setMeetDatas] = useState([]);
   const [loading, setLoading] = useState(false);
-
+  const [currentPage,setCurrentPage] = useState(1)
+  const pageSize = 15
   const showDrawer = () => {
     setOpen(true);
   };
@@ -35,8 +36,15 @@ const Meetings = () => {
     fetchMeetings();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user?._id]);
-  console.log("meeeeeeeeeeeeeeeeeee demplye",meetDatas);
-  
+  useEffect(()=>{
+    setCurrentPage(1)
+  },[meetDatas])
+
+  const totalPages = Math.ceil(meetDatas.length / pageSize);
+  const paginatedMeetings = meetDatas.slice(
+    (currentPage - 1) * pageSize,
+    currentPage * pageSize
+  );
 
   return (
     <div>
@@ -64,7 +72,38 @@ const Meetings = () => {
             <FaSpinner className="text-blue-500 animate-spin text-3xl" />
           </div>
         ) : (
-          <MeetingTable meetDatas={meetDatas} fetchMeetings={fetchMeetings} />
+          <>
+          <MeetingTable meetDatas={paginatedMeetings} currentPage={currentPage} pageSize={pageSize} fetchMeetings={fetchMeetings} />
+
+          {meetDatas.length > pageSize && (
+              <div className="flex justify-center mt-6">
+                <div className="join">
+                  {/* Previous Page */}
+                  <button
+                    className="join-item btn bg-[#4361EE] text-white hover:bg-blue-700"
+                    onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                    disabled={currentPage === 1}
+                  >
+                    «
+                  </button>
+
+                  {/* Page Number Display */}
+                  <button className="join-item p-3 text-xs font-medium cursor-default">
+                    Page {currentPage} of {totalPages}
+                  </button>
+
+                  {/* Next Page */}
+                  <button
+                    className="join-item btn bg-[#4361EE] text-white hover:bg-blue-700"
+                    onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+                    disabled={currentPage === totalPages}
+                  >
+                    »
+                  </button>
+                </div>
+              </div>
+            )}
+          </>
         )}
       </div>
     </div>

@@ -45,6 +45,11 @@ const AttendancePolicySchema: Schema = new Schema({
       default: 0,
     },
   },
+  holidayDays:{
+    type:[Number],
+    default:[]
+  }
+
 });
 
 export default mongoose.model<IAttendancePolicy>(

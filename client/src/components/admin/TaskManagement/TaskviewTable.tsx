@@ -119,6 +119,7 @@ const TaskViewTable: React.FC<
           setSelectedTask(task);
           setIsDrawerOpen(true);
         }}
+        project={project}
       />
       {tasks.length > pageSize && (
               <div className="mt-10 flex">

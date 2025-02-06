@@ -10,4 +10,6 @@ export interface IattendencePolicy{
     casual?:string | number,
     sick?:string | number,
     vacation?:string | number
+    holidayDays?:number[]
+
 }

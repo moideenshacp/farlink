@@ -56,5 +56,6 @@ export const TaskValidationSchema = Joi.object({
   }),
   _id:Joi.string().optional(),
   status:Joi.string().optional(),
-  __v:Joi.optional()
+  __v:Joi.optional(),
+  parentTaskId:Joi.string().optional()
 });

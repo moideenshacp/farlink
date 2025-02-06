@@ -13,8 +13,9 @@ const Myproject = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [selectedProject, setSelectedProject] = useState<IProject | null>(null);
   const { user } = useSelector((state: RootState) => state.user);
-  console.log(user);
-
+    // Pagination State
+    const [currentPage, setCurrentPage] = useState(1);
+    const pageSize = 6; // Number of projects per page
   const fetchAllProjects = async () => {
     try {
       const res = await fetchEmployeesProject(user?.organizationId, user?._id);
@@ -87,6 +88,15 @@ const Myproject = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user?.organizationId]);
+
+
+  
+    // Paginate filtered projects
+    const totalPages = Math.ceil(projects.length / pageSize);
+    const paginatedProjects = projects.slice(
+      (currentPage - 1) * pageSize,
+      currentPage * pageSize
+    );
   return (
     <div>
       <div className="drawer drawer-end ">
@@ -98,11 +108,39 @@ const Myproject = () => {
 
       <div className="mt-3 gap-5">
         <ProjectViewCard
-          projects={projects}
+          projects={paginatedProjects}
           isLoading={isLoading}
           onProjectClick={openDrawerWithProject}
         />
       </div>
+      {projects.length > pageSize && (
+        <div className="flex justify-center mt-6">
+          <div className="join">
+            {/* Previous Page */}
+            <button
+              className="join-item btn bg-[#4361EE] text-white hover:bg-blue-700"
+              onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+              disabled={currentPage === 1}
+            >
+              «
+            </button>
+
+            {/* Page Number Display */}
+            <button className="join-item p-3 text-xs font-medium cursor-default">
+              Page {currentPage} of {totalPages}
+            </button>
+
+            {/* Next Page */}
+            <button
+              className="join-item btn bg-[#4361EE] text-white hover:bg-blue-700"
+              onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+              disabled={currentPage === totalPages}
+            >
+              »
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

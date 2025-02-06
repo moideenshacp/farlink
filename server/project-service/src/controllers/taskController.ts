@@ -150,4 +150,29 @@ export class taskController implements ItaskController {
       }
     }
   };
+
+  public createSubTask =async (req: Request, res: Response): Promise<Response>=>{
+    try {
+      const {taskDetails} = req.body
+      
+      const result= await this._taskservice.createSubTask(taskDetails)
+      if (result) {
+        return res
+          .status(200)
+          .json({ message: "SubTask created sucessfully.." });
+      } else {
+        return res
+          .status(400)
+          .json({ message: "Something went wrong,please try again..." });
+      }
+      
+    } catch (error) {
+      if (error instanceof CustomError) {
+        return res.status(error.statusCode).json({ error: error.message });
+      } else {
+        return res.status(500).json({ error: "Internal Server Error" });
+      }
+      
+    }
+  }
 }

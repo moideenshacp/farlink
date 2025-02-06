@@ -104,7 +104,7 @@ export class attendenceService implements IattendenceService {
       const dayOfWeek = currentTimeIST.getDay();
       console.log("daaayyyyyy", dayOfWeek);
 
-      if (dayOfWeek == 0 ) {
+      if (policy?.holidayDays?.includes(dayOfWeek)) {
         throw new CustomError("Attendance cannot be marked on weekends.", 400);
       }
 

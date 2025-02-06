@@ -1,4 +1,6 @@
 import { CustomError } from "../errors/CustomError";
+import IsubTaskModel from "../interfaces/IsubTaskModel";
+import IsubTaskRepository from "../interfaces/IsubTaskRepository";
 import { ItaskDetails } from "../interfaces/ItaskDetails";
 import ItaskModel from "../interfaces/ItaskModel";
 import ItaskRepository from "../interfaces/ItaskRepository";
@@ -6,8 +8,10 @@ import { ItaskService } from "../interfaces/ItaskService";
 
 export class taskService implements ItaskService {
   private _taskRepository: ItaskRepository;
-  constructor(_taskRepository: ItaskRepository) {
+  private _subTaskRepository: IsubTaskRepository;
+  constructor(_taskRepository: ItaskRepository,_subTaskRepository: IsubTaskRepository) {
     this._taskRepository = _taskRepository;
+    this._subTaskRepository = _subTaskRepository
   }
 
   async createTask(taskDetails: ItaskDetails): Promise<ItaskModel | null> {
@@ -99,6 +103,19 @@ export class taskService implements ItaskService {
     } catch (error) {
       console.log(error);
       return null;
+    }
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  async createSubTask(taskDetails: any): Promise<IsubTaskModel | null> {
+    try {
+      console.log(taskDetails,"subtask-------------------")
+      await this._subTaskRepository.createMultipleTasks(taskDetails)
+      return null
+    } catch (error) {
+      console.log(error);
+      throw error
+      
     }
   }
 }

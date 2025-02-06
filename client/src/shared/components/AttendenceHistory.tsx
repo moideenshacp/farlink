@@ -137,7 +137,7 @@ const AttendanceHistory: React.FC<AttendanceHistoryProps> = ({
                 {paginatedData.length > 0 ? (
                   paginatedData.map((attendance, index) => (
                     <tr key={index} className="border-b hover:bg-gray-50">
-                      <td className="px-4 py-2">{index + 1}</td>
+                      <td className="px-4 py-2">{(currentPage - 1) * pageSize + index + 1}</td>
                       <td className="px-4 py-2">{attendance.date || "N/A"}</td>
                       <td className="px-4 py-2">
                         {attendance.checkIn || "N/A"}
@@ -178,7 +178,7 @@ const AttendanceHistory: React.FC<AttendanceHistoryProps> = ({
                 total={attendanceHistory.length}
                 pageSize={pageSize}
                 onChange={(page) => setCurrentPage(page)}
-                simple
+                simple={{ readOnly: true }}
               />
             </div>
           )}

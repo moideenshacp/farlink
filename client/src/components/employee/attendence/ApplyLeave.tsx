@@ -8,6 +8,7 @@ import { fetchLeave } from "../../../api/leaveApi";
 import LeaveDetailsModel from "../../../shared/components/LeaveDetailsModal";
 import { AllLeaves } from "../../../interface/IfetchLeave";
 import LeaveHistoryTable from "../../../shared/components/LeaveHistoryTable";
+import { Pagination } from "antd";
 
 const ApplyLeave = () => {
   const { user } = useSelector((state: RootState) => state.user);
@@ -19,7 +20,8 @@ const ApplyLeave = () => {
   const [approvedLeaveCount, setApprovedLeaveCount] = useState<number>(0);
   const isInitialLoad = useRef(true);
   const [filteredLeaves, setFilteredLeaves] = useState<AllLeaves[]>([]);
-
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 2;
 
   useEffect(() => {
     const fetchAllLeaves = async () => {
@@ -73,7 +75,10 @@ const ApplyLeave = () => {
       }
     }
   };
-
+  const paginatedLeaves = filteredLeaves.slice(
+    (currentPage - 1) * pageSize,
+    currentPage * pageSize
+  );
   return (
     <div>
       <div className="flex justify-end">
@@ -157,9 +162,22 @@ const ApplyLeave = () => {
 
         {/* Leave History Table */}
         <LeaveHistoryTable
-          leaves={filteredLeaves}
+          leaves={paginatedLeaves}
           onLeaveSelect={(leave) => setSelectedLeave(leave)}
+          currentPage={currentPage}
+          pageSize={pageSize}
         />
+      {filteredLeaves.length > pageSize && (
+              <div className="flex justify-end mt-6">
+                <Pagination
+                  current={currentPage}
+                  total={filteredLeaves.length}
+                  pageSize={pageSize}
+                  onChange={(page) => setCurrentPage(page)}
+                  simple={{ readOnly: true }}
+                />
+              </div>
+            )}
       </div>
     </div>
   );

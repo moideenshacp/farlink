@@ -12,5 +12,7 @@ export default interface IAttendancePolicyModel extends Document {
     sick: string | number;
     vacation: string | number;
 }
+holidayDays?:number[]
+
 
 }

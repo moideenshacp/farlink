@@ -3,9 +3,20 @@ import { fetchPolicy, updatePolicy } from "../../../api/attendenceApi";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
 import Input from "../../../shared/components/Input";
-import { message } from "antd";
+import { message, Select } from "antd";
 
 const ManageLeave = () => {
+  const { Option } = Select;
+
+  const WEEKDAYS = [
+    { label: "Sunday", value: 0 },
+    { label: "Monday", value: 1 },
+    { label: "Tuesday", value: 2 },
+    { label: "Wednesday", value: 3 },
+    { label: "Thursday", value: 4 },
+    { label: "Friday", value: 5 },
+    { label: "Saturday", value: 6 },
+  ];
   const [policy, setPolicy] = useState({
     officeStartTime: "",
     officeEndTime: "",
@@ -17,6 +28,7 @@ const ManageLeave = () => {
       sick: 0,
       vacation: 0,
     },
+    holidayDays: [] as number[],
   });
   const [error, setError] = useState("");
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -52,12 +64,9 @@ const ManageLeave = () => {
       }
       const res = await updatePolicy(policy, user?.organizationId);
       if (res.data.message === "Policy Updated successfully") {
-
         message.success("Policy updated successfully!", 2);
-
       } else {
         message.error("An error occurred. Please try again.", 2);
-
       }
     } catch (error) {
       console.log(error);
@@ -151,6 +160,25 @@ const ManageLeave = () => {
             onChange={handleInputChange}
             min="0"
           />
+          <div>
+            <label  className="block mb-1 font-medium text-[#232360]">Select Holiday Days</label>
+            <Select
+              mode="multiple"
+              value={policy.holidayDays}
+              onChange={(values) =>
+                setPolicy((prevData) => ({ ...prevData, holidayDays: values }))
+              }
+              size="large"
+              className="w-full rounded "
+              placeholder="Select holidays"
+            >
+              {WEEKDAYS.map((day) => (
+                <Option key={day.value} value={day.value}>
+                  {day.label}
+                </Option>
+              ))}
+            </Select>
+          </div>
         </div>
         <button
           type="submit"
