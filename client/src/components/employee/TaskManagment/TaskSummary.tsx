@@ -13,7 +13,9 @@ const TaskSummary = () => {
   const [selectedProject, setSelectedProject] = useState<IProject | null>(null);
   const [allTasks, setAllTasks] = useState(0);
   const [completedTasks, setCompletedTasks] = useState(0);
+  const [completedProjectTasks, setProjectCompletedTasks] = useState(0);
   const [pendingTasks, setPendingTasks] = useState(0);
+  const [projectAllTasks, setProjectAllTasks] = useState(0);
   const {user} = useSelector((state:RootState)=>state.user)
 
   const fetchAllTasks = async () => {
@@ -28,6 +30,14 @@ const TaskSummary = () => {
       const task = res.data.result;
       setAllTasks(task.length);
 
+      const projectTasks = await fetchTasks(selectedProject?._id)
+      console.log("project tasks",projectTasks);
+      
+      setProjectAllTasks(projectTasks.data.result.length)
+      const projectCompletedTasks = projectTasks.data.result.filter(
+        (t: ITaskDetails) => t.status === "completed"
+      );
+      setProjectCompletedTasks(projectCompletedTasks.length)
       const completedTasks = task.filter(
         (t: ITaskDetails) => t.status === "completed"
       );
@@ -40,8 +50,10 @@ const TaskSummary = () => {
       console.log(error);
     }
   };
+  console.log("project all taaks",projectAllTasks);
+  
   const progress =
-    allTasks > 0 ? Math.round((completedTasks / allTasks) * 100) : 0;
+  projectAllTasks > 0 ? Math.round((completedProjectTasks / projectAllTasks) * 100) : 0;
 
   useEffect(() => {
     fetchAllTasks();

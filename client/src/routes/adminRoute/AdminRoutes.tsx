@@ -34,6 +34,7 @@ const AdminRoutes = () => (
       <Route element={<SubscriptionRoute />}> 
       <Route path="/meeting" element={<Meeting />} />
       <Route path="/message" element={<ChatContainer />} />
+
       </Route>
     </Route>
   </Routes>

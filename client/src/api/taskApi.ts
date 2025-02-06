@@ -66,6 +66,22 @@ export const createTask= async (taskDetails: ITaskDetails) => {
       throw error;
     }
   };
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  export const updateSubTask = async (taskId:string | undefined ,taskDetails: any) => {
+    try {
+      const res = await axiosInstance.patch(
+        `${
+          import.meta.env.VITE_SERVER_BASE_URL
+        }/project-service/api/task/update-subTask`,
+        { taskDetails ,taskId},
+        { withCredentials: true }
+      );
+      return res;
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  };
   export const fetchEmployeesTask = async (projectId: string | undefined,employeeId:string | undefined) => {
     try {
       const res = await axiosInstance.get(

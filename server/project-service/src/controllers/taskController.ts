@@ -154,6 +154,8 @@ export class taskController implements ItaskController {
   public createSubTask =async (req: Request, res: Response): Promise<Response>=>{
     try {
       const {taskDetails} = req.body
+        console.log("subtask------from",taskDetails);
+        
       
       const result= await this._taskservice.createSubTask(taskDetails)
       if (result) {
@@ -174,5 +176,33 @@ export class taskController implements ItaskController {
       }
       
     }
+  }
+  public updateSubTask = async(req: Request, res: Response): Promise<Response>=> {
+    try {
+      const { taskId, taskDetails } = req.body;
+      console.log("taskDetails",taskDetails);
+      
+      const updatedTask = await this._taskservice.updateSubTask(
+        taskId,
+        taskDetails
+      );
+      if (updatedTask) {
+        return res
+          .status(200)
+          .json({ message: "Sub-Task updated sucessfully.." });
+      } else {
+        return res
+          .status(400)
+          .json({ message: "Something went wrong,please try again..." });
+      }
+      
+    } catch (error) {
+      if (error instanceof CustomError) {
+        return res.status(error.statusCode).json({ error: error.message });
+      } else {
+        return res.status(500).json({ error: "Internal Server Error" });
+      }
+    }
+    
   }
 }

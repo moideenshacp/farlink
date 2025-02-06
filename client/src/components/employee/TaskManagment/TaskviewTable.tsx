@@ -24,17 +24,16 @@ const TaskViewTable: React.FC<
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [selectedTask, setSelectedTask] = useState<ITaskDetails | null>(null);
   const { user } = useSelector((state: RootState) => state.user);
-  const [currentPage,setCurrentPage] = useState(1)
-  const pageSize = 1
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 1;
   const fetchAllTasks = async () => {
     setIsLoading(true);
     try {
-      let res
-      if(user?.email === project.manager.email){
-        res = await fetchTasks(project._id)
-      }else{
-
-        res = await fetchEmployeesTask(project._id,user?._id);
+      let res;
+      if (user?.email === project.manager.email) {
+        res = await fetchTasks(project._id);
+      } else {
+        res = await fetchEmployeesTask(project._id, user?._id);
       }
       if (res.data.result) {
         let projectData = res.data.result;
@@ -48,7 +47,13 @@ const TaskViewTable: React.FC<
             projectData.flatMap((project: any) => [...project.members])
           ),
         ];
-        const employeeRes = await fetchEmployeesByIds(allEmployeeIds);
+
+        let employeeRes;
+        if (user?.email === project.manager.email) {
+          employeeRes = await fetchEmployeesByIds(allEmployeeIds);
+        } else {
+          employeeRes = await fetchEmployeesByIds(user?._id);
+        }
 
         if (employeeRes.data) {
           const employeeMap = new Map(
@@ -57,15 +62,27 @@ const TaskViewTable: React.FC<
               employee,
             ])
           );
-
-          const projectsWithEmployeeData = projectData.map((project: any) => ({
-            ...project,
-            members: project.members.map(
-              (memberId: string) =>
-                employeeMap.get(memberId) || { _id: memberId }
-            ),
-          }));
-
+          let projectsWithEmployeeData;
+          if (user?.email === project.manager.email) {
+            projectsWithEmployeeData = projectData.map((project: any) => ({
+              ...project,
+              members: project.members.map(
+                (memberId: string) =>
+                  employeeMap.get(memberId) || { _id: memberId }
+              ),
+            }));
+          } else {
+            projectsWithEmployeeData = projectData.map((project: any) => ({
+              ...project,
+              members:
+                user?.email === project?.manager?.email
+                  ? project.members.map(
+                      (memberId: string) =>
+                        employeeMap.get(memberId) || { _id: memberId }
+                    )
+                  : [employeeMap.get(user?._id) || { _id: user?._id }],
+            }));
+          }
           setTasks(projectsWithEmployeeData);
         }
       } else {
@@ -118,7 +135,7 @@ const TaskViewTable: React.FC<
           "endDate",
           "status",
           "priority",
-          "assignees",
+          "assignee",
         ]}
         onEdit={(task) => {
           setSelectedTask(task);
@@ -126,17 +143,17 @@ const TaskViewTable: React.FC<
         }}
         project={project}
       />
-        {tasks.length > pageSize && (
-              <div className="mt-10 flex">
-                <Pagination
-                  current={currentPage}
-                  total={tasks.length}
-                  pageSize={pageSize}
-                  onChange={(page) => setCurrentPage(page)}
-                  simple={{ readOnly: true }}
-                />
-              </div>
-            )}
+      {tasks.length > pageSize && (
+        <div className="mt-10 flex">
+          <Pagination
+            current={currentPage}
+            total={tasks.length}
+            pageSize={pageSize}
+            onChange={(page) => setCurrentPage(page)}
+            simple={{ readOnly: true }}
+          />
+        </div>
+      )}
     </div>
   );
 };

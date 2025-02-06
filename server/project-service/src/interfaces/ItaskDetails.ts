@@ -11,4 +11,5 @@ export interface ItaskDetails {
   priority: "high" | "medium" | "low";
   fileUrl?: string;
   status: "in_progress" | "completed";
+  parentTaskId?:string |mongoose.Types.ObjectId
 }

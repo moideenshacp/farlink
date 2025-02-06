@@ -1,3 +1,4 @@
+import { CustomError } from "../errors/CustomError";
 import { ItaskDetails } from "../interfaces/ItaskDetails";
 import ItaskModel from "../interfaces/ItaskModel";
 import ItaskRepository from "../interfaces/ItaskRepository";
@@ -17,6 +18,18 @@ export class taskRepository
   async fetchTasks(projectId: string): Promise<ItaskModel[]> {
     try {
       const tasks = await this.model.find({ projectId });
+      return tasks;
+    } catch (error) {
+      console.error("Error fetching tasks:", error);
+      throw error;
+    }
+  }
+  async fetchParentTask(taskId: string): Promise<ItaskModel> {
+    try {
+      const tasks = await this.model.findById(taskId );
+      if (!tasks) {
+        throw new CustomError("No tasks found",400)
+      }
       return tasks;
     } catch (error) {
       console.error("Error fetching tasks:", error);

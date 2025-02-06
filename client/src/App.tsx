@@ -23,6 +23,7 @@ import EmployeeRoutes from "./routes/employeeRoute/EmployeeRoutes";
 import SuperAdminRoutes from "./routes/superAdminRoute/SuperAdminRoutes";
 import EmployeePrivateRoute from "./routes/EmployeePrivateRoute";
 import VideoCall from "./shared/components/VideoCall";
+import SubscriptionRoute from "./routes/SubscriptionRoute";
 
 function App() {
   return (
@@ -49,9 +50,11 @@ function App() {
               element={<InvalidForgetPass />}
             />
           </Route>
-            <Route path="/video-call" element={<VideoCall />} />
           {/*================================================================================================================================== */}
+            <Route element={<SubscriptionRoute/>}>
 
+            <Route path="/video-call" element={<VideoCall />} />
+            </Route>
           <Route element={<OrganizationPrivateRoute />}>
             <Route path="/step-3" element={<Step3 />} />
           </Route>

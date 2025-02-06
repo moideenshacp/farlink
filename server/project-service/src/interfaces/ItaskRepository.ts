@@ -15,4 +15,6 @@ export default interface ItaskRepository {
   fetchAllTasksOfEmployee(
     employeeId: string
   ): Promise<ItaskModel[]>;
+  fetchParentTask(taskId: string): Promise<ItaskModel>
+  
 }

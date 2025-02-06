@@ -15,7 +15,7 @@ import { createSubTask } from "../../api/taskApi";
 interface SubtaskModalProps {
   open: boolean;
   onClose: () => void;
-  taskMembers: any[];
+  taskMembers: any;
   parentTaskId?: string;
   projectId?:string
 }
@@ -34,7 +34,7 @@ const SubtaskModal: React.FC<SubtaskModalProps> = ({
   projectId
 }) => {
     const {user} = useSelector((state:RootState)=>state.user)
-  const memberOptions = taskMembers?.map((member) => ({
+  const memberOptions = taskMembers?.map((member:any) => ({
     value: member._id,
     label: (
       <div className="flex items-center">
@@ -54,7 +54,7 @@ const SubtaskModal: React.FC<SubtaskModalProps> = ({
       taskDescription: "",
       startDate: null,
       endDate: null,
-      members: [],
+      members: null,
       priority: null,
       file: null,
       projectId:"",
@@ -70,7 +70,7 @@ const SubtaskModal: React.FC<SubtaskModalProps> = ({
     taskDescription: "",
     startDate: null,
     endDate: null,
-    members: [],
+    members:null,
     priority: null,
     file: null,
           projectId:"",
@@ -108,18 +108,13 @@ const SubtaskModal: React.FC<SubtaskModalProps> = ({
   };
 
   const handleSubmit = async () => {
-    // Filter only valid subtasks
-    const validSubtasks = subtasks.filter(
-      (subtask) => subtask.taskName && subtask.taskDescription
-    );
-  
     // Format the subtasks for submission
-    const formattedSubtasks = validSubtasks.map((subtask) => ({
+    const formattedSubtasks = subtasks.map((subtask) => ({
       ...subtask,
       startDate: subtask.startDate ? dayjs(subtask.startDate).toDate() : null,
       endDate: subtask.endDate ? dayjs(subtask.endDate).toDate() : null,
       priority: subtask.priority?.value,
-      members: subtask.members.map((member: any) => member.value),
+      members: subtask.members ? [subtask.members.value] : [],
       parentTaskId,
       projectId,
       organizationId: user?.organizationId,
@@ -134,7 +129,9 @@ const SubtaskModal: React.FC<SubtaskModalProps> = ({
       });
   
       if (error) {
-        error.details.forEach((err: any) => message.error(err.message));
+        error.details.forEach((err: any) => {
+          message.error(err.message);
+        });
         return; 
       }
     }
@@ -145,10 +142,17 @@ const SubtaskModal: React.FC<SubtaskModalProps> = ({
       console.log(res.data);
       
       message.success("Subtasks submitted successfully!");
-    //   onClose();
-    } catch (error) {
-      console.error("Error submitting subtasks:", error);
-      message.error("Failed to submit subtasks. Please try again.");
+      onClose();
+    } catch (error:any) {
+      
+      if (error.response && error.response.data) {
+        console.log(error.response.data.error);
+        console.log(error.response.data.message);
+        // Handle custom error message
+        message.error(error.response.data.error);
+      } else {
+        message.error("Failed to submit subtasks. Please try again.");
+      }
     }
   };
   
@@ -207,14 +211,16 @@ const SubtaskModal: React.FC<SubtaskModalProps> = ({
             </div>
 
             <SelectField
-              label="Choose Members"
-              options={memberOptions}
-              isMulti
-              value={subtask.members}
-              onChange={(option: any) =>
-                updateSubtask(index, { members: option })
-              }
-            />
+  label="Choose Member"
+  options={memberOptions}
+  value={subtask.members || null}
+  onChange={(option: any) =>
+    updateSubtask(index, { members: option }) 
+  }
+  isMulti={false} 
+/>
+
+
 
             <SelectField
               label="Set Priority"
