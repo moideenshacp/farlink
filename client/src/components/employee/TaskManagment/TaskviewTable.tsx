@@ -25,7 +25,7 @@ const TaskViewTable: React.FC<
   const [selectedTask, setSelectedTask] = useState<ITaskDetails | null>(null);
   const { user } = useSelector((state: RootState) => state.user);
   const [currentPage, setCurrentPage] = useState(1);
-  const pageSize = 1;
+  const pageSize = 3;
   const fetchAllTasks = async () => {
     setIsLoading(true);
     try {

@@ -12,4 +12,5 @@ export default interface IsubTaskModel extends Document {
   projectId: mongoose.Types.ObjectId;
   organizationId: mongoose.Types.ObjectId;
   parentTaskId: mongoose.Types.ObjectId;
+  feedback?:string
 }

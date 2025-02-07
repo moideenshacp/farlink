@@ -32,6 +32,8 @@ const SubtaskForm: React.FC<SubtaskFormProps> = ({
     handleFileSelect,
     uploadingStates,
   }) => {
+    console.log("currentaks",currentSubtask);
+    
     return (
       <div className="mb-6">
         <label className="block mb-1 font-medium text-sm text-[#232360]">
@@ -105,6 +107,19 @@ const SubtaskForm: React.FC<SubtaskFormProps> = ({
               readOnly
             />
           </>
+        )}
+        {currentSubtask?.feedback &&(
+            <>
+            <label className="block mb-1 font-medium text-sm text-[#232360]">
+            Task Feedback
+          </label>
+          <textarea
+            placeholder="Subtask Description"
+            value={currentSubtask.feedback}
+            readOnly
+            className="w-full border rounded-md p-2 h-24 mb-2"
+          />
+            </>
         )}
   
         <FileUpload

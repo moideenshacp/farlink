@@ -43,9 +43,9 @@ const TaskTable: React.FC<TaskTableProps> = ({
   const [isSubtaskModalOpen, setIsSubtaskModalOpen] = useState(false);
   const [currentParentTask, setCurrentParentTask] =
     useState<ITaskDetails | null>(null);
-    const [selectedSubtasks, setSelectedSubtasks] = useState([]);
+  const [selectedSubtasks, setSelectedSubtasks] = useState([]);
   const { Option } = Select;
-  
+
   const formatDate = (date: Date | string | null) => {
     if (!date) return "N/A";
     try {
@@ -62,7 +62,7 @@ const TaskTable: React.FC<TaskTableProps> = ({
     setIsSubtaskModalOpen(true);
   };
   const handleViewSubtasks = (task: ITaskDetails, subtasks: any) => {
-    setCurrentParentTask(task); 
+    setCurrentParentTask(task);
     setSelectedSubtasks(subtasks || []);
     setIsSubtaskModalOpen(true);
   };
@@ -77,17 +77,19 @@ const TaskTable: React.FC<TaskTableProps> = ({
   const handleStatus = async (task: ITaskDetails, newStatus: Status) => {
     try {
       const updatedTask = { ...task, status: newStatus };
-      let response
-      if(user?.email === project?.manager.email || user?.role === "admin"){
+      let response;
+      if (user?.email === project?.manager.email || user?.role === "admin") {
         response = await updateTask(task._id, updatedTask);
-      }else{
-        console.log("updateTasks",updateTask);
-        
-        response = await updateSubTask(task._id,updatedTask)
+      } else {
+        console.log("updateTasks", updateTask);
+
+        response = await updateSubTask(task._id, updatedTask);
       }
 
-
-      if (response.data.message === "Task updated sucessfully.." || response.data.message === "Sub-Task updated sucessfully.." ) {
+      if (
+        response.data.message === "Task updated sucessfully.." ||
+        response.data.message === "Sub-Task updated sucessfully.."
+      ) {
         message.success("Status updated successfully");
         setTaskStatus((prevStatus) => ({
           ...prevStatus,
@@ -125,9 +127,10 @@ const TaskTable: React.FC<TaskTableProps> = ({
                   Priority
                 </th>
               )}
-              {(columns?.includes("assignees") || columns?.includes("assignee")) && (
+              {(columns?.includes("assignees") ||
+                columns?.includes("assignee")) && (
                 <th className="py-3 px-4 text-left font-semibold text-[#232360]">
-                      {columns.includes("assignee") ? "Assignee" : "Assignees"}
+                  {columns.includes("assignee") ? "Assignee" : "Assignees"}
                 </th>
               )}
               {columns?.includes("status") && (
@@ -167,7 +170,8 @@ const TaskTable: React.FC<TaskTableProps> = ({
                     </td>
                   )}
 
-                  {(columns?.includes("assignees") || columns?.includes("assignee") ) && (
+                  {(columns?.includes("assignees") ||
+                    columns?.includes("assignee")) && (
                     <td className="py-3 px-4">
                       <div className="flex flex-col gap-2">
                         {task.members.map((member: any) => (
@@ -245,19 +249,15 @@ const TaskTable: React.FC<TaskTableProps> = ({
       </div>
       <SubtaskModal
         open={isSubtaskModalOpen}
-        onClose={
-          () => {
-            setIsSubtaskModalOpen(false)
-            setSelectedSubtasks([]);
-            setCurrentParentTask(null);
-          }
-        
-        }
+        onClose={() => {
+          setIsSubtaskModalOpen(false);
+          setSelectedSubtasks([]);
+          setCurrentParentTask(null);
+        }}
         taskMembers={currentParentTask?.members || []}
         parentTaskId={currentParentTask?._id}
         projectId={project?._id}
         existingSubtasks={selectedSubtasks}
-
       />
     </>
   );

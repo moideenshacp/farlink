@@ -6,8 +6,6 @@ import StatCard from "../../../shared/components/StatsCard";
 import { FaTasks } from "react-icons/fa";
 import { fetchTasks } from "../../../api/taskApi";
 import { ITaskDetails } from "../../../interface/ItaskDetails";
-import SubTaskDetails from "../../../shared/components/SubTaskDetails";
-import { useTaskContext } from "../../../context/TaskContext";
 
 const TaskSummary = () => {
   const [selectedProject, setSelectedProject] = useState<IProject | null>(null);
@@ -34,10 +32,8 @@ const TaskSummary = () => {
     }
   };
   const progress = allTasks > 0 ? Math.round((completedTasks / allTasks) * 100) : 0;
-  const { selectedSubTask ,setSelectedSubTask} = useTaskContext(); 
 
   useEffect(() => {
-    setSelectedSubTask(null)
     fetchAllTasks();
   // eslint-disable-next-line react-hooks/exhaustive-deps
   },[selectedProject]);
@@ -54,11 +50,9 @@ const TaskSummary = () => {
           <div className="flex justify-between items-start">
             {/* Project Details on the Left */}
             <div className="flex-1 -ml-8">
-            {selectedSubTask ? (
-                <SubTaskDetails  />
-              ) : (
+            
                 <ProjectDetails project={selectedProject} progress={progress} />
-              )}
+              
             </div>
 
             <div className="space-y-8">

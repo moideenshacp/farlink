@@ -148,6 +148,8 @@ export class taskService implements ItaskService {
       console.log(taskId, taskDetails, "Updating task");
       const parentTaskId = taskDetails?.parentTaskId;
       console.log("parenttaskId",parentTaskId);
+      if(parentTaskId){
+
       
       if (!parentTaskId) {
         throw new CustomError("Parent Task ID is required for validation.",400);
@@ -169,7 +171,7 @@ export class taskService implements ItaskService {
       }
 
       taskDetails.members = taskDetails.members[0]
-    
+      }
       const updatedtask = await this._subTaskRepository.updateSubTask(
         taskId,
         taskDetails

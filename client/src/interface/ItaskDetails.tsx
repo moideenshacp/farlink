@@ -15,5 +15,6 @@ import { IEmployee } from "./IemployeeDetails";
     organizationId:string | undefined,
     projectId:string 
     status?:any
+    feedback?:string | undefined
   }
   

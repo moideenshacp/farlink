@@ -20,6 +20,7 @@ const SubTaskSchema: Schema = new Schema({
   projectId: { type: mongoose.Types.ObjectId},
   organizationId: { type: mongoose.Types.ObjectId},
   parentTaskId: { type: mongoose.Types.ObjectId},
+  feedback:{type:String}
 });
 
 export default mongoose.model<IsubTaskModel>("SubTask", SubTaskSchema);

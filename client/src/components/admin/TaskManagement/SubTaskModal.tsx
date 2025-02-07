@@ -13,7 +13,7 @@ import ModalFooter from "./SubtaskModalFooter";
 import SubtaskForm, { priorityOptions } from "./SubTaskForm";
 
 // Utility Functions
-const createInitialSubtask = (): Partial<ITaskDetails> => ({
+const createInitialSubtask = (): Partial<ITaskDetails | any> => ({
   taskName: "",
   taskDescription: "",
   startDate: null,
@@ -23,6 +23,7 @@ const createInitialSubtask = (): Partial<ITaskDetails> => ({
   file: null,
   projectId: "",
   organizationId: "",
+  feedback:""
 });
 
 const cleanSubtaskForComparison = (subtask: Partial<ITaskDetails> = {}) => {
@@ -204,6 +205,7 @@ const SubtaskModal: React.FC<SubtaskModalProps> = ({
             : null,
           priority:
             priorityOptions.find((p) => p.value === subtask.priority) || null,
+            feedback:subtask.feedback
         }));
 
         setSubtasks(formattedSubtasks);
