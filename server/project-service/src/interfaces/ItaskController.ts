@@ -8,5 +8,6 @@ export interface ItaskController {
     fetchEmployeesTask(req:Request,res:Response):Promise<Response>
     fetchAllTasksOfEmployee(req:Request,res:Response):Promise<Response>
     createSubTask(req:Request,res:Response):Promise<Response>
+    fetchAllSubTasks(req:Request,res:Response):Promise<Response>
 
 }

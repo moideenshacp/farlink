@@ -12,4 +12,5 @@ export default interface IsubTaskRepository {
     taskDetails: any
   ): Promise<IsubTaskModel | null>;
   fetchAllTasksOfEmployee(employeeId: string): Promise<IsubTaskModel[]>;
+  fetchSubTasksByParentTaskId(parentTaskId: string): Promise<IsubTaskModel[]>
 }

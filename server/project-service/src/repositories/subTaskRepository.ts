@@ -64,4 +64,14 @@ export class subTaskRepository
       throw error;
     }
   }
+  async fetchSubTasksByParentTaskId(parentTaskId: string): Promise<IsubTaskModel[]> {
+    try {
+      const subTasks = await this.model.find({ parentTaskId });
+      return subTasks;
+    } catch (error) {
+      console.error("Error fetching subtasks by parentTaskId:", error);
+      throw error;
+    }
+  }
+  
 }

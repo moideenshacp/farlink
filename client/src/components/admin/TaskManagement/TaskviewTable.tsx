@@ -22,10 +22,8 @@ const TaskViewTable: React.FC<
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [selectedTask, setSelectedTask] = useState<ITaskDetails | null>(null);
 
-  
-  const [currentPage,setCurrentPage] = useState(1)
-  const pageSize = 1
-
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 1;
 
   const fetchAllTasks = async () => {
     setIsLoading(true);
@@ -91,7 +89,6 @@ const TaskViewTable: React.FC<
     currentPage * pageSize
   );
 
-
   return (
     <div className="w-[650px] bg-white rounded-lg shadow-sm">
       <AssignTaskDrawer
@@ -122,18 +119,16 @@ const TaskViewTable: React.FC<
         project={project}
       />
       {tasks.length > pageSize && (
-              <div className="mt-10 flex">
-                <Pagination
-                  current={currentPage}
-                  total={tasks.length}
-                  pageSize={pageSize}
-                  onChange={(page) => setCurrentPage(page)}
-                  simple={{ readOnly: true }}
-                />
-              </div>
-            )}
-        
-  
+        <div className="mt-10 flex">
+          <Pagination
+            current={currentPage}
+            total={tasks.length}
+            pageSize={pageSize}
+            onChange={(page) => setCurrentPage(page)}
+            simple={{ readOnly: true }}
+          />
+        </div>
+      )}
     </div>
   );
 };

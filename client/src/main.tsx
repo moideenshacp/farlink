@@ -9,6 +9,7 @@ import CompaniesProvider from "./context/CompaniesContext.tsx";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
+import { TaskProvider } from "./context/TaskContext.tsx";
 
 const clientId =
   "210465206697-d5ujk8vsvn8o141dr9preq77kc16t2fk.apps.googleusercontent.com";
@@ -19,11 +20,13 @@ createRoot(document.getElementById("root")!).render(
     <PersistGate loading={null} persistor={persistor}>
       <RegistrationProvider>
         <CompaniesProvider>
+          <TaskProvider>
           <GoogleOAuthProvider clientId={clientId}>
             <Elements stripe={stripePromise} >
             <App />
             </Elements>
           </GoogleOAuthProvider>
+          </TaskProvider>
         </CompaniesProvider>
       </RegistrationProvider>
     </PersistGate>

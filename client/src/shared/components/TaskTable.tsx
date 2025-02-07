@@ -9,7 +9,7 @@ import { message, Select } from "antd";
 import { CheckCircleOutlined, PlayCircleOutlined } from "@ant-design/icons";
 import { updateSubTask, updateTask } from "../../api/taskApi";
 import { useState } from "react";
-import SubtaskModal from "./SubTaskModal";
+import SubtaskModal from "../../components/admin/TaskManagement/SubTaskModal";
 import TaskActionMenu from "./TaskActionMenu";
 
 type Status = "Completed" | "In Progress" | "Pending";
@@ -43,8 +43,9 @@ const TaskTable: React.FC<TaskTableProps> = ({
   const [isSubtaskModalOpen, setIsSubtaskModalOpen] = useState(false);
   const [currentParentTask, setCurrentParentTask] =
     useState<ITaskDetails | null>(null);
+    const [selectedSubtasks, setSelectedSubtasks] = useState([]);
   const { Option } = Select;
-
+  
   const formatDate = (date: Date | string | null) => {
     if (!date) return "N/A";
     try {
@@ -57,6 +58,12 @@ const TaskTable: React.FC<TaskTableProps> = ({
 
   const handleAddSubtask = (task: ITaskDetails) => {
     setCurrentParentTask(task);
+    setSelectedSubtasks([]);
+    setIsSubtaskModalOpen(true);
+  };
+  const handleViewSubtasks = (task: ITaskDetails, subtasks: any) => {
+    setCurrentParentTask(task); 
+    setSelectedSubtasks(subtasks || []);
     setIsSubtaskModalOpen(true);
   };
 
@@ -218,6 +225,7 @@ const TaskTable: React.FC<TaskTableProps> = ({
                       user={user}
                       handleEdit={handleEdit}
                       handleAddSubtask={handleAddSubtask}
+                      handleViewSubtasks={handleViewSubtasks}
                     />
                   </td>
                 </tr>
@@ -237,10 +245,19 @@ const TaskTable: React.FC<TaskTableProps> = ({
       </div>
       <SubtaskModal
         open={isSubtaskModalOpen}
-        onClose={() => setIsSubtaskModalOpen(false)}
-        taskMembers={currentParentTask?.members}
+        onClose={
+          () => {
+            setIsSubtaskModalOpen(false)
+            setSelectedSubtasks([]);
+            setCurrentParentTask(null);
+          }
+        
+        }
+        taskMembers={currentParentTask?.members || []}
         parentTaskId={currentParentTask?._id}
         projectId={project?._id}
+        existingSubtasks={selectedSubtasks}
+
       />
     </>
   );

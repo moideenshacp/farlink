@@ -168,7 +168,7 @@ export class taskService implements ItaskService {
         throw new CustomError("Sub task Start-Date and End-Date range should be in between of Main Task",400)
       }
 
-      taskDetails.members = taskDetails.members._id
+      taskDetails.members = taskDetails.members[0]
     
       const updatedtask = await this._subTaskRepository.updateSubTask(
         taskId,
@@ -184,5 +184,21 @@ export class taskService implements ItaskService {
       console.error("Error updating task:", error);
       throw error;
     }
+  }
+  async fetchAllSubTasks(parentTaskId: string): Promise<IsubTaskModel[] | null> {
+    try {
+      const res = await this._subTaskRepository.fetchSubTasksByParentTaskId(parentTaskId)
+
+      if(res){
+        return res
+      }
+      return null
+      
+    } catch (error) {
+      console.log(error);
+      throw error
+      
+    }
+    
   }
 }

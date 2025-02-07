@@ -7,6 +7,7 @@ export interface ItaskService {
   createTask(taskDetails: ItaskDetails): Promise<ItaskModel | null>;
   createSubTask(taskDetails: any): Promise<IsubTaskModel[] | null>;
   fetchTasks(projectId: string): Promise<ItaskModel[] | null>;
+  fetchAllSubTasks(parentTaskId: string): Promise<IsubTaskModel[] | null>;
   updateTask(
     taskId: string,
     taskDetails: ItaskDetails
