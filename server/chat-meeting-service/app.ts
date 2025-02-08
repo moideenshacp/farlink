@@ -8,11 +8,19 @@ import morgan from "morgan";
 import { rabbitmqConnect } from "./src/config/rabbitmq";
 import { errorHandler } from "./src/middleware/errorHandler";
 import meetRoute from './src/routes/meetRoute'
+import chatRoute from './src/routes/chatRoute'
+import { initializeSocket } from "./src/config/socket";
 
 dotenv.config();
 connectDB();
 rabbitmqConnect()
 const app = express();
+const port = process.env.PORT;
+
+const server = app.listen(port, () => {
+  console.log(`chat-meeting-service started on port ${port}`);
+});
+initializeSocket(server); 
 app.use(
   cors({
     origin: process.env.FRONT_URL,
@@ -44,11 +52,9 @@ app.use(
 app.use(cookieParser());
 app.use(express.json());
 
+
 app.use('/api/meet',meetRoute)
+app.use('/api/chat',chatRoute)
 
 app.use(errorHandler);
-const port = process.env.PORT;
 
-app.listen(port, () => {
-  console.log(`chat-meeting-service started on port ${port}`);
-});

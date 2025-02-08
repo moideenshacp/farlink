@@ -1,19 +1,28 @@
 import { Image, Paperclip, Send, Smile } from "lucide-react";
 import React, { useState } from "react";
 import { ChatInputProps } from "../../../interface/Imessage";
+import socket from "../../../utils/socket";
 
 
   
-  const ChatInput: React.FC<ChatInputProps> = ({ onSendMessage }) => {
+  const ChatInput: React.FC<ChatInputProps> = ({selectedChat ,onSendMessage }) => {
     const [message, setMessage] = useState('');
   
     const handleSend = () => {
-      if (message.trim()) {
-        onSendMessage(message);
-        setMessage('');
-      }
-    };
-  
+        if (message.trim()) {
+          const newMessage = {
+            chatId: selectedChat?.id,
+            sender: "self",
+            text: message,
+            time: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+          };
+      
+          socket.emit("sendMessage", newMessage);
+          onSendMessage(newMessage.text);
+          setMessage('');
+        }
+      };
+    
     return (
       <div className="p-4 border-t bg-white">
         <div className="flex items-center gap-2">

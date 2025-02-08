@@ -78,7 +78,7 @@ const TaskActionMenu: React.FC<any> = ({
 
   if (
     project
-      ? user?.email === project?.manager.email || user?.role === "admin"
+      ? user?.email === project?.manager.email || user?.role === "admin" || user.position === "HR"
       : true
   ) {
     menuItems.push(

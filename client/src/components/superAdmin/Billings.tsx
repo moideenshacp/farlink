@@ -1,12 +1,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from "react";
 import { getAllPaymentHistory } from "../../api/subcriptionApi";
+import { Pagination } from "antd";
 
 const PaymentHistoryAdmin = () => {
   const [history, setHistory] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 10;
   const filterInvoiceData = (invoices: any[]) => {
     return invoices.map((invoice) => ({
       id: invoice.id,
@@ -17,8 +20,8 @@ const PaymentHistoryAdmin = () => {
       amount: (invoice.amount_paid / 100).toFixed(2),
       currency: invoice.currency,
       invoice_pdf: invoice.invoice_pdf,
-      customer_email:invoice.customer_email,
-      customer_name:invoice.customer_name
+      customer_email: invoice.customer_email,
+      customer_name: invoice.customer_name,
     }));
   };
 
@@ -46,12 +49,18 @@ const PaymentHistoryAdmin = () => {
     fetchPaymentHistory();
   }, []);
 
+  const paginatedHistory = history.slice(
+    (currentPage - 1) * pageSize,
+    currentPage * pageSize
+  );
   return (
     <div className="p-6 bg-white rounded-lg shadow-lg">
       <h1 className="text-2xl font-bold mb-4">All Payment History</h1>
-      {loading && <div className="flex justify-center items-center h-full">
+      {loading && (
+        <div className="flex justify-center items-center h-full">
           <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
-        </div>}
+        </div>
+      )}
       {error && <div className="text-red-500">{error}</div>}
       {history.length > 0 ? (
         <div className="overflow-x-auto">
@@ -86,9 +95,9 @@ const PaymentHistoryAdmin = () => {
               </tr>
             </thead>
             <tbody>
-              {history.map((invoice: any, index: number) => (
+              {paginatedHistory.map((invoice: any, index: number) => (
                 <tr key={invoice.id} className="border-b hover:bg-gray-50">
-                  <td className="px-4 py-2">{index + 1}</td>
+                  <td className="px-4 py-2">{(currentPage - 1) * pageSize + index + 1}</td>
                   <td className="px-4 py-2">{invoice.date}</td>
                   <td className="px-4 py-2">
                     <span
@@ -123,8 +132,19 @@ const PaymentHistoryAdmin = () => {
           </table>
         </div>
       ) : (
+        !loading && <div>No payment history found.</div>
+      )}
 
-        !loading && <div>No payment history found.</div>        
+      {history.length > pageSize && (
+        <div className="flex justify-end mt-6">
+          <Pagination
+            current={currentPage}
+            total={history.length}
+            pageSize={pageSize}
+            onChange={(page) => setCurrentPage(page)}
+            simple={{ readOnly: true }}
+          />
+        </div>
       )}
     </div>
   );

@@ -3,7 +3,7 @@ import { ChatHeaderProps } from "../../../interface/Imessage";
 
 const ChatHeader: React.FC<ChatHeaderProps> = ({ chat }) => {
     return (
-      <div className="flex items-center justify-between p-3 border-b bg-white">
+      <div className="flex items-center mt-5 justify-between p-4 border-b bg-white">
         <div className="flex items-center gap-3">
           <div className="relative">
             <img src={chat.image} alt={chat.name} className="w-10 h-10 rounded-full" />

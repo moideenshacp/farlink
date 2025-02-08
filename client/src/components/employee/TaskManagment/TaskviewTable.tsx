@@ -30,7 +30,7 @@ const TaskViewTable: React.FC<
     setIsLoading(true);
     try {
       let res;
-      if (user?.email === project.manager.email) {
+      if (user?.email === project.manager.email || user?.position === "HR") {
         res = await fetchTasks(project._id);
       } else {
         res = await fetchEmployeesTask(project._id, user?._id);
@@ -114,7 +114,7 @@ const TaskViewTable: React.FC<
   );
   return (
     <div className="w-[650px] bg-white rounded-lg shadow-sm">
-      {user?.email === project.manager.email && (
+      {(user?.email === project.manager.email || user?.position === "HR") && (
         <AssignTaskDrawer
           open={isDrawerOpen}
           onClose={() => {

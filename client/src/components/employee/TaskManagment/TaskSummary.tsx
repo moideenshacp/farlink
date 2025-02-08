@@ -17,13 +17,17 @@ const TaskSummary = () => {
   const [pendingTasks, setPendingTasks] = useState(0);
   const [projectAllTasks, setProjectAllTasks] = useState(0);
   const {user} = useSelector((state:RootState)=>state.user)
-
+  console.log("inter psoition",user?.position);
+  
   const fetchAllTasks = async () => {
     try {
       let res
-      if(selectedProject?.manager.email === user?.email){
-       res = await fetchTasks(selectedProject?._id);
+      if(selectedProject?.manager.email === user?.email || user?.position ==="HR"){
+        console.log("heerre");
+        
+        res = await fetchTasks(selectedProject?._id);
       }else{
+        console.log("not   heerre");
 
         res = await fetchEmployeesTask(selectedProject?._id,user?._id);
       }

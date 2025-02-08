@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 export interface Message {
   id: number;
   text: string;
@@ -7,14 +9,14 @@ export interface Message {
   senderImage?: string;
 }
 export interface Chat {
-  id: number;
+  id?: number;
   name: string;
-  lastMessage: string;
-  time: string;
+  lastMessage?: string;
+  time?: string;
   unread: number;
-  image: string;
-  isOnline: boolean;
-  isGroup: boolean;
+  image?: string;
+  isOnline?: boolean;
+  isGroup?: boolean;
   members?: number;
   messages: Message[];
 }
@@ -22,14 +24,17 @@ export interface Chat {
 export interface ChatListProps {
   chats: Chat[];
   onSelectChat: (chat: Chat) => void;
-  selectedChatId: number;
+  selectedChatId: number | null;
   isGroup: boolean;
+  onAddChat?: (user:any) => void;
+
 }
 
 
 // Chat Input Component
 export interface ChatInputProps {
   onSendMessage: (message: string) => void;
+  selectedChat?:Chat
 }
 
 // Chat Header Component
@@ -46,3 +51,10 @@ export interface ChatHeaderProps {
 export interface ChatMessagesProps {
     messages: Message[];
   }
+
+ export interface  NewMessageProps {
+    chatId: string
+    sender: string,
+    text: string,
+    time: Date,
+  };

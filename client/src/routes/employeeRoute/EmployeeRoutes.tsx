@@ -12,12 +12,11 @@ import TaskSummary from "../../components/employee/TaskManagment/TaskSummary";
 import SubscriptionRoute from "../SubscriptionRoute";
 import Meetings from "../../components/employee/meeting/Meetings";
 import DashboardOverview from "../../components/employee/overview/DashboardOverview";
-const CreateProject = () => <div>Create Project Content</div>;
-const ManageTasks = () => <div>Manage Tasks Content</div>;
+import CreateProject from "../../components/admin/ProjectManagment/CreateProject";
+import ChatContainer from "../../shared/components/message/Message";
 const ServiceRequest = () => <div>ServiceRequest Content</div>;
 const RequestService = () => <div>ServiceRequest Content</div>;
 const RealTimeAlert = () => <div>RealTimeAlert Content</div>;
-const Message = () => <div>Message Content</div>;
 const EmployeeRoutes = () => (
   <Routes>
     <Route path="/" element={<EmployeeDashboard />}>
@@ -27,7 +26,7 @@ const EmployeeRoutes = () => (
       <Route path="/leave-summary" element={<LeaveSummary />} />
       <Route path="/manage-leave" element={<ManageLeave />} />
       <Route path="/create-project" element={<CreateProject />} />
-      <Route path="/manage-tasks" element={<ManageTasks />} />
+      <Route path="/manage-tasks" element={<TaskSummary />} />
       <Route path="/service-request" element={<ServiceRequest />} />
       <Route path="/realtime-alert" element={<RealTimeAlert />} />
       <Route path="/" element={<DashboardOverview />} />
@@ -41,7 +40,7 @@ const EmployeeRoutes = () => (
 
       <Route element={<SubscriptionRoute />}> 
 
-    <Route path="/message" element={<Message />} />
+    <Route path="/message" element={<ChatContainer />} />
       <Route path="/meeting" element={<Meetings />} />
       </Route>
 

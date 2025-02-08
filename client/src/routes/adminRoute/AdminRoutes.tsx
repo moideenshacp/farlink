@@ -11,7 +11,7 @@ import Billing from "../../components/admin/billing/Billing";
 import TaskSummary from "../../components/admin/TaskManagement/TaskSummary";
 import SubscriptionRoute from "../SubscriptionRoute";
 import Meeting from "../../components/admin/meeting/Meeting";
-import ChatContainer from "../../components/admin/message/Message";
+import ChatContainer from "../../shared/components/message/Message";
 const ServiceRequest = () => <div>ServiceRequest Content</div>;
 const RealTimeAlert = () => <div>RealTimeAlert Content</div>;
 
