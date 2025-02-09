@@ -19,6 +19,6 @@ const ChatController:IchatController = new chatController(ChatService)
 router.post("/create-chat",authenticate, ChatController.createChat);
 router.get("/fetch-chat", ChatController.fetchAllChats);
 router.post("/send-message",authenticate, ChatController.sendMessage);
-router.get("/messages", authenticate,ChatController.fetchMessages);
+router.get("/fetch-messages", authenticate,ChatController.fetchMessages);
 
 export default router;

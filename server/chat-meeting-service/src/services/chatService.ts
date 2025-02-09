@@ -46,14 +46,12 @@ export class chatService implements IchatService {
       if (!userId) {
         throw new CustomError("User ID is required", 400);
       }
-  
-      const privateChats = await this._chatRepository.fetchAllChats(userId);
+      const chats = await this._chatRepository.fetchAllChats(userId);
       
-      if (!privateChats) {
+      if (!chats) {
         return null;
       }
-  
-      return privateChats;
+      return chats;
     } catch (error) {
       console.log("Error fetching private chats:", error);
       throw error;
@@ -70,6 +68,8 @@ export class chatService implements IchatService {
       ) {
         throw new CustomError("Invalid message details", 400);
       }
+      console.log(messageDetails,"meyasage details-----------------");
+      
       const message = await this._messageRepository.createMessage(
         messageDetails
       );

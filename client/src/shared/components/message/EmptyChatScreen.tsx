@@ -6,7 +6,6 @@ const EmptyChatScreen: React.FC = () => {
   return (
     <div className="flex flex-col pl-32 items-center  mt-[12%] h-full text-gray-500">
       <div className="mb-4">
-        {/* Replace with your actual logo */}
         <img src={logo} alt="FarLink Logo" className="w-60 h-20 opacity-85" />
       </div>
       <h2 className="text-xl font-semibold text-[#232360]">FarLink</h2>

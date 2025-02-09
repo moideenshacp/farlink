@@ -2,23 +2,25 @@ import { Image, Paperclip, Send, Smile } from "lucide-react";
 import React, { useState } from "react";
 import { ChatInputProps } from "../../../interface/Imessage";
 import socket from "../../../utils/socket";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../redux/store";
 
 
   
   const ChatInput: React.FC<ChatInputProps> = ({selectedChat ,onSendMessage }) => {
     const [message, setMessage] = useState('');
-  
+    const {user} = useSelector((state:RootState)=>state.user)    
     const handleSend = () => {
         if (message.trim()) {
           const newMessage = {
             chatId: selectedChat?.id,
-            sender: "self",
-            text: message,
-            time: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+            sender: user?._id,
+            content: message,
+            time: new Date().toISOString(),
           };
       
           socket.emit("sendMessage", newMessage);
-          onSendMessage(newMessage.text);
+          onSendMessage(newMessage.content);
           setMessage('');
         }
       };

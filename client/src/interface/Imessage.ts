@@ -18,7 +18,7 @@ export interface Chat {
   isOnline?: boolean;
   isGroup?: boolean;
   members?: number;
-  messages: Message[];
+  messages: Message[] ;
 }
 // Chat List Component
 export interface ChatListProps {

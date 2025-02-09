@@ -1,0 +1,2 @@
+{"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"GET\",\"url\":\"/api/project/fetchEmployees-projects?organizationId=67869a6a1514145a64988362&employeeId=67a44a73314f8fe8e568bd61\",\"status\":\"200\",\"responseTime\":\"644.236\"}","timestamp":"2025-02-09T09:47:11.517Z"}
+{"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"GET\",\"url\":\"/api/task/fetchEmployees-Alltasks?employeeId=67a44a73314f8fe8e568bd61\",\"status\":\"200\",\"responseTime\":\"648.647\"}","timestamp":"2025-02-09T09:47:11.589Z"}

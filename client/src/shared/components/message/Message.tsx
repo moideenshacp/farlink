@@ -10,93 +10,140 @@ import socket from "../../../utils/socket";
 import EmptyChatScreen from "./EmptyChatScreen";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
-import { createChat } from "../../../api/chatApi";
+import { createChat, fetchAllChats, fetchMessages } from "../../../api/chatApi";
+import { fetchEmployeesByIds } from "../../../api/authApi";
 
 const ChatContainer: React.FC = () => {
-  const {user} = useSelector((state:RootState)=>state.user)
-  console.log("creare chat sender id",user);
-  
-  const [chats, setChats] = useState<Chat[]>([
-    {
-      id: 1,
-      name: "Sarah Johnson",
-      lastMessage: "Sure, I'll send the files soon",
-      time: "10:30 AM",
-      unread: 3,
-      image: "/api/placeholder/40/40",
-      isOnline: true,
-      isGroup: false,
-      messages: [
-        {
-          id: 1,
-          text: "Hey, how's the project going?",
-          time: "10:30 AM",
-          sender: "other",
-          senderName: "Sarah Johnson",
-          senderImage: "/api/placeholder/32/32",
-        },
-        {
-          id: 2,
-          text: "It's going well! I've completed the initial designs.",
-          time: "10:32 AM",
-          sender: "self",
-        },
-      ],
-    },
+  const { user } = useSelector((state: RootState) => state.user);
 
-  ]);
+  const [chats, setChats] = useState<Chat[]>([]);
 
-  const [selectedTab, setSelectedTab] = useState<"individual" | "group">("individual");
+  const [selectedTab, setSelectedTab] = useState<"individual" | "group">(
+    "individual"
+  );
   const [selectedChat, setSelectedChat] = useState<Chat | null>(null);
 
-  const handleSelectChat = (chat: Chat) => {
-    setSelectedChat(chat);
+  const handleSelectChat = async (chat: Chat) => {
+    try {
+      // setSelectedChat(chat);
+      const res = await fetchMessages(chat.id);
+      if (res.data?.result) {
+        const formattedMessages = res.data.result.map((msg: any) => ({
+          id: msg._id,
+          text: msg.content,
+          time: new Date(msg.createdAt).toLocaleTimeString([], {
+            hour: "2-digit",
+            minute: "2-digit",
+          }),
+          sender: msg.sender === user?._id ? "self" : "other",
+          senderImage: chat.image,
+          senderName: chat.name,
+        }));
+        setSelectedChat({
+          ...chat,
+          messages: formattedMessages,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
-  // When an employee is selected, transform the data to a User object and add/select the chat.
-  const handleAddChat =async (employee: any) => {
-    // Create a combined name from firstName and lastName
-    const userName = `${employee.firstName} ${employee.lastName}`;
-    // Check if a one-on-one chat with this employee already exists
-    const existingChat = chats.find(
-      (chat) => !chat.isGroup && chat.name === userName
+  const fetchChats = async () => {
+    try {
+      const res = await fetchAllChats(user?._id);
+
+      if (res.data?.result) {
+        const chatData = res.data.result;
+        const allParticipantIds = [
+          ...new Set(chatData.flatMap((chat: any) => chat.participants)),
+        ];
+
+        const employeeRes = await fetchEmployeesByIds(allParticipantIds);
+        if (employeeRes.data) {
+          const employeeMap = new Map(
+            employeeRes.data.employees.map((employee: any) => [
+              employee._id,
+              employee,
+            ])
+          );
+          const chatsWithEmployeeData = chatData.map((chat: any) => ({
+            ...chat,
+            participants: chat.participants.map(
+              (participantId: string) =>
+                employeeMap.get(participantId) || { _id: participantId }
+            ),
+          }));
+
+          const formattedChats = chatsWithEmployeeData.map((chat: any) => {
+            const receiver = chat.participants.filter(
+              (emp: any) => emp._id !== user?._id
+            );
+            const sender = chat.participants.filter(
+              (emp: any) => emp._id === user?._id
+            );
+            console.log(sender, "sender-------------------");
+            console.log(receiver[0].isActive, "receiver[0].isActive-------------------");
+            return {
+              id: chat._id,
+              name: `${receiver[0].firstName} ${receiver[0].lastName}`,
+              lastMessage:chat.lastMessage?.content || "",
+              time: new Date(chat.lastMessage?.updatedAt || chat.updatedAt).toLocaleTimeString([], {
+                hour: "2-digit",
+                minute: "2-digit",
+              }),
+              unread: 0,
+              image: receiver[0].image || "/api/placeholder/40/40",
+              isOnline: receiver[0].isActive || false,
+              isGroup: chat.chatType === "group",
+              messages: [],
+            };
+          });
+          setChats(formattedChats);
+          return formattedChats;
+        }
+      }
+    } catch (error) {
+      console.error("Error fetching chats:", error);
+    }
+  };
+  useEffect(() => {
+    fetchChats();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user?._id]);
+  const handleAddChat = async (employee: any) => {
+    const updatedChats = await fetchAllChats(user?._id);
+    const existingChat = updatedChats.data.result.find(
+      (chat: any) =>
+        !chat.isGroup &&
+        chat.participants.includes(employee._id) &&
+        chat.participants.includes(user?._id)
     );
     if (existingChat) {
-      setSelectedChat(existingChat);
+      const updatedChats = await fetchChats();
+      const newChat = updatedChats.filter(
+        (chat: any) => chat.id == existingChat._id
+      );
+      await handleSelectChat(newChat[0])
     } else {
-      const newChatId =
-        chats.length > 0 ? Math.max(...chats.map((chat) => chat.id ?? 0)) + 1 : 1;
-      const newChat: Chat = {
-        id: newChatId,
-        name: userName,
-        lastMessage: "",
-        time: new Date().toLocaleTimeString([], {
-          hour: "2-digit",
-          minute: "2-digit",
-        }),
-        unread: 0,
-        image: employee.image,
-        isOnline: false,
-        isGroup: false,
-        messages: [],
-      };
-
       const chatDetails = {
-        chatType:"private",
-        participants:[employee._id,user?._id]
-
-      }
+        chatType: "private",
+        participants: [employee._id, user?._id],
+      };
       try {
-        const res = await createChat(chatDetails)
-
-        console.log(res.data,"create chatttttttt------------------------");
-        
+        const res = await createChat(chatDetails);
+        if (res) {
+          const updatedChats = await fetchChats();
+          const newChat = updatedChats.filter(
+            (chat: any) => chat.id == res.data.result._id
+          );
+          if (newChat) {
+            setSelectedChat(newChat[0]);
+          }
+        }
       } catch (error) {
         console.log(error);
-        
       }
-      setChats((prevChats) => [...prevChats, newChat]);
-      setSelectedChat(newChat);
     }
   };
 
@@ -112,23 +159,8 @@ const ChatContainer: React.FC = () => {
       }),
       sender: "self",
     };
+    socket.emit("sendMessage", newMessage);
 
-    const updatedChats = chats.map((chat) =>
-      chat.id === selectedChat.id
-        ? {
-            ...chat,
-            messages: [...chat.messages, newMessage],
-            lastMessage: messageText,
-            time: newMessage.time,
-          }
-        : chat
-    );
-
-    setChats(updatedChats);
-    setSelectedChat({
-      ...selectedChat,
-      messages: [...selectedChat.messages, newMessage],
-    });
   };
 
   useEffect(() => {
@@ -138,20 +170,49 @@ const ChatContainer: React.FC = () => {
   }, [selectedChat]);
 
   useEffect(() => {
-    socket.on("receiveMessage", (newMessage) => {
+    socket.on("receiveMessage", (newMessage: any) => {
+      const chat = chats.find((chat) => chat.id === newMessage.chatId);      
+      if (!chat) return;
+      if (chat.messages.some((msg) => msg.id === newMessage.id)) return;
+
+      const formattedMessage: Message = {
+        id: newMessage.id || Date.now(),
+        text: newMessage.content,
+        time: new Date(newMessage.createdAt).toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+        }),
+        sender: newMessage.sender === user?._id ? "self" : "other",
+        senderName: chat?.name,
+        senderImage: chat?.image,
+      };
       setChats((prevChats) =>
         prevChats.map((chat) =>
           chat.id === newMessage.chatId
-            ? { ...chat, messages: [...chat.messages, newMessage] }
+            ? {
+                ...chat,
+                messages: [...chat.messages, formattedMessage],
+                lastMessage: formattedMessage.text,
+                time: formattedMessage.time,
+              }
             : chat
         )
+      );
+      setSelectedChat((prevChat) =>
+        prevChat && prevChat.id === newMessage.chatId
+          ? {
+              ...prevChat,
+              messages: [...prevChat.messages, formattedMessage],
+            }
+          : prevChat
       );
     });
 
     return () => {
       socket.off("receiveMessage");
     };
-  }, []);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [ chats]);
 
   const tabItems = [
     {
@@ -164,7 +225,7 @@ const ChatContainer: React.FC = () => {
             onSelectChat={handleSelectChat}
             selectedChatId={selectedChat?.id || null}
             isGroup={false}
-            onAddChat={handleAddChat} 
+            onAddChat={handleAddChat}
           />
           {selectedChat ? (
             <div className="flex-1 flex flex-col">
@@ -175,7 +236,10 @@ const ChatContainer: React.FC = () => {
                 <ChatMessages messages={selectedChat.messages} />
               </div>
               <div className="sticky bottom-0 bg-white">
-                <ChatInput onSendMessage={handleSendMessage} selectedChat={selectedChat} />
+                <ChatInput
+                  onSendMessage={handleSendMessage}
+                  selectedChat={selectedChat}
+                />
               </div>
             </div>
           ) : (
@@ -204,7 +268,10 @@ const ChatContainer: React.FC = () => {
                 <ChatMessages messages={selectedChat.messages} />
               </div>
               <div className="sticky bottom-0 bg-white">
-                <ChatInput onSendMessage={handleSendMessage} selectedChat={selectedChat} />
+                <ChatInput
+                  onSendMessage={handleSendMessage}
+                  selectedChat={selectedChat}
+                />
               </div>
             </div>
           ) : (

@@ -24,6 +24,10 @@ router.post("/forget-password", UserController.forgetPassword);
 router.post("/reset-password", UserController.resetPassword);
 router.patch("/update-profile",authenticate, UserController.updateProfile);
 router.get("/get-profile",authenticate, UserController.getUserProfile);
+router.get('/fetch-employeesById',authenticate,UserController.fetchEmployeesId)
+router.get('/get-employees',authenticate,UserController.getAllEmployees)
+
+
 
 
 //superAdmin========================================================================================================

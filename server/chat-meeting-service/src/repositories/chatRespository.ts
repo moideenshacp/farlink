@@ -56,4 +56,13 @@ export class chatRepository
       throw new Error("Failed to fetch chats");
     }
   }
+  async updateChat(chatId: string, updateData: any):Promise<IchatModel| null> {
+    try {
+      return await chatModel.findByIdAndUpdate(chatId, updateData, { new: true });
+    } catch (error) {
+      console.error("Error updating chat:", error);
+      throw error;
+    }
+  }
+  
 }

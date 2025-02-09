@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import axiosInstance from "./axiosInterceptor";
 
-export const fetchAllPrivateChats = async (userId:string | undefined) => {
+export const fetchAllChats = async (userId:string | undefined) => {
     try {
       const res = await axiosInstance.get(
         `${
@@ -20,6 +20,24 @@ export const fetchAllPrivateChats = async (userId:string | undefined) => {
     }
   };
 
+  export const fetchMessages = async (chatId:number | undefined) => {
+    try {
+      const res = await axiosInstance.get(
+        `${
+          import.meta.env.VITE_SERVER_BASE_URL
+        }/chat-meet-service/api/chat/fetch-messages`,
+        {
+          params: {chatId},
+  
+          withCredentials: true,
+        }
+      );
+      return res;
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  };
 
   export const createChat = async (chatDetails:any) => {
     try {

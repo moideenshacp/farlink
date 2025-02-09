@@ -315,6 +315,39 @@ export class userController implements IuserController {
     }
   }
    
+  public fetchEmployeesId = async(req: Request, res: Response): Promise<void> =>{
+    try {
+      const {employeeIds} = req.query
+      console.log("from emolyeecontroller",employeeIds);
+      
+      const employees = await this._userService.fetchEmployeesId(employeeIds as string[])
+      res.status(200).json({message:"Employees fetched succesfuly",employees})
+    } catch (error) {
+      console.log(error);
+      
+    }
+  }
+  public getAllEmployees = async (
+    req: Request,
+    res: Response
+  ): Promise<void> => {
+    try {
+      console.log("gte in allllll");
 
+      const { organizationId,page,pageSize } = req.query;
+      if (!organizationId) {
+        throw new Error("organix=zation id is needed");
+      }
+      const pageNumber = page ? parseInt(page as string, 10) : undefined;
+      const pageSizeNumber = pageSize ? parseInt(pageSize as string, 10) : undefined;
+      const {employees,totalEmployees} = await this._userService.getAllEmployees(
+        organizationId as string,pageNumber,pageSizeNumber
+      );
+      res.status(200).json({ message: "sucess", employees,totalEmployees });
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ message: "Interval server error" });
+    }
+  };
   
 }

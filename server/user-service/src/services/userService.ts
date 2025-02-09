@@ -274,4 +274,39 @@ export class userService implements IuserService {
     
       return user;     
   }
+  async fetchEmployeesId(employeeId: string[]): Promise<IuserModel[] | null> {
+    try {
+      console.log(employeeId);
+      const employees = await this._userRepository.findEmployeesByIds(employeeId);
+      if(employees){
+        console.log(employees,"gotacha project empmlyees");
+        
+        return employees
+      }
+      return null
+      
+    } catch (error) {
+      console.log(error);
+      return null
+      
+    }
+  }
+  async getAllEmployees(
+    organizationId: string,
+    page?: number,
+    pageSize?: number
+  ): Promise<{ employees: IuserModel[]; totalEmployees: number }> {
+    try {
+      // Count total employees
+      const totalEmployees = await this._userRepository.countEmployeesByOrganization(organizationId);
+  
+      // Fetch employees with optional pagination
+      const employees = await this._userRepository.findByOrganizationId(organizationId, page, pageSize);
+  
+      return { employees, totalEmployees };
+    } catch (error) {
+      console.error("Error in fetching employees:", error);
+      throw error;
+    }
+  }
 }

@@ -12,4 +12,7 @@ export default interface IuserRepo {
     email: string,
     populateField: string
   ): Promise<IuserModel | null>;
+  findEmployeesByIds(employeeIds: string[]): Promise<IuserModel[]> 
+  countEmployeesByOrganization(organizationId: string): Promise<number>
+  findByOrganizationId(organizationId: string, page?: number, pageSize?: number): Promise<IuserModel[]> 
 }

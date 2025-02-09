@@ -11,5 +11,9 @@ export interface IuserController {
   updateProfile(req:Request,res:Response):Promise<void>
   getUserProfile(req:Request,res:Response):Promise<void>
   googleLogin(req:Request,res:Response):Promise<Response>
+  fetchEmployeesId(req:Request,res:Response):Promise<void>
+  getAllEmployees(req:Request,res:Response):Promise<void>
+
+
 
 }

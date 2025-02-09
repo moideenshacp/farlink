@@ -182,4 +182,40 @@ export const googleLogin = async (userData: JwtPayload) => {
 };
 
 
-
+export const fetchEmployeesByIds = async (employeeIds: string[] | unknown) => {
+  try {
+    console.log(employeeIds,"id=============--------------------------");
+    
+    const res = await axiosInstance.get(
+      `${
+        import.meta.env.VITE_SERVER_BASE_URL
+      }/auth-service/api/auth/fetch-employeesById`,
+      {
+        params: {
+          employeeIds,
+        },
+        withCredentials: true,
+      }
+    );
+    return res;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+export const getAllEmployees = async (organizationId: string | undefined,page?:number, pageSize?:number) => {
+  try {
+    const res = await axiosInstance.get(
+      `${
+        import.meta.env.VITE_SERVER_BASE_URL
+      }/auth-service/api/auth/get-employees`,
+      {
+        params: { organizationId ,page,pageSize},
+        withCredentials: true,
+      }
+    );
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+};

@@ -2,9 +2,9 @@
 import React, { useEffect, useState } from "react";
 import { Modal } from "antd";
 import { Search, X } from "lucide-react";
-import { getAllEmployees } from "../../../api/employeeApi";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
+import { getAllEmployees } from "../../../api/authApi";
 
 
 interface UserSearchModalProps {
@@ -27,13 +27,14 @@ const UserSearchModal: React.FC<UserSearchModalProps> = ({
       const allUser = await getAllEmployees(user?.organizationId);
 
       if (allUser?.data.message === "sucess") {
-        setEmployees(allUser.data.employees);
+        const filtered = allUser.data.employees.filter((emp:any)=>emp._id !== user?._id )        
+        setEmployees(filtered);
       }
     };
     fetchAllUsers();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user?.organizationId]);
 
-  // Filter employees by firstName or position (adjust the filtering as needed)
   const filteredUsers = employees.filter(
     (employee: any) =>
       employee.firstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -91,7 +92,7 @@ const UserSearchModal: React.FC<UserSearchModalProps> = ({
               />
               <div>
                 <h3 className="font-medium text-[#232360]">{`${employee.firstName} ${employee.lastName}`}</h3>
-                <p className="text-sm text-gray-500">{employee.position}</p>
+                <p className="text-sm text-gray-500">{employee.position || "Owner"}</p>
               </div>
             </div>
           ))}

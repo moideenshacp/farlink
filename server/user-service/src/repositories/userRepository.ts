@@ -2,7 +2,7 @@ import BaseRepository from "./baseRepository";
 import IuserModel from "../interfaces/IuserModel";
 import IuserRepo from "../interfaces/IuserRepository";
 import UserModel from "../models/UserModel";
-import { FilterQuery } from "mongoose";
+import { FilterQuery, Types } from "mongoose";
 
 export class userRepository
   extends BaseRepository<IuserModel>
@@ -27,5 +27,30 @@ export class userRepository
   ): Promise<IuserModel | null> {
     return this.model.findOneAndUpdate(filter, update, { new: true });
   }
-
+   async findEmployeesByIds(employeeIds: string[]): Promise<IuserModel[]> {
+    try {
+      console.log(employeeIds,"ellaare id yum repository il und_______________________________________");
+      const employees = await this.model.find({ _id: { $in: employeeIds } });
+      return employees;
+    } catch (error) {
+      console.error("Error fetching employees from the database:", error);
+      throw error;
+    }
+  }
+  async countEmployeesByOrganization(organizationId: string): Promise<number> {
+    const objectId = new Types.ObjectId(organizationId);
+    return this.model.countDocuments({ organizationId: objectId }).exec();
+  }
+  async findByOrganizationId(organizationId: string, page?: number, pageSize?: number): Promise<IuserModel[]> {
+    const objectId = new Types.ObjectId(organizationId);
+    let query = this.model.find({ organizationId: objectId });
+  
+    // Apply pagination only if both page and pageSize exist
+    if (page !== undefined && pageSize !== undefined) {
+      const skip = (page - 1) * pageSize;
+      query = query.skip(skip).limit(pageSize);
+    }
+  
+    return query.exec();
+  }
 }
