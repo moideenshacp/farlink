@@ -29,17 +29,7 @@ export class messageRepository
       throw error;
     }
   }
-  async markMessagesAsRead(chatId: string, userId: string): Promise<void> {
-    try {
-      await this.model.updateMany(
-        { chatId, readBy: { $ne: userId } }, // 🔹 Only unread messages
-        { $addToSet: { readBy: userId } } // 🔹 Add userId to `readBy`
-      );
-    } catch (error) {
-      console.error("Error marking messages as read:", error);
-      throw error;
-    }
-  }
+
   
 
 }

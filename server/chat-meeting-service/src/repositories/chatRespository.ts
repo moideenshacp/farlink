@@ -49,7 +49,7 @@ export class chatRepository
       const chats = await chatModel
         .find({ participants: userId })
         .populate("lastMessage")
-        .sort({ updatedAt: -1 });
+        .sort({ "lastMessage.updatedAt": -1, updatedAt: -1 }); 
       return chats;
     } catch (error) {
       console.error("Error fetching chats:", error);

@@ -3,6 +3,10 @@ import { Search, Users } from "lucide-react";
 import { BiSolidMessageSquareAdd } from "react-icons/bi";
 import UserSearchModal from "./UserSearchModal";
 import { ChatListProps } from "../../../interface/Imessage";
+const isImageUrl = (url: string | undefined): boolean => {
+  if (!url) return false;
+  return /(https?:\/\/.*\.(?:png|jpg|jpeg|gif|webp))/i.test(url);
+};
 
 const ChatList: React.FC<ChatListProps> = ({
   chats,
@@ -64,7 +68,18 @@ const ChatList: React.FC<ChatListProps> = ({
                   <span className="text-xs text-gray-500">{chat.time}</span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <p className="text-sm text-gray-500 truncate">{chat.lastMessage}</p>
+                  {isImageUrl(chat?.lastMessage) ? (
+                    <p className="text-sm text-gray-500 truncate">Image</p>
+                  ) : (
+                    <p className="text-sm text-gray-500 truncate">
+                      {chat.lastMessage
+                        ? chat.lastMessage.length > 10
+                          ? chat.lastMessage.slice(0, 10) + "..."
+                          : chat.lastMessage
+                        : ""}
+                    </p>
+                  )}
+
                   {chat.unread > 0 && (
                     <span className="bg-[#1677ff] text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">
                       {chat.unread}
@@ -77,7 +92,9 @@ const ChatList: React.FC<ChatListProps> = ({
         ) : (
           <div className="flex flex-col mt-[50%] h-full text-center p-4 text-gray-500">
             <p className="text-lg font-semibold">No chats yet</p>
-            <p className="text-sm">"Great conversations start with a single message."</p>
+            <p className="text-sm">
+              "Great conversations start with a single message."
+            </p>
           </div>
         )}
       </div>

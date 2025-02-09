@@ -33,7 +33,7 @@ export interface ChatListProps {
 
 // Chat Input Component
 export interface ChatInputProps {
-  onSendMessage: (message: string) => void;
+  onSendMessage?: (message: string) => void;
   selectedChat?:Chat
 }
 

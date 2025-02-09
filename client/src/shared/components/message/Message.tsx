@@ -99,6 +99,11 @@ const ChatContainer: React.FC = () => {
               messages: [],
             };
           });
+          formattedChats.sort((a:any, b:any) => {
+            const timeA = new Date(a.time).getTime();
+            const timeB = new Date(b.time).getTime();
+            return timeB - timeA;
+          });
           setChats(formattedChats);
           return formattedChats;
         }
@@ -147,21 +152,6 @@ const ChatContainer: React.FC = () => {
     }
   };
 
-  const handleSendMessage = (messageText: string) => {
-    if (!selectedChat) return;
-
-    const newMessage: Message = {
-      id: selectedChat.messages.length + 1,
-      text: messageText,
-      time: new Date().toLocaleTimeString([], {
-        hour: "2-digit",
-        minute: "2-digit",
-      }),
-      sender: "self",
-    };
-    socket.emit("sendMessage", newMessage);
-
-  };
 
   useEffect(() => {
     if (selectedChat) {
@@ -237,7 +227,6 @@ const ChatContainer: React.FC = () => {
               </div>
               <div className="sticky bottom-0 bg-white">
                 <ChatInput
-                  onSendMessage={handleSendMessage}
                   selectedChat={selectedChat}
                 />
               </div>
@@ -269,7 +258,6 @@ const ChatContainer: React.FC = () => {
               </div>
               <div className="sticky bottom-0 bg-white">
                 <ChatInput
-                  onSendMessage={handleSendMessage}
                   selectedChat={selectedChat}
                 />
               </div>

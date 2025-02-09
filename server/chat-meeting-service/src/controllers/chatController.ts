@@ -116,4 +116,5 @@ export class chatController implements IchatController {
       }
     }
   };
+
 }
