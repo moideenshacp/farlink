@@ -1,8 +1,11 @@
 import { useEffect, useState } from "react";
-import { getAttendenceReport } from "../../api/attendenceApi";
+import { getAttendenceReport, updateAttendence } from "../../api/attendenceApi";
 import { IattendenceSummary } from "../../interface/IattendenceSummary";
 import { message, Pagination } from "antd";
 import ShimmerHistory from "./ShimmerHistory";
+import EditableAttendanceRow from "./EditableAttendenceRow";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
 
 interface AttendanceHistoryProps {
   email: string | undefined;
@@ -21,70 +24,71 @@ const AttendanceHistory: React.FC<AttendanceHistoryProps> = ({
   setIsCheckedIn,
   role,
 }) => {
+  const { user } = useSelector((state: RootState) => state.user);
+  const canEdit = user?.role === "admin" || user?.position === "HR";
+
   const [attendanceHistory, setAttendanceHistory] = useState<
     IattendenceSummary[]
   >([]);
   const [loading, setLoading] = useState<boolean>(false);
-  const [currentPage,setCurrentPage] = useState(1)
-  const pageSize = 10
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 10;
+  const fetchAttendenceReportEmp = async () => {
+    try {
+      setLoading(true);
+      const res = await getAttendenceReport(email);
+      if (res?.data?.attendancereport) {
+        setAttendanceHistory(res.data.attendancereport);
 
-  useEffect(() => {
-    const fetchAttendenceReportEmp = async () => {
-      try {
-        setLoading(true);
-        const res = await getAttendenceReport(email);
-        if (res?.data?.attendancereport) {
-            
-          setAttendanceHistory(res.data.attendancereport);
-
-          const todayAttendance = res.data.attendancereport.find(
-            (attendance: IattendenceSummary) => {
-              return (
-                new Date(attendance.date).toDateString() ===
-                  new Date().toDateString() && attendance.checkIn !== "N/A"
-              );
-            }
-          );
-          if (setIsCheckedIn) {
-            if (todayAttendance) {
-              setIsCheckedIn(true);
-            } else {
-              setIsCheckedIn(false);
-            }
+        const todayAttendance = res.data.attendancereport.find(
+          (attendance: IattendenceSummary) => {
+            return (
+              new Date(attendance.date).toDateString() ===
+                new Date().toDateString() && attendance.checkIn !== "N/A"
+            );
           }
-          const todayCheckout = res.data.attendancereport.find(
-            (attendance: IattendenceSummary) => {
-              return (
-                new Date(attendance.date).toDateString() ===
-                  new Date().toDateString() && attendance.checkOut !== "N/A"
-              );
-            }
-          );
-
-          if (todayCheckout && setIsCheckedIn) {
+        );
+        if (setIsCheckedIn) {
+          if (todayAttendance) {
+            setIsCheckedIn(true);
+          } else {
             setIsCheckedIn(false);
           }
         }
-      } catch (error) {
-        console.log(error);
-        message.error("Failed to fetch attendance report.", 2);
-      } finally {
-        setLoading(false);
-      }
-    };
+        const todayCheckout = res.data.attendancereport.find(
+          (attendance: IattendenceSummary) => {
+            return (
+              new Date(attendance.date).toDateString() ===
+                new Date().toDateString() && attendance.checkOut !== "N/A"
+            );
+          }
+        );
 
-    const fetchAttendenceReportAdmin = async () => {
-      try {
-        const res = await getAttendenceReport(email);
-        if (res?.data?.attendancereport) {
-          setAttendanceHistory(res.data.attendancereport);
+        if (todayCheckout && setIsCheckedIn) {
+          setIsCheckedIn(false);
         }
-      } catch (error) {
-        console.log(error);
-        message.error("Failed to fetch attendance report.", 2);
       }
-    };
+    } catch (error) {
+      console.log(error);
+      message.error("Failed to fetch attendance report.", 2);
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  const fetchAttendenceReportAdmin = async () => {
+    try {
+      const res = await getAttendenceReport(email);
+      if (res?.data?.attendancereport) {
+        setAttendanceHistory(res.data.attendancereport);
+      }
+    } catch (error) {
+      console.log(error);
+      message.error("Failed to fetch attendance report.", 2);
+    }
+  };
+
+  useEffect(() => {
     if (email) {
       if (role === "employee") {
         fetchAttendenceReportEmp();
@@ -92,6 +96,7 @@ const AttendanceHistory: React.FC<AttendanceHistoryProps> = ({
         fetchAttendenceReportAdmin();
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isCheckedIn, email, setIsCheckedIn, role]);
 
   useEffect(() => {
@@ -103,6 +108,38 @@ const AttendanceHistory: React.FC<AttendanceHistoryProps> = ({
     (currentPage - 1) * pageSize,
     currentPage * pageSize
   );
+
+  const handleSaveAttendance = async (
+    updatedAttendance: IattendenceSummary
+  ) => {
+    try {
+      const { id, checkIn, checkOut } = updatedAttendance;
+      console.log("id------------------------", id);
+
+      if (!checkIn || !checkOut) {
+        message.error("Check-in and check-out times are required.");
+        return;
+      }
+      const res = await updateAttendence(id, checkIn, checkOut);
+      if (res.status === 200) {
+        if (email) {
+          if (role === "employee") {
+            fetchAttendenceReportEmp();
+          } else {
+            fetchAttendenceReportAdmin();
+          }
+        }
+        message.success("Attendance updated successfully.");
+      } else {
+        message.error("Failed to Update attendence,please try again....");
+      }
+      // Update local state
+    } catch (error) {
+      console.error(error);
+      message.error("Failed to update attendance.");
+    }
+  };
+
   return (
     <div className="p-6 bg-white rounded-lg shadow-lg">
       {showCheckInButton && handleAttendance && (
@@ -118,7 +155,7 @@ const AttendanceHistory: React.FC<AttendanceHistoryProps> = ({
         </div>
       )}
       {loading ? (
-        <ShimmerHistory/>
+        <ShimmerHistory />
       ) : (
         <>
           <h2 className="text-lg font-semibold mb-4">Attendance History</h2>
@@ -131,35 +168,24 @@ const AttendanceHistory: React.FC<AttendanceHistoryProps> = ({
                   <th className="px-4 py-2">Check-In Time</th>
                   <th className="px-4 py-2">Check-Out Time</th>
                   <th className="px-4 py-2">Status</th>
+                  <th className="px-4 py-2">{canEdit ? "Actions" : ""}</th>
                 </tr>
               </thead>
               <tbody>
                 {paginatedData.length > 0 ? (
-                  paginatedData.map((attendance, index) => (
-                    <tr key={index} className="border-b hover:bg-gray-50">
-                      <td className="px-4 py-2">{(currentPage - 1) * pageSize + index + 1}</td>
-                      <td className="px-4 py-2">{attendance.date || "N/A"}</td>
-                      <td className="px-4 py-2">
-                        {attendance.checkIn || "N/A"}
-                      </td>
-                      <td className="px-4 py-2">
-                        {attendance.checkOut || "N/A"}
-                      </td>
-                      <td className="px-4 py-2">
-                        <span
-                          className={`px-2 py-1 text-xs font-medium rounded ${
-                            attendance.status === "present"
-                              ? "bg-green-100 text-green-600"
-                              : attendance.status === "absent"
-                              ? "bg-red-100 text-red-600"
-                              : "bg-yellow-100 text-yellow-600"
-                          }`}
-                        >
-                          {attendance.status}
-                        </span>
-                      </td>
-                    </tr>
-                  ))
+                  paginatedData.map(
+                    (attendance: IattendenceSummary, index: number) => (
+                      <EditableAttendanceRow
+                        key={index}
+                        attendance={attendance}
+                        index={index}
+                        currentPage={currentPage}
+                        pageSize={pageSize}
+                        onSave={handleSaveAttendance}
+                        user={user}
+                      />
+                    )
+                  )
                 ) : (
                   <tr>
                     <td colSpan={5} className="text-center py-4 text-gray-500">

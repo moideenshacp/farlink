@@ -19,7 +19,25 @@ export const updatePolicy = async (
     throw error;
   }
 };
-
+export const updateAttendence = async (
+  attendenceId: string | undefined,
+  checkIn: string, 
+  checkOut: string 
+) => {
+  try {
+    const res = await axiosInstance.patch(
+      `${
+        import.meta.env.VITE_SERVER_BASE_URL
+      }/employee-service/api/attendence/update-attendence`,
+      { attendenceId, checkIn,checkOut },
+      { withCredentials: true }
+    );
+    return res;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
 export const fetchPolicy = async (organizationId: string | undefined) => {
   try {
     const res = await axiosInstance.get(

@@ -12,5 +12,10 @@ export interface IattendenceService {
   handleAttendence(organizationId: string,employeeEmail:string):Promise<void>
   getAttendenceReport(employeeEmail:string):Promise<IattendanceSummary[] | null>
   markAbsentees(organizationId: string): Promise<void>;
+  editAttendance(
+    attendenceId: string,
+    checkIn: string, 
+    checkOut: string 
+  ): Promise<void>
 
 }

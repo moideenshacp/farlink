@@ -8,13 +8,15 @@ import {  FaProjectDiagram, FaCheckCircle } from "react-icons/fa";
 import { fetchAllTasksOfEmployee } from "../../../api/taskApi";
 import { ITaskDetails } from "../../../interface/ItaskDetails";
 import { GrTasks } from "react-icons/gr";
-import { DashboardChart } from "../../admin/overview/DashBoardChart";
+import { DashboardChart } from "./DashBoardChart";
 const DashboardOverview = () => {
   const { user } = useSelector((state: RootState) => state.user);
   const [allProjects, setAllProjects] = useState(0);
   const [allTasks, setAllTasks] = useState(0);
   const [completedProjects, setCompletedProjects] = useState(0);
   const [completedTasks, setCompletedTasks] = useState(0);
+  const [projects, setProjects] = useState<IProject[]>([]);
+  const [tasks, setTasks] = useState<ITaskDetails[]>([]);
 
   useEffect(() => {
     const fetchProject = async () => {
@@ -22,7 +24,7 @@ const DashboardOverview = () => {
       const project = res.data.result;
       if (project) {
         setAllProjects(project.length);
-
+        setProjects(project)
         const completedProjects = project.filter(
           (p: IProject) => p.status === "completed"
         );
@@ -38,7 +40,7 @@ const DashboardOverview = () => {
       const tasks = res.data.result;
       if (tasks) {
         setAllTasks(tasks.length);
-
+        setTasks(tasks)
         const completedTasks = tasks.filter(
           (t: ITaskDetails) => t.status === "completed"
         );
@@ -73,6 +75,8 @@ const DashboardOverview = () => {
       icon: <FaCheckCircle size={20} color="#28A745" />,
     },
   ];
+
+  
   
   return (
     <div>
@@ -93,7 +97,10 @@ const DashboardOverview = () => {
           </div>
         ))}
       </div>
-        <DashboardChart/>
+      <div className="mt-5" >
+
+      <DashboardChart projects={projects} tasks={tasks} />
+      </div>
     </div>
   );
   

@@ -5,4 +5,5 @@ export interface IattendenceController {
   getAttendencePolicy(req: Request, res: Response): Promise<void>;
   handleAttendence(req:Request,res:Response):Promise<void>
   getAttendenceReport(req: Request, res: Response): Promise<void>;
+  editAttendance(req: Request, res: Response): Promise<void>;
 }

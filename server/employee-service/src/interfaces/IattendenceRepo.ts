@@ -14,4 +14,5 @@ export default interface IattendenceRepo {
     employeeEmail: string,
     date: Date
   ): Promise<IAttendanceModel | null>;
+  findById(id: string): Promise<IAttendanceModel | null>
 }

@@ -14,6 +14,8 @@ const DashboardOverview = () => {
   const [TerminatedEmployeesCount, SetTerminatedEmployeesCount] = useState(0);
   const [allProjects, setAllProjects] = useState(0);
   const [completedProjects, setCompletedProjects] = useState(0);
+  const [allProjectsList, setAllProjectsList] = useState<IProject[]>([]);
+
   useEffect(() => {
     const fetchData = async () => {
       const res = await fetchEmployeesCount(user?.organizationId);
@@ -29,6 +31,7 @@ const DashboardOverview = () => {
   useEffect(() => {
     const fetchProject = async () => {
       const res = await fetchProjects(user?.organizationId);
+      setAllProjectsList(res.data.result)
       const project = res.data.result;
       if (project) {
         setAllProjects(project.length);
@@ -86,7 +89,10 @@ const DashboardOverview = () => {
           </div>
         ))}
       </div>
-        <DashboardChart/>
+      <div className="mt-5" >
+
+        <DashboardChart projects={allProjectsList} />
+      </div>
     </div>
   );
   

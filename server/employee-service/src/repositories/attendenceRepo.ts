@@ -51,4 +51,7 @@ export class AttendanceRepository
       })
       .exec();
   }
+  async findById(id: string): Promise<IAttendanceModel | null> {
+    return this.model.findById(id).exec();
+  }
 }

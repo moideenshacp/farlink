@@ -236,6 +236,7 @@ export class attendenceService implements IattendenceService {
             : "N/A";
 
           return {
+            id:attendance._id,
             date: checkInDate,
             checkIn: checkInTime,
             checkOut: checkOutTime,
@@ -324,4 +325,81 @@ export class attendenceService implements IattendenceService {
       throw error;
     }
   }
+
+  async editAttendance(
+    attendenceId: string,
+    checkIn: string,
+    checkOut: string
+  ): Promise<void> {
+    try {
+      console.log(attendenceId, "id---------");
+  
+      const attendanceRecord = await this._attendenceRepository.findById(attendenceId);
+      
+      if (!attendanceRecord) {
+        throw new CustomError("Attendance record not found", 404);
+      }
+  
+      const organizationId = attendanceRecord?.organizationId?.toString();
+      const policy = await this.getAttendencePolicy(organizationId as string);
+      if (!policy) throw new Error("Attendance policy not found");
+  
+      const currentDate = new Date();
+      const currentDateString = currentDate.toISOString().split("T")[0]; // YYYY-MM-DD
+  
+      // Convert check-in and check-out to IST timezone
+      const checkInIST = new Date(`${currentDateString}T${checkIn}:00+05:30`);
+      const checkOutIST = new Date(`${currentDateString}T${checkOut}:00+05:30`);
+  
+      if (checkOutIST <= checkInIST) {
+        throw new CustomError("Check-out time must be after check-in time", 400);
+      }
+  
+      // Calculate working hours
+      const workingHours = (checkOutIST.getTime() - checkInIST.getTime()) / 3600000;
+  
+      let status: "late" | "present" | "halfDay" | "absent" = "present";
+  
+      const halfDayThresholdHours = Number(policy.halfDayAfterHours);
+      const totalWorkingHoursRequired = Number(policy.totalWorkingHours);
+      const lateMarkAfterMinutes = Number(policy.lateMarkAfterMinutes);
+      const officeStartTimeIST = new Date(`${currentDateString}T${policy.officeStartTime}:00+05:30`);
+  
+      if (isNaN(halfDayThresholdHours) || isNaN(totalWorkingHoursRequired) || isNaN(lateMarkAfterMinutes)) {
+        throw new Error("Invalid working hours configuration in attendance policy");
+      }
+  
+      // Determine late status based on policy.lateMarkAfterMinutes
+      const lateMarkThresholdIST = new Date(officeStartTimeIST.getTime() + lateMarkAfterMinutes * 60000);
+  
+      if (workingHours < halfDayThresholdHours) {
+        status = "halfDay";
+      } else if (checkInIST > lateMarkThresholdIST) {
+        status = "late";
+      } else if (workingHours >= totalWorkingHoursRequired) {
+        status = "present";
+      }
+  
+      // Update attendance record
+      const updatedAttendance = {
+        checkIn: checkInIST,
+        checkOut: checkOutIST,
+        workingHours,
+        status,
+      };
+  
+      await this._attendenceRepository.updateAttendance(
+        { _id: attendanceRecord._id },
+        updatedAttendance
+      );
+  
+      console.log("Attendance updated successfully", updatedAttendance);
+    } catch (error) {
+      console.error("Error updating attendance:", error);
+      throw error;
+    }
+  }
+  
+  
+  
 }

@@ -22,6 +22,7 @@ const AttendenceController = new attendenceController(AttendenceService)
 //admin=====================================================================================================================
 
 router.patch('/update-policy',authenticate,AttendenceController.UpdateAttendencePolicy)
+router.patch('/update-attendence',authenticate,AttendenceController.editAttendance)
 router.get('/get-policy',authenticate,AttendenceController.getAttendencePolicy)
 router.post('/handle-attendence',authenticate,AttendenceController.handleAttendence)
 
