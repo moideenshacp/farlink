@@ -3,6 +3,7 @@ import { Search, Users } from "lucide-react";
 import { BiSolidMessageSquareAdd } from "react-icons/bi";
 import UserSearchModal from "./UserSearchModal";
 import { ChatListProps } from "../../../interface/Imessage";
+import { Avatar } from "antd";
 const isImageUrl = (url: string | undefined): boolean => {
   if (!url) return false;
   return /(https?:\/\/.*\.(?:png|jpg|jpeg|gif|webp))/i.test(url);
@@ -14,6 +15,7 @@ const ChatList: React.FC<ChatListProps> = ({
   selectedChatId,
   isGroup,
   onAddChat,
+  onAddGroup,
 }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -48,23 +50,32 @@ const ChatList: React.FC<ChatListProps> = ({
               onClick={() => onSelectChat(chat)}
             >
               <div className="relative">
-                <img
-                  src={chat.image}
+                <Avatar
+                  src={chat.isGroup ? undefined : chat.image}
                   alt={chat.name}
-                  className="w-10 h-10 rounded-full"
-                />
+                  className="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center"
+                >
+                  {chat.isGroup
+                    ? chat.groupName?.toUpperCase() || "G"
+                    : null}
+                </Avatar>
+
                 {chat.isOnline && (
                   <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-white"></div>
                 )}
+
                 {chat.isGroup && (
                   <div className="absolute bottom-0 right-0 bg-[#1677ff] rounded-full w-4 h-4 flex items-center justify-center">
                     <Users className="w-3 h-3 text-white" />
                   </div>
                 )}
               </div>
+
               <div className="flex-1">
                 <div className="flex justify-between items-center">
-                  <h3 className="font-medium text-[#232360]">{chat.name}</h3>
+                  <h3 className="font-medium text-[#232360]">
+                    {chat.isGroup ? chat.groupName : chat.name}
+                  </h3>
                   <span className="text-xs text-gray-500">{chat.time}</span>
                 </div>
                 <div className="flex justify-between items-center">
@@ -98,24 +109,31 @@ const ChatList: React.FC<ChatListProps> = ({
           </div>
         )}
       </div>
-      {!isGroup && onAddChat && (
-        <>
-          <button
-            className="absolute bottom-16 right-6 w-12 h-12 bg-[#1677ff] rounded-2xl flex items-center justify-center shadow-lg hover:bg-[#1668cc] transition-colors duration-200"
-            onClick={() => setIsModalOpen(true)}
-          >
-            <BiSolidMessageSquareAdd className="w-6 h-6 text-white" />
-          </button>
-          <UserSearchModal
-            isOpen={isModalOpen}
-            onClose={() => setIsModalOpen(false)}
-            onSelectUser={(employee) => {
+      <>
+        <button
+          className="absolute bottom-16 right-6 w-12 h-12 bg-[#1677ff] rounded-2xl flex items-center justify-center shadow-lg hover:bg-[#1668cc] transition-colors duration-200"
+          onClick={() => setIsModalOpen(true)}
+        >
+          <BiSolidMessageSquareAdd className="w-6 h-6 text-white" />
+        </button>
+        <UserSearchModal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          onSelectUser={(employee) => {
+            if (onAddChat) {
               onAddChat(employee);
               setIsModalOpen(false);
-            }}
-          />
-        </>
-      )}
+            }
+          }}
+          isGroup={isGroup}
+          onCreateGroup={(groupName, members) => {
+            if (onAddGroup) {
+              onAddGroup(groupName, members);
+            }
+            setIsModalOpen(false);
+          }}
+        />
+      </>
     </div>
   );
 };

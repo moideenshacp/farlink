@@ -17,8 +17,11 @@ export interface Chat {
   image?: string;
   isOnline?: boolean;
   isGroup?: boolean;
-  members?: number;
+  members?: [];
   messages: Message[] ;
+  groupName?:string
+  participants:any[]
+  groupAdmin?:string
 }
 // Chat List Component
 export interface ChatListProps {
@@ -27,6 +30,7 @@ export interface ChatListProps {
   selectedChatId: number | null;
   isGroup: boolean;
   onAddChat?: (user:any) => void;
+  onAddGroup?: (groupName:string, members:any) => void;
 
 }
 
@@ -40,6 +44,7 @@ export interface ChatInputProps {
 // Chat Header Component
 export interface ChatHeaderProps {
     chat: Chat;
+    fetchChats?: () => void;
   }
 
   export // Chat Messages Component

@@ -116,5 +116,22 @@ export class chatController implements IchatController {
       }
     }
   };
+  public updateChat = async(req: Request, res: Response): Promise<Response | void> =>{
+      try {
+        const {chatId,updateData} = req.body
+        const result = await this._chatService.updateChat(chatId,updateData)
+        if (result) {
+            return res
+              .status(200)
+              .json({ message: "Chat Updated successfully", result });
+          }else{
+    
+              return res.status(400).json({ message: "Failed to fetch messages" });
+          }
+      } catch (error) {
+        console.log(error);
+        
+      }
+  }
 
 }

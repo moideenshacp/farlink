@@ -7,5 +7,6 @@ export interface IchatService{
     sendMessage(messageDetails: any): Promise<ImessageModel | null>;
     fetchMessages(chatId: string): Promise<ImessageModel[] | null>;
     fetchAllChats(userId: string): Promise<IchatModel[] | null>;
+    updateChat(chatId: string,updateData:any): Promise<IchatModel | null>;
     
 }

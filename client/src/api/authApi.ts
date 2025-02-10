@@ -184,7 +184,6 @@ export const googleLogin = async (userData: JwtPayload) => {
 
 export const fetchEmployeesByIds = async (employeeIds: string[] | unknown) => {
   try {
-    console.log(employeeIds,"id=============--------------------------");
     
     const res = await axiosInstance.get(
       `${

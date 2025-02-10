@@ -56,13 +56,19 @@ export class chatRepository
       throw new Error("Failed to fetch chats");
     }
   }
-  async updateChat(chatId: string, updateData: any):Promise<IchatModel| null> {
+  async updateChat(chatId: string, updateData: Partial<IchatModel>) {
     try {
-      return await chatModel.findByIdAndUpdate(chatId, updateData, { new: true });
+        const updatedChat = await chatModel.findByIdAndUpdate(
+            chatId,
+            { $set: updateData, updatedAt: new Date() },
+            { new: true }
+        );
+        return updatedChat;
     } catch (error) {
-      console.error("Error updating chat:", error);
-      throw error;
+        console.error("Error updating chat:", error);
+        throw error;
     }
-  }
+}
+
   
 }

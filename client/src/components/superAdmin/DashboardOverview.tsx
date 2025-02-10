@@ -1,78 +1,75 @@
-import { useEffect } from "react";
-import OverviewCard from "../../shared/components/OverviewCard";
+import { useEffect, useState } from "react";
 import { useCompanies } from "../../shared/hooks/UseCompanies";
 import { fetchAllCompanies } from "../../api/companyApi";
+import { CompanyStatusChart } from "./CompanyStatusChart";
+import StatCard from "../../shared/components/StatsCard";
+import { FaBuilding, FaBan } from "react-icons/fa";
 
 const DashboardOverview = () => {
-  const { companies, setCompanies } = useCompanies();
-
-  const totalCompanies = companies.length;
-  console.log(totalCompanies);
-
-  const blockedCompanies = companies.filter(
-    (company: { admin: { isActive: boolean } }) =>
-      company.admin?.isActive === false
-  ).length;
-  console.log(blockedCompanies);
+  const { setCompanies } = useCompanies();
+  const [totalCompanies, setTotalCompanies] = useState(0);
+  const [blockedCompanies, setBlockedCompanies] = useState(0);
 
   useEffect(() => {
     const fetchCompanies = async () => {
       const res = await fetchAllCompanies();
       if (res?.data.message === "Organizations fetched successfully") {
         setCompanies(res.data.data);
+        setTotalCompanies(res.data.data.length);
+        setBlockedCompanies(
+          res.data.data.filter(
+            (company: { admin: { isActive: boolean } }) =>
+              company.admin?.isActive === false
+          ).length
+        );
       }
     };
     fetchCompanies();
   }, [setCompanies]);
-  console.log("comapnhyyyy",companies);
-  
-  return (
-    <div className="flex space-x-28">
-      <OverviewCard
-        title="Total Companies"
-        number={totalCompanies}
-        icon={
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={1.5}
-            stroke="#8C97A8"
-            className="h-6 w-6"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M2.25 21h19.5m-18-18v18m10.5-18v18m6-13.5V21M6.75 6.75h.75m-.75 3h.75m-.75 3h.75m3-6h.75m-.75 3h.75m-.75 3h.75M6.75 21v-3.375c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21M3 3h12m-.75 4.5H21m-3.75 3.75h.008v.008h-.008v-.008Zm0 3h.008v.008h-.008v-.008Zm0 3h.008v.008h-.008v-.008Z"
-            />
-          </svg>
-        }
-        chartColor="#4361EE"
-      />
 
-      <OverviewCard
-        title="Blocked Companies"
-        number={blockedCompanies}
-        icon={
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={1.5}
-            stroke="#8C97A8"
-            className="size-6"
+  const stats = [
+    {
+      title: "Total Companies",
+      value: totalCompanies,
+      icon: <FaBuilding size={20} color="#4361EE" />,
+    },
+    {
+      title: "Blocked Companies",
+      value: blockedCompanies,
+      icon: <FaBan size={20} color="#FF4C4C" />,
+    },
+  ];
+
+  return (
+    <div className="flex flex-col items-center">
+      {/* Stats Container */}
+      <div className="flex flex-wrap gap-6 justify-center">
+        {stats.map((stat, index) => (
+          <div
+            key={index}
+            className="hover:shadow-lg hover:scale-105 transition-transform"
           >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M18.364 18.364A9 9 0 0 0 5.636 5.636m12.728 12.728A9 9 0 0 1 5.636 5.636m12.728 12.728L5.636 5.636"
+            <StatCard
+              title={stat.title}
+              value={stat.value}
+              color="text-[#4361EE]"
+              fontSize="text-xl"
+              icon={stat.icon}
             />
-          </svg>
-        }
-        chartColor="#4361EE"
-      />
+          </div>
+        ))}
+      </div>
+  
+      {/* Centered Pie Chart */}
+      <div className="mt-10 flex justify-center">
+        <CompanyStatusChart
+          totalCompanies={totalCompanies}
+          blockedCompanies={blockedCompanies}
+        />
+      </div>
     </div>
   );
+  
 };
 
 export default DashboardOverview;

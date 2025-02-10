@@ -96,6 +96,24 @@ export class chatService implements IchatService {
       throw error;
     }
   }
+  async updateChat(chatId: string, updateData: any): Promise<IchatModel | null> {
+      try {
+        console.log("updatee data----------------------",updateData);
+        
+        const updated = await this._chatRepository.updateChat(chatId,updateData)
+        if(updated){
+            console.log("updateeddd-------------------",updated);
+            
+            return updated
+        }else{
+            return null
+        }
+      } catch (error) {
+        console.log(error);
+        throw error
+        
+      }
+  }
 
   
 }

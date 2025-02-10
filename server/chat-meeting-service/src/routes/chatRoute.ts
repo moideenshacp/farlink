@@ -17,6 +17,7 @@ const ChatService:IchatService = new chatService(chatRepo,messageRepo)
 const ChatController:IchatController = new chatController(ChatService)
 
 router.post("/create-chat",authenticate, ChatController.createChat);
+router.post("/update-chat",authenticate, ChatController.updateChat);
 router.get("/fetch-chat", ChatController.fetchAllChats);
 router.post("/send-message",authenticate, ChatController.sendMessage);
 router.get("/fetch-messages", authenticate,ChatController.fetchMessages);

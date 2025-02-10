@@ -12,6 +12,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
 import { createChat, fetchAllChats, fetchMessages } from "../../../api/chatApi";
 import { fetchEmployeesByIds } from "../../../api/authApi";
+import { IEmployee } from "../../../interface/IemployeeDetails";
 
 const ChatContainer: React.FC = () => {
   const { user } = useSelector((state: RootState) => state.user);
@@ -26,19 +27,41 @@ const ChatContainer: React.FC = () => {
   const handleSelectChat = async (chat: Chat) => {
     try {
       // setSelectedChat(chat);
+
       const res = await fetchMessages(chat.id);
       if (res.data?.result) {
-        const formattedMessages = res.data.result.map((msg: any) => ({
-          id: msg._id,
-          text: msg.content,
-          time: new Date(msg.createdAt).toLocaleTimeString([], {
-            hour: "2-digit",
-            minute: "2-digit",
-          }),
-          sender: msg.sender === user?._id ? "self" : "other",
-          senderImage: chat.image,
-          senderName: chat.name,
-        }));
+        const formattedMessages = res.data.result.map((msg: any) => {
+          return {
+            id: msg._id,
+            text: msg.content,
+            time: new Date(msg.createdAt).toLocaleTimeString([], {
+              hour: "2-digit",
+              minute: "2-digit",
+            }),
+            sender: msg.sender === user?._id ? "self" : "other",
+            senderImage: chat.isGroup
+              ? chat.participants?.find(
+                  (p: { _id: string; name: string }) => p._id === msg.sender
+                )?.image || "Unknown"
+              : chat.image,
+            senderName: chat.isGroup
+              ? chat.participants?.find(
+                  (p: { _id: string; firstName: string; lastName: string }) =>
+                    p._id === msg.sender
+                )
+                ? `${
+                    chat.participants.find((p) => p._id === msg.sender)
+                      ?.firstName
+                  } ${
+                    chat.participants.find((p) => p._id === msg.sender)
+                      ?.lastName
+                  }`
+                : "Unknown"
+              : chat.name,
+          };
+        });
+
+
         setSelectedChat({
           ...chat,
           messages: formattedMessages,
@@ -79,27 +102,39 @@ const ChatContainer: React.FC = () => {
             const receiver = chat.participants.filter(
               (emp: any) => emp._id !== user?._id
             );
-            const sender = chat.participants.filter(
+             chat.participants.filter(
               (emp: any) => emp._id === user?._id
             );
-            console.log(sender, "sender-------------------");
-            console.log(receiver[0].isActive, "receiver[0].isActive-------------------");
             return {
               id: chat._id,
-              name: `${receiver[0].firstName} ${receiver[0].lastName}`,
-              lastMessage:chat.lastMessage?.content || "",
-              time: new Date(chat.lastMessage?.updatedAt || chat.updatedAt).toLocaleTimeString([], {
+              name:
+                chat.chatType === "group"
+                  ? chat.groupName
+                  : `${receiver[0].firstName} ${receiver[0].lastName}`,
+              lastMessage: chat.lastMessage?.content || "",
+              time: new Date(
+                chat.lastMessage?.updatedAt || chat.updatedAt
+              ).toLocaleTimeString([], {
                 hour: "2-digit",
                 minute: "2-digit",
               }),
               unread: 0,
-              image: receiver[0].image || "/api/placeholder/40/40",
-              isOnline: receiver[0].isActive || false,
+              image:
+                chat.chatType === "group"
+                  ? "/api/placeholder/group-icon.png"
+                  : receiver[0].image || "/api/placeholder/40/40",
+              isOnline:
+                chat.chatType === "group"
+                  ? false
+                  : receiver[0].isActive || false,
               isGroup: chat.chatType === "group",
               messages: [],
+              groupName: chat.groupName,
+              participants: chat.participants,
+              groupAdmin:chat.groupAdmin
             };
           });
-          formattedChats.sort((a:any, b:any) => {
+          formattedChats.sort((a: any, b: any) => {
             const timeA = new Date(a.time).getTime();
             const timeB = new Date(b.time).getTime();
             return timeB - timeA;
@@ -120,16 +155,16 @@ const ChatContainer: React.FC = () => {
     const updatedChats = await fetchAllChats(user?._id);
     const existingChat = updatedChats.data.result.find(
       (chat: any) =>
-        !chat.isGroup &&
+        chat.chatType === "private" &&
         chat.participants.includes(employee._id) &&
         chat.participants.includes(user?._id)
-    );
+    );    
     if (existingChat) {
       const updatedChats = await fetchChats();
       const newChat = updatedChats.filter(
         (chat: any) => chat.id == existingChat._id
       );
-      await handleSelectChat(newChat[0])
+      await handleSelectChat(newChat[0]);
     } else {
       const chatDetails = {
         chatType: "private",
@@ -152,6 +187,32 @@ const ChatContainer: React.FC = () => {
     }
   };
 
+  const handleGroupAdd = async (groupName: string, members: any) => {
+    const membersId: any = [];
+    members.map((emp: IEmployee) => {
+      membersId.push(emp._id);
+    });
+    const chatDetails = {
+      groupName: groupName,
+      chatType: "group",
+      participants: [...membersId, user?._id],
+      groupAdmin: user?._id,
+    };
+    try {
+      const res = await createChat(chatDetails);
+      if (res) {
+        const updatedChats = await fetchChats();
+        const newChat = updatedChats.filter(
+          (chat: any) => chat.id == res.data.result._id
+        );
+        if (newChat) {
+          setSelectedChat(newChat[0]);
+        }
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   useEffect(() => {
     if (selectedChat) {
@@ -161,7 +222,8 @@ const ChatContainer: React.FC = () => {
 
   useEffect(() => {
     socket.on("receiveMessage", (newMessage: any) => {
-      const chat = chats.find((chat) => chat.id === newMessage.chatId);      
+      fetchChats();
+      const chat = chats.find((chat) => chat.id === newMessage.chatId);
       if (!chat) return;
       if (chat.messages.some((msg) => msg.id === newMessage.id)) return;
 
@@ -173,8 +235,25 @@ const ChatContainer: React.FC = () => {
           minute: "2-digit",
         }),
         sender: newMessage.sender === user?._id ? "self" : "other",
-        senderName: chat?.name,
-        senderImage: chat?.image,
+        senderName: chat.isGroup
+          ? chat.participants?.find(
+              (p: { _id: string; firstName: string; lastName: string }) =>
+                p._id === newMessage.sender
+            )
+            ? `${
+                chat.participants.find((p) => p._id === newMessage.sender)
+                  ?.firstName
+              } ${
+                chat.participants.find((p) => p._id === newMessage.sender)
+                  ?.lastName
+              }`
+            : "Unknown"
+          : chat.name,
+        senderImage: chat.isGroup
+          ? chat.participants?.find(
+              (p: { _id: string; name: string }) => p._id === newMessage.sender
+            )?.image || "Unknown"
+          : chat.image,
       };
       setChats((prevChats) =>
         prevChats.map((chat) =>
@@ -201,8 +280,8 @@ const ChatContainer: React.FC = () => {
     return () => {
       socket.off("receiveMessage");
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [ chats]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [chats]);
 
   const tabItems = [
     {
@@ -226,9 +305,7 @@ const ChatContainer: React.FC = () => {
                 <ChatMessages messages={selectedChat.messages} />
               </div>
               <div className="sticky bottom-0 bg-white">
-                <ChatInput
-                  selectedChat={selectedChat}
-                />
+                <ChatInput selectedChat={selectedChat} />
               </div>
             </div>
           ) : (
@@ -241,25 +318,24 @@ const ChatContainer: React.FC = () => {
       key: "group",
       label: "Group Chats",
       children: (
-        <div className="flex h-[calc(100vh-100px)]">
+        <div className="flex lg:-mt-6 h-[calc(100vh-100px)]">
           <ChatList
             chats={chats}
             onSelectChat={handleSelectChat}
             selectedChatId={selectedChat?.id || null}
             isGroup={true}
+            onAddGroup={handleGroupAdd}
           />
           {selectedChat ? (
             <div className="flex-1 flex flex-col">
               <div className="sticky z-10">
-                <ChatHeader chat={selectedChat} />
+                <ChatHeader chat={selectedChat} fetchChats={fetchChats} />
               </div>
               <div className="flex-1 scrollbar-none overflow-y-auto">
                 <ChatMessages messages={selectedChat.messages} />
               </div>
               <div className="sticky bottom-0 bg-white">
-                <ChatInput
-                  selectedChat={selectedChat}
-                />
+                <ChatInput selectedChat={selectedChat} />
               </div>
             </div>
           ) : (

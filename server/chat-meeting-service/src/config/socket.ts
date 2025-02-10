@@ -42,8 +42,8 @@ export const initializeSocket = (server: http.Server) => {
                   });
             
                   console.log("Message saved & last message updated:", savedMessage);
+                  io.to(messageData.chatId).emit("receiveMessage", savedMessage);
             }
-            io.to(messageData.chatId).emit("receiveMessage", savedMessage);
         } catch (error) {
             console.log(error);
                
