@@ -58,6 +58,8 @@ export const initializeSocket = (server: http.Server) => {
                 
               const userIdStr = userId.toString();
               if (userIdStr !== messageData.sender) {
+                console.log(userIdStr,"userIdStr----------------");
+                
                 const receiverSocket = userSockets.get(userIdStr);
                 console.log("reciever socket---------------------",receiverSocket);
                 if (receiverSocket) {
