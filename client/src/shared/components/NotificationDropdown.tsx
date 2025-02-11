@@ -2,6 +2,9 @@ import React, { useState, useEffect } from "react";
 import { MdOutlineNotificationsActive } from "react-icons/md";
 import { Dropdown, Badge, Empty } from "antd";
 import socket from "../../utils/socket";
+import { clearNotifications, fetchNotifications, markAllAsRead } from "../../api/chatApi";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
 import { fetchEmployeesByIds } from "../../api/authApi";
 
 interface Employee {
@@ -12,41 +15,82 @@ interface Employee {
 }
 
 interface NotificationData {
+_id:string
   sender: string;
   message: string;
+  timestamp: Date;
+  read: boolean;
 }
 
 interface Notification {
-  id: number;
+  id: string;
   message: string;
   senderName: string;
-  senderImage: string; 
+  senderImage: string;
   timestamp: Date;
   read: boolean;
 }
 
 const NotificationDropdown: React.FC = () => {
+    const {user}= useSelector((state:RootState)=>state.user)
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [unreadCount, setUnreadCount] = useState<number>(0);
 
+  // ✅ Fetch notifications from backend when component mounts
+  useEffect(() => {
+    const fetchAllNotifications = async () => {
+      try {
+        const res = await fetchNotifications(user?._id); // API call to fetch notifications
+
+        console.log("res-----------------------------------------------",res.data);
+        
+        if (res?.data) {
+          const enrichedNotifications = await Promise.all(
+            res.data.result.map(async (notif: NotificationData) => {
+              const senderRes = await fetchEmployeesByIds(notif.sender);
+              const sender: Employee = senderRes?.data?.employees[0] || {};
+              return {
+                id: notif._id,
+                message: notif.message,
+                senderName: sender ? `${sender.firstName} ${sender.lastName}` : "Unknown",
+                senderImage: sender?.image || "/default-avatar.png",
+                timestamp: new Date(notif.timestamp),
+                read: notif.read,
+              };
+            })
+          );
+
+          setNotifications(enrichedNotifications);
+          setUnreadCount(enrichedNotifications.filter(n => !n.read).length);
+        }
+      } catch (error) {
+        console.error("Failed to fetch notifications:", error);
+      }
+    };
+
+    fetchAllNotifications();
+  },[user?._id]);
+
+  console.log("notifocation---------------------------------------------------",notifications);
+  
+
+  // ✅ Handle new real-time notifications via Socket.io
   useEffect(() => {
     const handleNotification = async (notification: NotificationData) => {
       try {
         const res = await fetchEmployeesByIds(notification.sender);
         if (res?.data?.employees?.length > 0) {
           const sender: Employee = res.data.employees[0];
-          const name = `${sender.firstName} ${sender.lastName}`;
-          console.log(sender,"sender------------------");
-          
+
           const newNotification: Notification = {
-            id: Date.now(),
+            id: Date.now().toString(), // Temporary ID
             message: notification.message,
-            senderName: name,
+            senderName: `${sender.firstName} ${sender.lastName}`,
             senderImage: sender.image || "/default-avatar.png",
             timestamp: new Date(),
             read: false,
           };
-          
+
           setNotifications(prev => [newNotification, ...prev]);
           setUnreadCount(prev => prev + 1);
         }
@@ -60,18 +104,25 @@ const NotificationDropdown: React.FC = () => {
     return () => {
       socket.off("notifyUser", handleNotification);
     };
-  }, []);
+  });
 
-  const handleOpenChange = (open: boolean) => {
+  const handleOpenChange = async (open: boolean) => {
     if (open) {
       setNotifications(prev =>
         prev.map(notification => ({ ...notification, read: true }))
       );
       setUnreadCount(0);
+
+      try {
+        await markAllAsRead(user?._id); 
+      } catch (error) {
+        console.error("Failed to mark notifications as read:", error);
+      }
     }
   };
 
-  const handleClearAll = () => {
+  const handleClearAll =async () => {
+    await clearNotifications(user?._id);
     setNotifications([]);
     setUnreadCount(0);
   };
@@ -116,7 +167,9 @@ const NotificationDropdown: React.FC = () => {
           notifications.map(notification => (
             <div
               key={notification.id}
-              className="p-4 hover:bg-gray-50 transition-colors flex items-center space-x-3"
+              className={`p-4 flex items-center space-x-3 ${
+                notification.read ? "bg-white" : "bg-blue-100"
+              } hover:bg-gray-50 transition-colors`}
             >
               <img
                 src={notification.senderImage}

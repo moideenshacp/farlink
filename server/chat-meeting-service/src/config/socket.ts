@@ -5,9 +5,15 @@ import ImessageRepository from "../interfaces/ImessageRepository";
 import { messageRepository } from "../repositories/messageRepository";
 import IchatRepository from "../interfaces/IchatRepository";
 import { chatRepository } from "../repositories/chatRespository";
+import InotificationRepository from "../interfaces/InotificationRepository";
+import { NotificationRepository } from "../repositories/notificationRepository";
+import mongoose from "mongoose";
+import InotificationModel from "../interfaces/INotificationModel";
+
 
 const MessageRepository: ImessageRepository = new messageRepository();
 const ChatRepository: IchatRepository = new chatRepository();
+const NotifcationRepository:InotificationRepository = new NotificationRepository()
 const userSockets = new Map<string, string>(); // 🔹 Store userId -> socketId mapping
 
 export const initializeSocket = (server: http.Server) => {
@@ -53,7 +59,7 @@ export const initializeSocket = (server: http.Server) => {
 
           const chatDetails = await ChatRepository.getChatById(messageData.chatId);
           if (chatDetails) {
-            chatDetails.participants.forEach((userId) => {
+            chatDetails.participants.forEach( async(userId) => {
                 console.log("loiiiiii-------------------------------");
                 
               const userIdStr = userId.toString();
@@ -71,6 +77,21 @@ export const initializeSocket = (server: http.Server) => {
                   });
                   console.log(`Notification sent to user ${userIdStr}`);
                 }
+                try {
+                    const notificationDetails: Partial<InotificationModel> = {
+                      sender: new mongoose.Types.ObjectId(messageData.sender),
+                      reciever: new mongoose.Types.ObjectId(userIdStr),
+                      message: "New message received",
+                      timestamp: new Date(),
+                      read: false,
+                    };
+                  
+                    await NotifcationRepository.createNotification(notificationDetails);
+                    console.log(`Notification saved for user ${userIdStr}`);
+                  } catch (err) {
+                    console.error("Error saving notification:", err);
+                  }
+                  
               }
             });
           }

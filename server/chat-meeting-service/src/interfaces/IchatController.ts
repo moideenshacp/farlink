@@ -6,4 +6,7 @@ export  interface IchatController {
   fetchMessages(req: Request, res: Response): Promise<Response>;
   fetchAllChats(req: Request, res: Response): Promise<Response  | void>;
   updateChat(req: Request, res: Response): Promise<Response  | void>;
+  fetchNotification(req: Request, res: Response): Promise<Response  | void>;
+  markAllAsRead(req: Request, res: Response): Promise<Response  | void>;
+  clearReadNotifications(req: Request, res: Response): Promise<Response  | void>;
 }

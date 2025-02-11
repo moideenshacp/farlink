@@ -15,10 +15,9 @@ export class chatController implements IchatController {
     res: Response
   ): Promise<Response> => {
     try {
-        
-        const chatDetails = req.body;
-        console.log("coming to create chat-controllere",chatDetails);
-        const result = await this._chatService.createChat(chatDetails);
+      const chatDetails = req.body;
+      console.log("coming to create chat-controllere", chatDetails);
+      const result = await this._chatService.createChat(chatDetails);
 
       if (result) {
         return res
@@ -37,33 +36,34 @@ export class chatController implements IchatController {
   public fetchAllChats = async (
     req: Request,
     res: Response
-  ): Promise<Response | void> => { 
+  ): Promise<Response | void> => {
     try {
       const { userId } = req.query;
-      console.log("user id",userId);
-      
+      console.log("user id", userId);
+
       if (!userId) {
         return res.status(400).json({ error: "User ID is required" });
       }
-  
+
       const result = await this._chatService.fetchAllChats(userId as string);
-  
+
       if (result) {
-        return res.status(200).json({ message: "Chats fetched successfully", result });
+        return res
+          .status(200)
+          .json({ message: "Chats fetched successfully", result });
       } else {
         return res.status(404).json({ message: "No private chats found" });
       }
     } catch (error) {
       console.error("Error fetching private chats:", error);
-  
+
       if (error instanceof CustomError) {
         return res.status(error.statusCode).json({ error: error.message });
       }
-  
+
       res.status(500).json({ error: "Internal Server Error" });
     }
   };
-  
 
   public sendMessage = async (
     req: Request,
@@ -104,9 +104,8 @@ export class chatController implements IchatController {
         return res
           .status(200)
           .json({ message: "Messages fetched successfully", result });
-      }else{
-
-          return res.status(400).json({ message: "Failed to fetch messages" });
+      } else {
+        return res.status(400).json({ message: "Failed to fetch messages" });
       }
     } catch (error) {
       if (error instanceof CustomError) {
@@ -116,22 +115,86 @@ export class chatController implements IchatController {
       }
     }
   };
-  public updateChat = async(req: Request, res: Response): Promise<Response | void> =>{
-      try {
-        const {chatId,updateData} = req.body
-        const result = await this._chatService.updateChat(chatId,updateData)
-        if (result) {
-            return res
-              .status(200)
-              .json({ message: "Chat Updated successfully", result });
-          }else{
-    
-              return res.status(400).json({ message: "Failed to fetch messages" });
-          }
-      } catch (error) {
-        console.log(error);
-        
+  public updateChat = async (
+    req: Request,
+    res: Response
+  ): Promise<Response | void> => {
+    try {
+      const { chatId, updateData } = req.body;
+      const result = await this._chatService.updateChat(chatId, updateData);
+      if (result) {
+        return res
+          .status(200)
+          .json({ message: "Chat Updated successfully", result });
+      } else {
+        return res.status(400).json({ message: "Failed to fetch messages" });
       }
-  }
-
+    } catch (error) {
+      if (error instanceof CustomError) {
+        return res.status(error.statusCode).json({ error: error.message });
+      } else {
+        return res.status(500).json({ error: "Internal Server Error" });
+      }
+    }
+  };
+  public fetchNotification = async (
+    req: Request,
+    res: Response
+  ): Promise<Response | void> => {
+    try {
+      const { userId } = req.query;
+      const result = await this._chatService.fetchNotification(
+        userId as string
+      );
+      if (result) {
+        return res
+          .status(200)
+          .json({ message: "Notfications fetched successfully", result });
+      } else {
+        return res.status(400).json({ message: "Failed to fetch notifcation" });
+      }
+    } catch (error) {
+      if (error instanceof CustomError) {
+        return res.status(error.statusCode).json({ error: error.message });
+      } else {
+        return res.status(500).json({ error: "Internal Server Error" });
+      }
+    }
+  };
+  public markAllAsRead = async (
+    req: Request,
+    res: Response
+  ): Promise<Response | void> => {
+    try {
+      const { userId } = req.body;
+      await this._chatService.markAllAsRead(userId);
+      return res
+        .status(200)
+        .json({ message: "Notfications updated successfully" });
+    } catch (error) {
+      if (error instanceof CustomError) {
+        return res.status(error.statusCode).json({ error: error.message });
+      } else {
+        return res.status(500).json({ error: "Internal Server Error" });
+      }
+    }
+  };
+  public clearReadNotifications = async (
+    req: Request,
+    res: Response
+  ): Promise<Response | void> => {
+    try {
+      const { userId } = req.body;
+      await this._chatService.clearReadNotifications(userId);
+      return res
+        .status(200)
+        .json({ message: "Notfications cleared successfully" });
+    } catch (error) {
+      if (error instanceof CustomError) {
+        return res.status(error.statusCode).json({ error: error.message });
+      } else {
+        return res.status(500).json({ error: "Internal Server Error" });
+      }
+    }
+  };
 }

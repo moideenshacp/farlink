@@ -24,3 +24,7 @@
 {"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"GET\",\"url\":\"/api/task/fetch-tasks\",\"status\":\"401\",\"responseTime\":\"13.104\"}","timestamp":"2025-02-11T04:22:06.815Z"}
 {"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"GET\",\"url\":\"/api/project/fetch-projects?organizationId=67869a6a1514145a64988362\",\"status\":\"304\",\"responseTime\":\"443.173\"}","timestamp":"2025-02-11T04:22:07.710Z"}
 {"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"GET\",\"url\":\"/api/task/fetch-tasks\",\"status\":\"304\",\"responseTime\":\"436.710\"}","timestamp":"2025-02-11T04:22:07.728Z"}
+{"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"GET\",\"url\":\"/api/project/fetch-projects?organizationId=67869a6a1514145a64988362\",\"status\":\"401\",\"responseTime\":\"29.466\"}","timestamp":"2025-02-11T06:16:57.045Z"}
+{"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"GET\",\"url\":\"/api/task/fetch-tasks\",\"status\":\"401\",\"responseTime\":\"8.290\"}","timestamp":"2025-02-11T06:16:57.075Z"}
+{"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"GET\",\"url\":\"/api/task/fetch-tasks\",\"status\":\"304\",\"responseTime\":\"2480.212\"}","timestamp":"2025-02-11T06:16:59.799Z"}
+{"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"GET\",\"url\":\"/api/project/fetch-projects?organizationId=67869a6a1514145a64988362\",\"status\":\"304\",\"responseTime\":\"2455.538\"}","timestamp":"2025-02-11T06:16:59.812Z"}

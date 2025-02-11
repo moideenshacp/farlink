@@ -5,33 +5,38 @@ import IchatModel from "../interfaces/IchatModel";
 import ImessageModel from "../interfaces/ImessageModel";
 import IchatRepository from "../interfaces/IchatRepository";
 import ImessageRepository from "../interfaces/ImessageRepository";
+import InotificationRepository from "../interfaces/InotificationRepository";
+import InotificationModel from "../interfaces/INotificationModel";
 
 export class chatService implements IchatService {
   private _chatRepository: IchatRepository;
   private _messageRepository: ImessageRepository;
+  private _notificationRepository: InotificationRepository;
 
   constructor(
     chatRepository: IchatRepository,
-    messageRepository: ImessageRepository
+    messageRepository: ImessageRepository,
+    notificationRepository: InotificationRepository
   ) {
     this._chatRepository = chatRepository;
     this._messageRepository = messageRepository;
+    this._notificationRepository = notificationRepository;
   }
   async createChat(chatDetails: any): Promise<IchatModel | null> {
     try {
-        console.log("coming to create chat-service",chatDetails);
-        console.log("coming to create chat-service legth",chatDetails.chatType);
+      console.log("coming to create chat-service", chatDetails);
+      console.log("coming to create chat-service legth", chatDetails.chatType);
       if (!chatDetails.participants || chatDetails.participants.length < 2) {
         throw new CustomError(
           "A chat must have at least two participants",
           400
         );
       }
-      
+
       const res = await this._chatRepository.createChat(chatDetails);
       if (res) {
-        console.log("create dc hat",res);
-        
+        console.log("create dc hat", res);
+
         return res;
       }
       return null;
@@ -47,7 +52,7 @@ export class chatService implements IchatService {
         throw new CustomError("User ID is required", 400);
       }
       const chats = await this._chatRepository.fetchAllChats(userId);
-      
+
       if (!chats) {
         return null;
       }
@@ -57,7 +62,6 @@ export class chatService implements IchatService {
       throw error;
     }
   }
-  
 
   async sendMessage(messageDetails: any): Promise<ImessageModel | null> {
     try {
@@ -68,8 +72,8 @@ export class chatService implements IchatService {
       ) {
         throw new CustomError("Invalid message details", 400);
       }
-      console.log(messageDetails,"meyasage details-----------------");
-      
+      console.log(messageDetails, "meyasage details-----------------");
+
       const message = await this._messageRepository.createMessage(
         messageDetails
       );
@@ -96,24 +100,59 @@ export class chatService implements IchatService {
       throw error;
     }
   }
-  async updateChat(chatId: string, updateData: any): Promise<IchatModel | null> {
+  async updateChat(
+    chatId: string,
+    updateData: any
+  ): Promise<IchatModel | null> {
+    try {
+      console.log("updatee data----------------------", updateData);
+
+      const updated = await this._chatRepository.updateChat(chatId, updateData);
+      if (updated) {
+        console.log("updateeddd-------------------", updated);
+
+        return updated;
+      } else {
+        return null;
+      }
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  }
+  async fetchNotification(
+    userId: string
+  ): Promise<InotificationModel[] | null> {
+    try {
+      const result =
+        await this._notificationRepository.getNotificationsByUserId(userId);
+      if (result) {
+        console.log("result-------------------", result);
+        return result;
+      } else {
+        return null;
+      }
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  }
+  async markAllAsRead(userId: string): Promise<void> {
       try {
-        console.log("updatee data----------------------",updateData);
-        
-        const updated = await this._chatRepository.updateChat(chatId,updateData)
-        if(updated){
-            console.log("updateeddd-------------------",updated);
-            
-            return updated
-        }else{
-            return null
-        }
+        await this._notificationRepository.markAllAsRead(userId)
       } catch (error) {
         console.log(error);
         throw error
         
       }
   }
-
-  
+  async clearReadNotifications(userId: string): Promise<void> {
+    try {
+      await this._notificationRepository.clearReadNotifications(userId)
+    } catch (error) {
+      console.log(error);
+      throw error
+      
+    }
+}
 }

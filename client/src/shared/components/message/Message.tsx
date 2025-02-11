@@ -217,7 +217,7 @@ const ChatContainer: React.FC = () => {
   useEffect(()=>{
 
     socket.emit("registerUser", user?._id);
-  })
+  },[user?._id])
 
   useEffect(() => {
 
