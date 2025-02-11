@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from "react";
-import { Drawer, Input, message } from "antd";
+import { Checkbox, Drawer, Input, message } from "antd";
 import DatePickerField from "../../../shared/components/DatePickerField";
 import SelectField from "../../../shared/components/SelectField";
 import { fetchEmployeesByIds, getAllEmployees } from "../../../api/employeeApi";
@@ -31,6 +31,7 @@ const AssignMeetingDrawer: React.FC<CreateMeetDrawerProps> = ({
     meetTime: "",
     members: [],
     organizationId: user?.organizationId || "",
+    isDaily: false,
   });
 
   useEffect(() => {
@@ -86,15 +87,9 @@ const AssignMeetingDrawer: React.FC<CreateMeetDrawerProps> = ({
               meetTime: editMeetDetails.meetTime,
               members: formattedMembers,
               organizationId: user?.organizationId || "",
+              isDaily: editMeetDetails.isDaily || false
             });
 
-            setMeetDetails({
-              meetTitle: editMeetDetails.meetTitle,
-              meetDate: new Date(editMeetDetails.meetDate),
-              meetTime: editMeetDetails.meetTime,
-              members: formattedMembers,
-              organizationId: user?.organizationId || "",
-            });
           }
         } catch (error) {
           console.error("Failed to fetch members", error);
@@ -136,6 +131,9 @@ const AssignMeetingDrawer: React.FC<CreateMeetDrawerProps> = ({
   const handleSelectChange = (field: any, option: any) => {
     setMeetDetails({ ...meetDetails, [field]: option });
   };
+  const handleCheckboxChange = (e: any) => {
+    setMeetDetails({ ...meetDetails, isDaily: e.target.checked });
+  };
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
@@ -176,6 +174,7 @@ const AssignMeetingDrawer: React.FC<CreateMeetDrawerProps> = ({
           meetTime: "",
           members: [],
           organizationId: user?.organizationId || "",
+          isDaily: false,
         });
       } else {
         message.error("Failed to create Meet,please try again..");
@@ -241,6 +240,15 @@ const AssignMeetingDrawer: React.FC<CreateMeetDrawerProps> = ({
               className="h-10 border-gray-300 rounded-md"
             />
           </div>
+        </div>
+        <div className="flex items-center space-x-2">
+          <Checkbox
+            checked={meetDetails.isDaily}
+            onChange={handleCheckboxChange}
+          />
+          <span className="font-semibold text-sm text-[#232360]">
+            Schedule Daily Meeting
+          </span>
         </div>
 
         <SelectField

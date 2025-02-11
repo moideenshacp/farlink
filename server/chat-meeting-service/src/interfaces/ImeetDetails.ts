@@ -7,5 +7,6 @@ export interface ImeetDetails{
     members:mongoose.Types.ObjectId[]
     meetId?:string
     organizationId?:mongoose.Types.ObjectId
+    isDaily?:boolean
 
 }

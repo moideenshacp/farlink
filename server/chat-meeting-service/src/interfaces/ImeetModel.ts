@@ -7,4 +7,5 @@ export default interface ImeetModel extends Document {
   meetTime: string | number;
   members: mongoose.Types.ObjectId[];
   meetId: string;
+  isDaily?:boolean
 }

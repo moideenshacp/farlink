@@ -15,6 +15,10 @@ const meetSchema: Schema = new Schema(
     meetTime: {
       type: String,
     },
+    isDaily:{
+      type:Boolean,
+      default:false
+    },
     members: [
       {
         type: mongoose.Types.ObjectId,

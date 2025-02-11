@@ -5,17 +5,44 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import { useNavigate } from "react-router-dom";
 
-const isMeetingActive = (meetDate: string, meetTime: string) => {
-  const meetingDateTime = new Date(`${meetDate}T${meetTime}`);
+const isMeetingActive = (
+  meetDate: string,
+  meetTime: string,
+  isDaily: boolean
+) => {
   const now = new Date();
 
-  // Check if the meeting is within a window (e.g., 5 minutes before the meeting starts)
-  const timeBeforeMeeting = new Date(meetingDateTime.getTime() - 1 * 60 * 1000); // 5 minutes before
-  const timeAfterMeeting = new Date(meetingDateTime.getTime() + 30 * 60 * 1000); // 5 minutes after
+  if (isDaily) {
+    // Extract only the time part of the current time
+    const [meetHours, meetMinutes] = meetTime.split(":").map(Number);
+    const currentHours = now.getHours();
+    const currentMinutes = now.getMinutes();
+
+    // Consider a meeting active within a 30-minute window
+    const startTime = meetHours * 60 + meetMinutes - 1; // 1 min before
+    const endTime = meetHours * 60 + meetMinutes + 60; // 30 mins after
+    const nowTime = currentHours * 60 + currentMinutes;
+
+    return nowTime >= startTime && nowTime <= endTime;
+  }
+
+  //  logic for one-time meetings
+  const meetingDateTime = new Date(`${meetDate}T${meetTime}`);
+  const timeBeforeMeeting = new Date(meetingDateTime.getTime() - 1 * 60 * 1000);
+  const timeAfterMeeting = new Date(meetingDateTime.getTime() + 30 * 60 * 1000);
 
   return now >= timeBeforeMeeting && now <= timeAfterMeeting;
 };
-const MeetingDataTable: React.FC<any> = ({ meetData, onEdit, onDelete ,currentPage,pageSize}) => {
+
+const MeetingDataTable: React.FC<any> = ({
+  meetData,
+  onEdit,
+  onDelete,
+  currentPage,
+  pageSize,
+}) => {
+  console.log("meetData------------------------------", meetData);
+
   const { user } = useSelector((state: RootState) => state.user);
 
   const formatTime = (time: string) => {
@@ -61,7 +88,11 @@ const MeetingDataTable: React.FC<any> = ({ meetData, onEdit, onDelete ,currentPa
               .toISOString()
               .split("T")[0];
             const expired = isMeetingExpired(formattedDate, meet.meetTime);
-            const active = isMeetingActive(formattedDate, meet.meetTime);
+            const active = isMeetingActive(
+              formattedDate,
+              meet.meetTime,
+              meet.isDaily
+            );
 
             return (
               <tr key={index} className="border-b hover:bg-gray-50">
@@ -71,7 +102,13 @@ const MeetingDataTable: React.FC<any> = ({ meetData, onEdit, onDelete ,currentPa
                 <td className="py-2 px-4 text-[#1677ff] font-medium">
                   {meet.meetTitle}
                 </td>
-                <td className="py-2 px-4">{formattedDate}</td>
+                <td
+                  className={`py-2 px-4 ${
+                    meet.isDaily ? "text-green-600 font-semibold" : ""
+                  }`}
+                >
+                  {meet.isDaily === true ? "Daily" : formattedDate}
+                </td>
                 <td className="py-2 px-4">{formatTime(meet.meetTime)}</td>
                 <td className="py-2 px-4 flex space-x-3 items-center">
                   {(user?.role === "admin" || user?.position === "HR") && (
@@ -92,7 +129,9 @@ const MeetingDataTable: React.FC<any> = ({ meetData, onEdit, onDelete ,currentPa
                   )}
                   <button
                     disabled={expired || !active}
-                    onClick={() => navigate(`/video-call?roomID=${meet.meetId}`)}
+                    onClick={() =>
+                      navigate(`/video-call?roomID=${meet.meetId}`)
+                    }
                     className={`px-5 py-1 rounded-3xl ${
                       expired || !active
                         ? "bg-gray-400 text-white cursor-not-allowed"
