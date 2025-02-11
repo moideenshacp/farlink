@@ -68,7 +68,16 @@ export class chatRepository
         console.error("Error updating chat:", error);
         throw error;
     }
-}
-
+    }
+    async getChatById(chatId: string): Promise<IchatModel | null> {
+        try {
+          const chat = await chatModel.findById(chatId)
+          return chat;
+        } catch (error) {
+          console.error("Error fetching chat by ID:", error);
+          throw new Error("Failed to fetch chat");
+        }
+      }
+      
   
 }

@@ -6,4 +6,5 @@ export default interface IchatRepository{
     fetchAllPrivateChats(userId: string): Promise<IchatModel[] | null>
     fetchAllChats(userId: string): Promise<IchatModel[] | null> 
     updateChat(chatId: string, updateData: any):Promise<IchatModel| null>
+    getChatById(chatId: string): Promise<IchatModel | null>
 }

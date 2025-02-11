@@ -38,6 +38,7 @@ const AttendanceHistory: React.FC<AttendanceHistoryProps> = ({
       setLoading(true);
       const res = await getAttendenceReport(email);
       if (res?.data?.attendancereport) {
+          
         setAttendanceHistory(res.data.attendancereport);
 
         const todayAttendance = res.data.attendancereport.find(
@@ -88,6 +89,8 @@ const AttendanceHistory: React.FC<AttendanceHistoryProps> = ({
     }
   };
 
+ 
+
   useEffect(() => {
     if (email) {
       if (role === "employee") {
@@ -108,6 +111,9 @@ const AttendanceHistory: React.FC<AttendanceHistoryProps> = ({
     (currentPage - 1) * pageSize,
     currentPage * pageSize
   );
+
+  console.log(paginatedData,"paginated attendence-----------------------------");
+  
 
   const handleSaveAttendance = async (
     updatedAttendance: IattendenceSummary

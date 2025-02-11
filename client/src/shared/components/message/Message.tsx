@@ -13,6 +13,7 @@ import { RootState } from "../../../redux/store";
 import { createChat, fetchAllChats, fetchMessages } from "../../../api/chatApi";
 import { fetchEmployeesByIds } from "../../../api/authApi";
 import { IEmployee } from "../../../interface/IemployeeDetails";
+import Notifications from "../Notification";
 
 const ChatContainer: React.FC = () => {
   const { user } = useSelector((state: RootState) => state.user);
@@ -213,12 +214,17 @@ const ChatContainer: React.FC = () => {
       console.log(error);
     }
   };
+  useEffect(()=>{
+
+    socket.emit("registerUser", user?._id);
+  })
 
   useEffect(() => {
+
     if (selectedChat) {
       socket.emit("joinRoom", selectedChat.id);
     }
-  }, [selectedChat]);
+  }, [selectedChat,user?._id]);
 
   useEffect(() => {
     socket.on("receiveMessage", (newMessage: any) => {
@@ -298,7 +304,7 @@ const ChatContainer: React.FC = () => {
           />
           {selectedChat ? (
             <div className="flex-1 flex flex-col">
-              <div className="sticky z-10">
+              <div className="sticky">
                 <ChatHeader chat={selectedChat} />
               </div>
               <div className="flex-1 scrollbar-none overflow-y-auto">
@@ -328,7 +334,7 @@ const ChatContainer: React.FC = () => {
           />
           {selectedChat ? (
             <div className="flex-1 flex flex-col">
-              <div className="sticky z-10">
+              <div className="sticky ">
                 <ChatHeader chat={selectedChat} fetchChats={fetchChats} />
               </div>
               <div className="flex-1 scrollbar-none overflow-y-auto">
@@ -348,6 +354,7 @@ const ChatContainer: React.FC = () => {
 
   return (
     <div className="container mx-auto">
+      <Notifications/>
       <Tabs
         items={tabItems}
         activeKey={selectedTab}

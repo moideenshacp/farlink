@@ -199,6 +199,7 @@ export class attendenceService implements IattendenceService {
           employeeEmail,
           checkIn: currentTimeIST,
           status,
+          date: currentTimeIST, 
         };
 
         await this._attendenceRepository.createattendence(attendanceData);
@@ -237,7 +238,7 @@ export class attendenceService implements IattendenceService {
 
           return {
             id:attendance._id,
-            date: checkInDate,
+            date: attendance.date ? attendance.date.toISOString().split("T")[0] : checkInDate,
             checkIn: checkInTime,
             checkOut: checkOutTime,
             status: attendance.status,
@@ -390,8 +391,9 @@ export class attendenceService implements IattendenceService {
   
       await this._attendenceRepository.updateAttendance(
         { _id: attendanceRecord._id },
-        updatedAttendance
+        { checkIn: checkInIST, checkOut: checkOutIST, workingHours, status } 
       );
+      
   
       console.log("Attendance updated successfully", updatedAttendance);
     } catch (error) {

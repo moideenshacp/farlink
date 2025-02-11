@@ -4,8 +4,8 @@ import { logoutUser } from "../../../api/authApi";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../../redux/user/userSlice";
 import { RootState } from "../../../redux/store";
-import { MdOutlineNotificationsActive } from "react-icons/md";
 import { FiLogOut } from "react-icons/fi";
+import NotificationDropdown from "../NotificationDropdown";
 
 const DashBoardTopBar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -110,9 +110,7 @@ const DashBoardTopBar = () => {
               </svg>
             </div>
 
-            <button aria-label="Notifications" className="flex items-center">
-              <MdOutlineNotificationsActive size={24} color="#8C97A8" />
-            </button>
+            <NotificationDropdown/>
             <div className="relative inline-block text-left">
               <div>
                 <button onClick={toggleDropdown} className="flex items-center">

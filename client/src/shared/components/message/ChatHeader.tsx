@@ -77,7 +77,8 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({ chat,fetchChats }) => {
 
   return (
     <>
-      <div className="flex items-center mt-5 justify-between p-4 border-b bg-white">
+    
+      <div className="flex items-center mt-5  justify-between p-4 border-b bg-white">
         <div className="flex items-center gap-3">
           <div className="relative">
             <Avatar

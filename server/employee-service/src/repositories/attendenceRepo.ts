@@ -27,8 +27,9 @@ export class AttendanceRepository
     filter: FilterQuery<IAttendanceModel>,
     updateData: Partial<IAttendanceModel>
   ): Promise<IAttendanceModel | null> {
-    return this.model.findOneAndUpdate(filter, updateData, { new: true }).exec();
+    return this.model.findOneAndUpdate(filter, { $set: updateData }, { new: true }).exec();
   }
+  
   async findAllByEmployeeEmail(
     employeeEmail: string
   ): Promise<IAttendanceModel[]> {
