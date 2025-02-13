@@ -40,23 +40,17 @@ const Login = () => {
     try {
       const res = await LoginAdmin(formData.email, formData.password);
 
-      console.log("here is the res", res.data.user.isOrganizationAdded);
-
       if (res.data.message === "Login sucessfull") {
         const user = res.data.user;
-        console.log("admin", user);
 
         if (user.role === "admin") {
           dispatch(login({ user, token: user.token }));
 
           if (user.isOrganizationAdded) {
             dispatch(setOrganizationId(user.organizationId));
-            console.log(
-              "Admin with organization added, navigating to admin dashboard"
-            );
+
             navigate("/admin/", { replace: true });
           } else {
-            console.log("Admin without organization, navigating to step-1");
             navigate("/step-1", { replace: true });
           }
         }
@@ -89,24 +83,17 @@ const Login = () => {
     if (credentialResponse.credential) {
       try {
         const userData = jwtDecode(credentialResponse.credential);
-        console.log("Google User Data:", userData);
         const res = await googleLogin(userData);
-        console.log(res, "res from google login");
         if (res.data.message === "Login sucessfull") {
           const user = res.data.user;
-          console.log("admin", user);
 
           if (user.role === "admin") {
             dispatch(login({ user, token: user.token }));
 
             if (user.isOrganizationAdded) {
               dispatch(setOrganizationId(user.organizationId));
-              console.log(
-                "Admin with organization added, navigating to admin dashboard"
-              );
               navigate("/admin/", { replace: true });
             } else {
-              console.log("Admin without organization, navigating to step-1");
               navigate("/step-1", { replace: true });
             }
           }
@@ -164,7 +151,7 @@ const Login = () => {
 
           <form className="mt-6 space-y-4 w-full" onSubmit={handleSubmit}>
             {/* Email Input */}
-           
+
             <Input
               type="email"
               name="email"
@@ -175,7 +162,7 @@ const Login = () => {
             />
 
             {/* Password Input */}
-            
+
             <Input
               type="password"
               name="password"

@@ -87,9 +87,8 @@ const AssignMeetingDrawer: React.FC<CreateMeetDrawerProps> = ({
               meetTime: editMeetDetails.meetTime,
               members: formattedMembers,
               organizationId: user?.organizationId || "",
-              isDaily: editMeetDetails.isDaily || false
+              isDaily: editMeetDetails.isDaily || false,
             });
-
           }
         } catch (error) {
           console.error("Failed to fetch members", error);

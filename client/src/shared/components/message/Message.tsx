@@ -62,7 +62,6 @@ const ChatContainer: React.FC = () => {
           };
         });
 
-
         setSelectedChat({
           ...chat,
           messages: formattedMessages,
@@ -103,9 +102,7 @@ const ChatContainer: React.FC = () => {
             const receiver = chat.participants.filter(
               (emp: any) => emp._id !== user?._id
             );
-             chat.participants.filter(
-              (emp: any) => emp._id === user?._id
-            );
+            chat.participants.filter((emp: any) => emp._id === user?._id);
             return {
               id: chat._id,
               name:
@@ -132,7 +129,7 @@ const ChatContainer: React.FC = () => {
               messages: [],
               groupName: chat.groupName,
               participants: chat.participants,
-              groupAdmin:chat.groupAdmin
+              groupAdmin: chat.groupAdmin,
             };
           });
           formattedChats.sort((a: any, b: any) => {
@@ -159,7 +156,7 @@ const ChatContainer: React.FC = () => {
         chat.chatType === "private" &&
         chat.participants.includes(employee._id) &&
         chat.participants.includes(user?._id)
-    );    
+    );
     if (existingChat) {
       const updatedChats = await fetchChats();
       const newChat = updatedChats.filter(
@@ -214,17 +211,15 @@ const ChatContainer: React.FC = () => {
       console.log(error);
     }
   };
-  useEffect(()=>{
-
+  useEffect(() => {
     socket.emit("registerUser", user?._id);
-  },[user?._id])
+  }, [user?._id]);
 
   useEffect(() => {
-
     if (selectedChat) {
       socket.emit("joinRoom", selectedChat.id);
     }
-  }, [selectedChat,user?._id]);
+  }, [selectedChat, user?._id]);
 
   useEffect(() => {
     socket.on("receiveMessage", (newMessage: any) => {
@@ -354,7 +349,7 @@ const ChatContainer: React.FC = () => {
 
   return (
     <div className="container mx-auto">
-      <Notifications/>
+      <Notifications />
       <Tabs
         items={tabItems}
         activeKey={selectedTab}

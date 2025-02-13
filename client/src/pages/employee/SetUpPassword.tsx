@@ -13,7 +13,7 @@ const SetUpPassword = () => {
   const [email, setEmail] = useState<string | null>(null);
 
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
-    const navigate = useNavigate();
+  const navigate = useNavigate();
   useEffect(() => {
     const queryParams = new URLSearchParams(location.search);
     const emailParam = queryParams.get("email");
@@ -40,12 +40,11 @@ const SetUpPassword = () => {
     e.preventDefault();
     try {
       if (handleValidation()) {
-        const res = await setUpPassword(password, confirmPassword,email);
-        if(res.data.message === "Password set-up successfully"){
-            navigate('/employee-login')
+        const res = await setUpPassword(password, confirmPassword, email);
+        if (res.data.message === "Password set-up successfully") {
+          navigate("/employee-login");
         }
       } else {
-
         message.error("Something went wrong!!. Please try again.", 2);
       }
     } catch (error) {

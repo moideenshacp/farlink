@@ -21,9 +21,6 @@ const TaskActionMenu: React.FC<any> = ({
   const [subTasks, setSubtasks] = useState<any>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedTask, setSelectedTask] = useState<any>(null);
-  console.log("seletcted atsk",selectedTask);
-  console.log(" atsk",task);
-  
   const handleViewMore = () => {
     setSelectedTask(task);
     setIsModalOpen(true);
@@ -78,7 +75,9 @@ const TaskActionMenu: React.FC<any> = ({
 
   if (
     project
-      ? user?.email === project?.manager.email || user?.role === "admin" || user.position === "HR"
+      ? user?.email === project?.manager.email ||
+        user?.role === "admin" ||
+        user.position === "HR"
       : true
   ) {
     menuItems.push(
@@ -116,16 +115,16 @@ const TaskActionMenu: React.FC<any> = ({
       });
     }
   }
-  if( user?.email !== project?.manager.email && user?.role !== "admin"){
+  if (user?.email !== project?.manager.email && user?.role !== "admin") {
     menuItems.push({
       key: "view-more",
       label: (
         <div className="flex items-center">
-          <FaRegEye  className="w-4 h-4 mr-1 text-[#1677ff]" />
+          <FaRegEye className="w-4 h-4 mr-1 text-[#1677ff]" />
           View More
         </div>
       ),
-      onClick:handleViewMore
+      onClick: handleViewMore,
     });
   }
 
@@ -149,12 +148,12 @@ const TaskActionMenu: React.FC<any> = ({
 
   return (
     <>
-    <Dropdown overlay={menu} trigger={["click"]} placement="bottomCenter">
-      <button className="hover:bg-gray-100 rounded-full p-1">
-        <MoreOutlined className="text-black" />
-      </button>
-    </Dropdown>
-    {selectedTask && (
+      <Dropdown overlay={menu} trigger={["click"]} placement="bottomCenter">
+        <button className="hover:bg-gray-100 rounded-full p-1">
+          <MoreOutlined className="text-black" />
+        </button>
+      </Dropdown>
+      {selectedTask && (
         <SubTaskMoreDetails
           isOpen={isModalOpen}
           onClose={handleClose}

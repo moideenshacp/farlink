@@ -19,8 +19,6 @@ const DashboardOverview = () => {
   useEffect(() => {
     const fetchData = async () => {
       const res = await fetchEmployeesCount(user?.organizationId);
-
-      console.log(res?.data.data);
       if (res?.data.data) {
         setActiveEmployees(res?.data.data.ActiveEmployeesCount);
         SetTerminatedEmployeesCount(res?.data.data.TerminatedEmployeesCount);
@@ -31,7 +29,7 @@ const DashboardOverview = () => {
   useEffect(() => {
     const fetchProject = async () => {
       const res = await fetchProjects(user?.organizationId);
-      setAllProjectsList(res.data.result)
+      setAllProjectsList(res.data.result);
       const project = res.data.result;
       if (project) {
         setAllProjects(project.length);
@@ -45,8 +43,6 @@ const DashboardOverview = () => {
     fetchProject();
   }, [user?.organizationId]);
 
-
-  
   const stats = [
     {
       title: "Active Employees",
@@ -69,10 +65,9 @@ const DashboardOverview = () => {
       icon: <FaCheckCircle size={20} color="#28A745" />,
     },
   ];
-  
+
   return (
     <div>
-      
       <div className="flex flex-wrap space-x-10 gap-y-6 justify-center sm:justify-start">
         {stats.map((stat, index) => (
           <div
@@ -89,14 +84,11 @@ const DashboardOverview = () => {
           </div>
         ))}
       </div>
-      <div className="mt-5" >
-
+      <div className="mt-5">
         <DashboardChart projects={allProjectsList} />
       </div>
     </div>
   );
-  
-  
 };
 
 export default DashboardOverview;

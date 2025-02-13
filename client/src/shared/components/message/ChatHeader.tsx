@@ -7,26 +7,24 @@ import { RootState } from "../../../redux/store";
 import GroupInfo from "./GroupInfo";
 import { updateChat } from "../../../api/chatApi";
 
-const ChatHeader: React.FC<ChatHeaderProps> = ({ chat,fetchChats }) => {
+const ChatHeader: React.FC<ChatHeaderProps> = ({ chat, fetchChats }) => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [newGroupName, setNewGroupName] = useState(chat.groupName || "");
   const membersCount = chat.participants.length;
   const { user } = useSelector((state: RootState) => state.user);
-  
+
   const handleEditGroupName = async () => {
     const updatedChat = { groupName: newGroupName };
-  
+
     if (!newGroupName.trim()) {
       message.error("Group name cannot be empty");
       return;
     }
     try {
       const res = await updateChat(chat.id?.toString(), updatedChat);
-      console.log(res, "res from updateee group------------------------");
-  
       if (res?.data?.message === "Chat Updated successfully") {
         chat.groupName = newGroupName;
-        fetchChats?.()
+        fetchChats?.();
         message.success("Group name updated successfully");
       } else {
         message.error("Failed to update group name");
@@ -35,10 +33,9 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({ chat,fetchChats }) => {
       console.error("Error updating group name:", error);
       message.error("Something went wrong!");
     }
-  
+
     setIsEditModalOpen(false);
   };
-  
 
   const groupMenuItems = {
     items: [
@@ -63,9 +60,7 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({ chat,fetchChats }) => {
                 setNewGroupName(chat.groupName || "");
                 setIsEditModalOpen(true);
               },
-              
             },
-            
           ]
         : []),
     ],
@@ -73,7 +68,6 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({ chat,fetchChats }) => {
 
   return (
     <>
-    
       <div className="flex items-center mt-5  justify-between p-4 border-b bg-white">
         <div className="flex items-center gap-3">
           <div className="relative">
@@ -89,9 +83,9 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({ chat,fetchChats }) => {
             )}
           </div>
           <div>
-          <h3 className="font-medium text-[#232360]">
-  {chat.isGroup ? chat.groupName || newGroupName : chat.name}
-</h3>
+            <h3 className="font-medium text-[#232360]">
+              {chat.isGroup ? chat.groupName || newGroupName : chat.name}
+            </h3>
 
             {chat.isGroup ? (
               <p className="text-sm text-gray-500">{membersCount} members</p>
@@ -123,9 +117,9 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({ chat,fetchChats }) => {
         open={isEditModalOpen}
         onOk={handleEditGroupName}
         onCancel={() => {
-          setNewGroupName(chat.groupName || "")
-          setIsEditModalOpen(false)}
-        }
+          setNewGroupName(chat.groupName || "");
+          setIsEditModalOpen(false);
+        }}
         okText="Save"
         cancelText="Cancel"
       >

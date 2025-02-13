@@ -9,11 +9,13 @@ interface DashboardAllEmployeesProps {
   selectedPosition: string;
 }
 
-const DashboardAllEmployees: React.FC<DashboardAllEmployeesProps> = ({ selectedPosition }) => {
+const DashboardAllEmployees: React.FC<DashboardAllEmployeesProps> = ({
+  selectedPosition,
+}) => {
   const [employees, setEmployees] = useState<IEmployee[]>([]);
   const [totalEmployees, setTotalEmployees] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize] = useState(2); 
+  const [pageSize] = useState(2);
   const [loading, setLoading] = useState(false);
 
   const organizationId = useSelector(
@@ -35,13 +37,13 @@ const DashboardAllEmployees: React.FC<DashboardAllEmployeesProps> = ({ selectedP
 
   useEffect(() => {
     fetchEmployees(currentPage);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [organizationId, currentPage]);
 
-  console.log(employees, "res from employee");
-
   const filteredEmployees = selectedPosition
-    ? employees.filter((employee: IEmployee) => employee.position === selectedPosition)
+    ? employees.filter(
+        (employee: IEmployee) => employee.position === selectedPosition
+      )
     : employees;
 
   const totalPages = Math.ceil(totalEmployees / pageSize);

@@ -6,7 +6,7 @@ import { IProject } from "../../interface/IprojectDetails";
 import Input from "./Input";
 
 interface SidebarProps {
-  items: IProject[];  
+  items: IProject[];
   selectedItem: IProject | null;
   setSelectedItem: React.Dispatch<React.SetStateAction<IProject | null>>;
   setActiveProject: React.Dispatch<React.SetStateAction<string | any>>;
@@ -14,7 +14,6 @@ interface SidebarProps {
   searchPlaceholder?: string;
   title?: string;
   activeProject?: string;
-
 }
 
 const ProjectSidebar = ({
@@ -24,7 +23,7 @@ const ProjectSidebar = ({
   searchPlaceholder = "Search...",
   title = "Items",
   setActiveProject,
-  activeProject
+  activeProject,
 }: SidebarProps) => {
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [filteredItems, setFilteredItems] = useState<IProject[]>([]);
@@ -70,10 +69,10 @@ const ProjectSidebar = ({
                       ? "text-[#4361EE] bg-blue-50 rounded-lg border-l-4 border-[#4361EE]"
                       : "hover:bg-gray-100 text-[#0B0B0B]"
                   }`}
-                  onClick={() =>{
-                    setSelectedItem(item)
+                  onClick={() => {
+                    setSelectedItem(item);
                     setActiveProject(item.projectName);
-                  } }
+                  }}
                 >
                   <span className="w-8 h-8 flex items-center justify-center rounded-full bg-[#E3E8F4] text-[#4361EE] font-bold uppercase">
                     {item.projectName.charAt(0)}

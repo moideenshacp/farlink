@@ -10,10 +10,9 @@ import { GoogleOAuthProvider } from "@react-oauth/google";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 
-const clientId =
-  "210465206697-d5ujk8vsvn8o141dr9preq77kc16t2fk.apps.googleusercontent.com";
+const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 
-  const stripePromise = loadStripe("pk_test_51QZnKcCc8hYAsEPiCRSQFJwAovZehwu7fCIe8X8QTs4UmppI6dqPVhx9P87eWYIFe3agjNQPTGqBAWkVsbTVG1R3002bOWA4Rb");
+const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
 createRoot(document.getElementById("root")!).render(
   <Provider store={store}>
     <PersistGate loading={null} persistor={persistor}>

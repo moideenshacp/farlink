@@ -22,13 +22,11 @@ const ResetPassword = () => {
   const [isTokenValid, setIsTokenValid] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-
   useEffect(() => {
     const urlParams = new URLSearchParams(location.search);
     const token = urlParams.get("token");
 
     if (!token) {
-
       message.error("Token is missing", 2);
 
       navigate("/invalid-forget-password");
@@ -56,29 +54,28 @@ const ResetPassword = () => {
     }
   }, [location, navigate]);
 
-
-  const handleChange = (e:React.ChangeEvent<HTMLInputElement>)=>{
-    setError(null)
-    const {name,value} = e.target
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setError(null);
+    const { name, value } = e.target;
     setFormData({
       ...formData,
       [name]: value,
     });
-  }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!isTokenValid) {
-
-      message.error("Token is not valid. Please request a new password reset link.", 2);
+      message.error(
+        "Token is not valid. Please request a new password reset link.",
+        2
+      );
       return;
     }
     setIsLoading(true);
     const urlParams = new URLSearchParams(location.search);
     const token = urlParams.get("token");
-    console.log("reset password token", token);
-
     if (formData.password !== formData.confirmPassword) {
       setError("Passwords do not match.");
       setIsLoading(false);
@@ -86,30 +83,27 @@ const ResetPassword = () => {
     }
 
     try {
-      const response = await resetPassword(formData.password, formData.confirmPassword, token);
+      const response = await resetPassword(
+        formData.password,
+        formData.confirmPassword,
+        token
+      );
       if (response.data.message === "Password updated successfully") {
-
         message.success("password changed successfully", 2);
 
         setTimeout(() => {
           navigate("/sign-in");
         }, 2000);
       }
-      console.log(response.data);
-
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
-      console.log(error);
-
       if (error.response && error.response.data.errors) {
         error.response.data.errors.forEach((err: string) => {
           setError(err || "Something went wrong.");
         });
-        console.log("eee error");
       } else if (axios.isAxiosError(error)) {
         if (error.response) {
           setError(error.response.data.error || "Something went wrong.");
-          console.log("msg", error.response.data.error);
         }
       } else {
         setError("Something went wrong. Please try again.");
@@ -132,11 +126,7 @@ const ResetPassword = () => {
           <p className="mt-4 text-[#000000]">
             Enter your new password and confirm it to reset your password.
           </p>
-          {error && (
-            <div className=" text-red-700  rounded mt-6">
-              {error}
-            </div>
-          )}
+          {error && <div className=" text-red-700  rounded mt-6">{error}</div>}
           <form onSubmit={handleSubmit} className="mt-6 space-y-4">
             <input
               type="password"

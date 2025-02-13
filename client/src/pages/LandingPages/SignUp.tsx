@@ -60,7 +60,6 @@ const SignUp = () => {
         formData.confirmPassword
       );
       setLoading(false);
-      console.log(response.data.message);
       if (response.data.message === "User registered successfully") {
         message.success("User registered successfully", 2);
         navigate("/verifyEmail-msg");
@@ -69,8 +68,6 @@ const SignUp = () => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       setLoading(false);
-      console.log(error);
-
       if (error.response && error.response.data.errors) {
         const fieldErrors: typeof errors = { ...errors };
         error.response.data.errors.forEach((err: string) => {
@@ -86,11 +83,9 @@ const SignUp = () => {
             fieldErrors.confirmPassword = err;
         });
         setErrors(fieldErrors);
-        console.log("eee error");
       } else if (axios.isAxiosError(error)) {
         if (error.response) {
           setError(error.response.data.error || "Something went wrong.");
-          console.log("msg", error.response.data.error);
         }
       } else {
         setError("Something went wrong. Please try again.");
@@ -103,24 +98,17 @@ const SignUp = () => {
     if (credentialResponse.credential) {
       try {
         const userData = jwtDecode(credentialResponse.credential);
-        console.log("Google User Data:", userData);
         const res = await googleLogin(userData);
-        console.log(res, "res from google login");
         if (res.data.message === "Login sucessfull") {
           const user = res.data.user;
-          console.log("admin", user);
 
           if (user.role === "admin") {
             dispatch(login({ user, token: user.token }));
 
             if (user.isOrganizationAdded) {
               dispatch(setOrganizationId(user.organizationId));
-              console.log(
-                "Admin with organization added, navigating to admin dashboard"
-              );
               navigate("/admin/", { replace: true });
             } else {
-              console.log("Admin without organization, navigating to step-1");
               navigate("/step-1", { replace: true });
             }
           }
@@ -143,7 +131,6 @@ const SignUp = () => {
 
   const handleGoogleLoginFailure = () => {
     message.error("Google Login Failed. Please try again.", 2);
-
   };
   return (
     <div>

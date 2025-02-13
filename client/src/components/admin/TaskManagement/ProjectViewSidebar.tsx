@@ -7,11 +7,15 @@ import { fetchProjects } from "../../../api/projectApi";
 import { fetchEmployeesByIds } from "../../../api/employeeApi";
 import ProjectSidebar from "../../../shared/components/ProjectSidebar";
 
-const ProjectViewSidebar = ({ setSelectedProject }: { setSelectedProject: React.Dispatch<React.SetStateAction<IProject | null>> }) => {
+const ProjectViewSidebar = ({
+  setSelectedProject,
+}: {
+  setSelectedProject: React.Dispatch<React.SetStateAction<IProject | null>>;
+}) => {
   const [projects, setProjects] = useState<IProject[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [activeProject, setActiveProject] = useState<string>("");
- 
+
   const organizationId = useSelector(
     (state: RootState) => state.user?.user?.organizationId
   );
@@ -73,7 +77,6 @@ const ProjectViewSidebar = ({ setSelectedProject }: { setSelectedProject: React.
 
     fetchEmployees();
   }, [organizationId, setSelectedProject]);
-
 
   return (
     <ProjectSidebar

@@ -51,10 +51,9 @@ function App() {
             />
           </Route>
           {/*================================================================================================================================== */}
-            <Route element={<SubscriptionRoute/>}>
-
+          <Route element={<SubscriptionRoute />}>
             <Route path="/video-call" element={<VideoCall />} />
-            </Route>
+          </Route>
           <Route element={<OrganizationPrivateRoute />}>
             <Route path="/step-3" element={<Step3 />} />
           </Route>
@@ -65,10 +64,9 @@ function App() {
             <Route path="/success" element={<SuccessPayment />} />
             <Route path="/admin/*" element={<AdminRoutes />} />
           </Route>
-    <Route element={<EmployeePrivateRoute/>} >
-
-          <Route path="/employee/*" element={<EmployeeRoutes />} />
-    </Route>
+          <Route element={<EmployeePrivateRoute />}>
+            <Route path="/employee/*" element={<EmployeeRoutes />} />
+          </Route>
 
           {/*================================================================================================================================== */}
           <Route element={<SuperAdminPrivateRoute />}>

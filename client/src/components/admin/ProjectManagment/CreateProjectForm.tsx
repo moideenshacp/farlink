@@ -147,7 +147,7 @@ const CreateProjectForm = ({
 
     try {
       if (project) {
-        const res = await updateProject(project._id, formattedProjectDetails);        
+        const res = await updateProject(project._id, formattedProjectDetails);
         if (res.data.message === "Project updated sucessfully..") {
           message.success("project updated successfully");
         }
@@ -161,13 +161,13 @@ const CreateProjectForm = ({
       fetchAllProjects();
     } catch (error: any) {
       const errorMsg =
-      error.response?.data?.errors ||
-      "An error occurred while creating the project.";
+        error.response?.data?.errors ||
+        "An error occurred while creating the project.";
       message.error(errorMsg);
     }
   };
-  
-  const resetForm = () => {    
+
+  const resetForm = () => {
     setProjectDetails({
       projectName: "",
       projectDescription: "",
@@ -178,7 +178,7 @@ const CreateProjectForm = ({
       priority: null,
       status: null,
       organizationId,
-    });    
+    });
     const drawerCheckbox = document.getElementById(
       "my-drawer-4"
     ) as HTMLInputElement;
@@ -193,7 +193,6 @@ const CreateProjectForm = ({
       setIsDrawerOpen(drawerCheckbox.checked);
 
       if (!drawerCheckbox.checked) {
-        
         resetForm();
       }
     };
@@ -225,10 +224,9 @@ const CreateProjectForm = ({
         organizationId: project.organizationId,
       });
     } else {
-      
-      resetForm()
+      resetForm();
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [project, organizationId]);
 
   return (

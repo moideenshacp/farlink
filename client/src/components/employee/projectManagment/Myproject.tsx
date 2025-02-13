@@ -13,9 +13,9 @@ const Myproject = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [selectedProject, setSelectedProject] = useState<IProject | null>(null);
   const { user } = useSelector((state: RootState) => state.user);
-    // Pagination State
-    const [currentPage, setCurrentPage] = useState(1);
-    const pageSize = 6; // Number of projects per page
+  // Pagination State
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 6; // Number of projects per page
   const fetchAllProjects = async () => {
     try {
       const res = await fetchEmployeesProject(user?.organizationId, user?._id);
@@ -89,21 +89,19 @@ const Myproject = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user?.organizationId]);
 
-
-  
-    // Paginate filtered projects
-    const totalPages = Math.ceil(projects.length / pageSize);
-    const paginatedProjects = projects.slice(
-      (currentPage - 1) * pageSize,
-      currentPage * pageSize
-    );
+  // Paginate filtered projects
+  const totalPages = Math.ceil(projects.length / pageSize);
+  const paginatedProjects = projects.slice(
+    (currentPage - 1) * pageSize,
+    currentPage * pageSize
+  );
   return (
     <div>
       <div className="drawer drawer-end ">
         <input id="my-drawer-4" type="checkbox" className="drawer-toggle" />
         {/* Include Sidebar component */}
 
-        <ViewProjectDetail project={selectedProject}/>
+        <ViewProjectDetail project={selectedProject} />
       </div>
 
       <div className="mt-3 gap-5">
@@ -133,7 +131,9 @@ const Myproject = () => {
             {/* Next Page */}
             <button
               className="join-item btn bg-[#4361EE] text-white hover:bg-blue-700"
-              onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+              onClick={() =>
+                setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+              }
               disabled={currentPage === totalPages}
             >
               »

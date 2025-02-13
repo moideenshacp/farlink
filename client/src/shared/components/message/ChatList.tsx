@@ -55,9 +55,7 @@ const ChatList: React.FC<ChatListProps> = ({
                   alt={chat.name}
                   className="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center"
                 >
-                  {chat.isGroup
-                    ? chat.groupName?.toUpperCase() || "G"
-                    : null}
+                  {chat.isGroup ? chat.groupName?.toUpperCase() || "G" : null}
                 </Avatar>
 
                 {chat.isOnline && (

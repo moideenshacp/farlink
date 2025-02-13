@@ -1,5 +1,7 @@
 import axiosInstance from "./axiosInterceptor";
 
+//FETCH SUBSCRIPTION OF ORGANIZATION API=====================================================================================================
+
 export const getSubcriptionPlans = async (
   organizationId: string | undefined
 ) => {
@@ -19,7 +21,12 @@ export const getSubcriptionPlans = async (
     throw error;
   }
 };
-export const createCustomerPortalSession = async (customerId: string | undefined): Promise<string> => {
+
+//CREATE CUSTOMER PORTAL OF SUBSCRIPTION API=====================================================================================================
+
+export const createCustomerPortalSession = async (
+  customerId: string | undefined
+): Promise<string> => {
   try {
     const { data } = await axiosInstance.post(
       `${
@@ -34,11 +41,17 @@ export const createCustomerPortalSession = async (customerId: string | undefined
   }
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const getPaymentHistory = async (customerId: string | undefined): Promise<any> => {
+//GET PAYMENT HISTORY OF SUBSCRIPTION API=====================================================================================================
+
+export const getPaymentHistory = async (
+  customerId: string | undefined
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+): Promise<any> => {
   try {
     const { data } = await axiosInstance.get(
-      `${import.meta.env.VITE_SERVER_BASE_URL}/subcription-service/api/subscription/payment-history`,
+      `${
+        import.meta.env.VITE_SERVER_BASE_URL
+      }/subcription-service/api/subscription/payment-history`,
       { params: { customerId } }
     );
     return data;
@@ -48,17 +61,21 @@ export const getPaymentHistory = async (customerId: string | undefined): Promise
   }
 };
 
+//FETCH ALL PAYMENT HISTORY OF COMPANY IN SUPER ADMIN SIDE API=====================================================================================================
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const getAllPaymentHistory  =async():Promise<any>=>{
+export const getAllPaymentHistory = async (): Promise<any> => {
   try {
     const { data } = await axiosInstance.get(
-      `${import.meta.env.VITE_SERVER_BASE_URL}/subcription-service/api/subscription/All-payment-history`);
-      console.log("dataa from apo",data);
-      
+      `${
+        import.meta.env.VITE_SERVER_BASE_URL
+      }/subcription-service/api/subscription/All-payment-history`
+    );
+    console.log("dataa from apo", data);
+
     return data;
   } catch (error) {
     console.log(error);
-    throw new Error("Unable to fetch payment history of all..")
-    
+    throw new Error("Unable to fetch payment history of all..");
   }
-}
+};

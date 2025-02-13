@@ -10,7 +10,7 @@ type SubscriptionCardProps = {
   date?: string;
   buttonText: string;
   activeStatus: string;
-  customerId: string
+  customerId: string;
 };
 
 const SubscriptionCard: React.FC<SubscriptionCardProps> = ({
@@ -19,10 +19,8 @@ const SubscriptionCard: React.FC<SubscriptionCardProps> = ({
   date,
   buttonText,
   activeStatus,
-  customerId
+  customerId,
 }) => {
-  console.log(planName,"plan edhaa");
-  
   const [isModalOpen, setModalOpen] = useState(false);
 
   const handleUpgradeClick = () => {

@@ -30,17 +30,13 @@ const ForgetPassEmail = () => {
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
-      console.log(error);
-
       if (error.response && error.response.data.errors) {
         error.response.data.errors.forEach((err: string) => {
           setError(err || "Something went wrong.");
         });
-        console.log("eee error");
       } else if (axios.isAxiosError(error)) {
         if (error.response) {
           setError(error.response.data.error || "Something went wrong.");
-          console.log("msg", error.response.data.error);
         }
       } else {
         setError("Something went wrong. Please try again.");

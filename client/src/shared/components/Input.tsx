@@ -6,8 +6,8 @@ interface ReusableInputProps {
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   placeholder?: string;
   className?: string;
-  min?: number | string
-  readOnly?: boolean | undefined
+  min?: number | string;
+  readOnly?: boolean | undefined;
 }
 
 const Input: React.FC<ReusableInputProps> = ({

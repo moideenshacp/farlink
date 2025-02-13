@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Step1 from "../../components/admin/companyRegister/Step1"
+import Step1 from "../../components/admin/companyRegister/Step1";
 import Step2 from "../../components/admin/companyRegister/Step2";
 import axios from "axios";
 
@@ -22,7 +22,6 @@ const RegisterCompany = () => {
     try {
       // Send combined data to backend
       await axios.post("/api/submit-all", finalData);
-      console.log("Data sent successfully");
     } catch (error) {
       console.error("Error sending data:", error);
     }
@@ -32,7 +31,7 @@ const RegisterCompany = () => {
     <div>
       {/* Pass step1Data and handleStep1Submit to Step1 */}
       <Step1 onSubmit={handleStep1Submit} />
-      
+
       {/* Pass step1Data and handleFinalSubmit to Step2 */}
       <Step2 step1Data={step1Data} onSubmit={handleFinalSubmit} />
     </div>

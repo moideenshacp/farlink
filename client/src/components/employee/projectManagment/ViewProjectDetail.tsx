@@ -19,8 +19,6 @@ const ViewProjectDetail = ({ project }: ViewProjectDetailProps) => {
     key: member._id,
   }));
 
-  console.log(project?.startDate, "startdsate");
-
   return (
     <div className="drawer-side z-30">
       <label
@@ -58,7 +56,7 @@ const ViewProjectDetail = ({ project }: ViewProjectDetailProps) => {
             ></textarea>
           </div>
           <div className="grid pb-2 grid-cols-2 gap-4">
-          <label className=" font-semibold text-sm text-[#232360]">
+            <label className=" font-semibold text-sm text-[#232360]">
               Start Date
             </label>
             <Input
@@ -70,7 +68,7 @@ const ViewProjectDetail = ({ project }: ViewProjectDetailProps) => {
               }
               readOnly
             />
-             <label className="  font-semibold text-sm text-[#232360]">
+            <label className="  font-semibold text-sm text-[#232360]">
               End Date
             </label>
             <Input

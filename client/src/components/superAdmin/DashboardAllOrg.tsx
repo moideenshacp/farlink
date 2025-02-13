@@ -10,12 +10,11 @@ const DashboardAllOrg = () => {
   interface Admin {
     phone: string;
     email: string;
-    isActive: boolean
+    isActive: boolean;
   }
   const navigate = useNavigate();
   const { companies } = useCompanies();
-  console.log("comapniesss",companies);
-  
+
   const handleCardClick = (company: Company) => {
     navigate("/superAdmin/organization-details", { state: { company } });
   };
@@ -30,9 +29,9 @@ const DashboardAllOrg = () => {
             className="bg-white shadow-md rounded-lg p-16 flex flex-col items-center cursor-pointer border border-gray-200 hover:shadow-lg hover:scale-105 transition-transform"
           >
             <div
-              className={`w-12 h-12 rounded-full flex items-center justify-center text-white text-lg font-bold ${ 
-                
-                org.admin?.isActive ? "bg-gray-500" : "bg-red-500"}`}
+              className={`w-12 h-12 rounded-full flex items-center justify-center text-white text-lg font-bold ${
+                org.admin?.isActive ? "bg-gray-500" : "bg-red-500"
+              }`}
             >
               {org.name.charAt(0).toUpperCase()}
             </div>

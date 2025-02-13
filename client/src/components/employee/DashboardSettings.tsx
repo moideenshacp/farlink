@@ -22,7 +22,7 @@ const DashboardSettings = () => {
       key: "password",
       label: "Password",
       children: <DashboardPassword />,
-    }
+    },
   ];
 
   return (

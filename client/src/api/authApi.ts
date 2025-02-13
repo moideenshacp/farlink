@@ -2,6 +2,8 @@ import axios from "axios";
 import axiosInstance from "./axiosInterceptor";
 import { JwtPayload } from "jwt-decode";
 
+//LOGIN ADMIN API=========================================================================================================
+
 export const LoginAdmin = async (email: string, password: string) => {
   try {
     const res = await axios.post(
@@ -19,6 +21,8 @@ export const LoginAdmin = async (email: string, password: string) => {
     throw error;
   }
 };
+
+//SIGN-UP ADMIN API=========================================================================================================
 
 export const SignUpAdmin = async (
   name: string,
@@ -43,6 +47,8 @@ export const SignUpAdmin = async (
   }
 };
 
+//VERIFY EMAIL ADMIN API=========================================================================================================
+
 export const VerifyEmailAdmin = async (token: string | null) => {
   try {
     const res = await axios.post(
@@ -57,6 +63,8 @@ export const VerifyEmailAdmin = async (token: string | null) => {
   }
 };
 
+//LOGOUT USER API=========================================================================================================
+
 export const logoutUser = async () => {
   try {
     const res = await axios.post(
@@ -68,6 +76,8 @@ export const logoutUser = async () => {
     throw error;
   }
 };
+
+//FORGOT PASSWORD API=========================================================================================================
 
 export const forgetPassword = async (email: string) => {
   try {
@@ -85,6 +95,8 @@ export const forgetPassword = async (email: string) => {
     throw error;
   }
 };
+
+//RESET PASSWORD API=========================================================================================================
 
 export const resetPassword = async (
   password: string,
@@ -109,52 +121,56 @@ export const resetPassword = async (
   }
 };
 
-export const regitserCompany = async (organization:unknown)=>{
+//REGISTER ORGANIZATION API=========================================================================================================
+
+export const regitserCompany = async (organization: unknown) => {
   try {
     const res = await axiosInstance.post(
-      `${import.meta.env.VITE_SERVER_BASE_URL}/auth-service/api/company/register-company`, 
-      {organization:organization},
-      { withCredentials: true } 
+      `${
+        import.meta.env.VITE_SERVER_BASE_URL
+      }/auth-service/api/company/register-company`,
+      { organization: organization },
+      { withCredentials: true }
     );
     return res;
   } catch (error) {
-    console.error('Error submitting Step 2 data:', error);
+    console.error("Error submitting Step 2 data:", error);
     throw error;
   }
+};
 
-  
-}
+//UPDATE PROFILE API=========================================================================================================
+
 export const updateProfile = async (
   fName: string,
   lName: string,
   phone: string,
-  email:string | undefined,
-  image:string
-)=>{
+  email: string | undefined,
+  image: string
+) => {
   try {
     const res = await axiosInstance.patch(
-      `${import.meta.env.VITE_SERVER_BASE_URL}/auth-service/api/auth/update-profile`, 
-      {fName:fName,
-        lName:lName,
-        phone:phone,
-        email:email,
-        image:image
-
-      },
-      { withCredentials: true } 
-    )
-    return res
+      `${
+        import.meta.env.VITE_SERVER_BASE_URL
+      }/auth-service/api/auth/update-profile`,
+      { fName: fName, lName: lName, phone: phone, email: email, image: image },
+      { withCredentials: true }
+    );
+    return res;
   } catch (error) {
     console.log(error);
-    throw error
-    
+    throw error;
   }
-}
+};
+
+//FETCH PROFILE API=========================================================================================================
 
 export const fetchProfile = async (email: string) => {
   try {
     const res = await axiosInstance.get(
-      `${import.meta.env.VITE_SERVER_BASE_URL}/auth-service/api/auth/get-profile`,
+      `${
+        import.meta.env.VITE_SERVER_BASE_URL
+      }/auth-service/api/auth/get-profile`,
       {
         params: { email },
         withCredentials: true,
@@ -167,10 +183,14 @@ export const fetchProfile = async (email: string) => {
   }
 };
 
+//GOOGLE LOGIN API=========================================================================================================
+
 export const googleLogin = async (userData: JwtPayload) => {
   try {
     const res = await axios.post(
-      `${import.meta.env.VITE_SERVER_BASE_URL}/auth-service/api/auth/google-login`,
+      `${
+        import.meta.env.VITE_SERVER_BASE_URL
+      }/auth-service/api/auth/google-login`,
       userData,
       { withCredentials: true }
     );
@@ -181,10 +201,10 @@ export const googleLogin = async (userData: JwtPayload) => {
   }
 };
 
+//FETCH ALL-EMPLOYEES BY EMPLOYEE-ID API=========================================================================================================
 
 export const fetchEmployeesByIds = async (employeeIds: string[] | unknown) => {
   try {
-    
     const res = await axiosInstance.get(
       `${
         import.meta.env.VITE_SERVER_BASE_URL
@@ -202,14 +222,21 @@ export const fetchEmployeesByIds = async (employeeIds: string[] | unknown) => {
     throw error;
   }
 };
-export const getAllEmployees = async (organizationId: string | undefined,page?:number, pageSize?:number) => {
+
+//FETCH ALL EMPLOYEES BY ORGANIZATION-ID POLICY=========================================================================================================
+
+export const getAllEmployees = async (
+  organizationId: string | undefined,
+  page?: number,
+  pageSize?: number
+) => {
   try {
     const res = await axiosInstance.get(
       `${
         import.meta.env.VITE_SERVER_BASE_URL
       }/auth-service/api/auth/get-employees`,
       {
-        params: { organizationId ,page,pageSize},
+        params: { organizationId, page, pageSize },
         withCredentials: true,
       }
     );

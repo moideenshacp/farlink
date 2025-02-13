@@ -23,7 +23,7 @@ const createInitialSubtask = (): Partial<ITaskDetails | any> => ({
   file: null,
   projectId: "",
   organizationId: "",
-  feedback:""
+  feedback: "",
 });
 
 const cleanSubtaskForComparison = (subtask: Partial<ITaskDetails> = {}) => {
@@ -205,7 +205,7 @@ const SubtaskModal: React.FC<SubtaskModalProps> = ({
             : null,
           priority:
             priorityOptions.find((p) => p.value === subtask.priority) || null,
-            feedback:subtask.feedback
+          feedback: subtask.feedback,
         }));
 
         setSubtasks(formattedSubtasks);

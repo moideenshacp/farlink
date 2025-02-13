@@ -1,4 +1,4 @@
-import ShimmerTable from "../../components/shimmers/Table"
+import ShimmerTable from "../../components/shimmers/Table";
 
 const ShimmerHistory = () => {
   return (

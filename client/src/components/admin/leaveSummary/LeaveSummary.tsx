@@ -39,15 +39,11 @@ const LeaveSummary = () => {
     }
   }, [organizationId, selectedEmail]);
 
-  console.log("balanace bleave", leaveBalance);
-
   useEffect(() => {
     const fetchAllLeaves = async () => {
       setLoading(true);
       try {
         const res = await fetchLeave(selectedEmail);
-        console.log(res);
-
         if (res.data.message === "Fetched Applied leaves") {
           setLeaves(res.data.leaves);
         }
@@ -139,7 +135,7 @@ const LeaveSummary = () => {
               pageSize={pageSize}
             />
 
-{filteredLeaves.length > pageSize && (
+            {filteredLeaves.length > pageSize && (
               <div className="flex justify-end mt-6">
                 <Pagination
                   current={currentPage}

@@ -11,7 +11,6 @@ const PaymentHistory: React.FC<historyProps> = ({ customerId }) => {
   const [history, setHistory] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
-  
 
   const filterInvoiceData = (invoices: any[]) => {
     return invoices.map((invoice) => ({
@@ -57,25 +56,35 @@ const PaymentHistory: React.FC<historyProps> = ({ customerId }) => {
   return (
     <div className="p-6 bg-white rounded-lg shadow-lg">
       <h1 className="text-2xl font-bold mb-4">Payment History</h1>
-      {loading &&
-            <ShimmerHistory/>
-         }
+      {loading && <ShimmerHistory />}
       {error && <div className="text-red-500">{error}</div>}
       {history.length > 0 ? (
         <div className="overflow-x-auto">
           <table className="min-w-full text-sm text-left text-gray-500 border-collapse">
             <thead className="bg-gray-100 text-gray-700 uppercase text-xs">
               <tr>
-                <th scope="col" className="px-4 py-2">No.</th>
-                <th scope="col" className="px-4 py-2">Invoice Date</th>
-                <th scope="col" className="px-4 py-2">Status</th>
-                <th scope="col" className="px-4 py-2">Subscription ID</th>
-                <th scope="col" className="px-4 py-2">Amount</th>
-                <th scope="col" className="px-4 py-2">Action</th>
+                <th scope="col" className="px-4 py-2">
+                  No.
+                </th>
+                <th scope="col" className="px-4 py-2">
+                  Invoice Date
+                </th>
+                <th scope="col" className="px-4 py-2">
+                  Status
+                </th>
+                <th scope="col" className="px-4 py-2">
+                  Subscription ID
+                </th>
+                <th scope="col" className="px-4 py-2">
+                  Amount
+                </th>
+                <th scope="col" className="px-4 py-2">
+                  Action
+                </th>
               </tr>
             </thead>
             <tbody>
-              {history.map((invoice:any, index: number) => (
+              {history.map((invoice: any, index: number) => (
                 <tr key={invoice.id} className="border-b hover:bg-gray-50">
                   <td className="px-4 py-2">{index + 1}</td>
                   <td className="px-4 py-2">{invoice.date}</td>
@@ -110,7 +119,7 @@ const PaymentHistory: React.FC<historyProps> = ({ customerId }) => {
           </table>
         </div>
       ) : (
-        !loading && <div>No payment history found.</div> 
+        !loading && <div>No payment history found.</div>
       )}
     </div>
   );

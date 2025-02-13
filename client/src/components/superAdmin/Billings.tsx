@@ -30,8 +30,6 @@ const PaymentHistoryAdmin = () => {
       setLoading(true);
       try {
         const res = await getAllPaymentHistory();
-        console.log(res, "from admin histrory");
-
         if (res) {
           const filteredInvoices = filterInvoiceData(res.invoices);
           setHistory(filteredInvoices);
@@ -97,7 +95,9 @@ const PaymentHistoryAdmin = () => {
             <tbody>
               {paginatedHistory.map((invoice: any, index: number) => (
                 <tr key={invoice.id} className="border-b hover:bg-gray-50">
-                  <td className="px-4 py-2">{(currentPage - 1) * pageSize + index + 1}</td>
+                  <td className="px-4 py-2">
+                    {(currentPage - 1) * pageSize + index + 1}
+                  </td>
                   <td className="px-4 py-2">{invoice.date}</td>
                   <td className="px-4 py-2">
                     <span

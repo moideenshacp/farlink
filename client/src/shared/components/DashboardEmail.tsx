@@ -2,8 +2,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 
 const DashboardEmail = () => {
-
-  const {user} = useSelector((state:RootState)=>state.user)
+  const { user } = useSelector((state: RootState) => state.user);
   return (
     <div>
       <div>

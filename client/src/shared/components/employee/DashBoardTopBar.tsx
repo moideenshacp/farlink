@@ -13,8 +13,6 @@ const DashBoardTopBar = () => {
 
   const { user } = useSelector((state: RootState) => state.user);
 
-  console.log("name of user", user?.name);
-
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
   };
@@ -27,7 +25,6 @@ const DashBoardTopBar = () => {
       navigate("/employee-login", { replace: true });
     }
   };
-
 
   const location = useLocation();
   return (
@@ -50,23 +47,19 @@ const DashBoardTopBar = () => {
             <h1 className="text-xl font-semibold text-gray-700 lg:block sm: hidden">
               My Projects
             </h1>
-          ) :
-          location.pathname === "/employee/manage-tasks" ? (
+          ) : location.pathname === "/employee/manage-tasks" ? (
             <h1 className="text-xl font-semibold text-gray-700 lg:block sm: hidden">
               Manage Tasks
             </h1>
-          ) :
-          location.pathname === "/employee/leave-summary" ? (
+          ) : location.pathname === "/employee/leave-summary" ? (
             <h1 className="text-xl font-semibold text-gray-700 lg:block sm: hidden">
               Team Leave Summary
             </h1>
-          ) :
-          location.pathname === "/employee/create-project" ? (
+          ) : location.pathname === "/employee/create-project" ? (
             <h1 className="text-xl font-semibold text-gray-700 lg:block sm: hidden">
               Create Projects
             </h1>
-          ) :
-           location.pathname === "/employee/my-team" ? (
+          ) : location.pathname === "/employee/my-team" ? (
             <h1 className="text-xl font-semibold text-gray-700 lg:block sm: hidden">
               My Team
             </h1>
@@ -94,19 +87,17 @@ const DashBoardTopBar = () => {
             <h1 className="text-xl font-semibold text-gray-700 lg:block sm: hidden">
               Settings
             </h1>
-          ): (
+          ) : (
             <h1 className="text-xl font-semibold text-gray-700 lg:block sm: hidden">
               Overview
             </h1>
           )}
           <div className="flex items-center p-2 gap-12">
-            
-
-            <NotificationDropdown/>
+            <NotificationDropdown />
             <div className="relative inline-block text-left">
               <div>
                 <button onClick={toggleDropdown} className="flex items-center">
-                {user?.image ? (
+                  {user?.image ? (
                     <img
                       src={user.image}
                       alt="User Avatar"

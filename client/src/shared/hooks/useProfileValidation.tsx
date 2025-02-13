@@ -4,7 +4,7 @@ interface FormData {
   fName: string;
   lName: string;
   phone: string;
-  image: string
+  image: string;
 }
 
 interface ValidationErrors {
@@ -47,7 +47,7 @@ const useProfileValidation = (initialFormData: FormData) => {
     if (formData.lName.trim().length === 0) {
       errors.lName = "Last name is required.";
     }
-    if (formData.phone.trim().length === 0  ) {
+    if (formData.phone.trim().length === 0) {
       errors.phone = "Phone number is required.";
     } else if (!/^\d{10}$/.test(formData.phone)) {
       errors.phone = "Phone number must be 10 digits.";

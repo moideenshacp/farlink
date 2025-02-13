@@ -16,32 +16,28 @@ const TaskSummary = () => {
   const [completedProjectTasks, setProjectCompletedTasks] = useState(0);
   const [pendingTasks, setPendingTasks] = useState(0);
   const [projectAllTasks, setProjectAllTasks] = useState(0);
-  const {user} = useSelector((state:RootState)=>state.user)
-  console.log("inter psoition",user?.position);
-  
+  const { user } = useSelector((state: RootState) => state.user);
   const fetchAllTasks = async () => {
     try {
-      let res
-      if(selectedProject?.manager.email === user?.email || user?.position ==="HR"){
-        console.log("heerre");
-        
+      let res;
+      if (
+        selectedProject?.manager.email === user?.email ||
+        user?.position === "HR"
+      ) {
         res = await fetchTasks(selectedProject?._id);
-      }else{
-        console.log("not   heerre");
-
-        res = await fetchEmployeesTask(selectedProject?._id,user?._id);
+      } else {
+        res = await fetchEmployeesTask(selectedProject?._id, user?._id);
       }
       const task = res.data.result;
       setAllTasks(task.length);
 
-      const projectTasks = await fetchTasks(selectedProject?._id)
-      console.log("project tasks",projectTasks);
-      
-      setProjectAllTasks(projectTasks.data.result.length)
+      const projectTasks = await fetchTasks(selectedProject?._id);
+
+      setProjectAllTasks(projectTasks.data.result.length);
       const projectCompletedTasks = projectTasks.data.result.filter(
         (t: ITaskDetails) => t.status === "completed"
       );
-      setProjectCompletedTasks(projectCompletedTasks.length)
+      setProjectCompletedTasks(projectCompletedTasks.length);
       const completedTasks = task.filter(
         (t: ITaskDetails) => t.status === "completed"
       );
@@ -54,10 +50,11 @@ const TaskSummary = () => {
       console.log(error);
     }
   };
-  console.log("project all taaks",projectAllTasks);
-  
+
   const progress =
-  projectAllTasks > 0 ? Math.round((completedProjectTasks / projectAllTasks) * 100) : 0;
+    projectAllTasks > 0
+      ? Math.round((completedProjectTasks / projectAllTasks) * 100)
+      : 0;
 
   useEffect(() => {
     fetchAllTasks();

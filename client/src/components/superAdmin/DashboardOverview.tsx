@@ -59,7 +59,7 @@ const DashboardOverview = () => {
           </div>
         ))}
       </div>
-  
+
       {/* Centered Pie Chart */}
       <div className="mt-10 flex justify-center">
         <CompanyStatusChart
@@ -69,7 +69,6 @@ const DashboardOverview = () => {
       </div>
     </div>
   );
-  
 };
 
 export default DashboardOverview;

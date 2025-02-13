@@ -20,8 +20,6 @@ const AttendanceSummary = () => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       if (error) {
-        console.log("response fron backend", error.response?.data?.error);
-
         message.warning(error.response?.data?.error, 2);
       } else {
         message.error(

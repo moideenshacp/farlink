@@ -22,22 +22,16 @@ const EmployeeProfile_settings: React.FC<employeeEmail> = ({
   const [activeStatus, setActiveStatus] = useState(isActive);
   const [showModal, setShowModal] = useState(false);
 
-  console.log(isActive, "isactive");
-
   const sendInvitation = async () => {
     try {
       setIsLoading(true);
       const res = await sendInvitationEmployee(email);
-      console.log(res);
       if (res.data.message === "Invitation sended successfully") {
-
         message.success("Invitation sended successfully!", 2);
 
         setEmailSendStatus(true);
       } else {
-
         message.error("Failed to send the Invitation. Please try again.", 2);
-
       }
     } catch (error) {
       console.log(error);
@@ -47,13 +41,10 @@ const EmployeeProfile_settings: React.FC<employeeEmail> = ({
   };
 
   const terminate = async () => {
-
     try {
       const res = await terminateEmployee(email);
-      console.log(res, "terminae resss");
       if (res?.data.message === "Employee terminated successfully") {
         setActiveStatus(res.data.isActive);
-        console.log(isActive);
       }
     } catch (error) {
       console.log(error);

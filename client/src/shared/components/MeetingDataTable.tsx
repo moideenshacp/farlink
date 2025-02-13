@@ -41,8 +41,6 @@ const MeetingDataTable: React.FC<any> = ({
   currentPage,
   pageSize,
 }) => {
-  console.log("meetData------------------------------", meetData);
-
   const { user } = useSelector((state: RootState) => state.user);
 
   const formatTime = (time: string) => {

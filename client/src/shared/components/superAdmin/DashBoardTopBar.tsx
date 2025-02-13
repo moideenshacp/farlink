@@ -28,7 +28,6 @@ const DashBoardTopBar = () => {
   return (
     <div>
       <header className="bg-white shadow">
-        
         <div className="px-6 py-4 flex justify-between items-center">
           {location.pathname === "/superAdmin/" ? (
             <h1 className="text-xl font-semibold text-gray-700 lg:block sm: hidden">
@@ -56,8 +55,6 @@ const DashBoardTopBar = () => {
             </h1>
           )}
           <div className="flex items-center p-2 gap-12 sm:gap-6">
-            
-
             <button aria-label="Notifications" className="flex items-center">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -77,7 +74,7 @@ const DashBoardTopBar = () => {
             <div className="relative inline-block text-left">
               <div>
                 <button onClick={toggleDropdown} className="flex items-center">
-                {user?.image ? (
+                  {user?.image ? (
                     <img
                       src={user.image}
                       alt="User Avatar"

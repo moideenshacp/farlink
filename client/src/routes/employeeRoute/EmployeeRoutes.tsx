@@ -38,12 +38,10 @@ const EmployeeRoutes = () => (
       <Route path="/realtime-alert" element={<RealTimeAlert />} />
       <Route path="/setting" element={<DashboardSettings />} />
 
-      <Route element={<SubscriptionRoute />}> 
-
-    <Route path="/message" element={<ChatContainer />} />
-      <Route path="/meeting" element={<Meetings />} />
+      <Route element={<SubscriptionRoute />}>
+        <Route path="/message" element={<ChatContainer />} />
+        <Route path="/meeting" element={<Meetings />} />
       </Route>
-
     </Route>
   </Routes>
 );

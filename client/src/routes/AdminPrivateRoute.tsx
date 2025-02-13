@@ -13,19 +13,14 @@ const AdminPrivateRoute = () => {
   );
 
   if (isAuthenticated && userRole === "admin") {
-    console.log("yes it is added");
-    
     return isOrganizationAdded ? <Outlet /> : <Navigate to="/step-1" replace />;
   }
   // if(userRole === "employee" && userPosition === "HR"){
-  //   console.log("employee hr aan");
-    
   //   return isAuthenticated ? <Outlet/> : <Navigate to="/step-1" replace /> ;
 
   // }
 
   return <Navigate to="/sign-in" replace />;
 };
-
 
 export default AdminPrivateRoute;

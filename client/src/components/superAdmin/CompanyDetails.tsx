@@ -14,7 +14,7 @@ const CompanyDetails = () => {
       case "profile":
         return <CompanyDetailsProfile organization={company} />;
       case "payment-history":
-        return <PaymentHistory organization={company}/>
+        return <PaymentHistory organization={company} />;
       default:
         return <div>Select a section</div>;
     }
@@ -90,7 +90,7 @@ const CompanyDetails = () => {
           </div>
         </div>
 
-          <div className="ml-6 w-full">{renderContent()}</div>
+        <div className="ml-6 w-full">{renderContent()}</div>
       </div>
     </div>
   );

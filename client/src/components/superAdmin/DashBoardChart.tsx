@@ -12,7 +12,14 @@ import {
 } from "chart.js";
 
 // Register necessary chart components
-ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend
+);
 
 // Sample data
 const chartData = {
@@ -54,4 +61,3 @@ export const DashboardChart = () => {
     </div>
   );
 };
-

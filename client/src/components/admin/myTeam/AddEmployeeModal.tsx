@@ -55,8 +55,6 @@ const AddEmployeeModal = ({ toggleModal }: { toggleModal: () => void }) => {
     const fetchAllPositions = async () => {
       try {
         const res = await fetchPositions(user?.organizationId);
-
-        console.log(res.data.result.positions, "All positions");
         setTeams(res.data.result.positions);
       } catch (error) {
         console.log(error);
@@ -89,11 +87,9 @@ const AddEmployeeModal = ({ toggleModal }: { toggleModal: () => void }) => {
       message.error("Please enter a valid email address");
       return;
     }
-    
+
     let uploadedImageUrl = null;
     if (selectedFile) {
-      console.log("selected file is there");
-
       uploadedImageUrl = await uploadFileToCloudinary(
         selectedFile,
         setIsUploading
@@ -108,7 +104,6 @@ const AddEmployeeModal = ({ toggleModal }: { toggleModal: () => void }) => {
     };
     try {
       const res = await addEmployee(dataToSubmit);
-      console.log(res);
       if (res?.data.message === "Employee added successfully") {
         message.success("Employee added successfully!", 2);
 

@@ -97,11 +97,10 @@ const ChatInput: React.FC<ChatInputProps> = ({ selectedChat }) => {
         <button
           onClick={handleSend}
           className="bg-[#1677ff] p-2 rounded-full hover:bg-blue-600"
-          disabled={isUploading} 
+          disabled={isUploading}
         >
           {isUploading ? (
-                    <FaSpinner className="text-blue-500 animate-spin text-3xl" />
-            
+            <FaSpinner className="text-blue-500 animate-spin text-3xl" />
           ) : (
             <Send className="w-5 h-5 text-white" />
           )}

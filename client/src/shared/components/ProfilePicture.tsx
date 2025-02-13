@@ -6,7 +6,11 @@ interface ProfilePictureProps {
   onImageChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-const ProfilePicture: React.FC<ProfilePictureProps> = ({ image, isUploading, onImageChange }) => (
+const ProfilePicture: React.FC<ProfilePictureProps> = ({
+  image,
+  isUploading,
+  onImageChange,
+}) => (
   <div className="flex mb-6">
     <div className="flex-shrink-0">
       <label htmlFor="image" className="cursor-pointer">

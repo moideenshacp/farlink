@@ -18,10 +18,10 @@ export interface Chat {
   isOnline?: boolean;
   isGroup?: boolean;
   members?: [];
-  messages: Message[] ;
-  groupName?:string
-  participants:any[]
-  groupAdmin?:string
+  messages: Message[];
+  groupName?: string;
+  participants: any[];
+  groupAdmin?: string;
 }
 // Chat List Component
 export interface ChatListProps {
@@ -29,37 +29,35 @@ export interface ChatListProps {
   onSelectChat: (chat: Chat) => void;
   selectedChatId: number | null;
   isGroup: boolean;
-  onAddChat?: (user:any) => void;
-  onAddGroup?: (groupName:string, members:any) => void;
-
+  onAddChat?: (user: any) => void;
+  onAddGroup?: (groupName: string, members: any) => void;
 }
-
 
 // Chat Input Component
 export interface ChatInputProps {
   onSendMessage?: (message: string) => void;
-  selectedChat?:Chat
+  selectedChat?: Chat;
 }
 
 // Chat Header Component
 export interface ChatHeaderProps {
-    chat: Chat;
-    fetchChats?: () => void;
-  }
+  chat: Chat;
+  fetchChats?: () => void;
+}
 
-  export // Chat Messages Component
-  interface ChatMessagesProps {
-    messages: Message[];
-  }
+export // Chat Messages Component
+interface ChatMessagesProps {
+  messages: Message[];
+}
 
-  // Chat Messages Component
+// Chat Messages Component
 export interface ChatMessagesProps {
-    messages: Message[];
-  }
+  messages: Message[];
+}
 
- export interface  NewMessageProps {
-    chatId: string
-    sender: string,
-    text: string,
-    time: Date,
-  };
+export interface NewMessageProps {
+  chatId: string;
+  sender: string;
+  text: string;
+  time: Date;
+}

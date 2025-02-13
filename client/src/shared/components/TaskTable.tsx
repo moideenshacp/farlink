@@ -81,8 +81,6 @@ const TaskTable: React.FC<TaskTableProps> = ({
       if (user?.email === project?.manager.email || user?.role === "admin") {
         response = await updateTask(task._id, updatedTask);
       } else {
-        console.log("updateTasks", updateTask);
-
         response = await updateSubTask(task._id, updatedTask);
       }
 

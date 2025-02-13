@@ -7,7 +7,11 @@ interface ProjectViewCardProps {
   onProjectClick: (project: IProject) => void;
 }
 
-const ProjectViewCard = ({ projects, isLoading,onProjectClick }: ProjectViewCardProps) => {
+const ProjectViewCard = ({
+  projects,
+  isLoading,
+  onProjectClick,
+}: ProjectViewCardProps) => {
   return (
     <>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

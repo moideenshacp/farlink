@@ -1,37 +1,39 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from "react";
-import { getPaymentHistory, getSubcriptionPlans } from "../../api/subcriptionApi";
-
+import {
+  getPaymentHistory,
+  getSubcriptionPlans,
+} from "../../api/subcriptionApi";
 
 interface Organization {
-    admin: {
-      email: string;
-      phone: string;
-      isActive: boolean
-    };
-    _id:string
-    name: string;
-    description: string;
-    city: string;
-    country: string;
-    industry: string;
-    state: string;
-    street: string;
-    subscriptionType: string;
-    zipcode: string;
-  }
-  
-  interface CompanyDetailsProfileProps {
-    organization: Organization;
-  }
-  
+  admin: {
+    email: string;
+    phone: string;
+    isActive: boolean;
+  };
+  _id: string;
+  name: string;
+  description: string;
+  city: string;
+  country: string;
+  industry: string;
+  state: string;
+  street: string;
+  subscriptionType: string;
+  zipcode: string;
+}
 
-const PaymentHistory: React.FC<CompanyDetailsProfileProps>= ({ organization }) => {
+interface CompanyDetailsProfileProps {
+  organization: Organization;
+}
+
+const PaymentHistory: React.FC<CompanyDetailsProfileProps> = ({
+  organization,
+}) => {
   const [history, setHistory] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
   const [subscriptionDetails, setSubscriptionDetails] = useState<any>(null);
-
 
   const filterInvoiceData = (invoices: any[]) => {
     return invoices.map((invoice) => ({
@@ -45,7 +47,7 @@ const PaymentHistory: React.FC<CompanyDetailsProfileProps>= ({ organization }) =
       invoice_pdf: invoice.invoice_pdf,
     }));
   };
- 
+
   useEffect(() => {
     const fetchSubscription = async () => {
       if (!organization?._id) return;
@@ -90,25 +92,39 @@ const PaymentHistory: React.FC<CompanyDetailsProfileProps>= ({ organization }) =
   return (
     <div className="p-6  rounded-lg ">
       <h1 className="text-2xl font-bold mb-4">Payment History</h1>
-      {loading && <div className="flex justify-center items-center h-full">
-            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
-          </div>}
+      {loading && (
+        <div className="flex justify-center items-center h-full">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+        </div>
+      )}
       {error && <div className="text-red-500">{error}</div>}
       {history ? (
         <div className="overflow-x-auto">
           <table className="min-w-full text-sm text-left text-gray-500 border-collapse">
             <thead className="bg-gray-100 text-gray-700 uppercase text-xs">
               <tr>
-                <th scope="col" className="px-4 py-2">No.</th>
-                <th scope="col" className="px-4 py-2">Invoice Date</th>
-                <th scope="col" className="px-4 py-2">Status</th>
-                <th scope="col" className="px-4 py-2">Subscription ID</th>
-                <th scope="col" className="px-4 py-2">Amount</th>
-                <th scope="col" className="px-4 py-2">Action</th>
+                <th scope="col" className="px-4 py-2">
+                  No.
+                </th>
+                <th scope="col" className="px-4 py-2">
+                  Invoice Date
+                </th>
+                <th scope="col" className="px-4 py-2">
+                  Status
+                </th>
+                <th scope="col" className="px-4 py-2">
+                  Subscription ID
+                </th>
+                <th scope="col" className="px-4 py-2">
+                  Amount
+                </th>
+                <th scope="col" className="px-4 py-2">
+                  Action
+                </th>
               </tr>
             </thead>
             <tbody>
-              {history.map((invoice:any, index: number) => (
+              {history.map((invoice: any, index: number) => (
                 <tr key={invoice.id} className="border-b hover:bg-gray-50">
                   <td className="px-4 py-2">{index + 1}</td>
                   <td className="px-4 py-2">{invoice.date}</td>

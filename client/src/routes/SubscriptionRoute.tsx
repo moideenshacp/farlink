@@ -55,7 +55,8 @@ const SubscriptionRoute = () => {
     if (user?.role !== "admin") {
       Modal.warning({
         title: "Subscription Required",
-        content: "Your organization needs an active subscription to access this section. Please contact your admin.",
+        content:
+          "Your organization needs an active subscription to access this section. Please contact your admin.",
         centered: true,
       });
       return <Navigate to="/employee/" replace />;

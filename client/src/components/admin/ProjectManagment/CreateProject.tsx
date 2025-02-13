@@ -86,7 +86,7 @@ const CreateProject = () => {
     if (user?.organizationId) {
       fetchAllProjects();
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user?.organizationId]);
 
   // Apply filtering first (before pagination)
@@ -210,7 +210,9 @@ const CreateProject = () => {
             {/* Next Page */}
             <button
               className="join-item btn bg-[#4361EE] text-white hover:bg-blue-700"
-              onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+              onClick={() =>
+                setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+              }
               disabled={currentPage === totalPages}
             >
               »

@@ -158,85 +158,83 @@ const DashboardProfile = () => {
               </button>
             </div>
           )}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mt-4" >
-
-          <Input
-            label="Username"
-            type="text"
-            value={user?.name || ""}
-            className="w-full p-2 border rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-200 text-[#333333] font-normal"
-            readOnly
-          />
-
-          <Input
-            label="First Name"
-            type="text"
-            placeholder="Enter your first name"
-            onChange={handleChange}
-            name="fName"
-            value={formData.fName}
-            readOnly={user?.role === "employee"}
-            className="w-full p-2 border rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-200 text-[#333333] font-normal"
-          />
-          {validationErrors.fName && (
-            <p className="text-red-500 text-sm">{validationErrors.fName}</p>
-          )}
-
-          <Input
-            label="Last Name"
-            type="text"
-            placeholder="Enter your last name"
-            onChange={handleChange}
-            name="lName"
-            value={formData.lName}
-            readOnly={user?.role === "employee"}
-            className="w-full p-2 border rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-200 text-[#333333] font-normal"
-          />
-          {validationErrors.lName && (
-            <p className="text-red-500 text-sm">{validationErrors.lName}</p>
-          )}
-
-          <Input
-            label="Phone"
-            type="text"
-            placeholder="Enter your phone"
-            onChange={handleChange}
-            name="phone"
-            value={formData.phone}
-            readOnly={user?.role === "employee"}
-            className="w-full p-2 border rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-200 text-[#333333] font-normal"
-          />
-          {validationErrors.phone && (
-            <p className="text-red-500 text-sm">{validationErrors.phone}</p>
-          )}
-
-          {user?.role === "employee" && (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mt-4">
             <Input
-              label="Email"
+              label="Username"
               type="text"
-              value={user?.email || ""}
+              value={user?.name || ""}
+              className="w-full p-2 border rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-200 text-[#333333] font-normal"
+              readOnly
+            />
+
+            <Input
+              label="First Name"
+              type="text"
+              placeholder="Enter your first name"
+              onChange={handleChange}
+              name="fName"
+              value={formData.fName}
+              readOnly={user?.role === "employee"}
+              className="w-full p-2 border rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-200 text-[#333333] font-normal"
+            />
+            {validationErrors.fName && (
+              <p className="text-red-500 text-sm">{validationErrors.fName}</p>
+            )}
+
+            <Input
+              label="Last Name"
+              type="text"
+              placeholder="Enter your last name"
+              onChange={handleChange}
+              name="lName"
+              value={formData.lName}
+              readOnly={user?.role === "employee"}
+              className="w-full p-2 border rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-200 text-[#333333] font-normal"
+            />
+            {validationErrors.lName && (
+              <p className="text-red-500 text-sm">{validationErrors.lName}</p>
+            )}
+
+            <Input
+              label="Phone"
+              type="text"
+              placeholder="Enter your phone"
+              onChange={handleChange}
+              name="phone"
+              value={formData.phone}
+              readOnly={user?.role === "employee"}
+              className="w-full p-2 border rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-200 text-[#333333] font-normal"
+            />
+            {validationErrors.phone && (
+              <p className="text-red-500 text-sm">{validationErrors.phone}</p>
+            )}
+
+            {user?.role === "employee" && (
+              <Input
+                label="Email"
+                type="text"
+                value={user?.email || ""}
+                readOnly
+                className="w-full p-2 border rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-200 text-[#333333] font-normal"
+              />
+            )}
+            {user?.position && (
+              <Input
+                label="Position"
+                type="text"
+                value={user?.position || ""}
+                readOnly
+                className="w-full p-2 border rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-200 text-[#333333] font-normal"
+              />
+            )}
+            <Input
+              label="Role"
+              type="text"
+              value={user?.role || ""}
               readOnly
               className="w-full p-2 border rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-200 text-[#333333] font-normal"
             />
-          )}
-          {user?.position && (
-            <Input
-              label="Position"
-              type="text"
-              value={user?.position || ""}
-              readOnly
-              className="w-full p-2 border rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-200 text-[#333333] font-normal"
-            />
-          )}
-          <Input
-            label="Role"
-            type="text"
-            value={user?.role || ""}
-            readOnly
-            className="w-full p-2 border rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-200 text-[#333333] font-normal"
-          />
           </div>
-
         </div>
       </form>
     </div>

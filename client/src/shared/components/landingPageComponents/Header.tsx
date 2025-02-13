@@ -51,7 +51,6 @@ const Header = () => {
                   className="block px-4 py-2 text-sm text-[#172C56] hover:bg-[#F5F5F5]"
                 >
                   Login as Employee
-
                 </Link>
               </div>
             )}
@@ -140,7 +139,6 @@ const Header = () => {
                     className="block px-4 py-2 text-sm text-[#172C56] hover:bg-[#F5F5F5]"
                   >
                     Login as Employee
-
                   </Link>
                 </div>
               )}

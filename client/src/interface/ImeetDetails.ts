@@ -3,5 +3,5 @@ export interface ImeetDetails {
   meetDate: Date;
   meetTime: string;
   members: string[];
-  organizationId:string
+  organizationId: string;
 }

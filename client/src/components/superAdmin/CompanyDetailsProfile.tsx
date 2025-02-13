@@ -5,7 +5,7 @@ interface Organization {
   admin: {
     email: string;
     phone: string;
-    isActive: boolean
+    isActive: boolean;
   };
   name: string;
   description: string;
@@ -25,57 +25,43 @@ interface CompanyDetailsProfileProps {
 const CompanyDetailsProfile: React.FC<CompanyDetailsProfileProps> = ({
   organization,
 }) => {
+  const [activeStatus, setActiveStatus] = useState(organization.admin.isActive);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const [activeStatus,setActiveStatus] = useState(organization.admin.isActive)
-  const [isLoading,setIsLoading] = useState(false)
-  console.log("normal",activeStatus);
-  
- 
-  const handleClick =async ()=>{
-    setIsLoading(true)
+  const handleClick = async () => {
+    setIsLoading(true);
     try {
-      const res = await blockOrganization(organization.admin.email)
-      if(res?.data.result.isActive === false){
-        console.log("false--------");
-        
-        setActiveStatus(false)
-        console.log("from block",activeStatus);
-        
-      }else if(res?.data.result.isActive === true){
-        console.log("true-----------");
-        
-        setActiveStatus(true)
-        console.log("from unblock",activeStatus);
-        
+      const res = await blockOrganization(organization.admin.email);
+      if (res?.data.result.isActive === false) {
+        setActiveStatus(false);
+      } else if (res?.data.result.isActive === true) {
+        setActiveStatus(true);
       }
-      
     } catch (error) {
       console.log(error);
-      
-    }finally{
-      setIsLoading(false)
+    } finally {
+      setIsLoading(false);
     }
-  }
-
+  };
 
   return (
     <div>
-        <div className="justify-end flex mb-1" >
-
-      <button onClick={handleClick}
-        type="submit"
-        className="bg-[#4361EE] py-2 px-6 rounded-full text-white"
-        disabled={isLoading}
-      >
-        { isLoading 
-
-        ?(activeStatus ? "Blocking..." : "Unblocking...")
-        :(activeStatus ? "Block Organization" : "Unblock Organization")
-        
-        }
-      </button>
-
-        </div>
+      <div className="justify-end flex mb-1">
+        <button
+          onClick={handleClick}
+          type="submit"
+          className="bg-[#4361EE] py-2 px-6 rounded-full text-white"
+          disabled={isLoading}
+        >
+          {isLoading
+            ? activeStatus
+              ? "Blocking..."
+              : "Unblocking..."
+            : activeStatus
+            ? "Block Organization"
+            : "Unblock Organization"}
+        </button>
+      </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-10">
         <div className="form-group">
           <label className="block font-medium text-[#232360]">Name</label>

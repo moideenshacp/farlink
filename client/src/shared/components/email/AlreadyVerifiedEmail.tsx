@@ -2,7 +2,9 @@ import { Link } from "react-router-dom";
 type SuccessfulEmailVerificationProps = {
   role?: string;
 };
-const AlreadyVerifiedEmail: React.FC<SuccessfulEmailVerificationProps> = ({role}) => {
+const AlreadyVerifiedEmail: React.FC<SuccessfulEmailVerificationProps> = ({
+  role,
+}) => {
   const isEmployee = role === "employee";
 
   return (
@@ -16,10 +18,10 @@ const AlreadyVerifiedEmail: React.FC<SuccessfulEmailVerificationProps> = ({role}
           Welcome to the FarLink App!
         </p>
         <Link to={isEmployee ? "/set-password" : "/sign-in"}>
-        <button className="mt-6 bg-[#4361EE] font-semibold text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition">
-          {isEmployee ? "Set Up Password" : "Login Now"}
-        </button>
-      </Link>
+          <button className="mt-6 bg-[#4361EE] font-semibold text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition">
+            {isEmployee ? "Set Up Password" : "Login Now"}
+          </button>
+        </Link>
       </div>
     </div>
   );

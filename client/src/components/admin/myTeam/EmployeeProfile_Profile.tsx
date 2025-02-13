@@ -12,14 +12,11 @@ import { employeeProfileUpdate } from "../../../validations/employeeProfileUpdat
 import Input from "../../../shared/components/Input";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
-import { message } from 'antd';
-
+import { message } from "antd";
 
 const EmployeeProfile_Profile: React.FC<EmployeeProfileProps> = ({
   employee,
 }) => {
-  console.log(employee, "employee");
-
   const [isUploading, setIsUploading] = useState(false);
   const initialFormData = useRef({
     employeeId: employee._id,
@@ -45,8 +42,8 @@ const EmployeeProfile_Profile: React.FC<EmployeeProfileProps> = ({
   });
   const [formData, setFormData] = useState(initialFormData.current);
   const [errors, setErrors] = useState<updateEmployeeFormErrors>({});
-  const {user} = useSelector((state:RootState)=>state.user)
-  const [teams, setTeams] = useState([]); 
+  const { user } = useSelector((state: RootState) => state.user);
+  const [teams, setTeams] = useState([]);
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
@@ -89,33 +86,29 @@ const EmployeeProfile_Profile: React.FC<EmployeeProfileProps> = ({
         setErrors(newErrors);
       }
       const res = await updateEmployeeDetails(formData);
-      console.log(res?.data.message);
-
       if (res?.data.message === "employee updated") {
-        message.success('Employee Profile updated successfullly!', 2);
-        
+        message.success("Employee Profile updated successfullly!", 2);
       } else {
-        message.error('Failed to update the profile employee. Please try again.', 2);
+        message.error(
+          "Failed to update the profile employee. Please try again.",
+          2
+        );
       }
     } catch (error) {
       console.log(error);
     }
   };
-      useEffect(()=>{
-        const fetchAllPositions = async()=>{
-          try {
-            const res = await fetchPositions(user?.organizationId)
-    
-            console.log(res.data.result.positions,"All positions")
-            setTeams(res.data.result.positions)
-            
-          } catch (error) {
-            console.log(error);
-            
-          }
-        }
-        fetchAllPositions()
-      },[user?.organizationId])
+  useEffect(() => {
+    const fetchAllPositions = async () => {
+      try {
+        const res = await fetchPositions(user?.organizationId);
+        setTeams(res.data.result.positions);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchAllPositions();
+  }, [user?.organizationId]);
 
   const handleClear = () => {
     setFormData(initialFormData.current);
@@ -161,43 +154,46 @@ const EmployeeProfile_Profile: React.FC<EmployeeProfileProps> = ({
 
         <h2 className="text-lg font-semibold mb-4">Personal Details</h2>
         <div className="flex flex-wrap mt-4 mb-4 gap-x-40 gap-y-4">
+          <Input
+            label="User Name"
+            type="text"
+            placeholder="Enter the userName of employee"
+            onChange={handleChange}
+            name="userName"
+            value={formData.userName}
+            className="w-full border-b border-gray-300 focus:outline-none focus:border-[#4361EE] py-1"
+          />
+          {errors.userName && <p className="text-red-600">{errors.userName}</p>}
 
-        <Input
-          label="User Name"
-          type="text"
-          placeholder="Enter the userName of employee"
-          onChange={handleChange}
-          name="userName"
-          value={formData.userName}
-          className="w-full border-b border-gray-300 focus:outline-none focus:border-[#4361EE] py-1"
-        />
-        {errors.userName && <p className="text-red-600">{errors.userName}</p>}
+          <Input
+            label="First Name"
+            type="text"
+            placeholder="Enter the First name of employee"
+            onChange={handleChange}
+            name="firstName"
+            value={formData.firstName}
+            className="w-full border-b border-gray-300 focus:outline-none focus:border-[#4361EE] py-1"
+          />
+          {errors.firstName && (
+            <p className="text-red-600">{errors.firstName}</p>
+          )}
 
-        <Input
-          label="First Name"
-          type="text"
-          placeholder="Enter the First name of employee"
-          onChange={handleChange}
-          name="firstName"
-          value={formData.firstName}
-          className="w-full border-b border-gray-300 focus:outline-none focus:border-[#4361EE] py-1"
-        />
-        {errors.firstName && <p className="text-red-600">{errors.firstName}</p>}
-
-        <Input
-          label="Last Name"
-          type="text"
-          placeholder="Enter the Last name of employee"
-          onChange={handleChange}
-          name="lastName"
-          value={formData.lastName}
-          className="w-full border-b border-gray-300 focus:outline-none focus:border-[#4361EE] py-1"
-        />
-        {errors.lastName && <p className="text-red-600">{errors.lastName}</p>}
+          <Input
+            label="Last Name"
+            type="text"
+            placeholder="Enter the Last name of employee"
+            onChange={handleChange}
+            name="lastName"
+            value={formData.lastName}
+            className="w-full border-b border-gray-300 focus:outline-none focus:border-[#4361EE] py-1"
+          />
+          {errors.lastName && <p className="text-red-600">{errors.lastName}</p>}
         </div>
 
         <div>
-          <label className="block mb-1 font-medium text-[#232360]">Position</label>
+          <label className="block mb-1 font-medium text-[#232360]">
+            Position
+          </label>
           <select
             className="w-full p-2 border rounded focus:outline-none"
             name="position"
@@ -205,10 +201,10 @@ const EmployeeProfile_Profile: React.FC<EmployeeProfileProps> = ({
             value={formData.position}
           >
             {teams.map((team, index) => (
-                <option key={index} value={team}>
-                  {team}
-                </option>
-              ))}
+              <option key={index} value={team}>
+                {team}
+              </option>
+            ))}
           </select>
         </div>
         {errors.position && <p className="text-red-600">{errors.position}</p>}
@@ -227,40 +223,39 @@ const EmployeeProfile_Profile: React.FC<EmployeeProfileProps> = ({
           </select>
         </div>
         <div className="flex flex-wrap mt-4 mb-4 gap-x-56 gap-y-4">
+          <Input
+            label="Date of Joining"
+            type="date"
+            placeholder="Enter the name of employee"
+            onChange={handleChange}
+            name="dateOfJoining"
+            value={formData.dateOfJoining}
+            className="w-full border-b border-gray-300 focus:outline-none focus:border-[#4361EE] py-1"
+          />
+          {errors.dateOfJoining && (
+            <p className="text-red-600">{errors.dateOfJoining}</p>
+          )}
 
-        <Input
-          label="Date of Joining"
-          type="date"
-          placeholder="Enter the name of employee"
-          onChange={handleChange}
-          name="dateOfJoining"
-          value={formData.dateOfJoining}
-          className="w-full border-b border-gray-300 focus:outline-none focus:border-[#4361EE] py-1"
-        />
-        {errors.dateOfJoining && (
-          <p className="text-red-600">{errors.dateOfJoining}</p>
-        )}
-
-        <Input
-          label="Date of Birth"
-          type="date"
-          onChange={handleChange}
-          name="dateOfBirth"
-          value={formData.dateOfBirth}
-          className="w-full border-b border-gray-300 focus:outline-none focus:border-[#4361EE] py-1"
-        />
-        {errors.dateOfBirth && (
-          <p className="text-red-600">{errors.dateOfBirth}</p>
-        )}
-        <Input
-          label="Contact Number"
-          type="tel"
-          placeholder="Enter the phone number"
-          onChange={handleChange}
-          name="phone"
-          value={formData.phone}
-          className="w-full border-b border-gray-300 focus:outline-none focus:border-[#4361EE] py-1"
-        />
+          <Input
+            label="Date of Birth"
+            type="date"
+            onChange={handleChange}
+            name="dateOfBirth"
+            value={formData.dateOfBirth}
+            className="w-full border-b border-gray-300 focus:outline-none focus:border-[#4361EE] py-1"
+          />
+          {errors.dateOfBirth && (
+            <p className="text-red-600">{errors.dateOfBirth}</p>
+          )}
+          <Input
+            label="Contact Number"
+            type="tel"
+            placeholder="Enter the phone number"
+            onChange={handleChange}
+            name="phone"
+            value={formData.phone}
+            className="w-full border-b border-gray-300 focus:outline-none focus:border-[#4361EE] py-1"
+          />
         </div>
 
         {errors.phone && <p className="text-red-600">{errors.phone}</p>}
@@ -277,103 +272,99 @@ const EmployeeProfile_Profile: React.FC<EmployeeProfileProps> = ({
 
         <h2 className="text-lg font-semibold mt-6 mb-4">Educational Details</h2>
         <div className="flex flex-wrap gap-x-44 gap-y-4">
+          <Input
+            label="Highest Qualification"
+            type="text"
+            placeholder="Enter the  Highest qualification"
+            onChange={handleChange}
+            name="highestQualification"
+            value={formData.highestQualification}
+            className="w-full border-b border-gray-300 focus:outline-none focus:border-[#4361EE] py-1"
+          />
+          {errors.highestQualification && (
+            <p className="text-red-600">{errors.highestQualification}</p>
+          )}
+          <Input
+            label="Name of Institution"
+            type="text"
+            placeholder="Enter Name of Institution"
+            onChange={handleChange}
+            name="institution"
+            value={formData.institution}
+            className="w-full border-b border-gray-300 focus:outline-none focus:border-[#4361EE] py-1"
+          />
+          {errors.institution && (
+            <p className="text-red-600">{errors.institution}</p>
+          )}
 
-        <Input
-          label="Highest Qualification"
-          type="text"
-          placeholder="Enter the  Highest qualification"
-          onChange={handleChange}
-          name="highestQualification"
-          value={formData.highestQualification}
-          className="w-full border-b border-gray-300 focus:outline-none focus:border-[#4361EE] py-1"
-        />
-        {errors.highestQualification && (
-          <p className="text-red-600">{errors.highestQualification}</p>
-        )}
-        <Input
-          label="Name of Institution"
-          type="text"
-          placeholder="Enter Name of Institution"
-          onChange={handleChange}
-          name="institution"
-          value={formData.institution}
-          className="w-full border-b border-gray-300 focus:outline-none focus:border-[#4361EE] py-1"
-        />
-        {errors.institution && (
-          <p className="text-red-600">{errors.institution}</p>
-        )}
-
-        <Input
-          label="Year of Qualification"
-          type="text"
-          placeholder="Enter Year of Qualification"
-          onChange={handleChange}
-          name="qualificationYear"
-          value={formData.qualificationYear}
-          className="w-full border-b border-gray-300 focus:outline-none focus:border-[#4361EE] py-1"
-        />
-        {errors.qualificationYear && (
-          <p className="text-red-600">{errors.qualificationYear}</p>
-        )}
-  </div>
+          <Input
+            label="Year of Qualification"
+            type="text"
+            placeholder="Enter Year of Qualification"
+            onChange={handleChange}
+            name="qualificationYear"
+            value={formData.qualificationYear}
+            className="w-full border-b border-gray-300 focus:outline-none focus:border-[#4361EE] py-1"
+          />
+          {errors.qualificationYear && (
+            <p className="text-red-600">{errors.qualificationYear}</p>
+          )}
+        </div>
         <h2 className="text-lg font-semibold mt-6 mb-4">Family Details</h2>
         <div className="flex flex-wrap gap-x-44 gap-y-4">
+          <Input
+            label="Father's Name"
+            type="text"
+            placeholder="Enter Father's Name"
+            onChange={handleChange}
+            name="fatherName"
+            value={formData.fatherName}
+            className="w-full border-b border-gray-300 focus:outline-none focus:border-[#4361EE] py-1"
+          />
+          {errors.fatherName && (
+            <p className="text-red-600">{errors.fatherName}</p>
+          )}
+          <Input
+            label="Father's Profession"
+            type="text"
+            placeholder="Enter Father's Profession"
+            onChange={handleChange}
+            name="fatherProfession"
+            value={formData.fatherProfession}
+            className="w-full border-b border-gray-300 focus:outline-none focus:border-[#4361EE] py-1"
+          />
+          {errors.fatherProfession && (
+            <p className="text-red-600">{errors.fatherProfession}</p>
+          )}
+        </div>
+        <div className="flex flex-wrap mt-4 gap-x-44 gap-y-4">
+          <Input
+            label="Mother's Name"
+            type="text"
+            placeholder="Enter Mother's Name"
+            onChange={handleChange}
+            name="motherName"
+            value={formData.motherName}
+            className="w-full border-b border-gray-300 focus:outline-none focus:border-[#4361EE] py-1"
+          />
+          {errors.motherName && (
+            <p className="text-red-600">{errors.motherName}</p>
+          )}
 
-        <Input
-          label="Father's Name"
-          type="text"
-          placeholder="Enter Father's Name"
-          onChange={handleChange}
-          name="fatherName"
-          value={formData.fatherName}
-          className="w-full border-b border-gray-300 focus:outline-none focus:border-[#4361EE] py-1"
-        />
-        {errors.fatherName && (
-          <p className="text-red-600">{errors.fatherName}</p>
-        )}
-        <Input
-          label="Father's Profession"
-          type="text"
-          placeholder="Enter Father's Profession"
-          onChange={handleChange}
-          name="fatherProfession"
-          value={formData.fatherProfession}
-          className="w-full border-b border-gray-300 focus:outline-none focus:border-[#4361EE] py-1"
-        />
-        {errors.fatherProfession && (
-          <p className="text-red-600">{errors.fatherProfession}</p>
-        )}
-  </div>
-  <div className="flex flex-wrap mt-4 gap-x-44 gap-y-4">
-
-        <Input
-          label="Mother's Name"
-          type="text"
-          placeholder="Enter Mother's Name"
-          onChange={handleChange}
-          name="motherName"
-          value={formData.motherName}
-          className="w-full border-b border-gray-300 focus:outline-none focus:border-[#4361EE] py-1"
-        />
-        {errors.motherName && (
-          <p className="text-red-600">{errors.motherName}</p>
-        )}
-
-        <Input
-          label="Mother's Proffession"
-          type="text"
-          placeholder="Enter Mother's Profession"
-          onChange={handleChange}
-          name="motherProfession"
-          value={formData.motherProfession}
-          className="w-full border-b border-gray-300 focus:outline-none focus:border-[#4361EE] py-1"
-        />
-        {errors.motherProfession && (
-          <p className="text-red-600">{errors.motherProfession}</p>
-        )}
+          <Input
+            label="Mother's Proffession"
+            type="text"
+            placeholder="Enter Mother's Profession"
+            onChange={handleChange}
+            name="motherProfession"
+            value={formData.motherProfession}
+            className="w-full border-b border-gray-300 focus:outline-none focus:border-[#4361EE] py-1"
+          />
+          {errors.motherProfession && (
+            <p className="text-red-600">{errors.motherProfession}</p>
+          )}
+        </div>
       </div>
-      </div>
-
     </form>
   );
 };

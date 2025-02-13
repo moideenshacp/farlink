@@ -34,7 +34,7 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({
 }) => {
   const [open, setOpen] = useState(false);
   const [refreshKey, setRefreshKey] = useState(0);
-  const {user}= useSelector((state:RootState)=>state.user)
+  const { user } = useSelector((state: RootState) => state.user);
 
   const showDrawer = () => {
     setOpen(true);
@@ -108,16 +108,15 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({
             <Title level={4} style={{ color: "#4361EE" }}>
               {project.projectName}
             </Title>
-            {user?.role === "admin"&& (
-
-            <Button
-              type="primary"
-              className="bg-[#4361EE] p-4 hover:bg-[#3b59d7]"
-              onClick={showDrawer}
-            >
-              <FaFileCirclePlus />
-              Assign Task
-            </Button>
+            {user?.role === "admin" && (
+              <Button
+                type="primary"
+                className="bg-[#4361EE] p-4 hover:bg-[#3b59d7]"
+                onClick={showDrawer}
+              >
+                <FaFileCirclePlus />
+                Assign Task
+              </Button>
             )}
           </div>
         }

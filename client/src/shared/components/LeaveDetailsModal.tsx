@@ -17,7 +17,7 @@ interface LeaveDetailsModelProps {
   onClose: () => void;
   isAdmin?: boolean;
   onStatusChange?: () => void;
-  onLeaveApplied?:() =>void
+  onLeaveApplied?: () => void;
 }
 
 const LeaveDetailsModel: React.FC<LeaveDetailsModelProps> = ({
@@ -25,7 +25,7 @@ const LeaveDetailsModel: React.FC<LeaveDetailsModelProps> = ({
   onClose,
   isAdmin,
   onStatusChange,
-  onLeaveApplied
+  onLeaveApplied,
 }) => {
   const [status, setStatus] = useState<string | undefined>(leave.status);
   const { user } = useSelector((state: RootState) => state.user);
@@ -96,8 +96,6 @@ const LeaveDetailsModel: React.FC<LeaveDetailsModelProps> = ({
   };
 
   const handleEdit = async (e: React.FormEvent) => {
-    console.log("editing");
-
     e.preventDefault();
     try {
       if (!formData.reason.trim()) {
@@ -110,11 +108,10 @@ const LeaveDetailsModel: React.FC<LeaveDetailsModelProps> = ({
         employeeEmail: user?.email,
       };
       const res = await editLeave(leave._id, leaveData);
-      console.log(res.data, "from edit");
       if (res.data.message === "Leave edited successfully") {
         if (onLeaveApplied) {
           onClose();
-          onLeaveApplied()
+          onLeaveApplied();
         }
         message.success("Leave edited successfully");
       } else {
@@ -143,25 +140,28 @@ const LeaveDetailsModel: React.FC<LeaveDetailsModelProps> = ({
                 Leave Type
               </label>
               {isAdmin || user?.position === "HR" || status !== "pending" ? (
-  <Input
-    name="leaveType"
-    value={formData.leaveType}
-    onChange={handleChange}
-    readOnly
-  />
-) : (
-  <select
-    className="w-full border focus:outline-none rounded-lg p-2"
-    value={formData.leaveType}
-    name="leaveType"
-    onChange={handleChange}
-  >
-    <option value="sick">Sick ({leaveBalance?.sick})</option>
-    <option value="casual">Casual ({leaveBalance?.casual})</option>
-    <option value="vacation">Vacation ({leaveBalance?.vacation})</option>
-  </select>
-)}
-
+                <Input
+                  name="leaveType"
+                  value={formData.leaveType}
+                  onChange={handleChange}
+                  readOnly
+                />
+              ) : (
+                <select
+                  className="w-full border focus:outline-none rounded-lg p-2"
+                  value={formData.leaveType}
+                  name="leaveType"
+                  onChange={handleChange}
+                >
+                  <option value="sick">Sick ({leaveBalance?.sick})</option>
+                  <option value="casual">
+                    Casual ({leaveBalance?.casual})
+                  </option>
+                  <option value="vacation">
+                    Vacation ({leaveBalance?.vacation})
+                  </option>
+                </select>
+              )}
             </div>
 
             <div className="mb-4">

@@ -8,9 +8,11 @@ const EmployeePrivateRoute = () => {
   );
   const userRole = useSelector((state: RootState) => state.user?.user?.role);
 
-
-  return isAuthenticated && userRole === "employee" ? <Outlet /> : <Navigate to="/employee-login" replace />;
-
-}
+  return isAuthenticated && userRole === "employee" ? (
+    <Outlet />
+  ) : (
+    <Navigate to="/employee-login" replace />
+  );
+};
 
 export default EmployeePrivateRoute;

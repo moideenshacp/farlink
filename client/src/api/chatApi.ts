@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import axiosInstance from "./axiosInterceptor";
 
+//FETCH ALL-CHATS OF A USER API=========================================================================================================
+
 export const fetchAllChats = async (userId: string | undefined) => {
   try {
     const res = await axiosInstance.get(
@@ -19,6 +21,8 @@ export const fetchAllChats = async (userId: string | undefined) => {
     throw error;
   }
 };
+
+//FETCH ALL-MESSAGES OF A USER BY CHAT-ID=========================================================================================================
 
 export const fetchMessages = async (chatId: number | undefined) => {
   try {
@@ -39,6 +43,8 @@ export const fetchMessages = async (chatId: number | undefined) => {
   }
 };
 
+//CREATE NEW CHAT API=========================================================================================================
+
 export const createChat = async (chatDetails: any) => {
   try {
     const res = await axiosInstance.post(
@@ -55,7 +61,12 @@ export const createChat = async (chatDetails: any) => {
   }
 };
 
-export const updateChat = async (chatId: string | undefined, updateData: any) => {
+//UPDATE CHAT API=========================================================================================================
+
+export const updateChat = async (
+  chatId: string | undefined,
+  updateData: any
+) => {
   try {
     const res = await axiosInstance.post(
       `${
@@ -71,53 +82,57 @@ export const updateChat = async (chatId: string | undefined, updateData: any) =>
   }
 };
 
+//FETCH ALL-NOTIFICATION OF A USER API=========================================================================================================
+
 export const fetchNotifications = async (userId: string | undefined) => {
-    try {
-      const res = await axiosInstance.get(
-        `${
-          import.meta.env.VITE_SERVER_BASE_URL
-        }/chat-meet-service/api/chat/fetch-notification`,
-        {
-          params: { userId },
-          withCredentials: true,
-        }
-      );
-      return res;
-    } catch (error) {
-      console.log(error);
-      throw error;
-    }
-  };
+  try {
+    const res = await axiosInstance.get(
+      `${
+        import.meta.env.VITE_SERVER_BASE_URL
+      }/chat-meet-service/api/chat/fetch-notification`,
+      {
+        params: { userId },
+        withCredentials: true,
+      }
+    );
+    return res;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
 
+//MARK ALL-NOTIFICATION READ API=========================================================================================================
 
-  export const markAllAsRead = async (userId: string | undefined) => {
-    try {
-      const res = await axiosInstance.put(
-        `${
-          import.meta.env.VITE_SERVER_BASE_URL
-        }/chat-meet-service/api/chat/mark-as-read`,
-        { userId },
-        { withCredentials: true }
-      );
-      return res;
-    } catch (error) {
-      console.log(error);
-      throw error;
-    }
-  };
+export const markAllAsRead = async (userId: string | undefined) => {
+  try {
+    const res = await axiosInstance.put(
+      `${
+        import.meta.env.VITE_SERVER_BASE_URL
+      }/chat-meet-service/api/chat/mark-as-read`,
+      { userId },
+      { withCredentials: true }
+    );
+    return res;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
 
-  
-  export const clearNotifications = async (userId: string | undefined) => {
-    try {
-      const res = await axiosInstance.delete(
-        `${
-          import.meta.env.VITE_SERVER_BASE_URL
-        }/chat-meet-service/api/chat/clearNotifications`,
-        { data: { userId }, withCredentials: true }
-      );
-      return res;
-    } catch (error) {
-      console.log(error);
-      throw error;
-    }
-  };
+//CLEAR ALL-NOTIIFICATION OF A USER API=========================================================================================================
+
+export const clearNotifications = async (userId: string | undefined) => {
+  try {
+    const res = await axiosInstance.delete(
+      `${
+        import.meta.env.VITE_SERVER_BASE_URL
+      }/chat-meet-service/api/chat/clearNotifications`,
+      { data: { userId }, withCredentials: true }
+    );
+    return res;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};

@@ -21,20 +21,17 @@ const EmailVerified = () => {
     const verifyEmail = async () => {
       const urlParams = new URLSearchParams(location.search);
       const token = urlParams.get("token");
-      const userRole = urlParams.get("role") || undefined;;
+      const userRole = urlParams.get("role") || undefined;
       setRole(userRole);
 
       try {
-        if(token){
-
+        if (token) {
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           const decoded: any = jwtDecode(token);
           if (decoded && decoded.email) {
             setEmail(decoded.email);
-
           }
           const res = await VerifyEmailAdmin(token);
-          console.log("dtata=====", res.data.message);
           if (res.data.message === "Email successfully verified.") {
             setVerificationStatus("verified");
           } else if (res.data.message === "User already verified.") {
@@ -46,13 +43,10 @@ const EmailVerified = () => {
           if (error.response) {
             if (error.response.data.error === "User is already verified..") {
               // setVerificationStatus("verified");
-              setErr(error.response.data.error)
-              console.log("bahabab");
+              setErr(error.response.data.error);
             }
-            console.log("Error message===:", error.response.data.error);
             setErr(error.response.data.error);
           } else {
-            console.log("Error message----:", error.message);
             setErr(error.message);
           }
         } else {
@@ -74,7 +68,7 @@ const EmailVerified = () => {
             className="w-56 ml-12 mx-auto mb-6"
           />
           {verificationStatus === "verified" ? (
-            <SuccessfulEmailVerifcation role={role} email={email}/>
+            <SuccessfulEmailVerifcation role={role} email={email} />
           ) : err === "User is already verified.." ? (
             <AlreadyVerifiedEmail role={role} />
           ) : err === "Invalid  or expired token" ? (

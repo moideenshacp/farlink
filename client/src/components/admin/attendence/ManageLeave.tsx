@@ -161,7 +161,9 @@ const ManageLeave = () => {
             min="0"
           />
           <div>
-            <label  className="block mb-1 font-medium text-[#232360]">Select Holiday Days</label>
+            <label className="block mb-1 font-medium text-[#232360]">
+              Select Holiday Days
+            </label>
             <Select
               mode="multiple"
               value={policy.holidayDays}

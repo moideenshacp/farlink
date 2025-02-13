@@ -2,7 +2,11 @@ import React, { useState, useEffect } from "react";
 import { MdOutlineNotificationsActive } from "react-icons/md";
 import { Dropdown, Badge, Empty } from "antd";
 import socket from "../../utils/socket";
-import { clearNotifications, fetchNotifications, markAllAsRead } from "../../api/chatApi";
+import {
+  clearNotifications,
+  fetchNotifications,
+  markAllAsRead,
+} from "../../api/chatApi";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import { fetchEmployeesByIds } from "../../api/authApi";
@@ -11,11 +15,11 @@ interface Employee {
   firstName: string;
   lastName: string;
   _id: string;
-  image: string; 
+  image: string;
 }
 
 interface NotificationData {
-_id:string
+  _id: string;
   sender: string;
   message: string;
   timestamp: Date;
@@ -32,7 +36,7 @@ interface Notification {
 }
 
 const NotificationDropdown: React.FC = () => {
-    const {user}= useSelector((state:RootState)=>state.user)
+  const { user } = useSelector((state: RootState) => state.user);
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [unreadCount, setUnreadCount] = useState<number>(0);
 
@@ -42,8 +46,6 @@ const NotificationDropdown: React.FC = () => {
       try {
         const res = await fetchNotifications(user?._id); // API call to fetch notifications
 
-        console.log("res-----------------------------------------------",res.data);
-        
         if (res?.data) {
           const enrichedNotifications = await Promise.all(
             res.data.result.map(async (notif: NotificationData) => {
@@ -52,7 +54,9 @@ const NotificationDropdown: React.FC = () => {
               return {
                 id: notif._id,
                 message: notif.message,
-                senderName: sender ? `${sender.firstName} ${sender.lastName}` : "Unknown",
+                senderName: sender
+                  ? `${sender.firstName} ${sender.lastName}`
+                  : "Unknown",
                 senderImage: sender?.image || "/default-avatar.png",
                 timestamp: new Date(notif.timestamp),
                 read: notif.read,
@@ -61,7 +65,7 @@ const NotificationDropdown: React.FC = () => {
           );
 
           setNotifications(enrichedNotifications);
-          setUnreadCount(enrichedNotifications.filter(n => !n.read).length);
+          setUnreadCount(enrichedNotifications.filter((n) => !n.read).length);
         }
       } catch (error) {
         console.error("Failed to fetch notifications:", error);
@@ -69,10 +73,7 @@ const NotificationDropdown: React.FC = () => {
     };
 
     fetchAllNotifications();
-  },[user?._id]);
-
-  console.log("notifocation---------------------------------------------------",notifications);
-  
+  }, [user?._id]);
 
   // ✅ Handle new real-time notifications via Socket.io
   useEffect(() => {
@@ -91,8 +92,8 @@ const NotificationDropdown: React.FC = () => {
             read: false,
           };
 
-          setNotifications(prev => [newNotification, ...prev]);
-          setUnreadCount(prev => prev + 1);
+          setNotifications((prev) => [newNotification, ...prev]);
+          setUnreadCount((prev) => prev + 1);
         }
       } catch (error) {
         console.error("Failed to fetch sender details:", error);
@@ -108,20 +109,20 @@ const NotificationDropdown: React.FC = () => {
 
   const handleOpenChange = async (open: boolean) => {
     if (open) {
-      setNotifications(prev =>
-        prev.map(notification => ({ ...notification, read: true }))
+      setNotifications((prev) =>
+        prev.map((notification) => ({ ...notification, read: true }))
       );
       setUnreadCount(0);
 
       try {
-        await markAllAsRead(user?._id); 
+        await markAllAsRead(user?._id);
       } catch (error) {
         console.error("Failed to mark notifications as read:", error);
       }
     }
   };
 
-  const handleClearAll =async () => {
+  const handleClearAll = async () => {
     await clearNotifications(user?._id);
     setNotifications([]);
     setUnreadCount(0);
@@ -164,7 +165,7 @@ const NotificationDropdown: React.FC = () => {
             className="py-6"
           />
         ) : (
-          notifications.map(notification => (
+          notifications.map((notification) => (
             <div
               key={notification.id}
               className={`p-4 flex items-center space-x-3 ${

@@ -14,7 +14,6 @@ const benefits = [
   "Get-unlimited features!",
 ];
 
-
 const Billing = () => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [subscriptionDetails, setSubscriptionDetails] = useState<any>(null);
@@ -27,8 +26,6 @@ const Billing = () => {
         setIsLoading(true);
         if (user?.organizationId) {
           const res = await getSubcriptionPlans(user?.organizationId);
-          console.log(res.data.companyDetails.plan);
-
           if (res.data) {
             setSubscriptionDetails(res.data.companyDetails);
           }
@@ -43,7 +40,6 @@ const Billing = () => {
     fetchSubcription();
   }, [user?.organizationId]);
 
-  console.log(subscriptionDetails, "fghjkdfgh");
   const formattedDate = subscriptionDetails?.current_period_end
     ? new Date(subscriptionDetails.current_period_end).toLocaleDateString()
     : "";
@@ -51,8 +47,6 @@ const Billing = () => {
     subscriptionDetails?.plan === undefined
       ? "Upgrade Your Plan"
       : "Manage Your Plan";
-
-  console.log(subscriptionDetails?.plan, "subcription detail plan");
 
   const fallbackSubscriptionDetails = {
     plan: "FREE",
@@ -71,10 +65,9 @@ const Billing = () => {
       <div className="flex flex-col">
         <div className="flex flex-col sm:flex-row gap-20 w-full max-w-4xl">
           {isLoading ? (
-                <div className="flex-1">
-                <Shimmer />
-              </div>
-          
+            <div className="flex-1">
+              <Shimmer />
+            </div>
           ) : (
             <>
               <div className="flex-1">

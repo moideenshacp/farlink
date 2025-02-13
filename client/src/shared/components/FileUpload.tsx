@@ -8,7 +8,11 @@ interface FileUploadProps {
   loading?: boolean;
 }
 
-const FileUpload: React.FC<FileUploadProps> = ({ onFileSelect, file, loading }) => {
+const FileUpload: React.FC<FileUploadProps> = ({
+  onFileSelect,
+  file,
+  loading,
+}) => {
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0] || null;
     onFileSelect(selectedFile);

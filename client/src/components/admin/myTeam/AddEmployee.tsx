@@ -9,7 +9,7 @@ const AddEmployee = () => {
   };
 
   return (
-    <div >
+    <div>
       {/* Button to Open Modal */}
       <div className="flex justify-end">
         <button
@@ -53,7 +53,6 @@ const AddEmployee = () => {
             {/* Modal Body */}
 
             <AddEmployeeModal toggleModal={toggleModal} />
-          
           </div>
         </div>
       )}

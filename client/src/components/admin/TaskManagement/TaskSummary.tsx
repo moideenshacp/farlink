@@ -31,17 +31,18 @@ const TaskSummary = () => {
       console.log(error);
     }
   };
-  const progress = allTasks > 0 ? Math.round((completedTasks / allTasks) * 100) : 0;
+  const progress =
+    allTasks > 0 ? Math.round((completedTasks / allTasks) * 100) : 0;
 
   useEffect(() => {
     fetchAllTasks();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[selectedProject]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedProject]);
   return (
     <div className="flex h-screen">
       {/* Sidebar */}
       <div className="w-60 overflow-auto h-full">
-        <Sidebar setSelectedProject={setSelectedProject}  />
+        <Sidebar setSelectedProject={setSelectedProject} />
       </div>
 
       {/* Project Details Section */}
@@ -50,9 +51,7 @@ const TaskSummary = () => {
           <div className="flex justify-between items-start">
             {/* Project Details on the Left */}
             <div className="flex-1 -ml-8">
-            
-                <ProjectDetails project={selectedProject} progress={progress} />
-              
+              <ProjectDetails project={selectedProject} progress={progress} />
             </div>
 
             <div className="space-y-8">

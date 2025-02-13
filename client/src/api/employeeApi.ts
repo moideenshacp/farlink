@@ -32,6 +32,9 @@ interface EmployeeDetails {
   motherName: string;
   motherProfession: string;
 }
+
+//ADD EMPLOYEE API=========================================================================================================
+
 export const addEmployee = async (employeeData: EmployeeData) => {
   try {
     const res = await axiosInstance.post(
@@ -51,6 +54,8 @@ export const addEmployee = async (employeeData: EmployeeData) => {
     throw error;
   }
 };
+
+//UPLOAD FILE TO CLOUDINARY API=========================================================================================================
 
 export const uploadFileToCloudinary = async (
   selectedFile: File,
@@ -79,9 +84,6 @@ export const uploadFileToCloudinary = async (
       formData
     );
     setIsUploading?.(false);
-    console.log("Upload response:", res.data);
-    console.log("ress from uploading",res);
-    
     return res.data.secure_url;
   } catch (error) {
     console.error("Error uploading file:", error);
@@ -89,6 +91,8 @@ export const uploadFileToCloudinary = async (
     return null;
   }
 };
+
+//GET ALL-EMPLOYEES OF A COMPANY API=========================================================================================================
 
 export const getAllEmployees = async (organizationId: string | undefined,page?:number, pageSize?:number) => {
   try {
@@ -106,6 +110,8 @@ export const getAllEmployees = async (organizationId: string | undefined,page?:n
     console.log(error);
   }
 };
+
+//UPDATE EMPLOYEE-DETAILS API=========================================================================================================
 
 export const updateEmployeeDetails = async (data: EmployeeDetails) => {
   try {
@@ -126,6 +132,8 @@ export const updateEmployeeDetails = async (data: EmployeeDetails) => {
   }
 };
 
+//SEND INVITATION TO EMPLOYEE API=========================================================================================================
+
 export const sendInvitationEmployee = async (email: string | null) => {
   try {
     const res = await axiosInstance.post(
@@ -141,6 +149,9 @@ export const sendInvitationEmployee = async (email: string | null) => {
     throw error;
   }
 };
+
+
+//SET-UP EMPLOYEE PASSWORD API=========================================================================================================
 
 export const setUpPassword = async (
   password: string | null,
@@ -161,6 +172,8 @@ export const setUpPassword = async (
   }
 };
 
+//FETCH EMPLOYEESCOUNT OF AN ORGANIZATION API=========================================================================================================
+
 export const fetchEmployeesCount = async (
   organizationId: string | undefined
 ) => {
@@ -179,6 +192,9 @@ export const fetchEmployeesCount = async (
     console.log(error);
   }
 };
+
+//TERMINATE EMPLOYEE API=========================================================================================================
+
 export const terminateEmployee = async (email: string | undefined) => {
   try {
     const res = await axiosInstance.get(
@@ -195,6 +211,8 @@ export const terminateEmployee = async (email: string | undefined) => {
     console.log(error);
   }
 };
+
+//ADD POSITION-ORGANIZATION API=========================================================================================================
 
 export const addPosition = async (
   organizationId: string | undefined,
@@ -213,6 +231,8 @@ export const addPosition = async (
     throw error;
   }
 };
+
+//FETCH ORGANIZATION POSITION API=====================================================================================================
 
 export const fetchPositions = async (organizationId: string | undefined) => {
   try {
@@ -233,6 +253,9 @@ export const fetchPositions = async (organizationId: string | undefined) => {
     throw error;
   }
 };
+
+
+//FETCH EMPLOYEES BY THEIR ID  API=====================================================================================================
 
 export const fetchEmployeesByIds = async (employeeIds: string[] | unknown) => {
   try {

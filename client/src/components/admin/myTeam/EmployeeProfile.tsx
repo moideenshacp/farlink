@@ -24,7 +24,7 @@ const EmployeeProfile = () => {
       label: "Profile",
       children: <EmployeeProfile_Profile employee={employee} />,
     },
-    
+
     {
       key: "attendence",
       label: "Attendance",

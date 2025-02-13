@@ -25,7 +25,7 @@ const DashboardSettings = () => {
     },
     {
       key: "organization",
-      label:  (
+      label: (
         <span className="flex items-center gap-2">
           <GoOrganization />
           Organization
@@ -35,7 +35,7 @@ const DashboardSettings = () => {
     },
     {
       key: "password",
-      label:   (
+      label: (
         <span className="flex items-center gap-2">
           <RiLockPasswordLine />
           Password

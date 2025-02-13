@@ -6,17 +6,15 @@ import { toggleOrganizationStatus } from "../../../redux/user/userSlice";
 import { useEffect } from "react";
 
 const Step3 = () => {
-  const navigate = useNavigate()
-  const dispatch = useDispatch()
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-  const redirectHome = ()=>{
-    navigate('/admin/',{replace:true})
-    
-  }
-  useEffect(()=>{
+  const redirectHome = () => {
+    navigate("/admin/", { replace: true });
+  };
+  useEffect(() => {
     dispatch(toggleOrganizationStatus());
-
-  })
+  });
   return (
     <div>
       <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50">
@@ -64,9 +62,12 @@ const Step3 = () => {
         </div>
 
         <div className="mt-8">
-            <button onClick={redirectHome} className="bg-[#4361EE] text-white font-semibold px-6 py-3 rounded-lg hover:bg-[#4361EE]transition">
-              Go To Dashboard
-            </button>
+          <button
+            onClick={redirectHome}
+            className="bg-[#4361EE] text-white font-semibold px-6 py-3 rounded-lg hover:bg-[#4361EE]transition"
+          >
+            Go To Dashboard
+          </button>
         </div>
       </div>
       <Footer />

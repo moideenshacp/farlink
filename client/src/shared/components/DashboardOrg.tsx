@@ -32,18 +32,12 @@ const DashboardOrg = () => {
 
     try {
       if (validate()) {
-        console.log("Form is valid, submitting the update...");
         const res = await updateCompanyProfile(formData, user?.email);
         if (res?.data.message === "organization data fetched successfully") {
-
           message.success("Organization updated successfully!", 2);
-
         } else {
           message.error("Failed to update profile.", 2);
-
         }
-      } else {
-        console.log("Form has errors.");
       }
     } catch (error) {
       console.log(error);
@@ -57,8 +51,6 @@ const DashboardOrg = () => {
       try {
         if (user?.email) {
           const res = await fetchCompanyProfile(user.email);
-          console.log("idd", res?.data.companyDetails);
-
           const companyProfile = {
             name: res?.data.companyDetails.name,
             industry: res?.data.companyDetails.industry,
@@ -87,7 +79,7 @@ const DashboardOrg = () => {
     <div>
       <form onSubmit={handleSubmit}>
         <div className="space-y-3">
-        {user?.role !== "employee" && (
+          {user?.role !== "employee" && (
             <div className="mt-2 flex justify-end space-x-4">
               <button
                 type="button"
@@ -121,7 +113,6 @@ const DashboardOrg = () => {
                   name={key}
                   onChange={handleChange}
                   readOnly={user?.role === "employee"}
-
                 />
                 {errors[key] && (
                   <p className="text-red-500 text-sm">{errors[key]}</p>

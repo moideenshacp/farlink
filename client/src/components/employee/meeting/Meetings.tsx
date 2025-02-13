@@ -13,8 +13,8 @@ const Meetings = () => {
   const { user } = useSelector((state: RootState) => state.user);
   const [meetDatas, setMeetDatas] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [currentPage,setCurrentPage] = useState(1)
-  const pageSize = 15
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 15;
   const showDrawer = () => {
     setOpen(true);
   };
@@ -36,9 +36,9 @@ const Meetings = () => {
     fetchMeetings();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user?._id]);
-  useEffect(()=>{
-    setCurrentPage(1)
-  },[meetDatas])
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [meetDatas]);
 
   const totalPages = Math.ceil(meetDatas.length / pageSize);
   const paginatedMeetings = meetDatas.slice(
@@ -48,22 +48,22 @@ const Meetings = () => {
 
   return (
     <div>
-        {(user?.role === "admin" || user?.position === "HR") && (
-      <div className="flex justify-end">
-        <Button
-          type="primary"
-          className="bg-[#4361EE] p-5 hover:bg-[#3b59d7]"
-          onClick={showDrawer}
-        >
-          <Video />
-          Create Meet
-        </Button>
-        <AssignMeetingDrawer
-          onClose={onClose}
-          fetchMeetings={fetchMeetings}
-          open={open}
-        />
-      </div>
+      {(user?.role === "admin" || user?.position === "HR") && (
+        <div className="flex justify-end">
+          <Button
+            type="primary"
+            className="bg-[#4361EE] p-5 hover:bg-[#3b59d7]"
+            onClick={showDrawer}
+          >
+            <Video />
+            Create Meet
+          </Button>
+          <AssignMeetingDrawer
+            onClose={onClose}
+            fetchMeetings={fetchMeetings}
+            open={open}
+          />
+        </div>
       )}
 
       <div className="mt-0">
@@ -73,15 +73,22 @@ const Meetings = () => {
           </div>
         ) : (
           <>
-          <MeetingTable meetDatas={paginatedMeetings} currentPage={currentPage} pageSize={pageSize} fetchMeetings={fetchMeetings} />
+            <MeetingTable
+              meetDatas={paginatedMeetings}
+              currentPage={currentPage}
+              pageSize={pageSize}
+              fetchMeetings={fetchMeetings}
+            />
 
-          {meetDatas.length > pageSize && (
+            {meetDatas.length > pageSize && (
               <div className="flex justify-center mt-6">
                 <div className="join">
                   {/* Previous Page */}
                   <button
                     className="join-item btn bg-[#4361EE] text-white hover:bg-blue-700"
-                    onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                    onClick={() =>
+                      setCurrentPage((prev) => Math.max(prev - 1, 1))
+                    }
                     disabled={currentPage === 1}
                   >
                     «
@@ -95,7 +102,9 @@ const Meetings = () => {
                   {/* Next Page */}
                   <button
                     className="join-item btn bg-[#4361EE] text-white hover:bg-blue-700"
-                    onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+                    onClick={() =>
+                      setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+                    }
                     disabled={currentPage === totalPages}
                   >
                     »

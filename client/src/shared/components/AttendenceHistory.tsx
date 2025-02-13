@@ -38,7 +38,6 @@ const AttendanceHistory: React.FC<AttendanceHistoryProps> = ({
       setLoading(true);
       const res = await getAttendenceReport(email);
       if (res?.data?.attendancereport) {
-          
         setAttendanceHistory(res.data.attendancereport);
 
         const todayAttendance = res.data.attendancereport.find(
@@ -89,8 +88,6 @@ const AttendanceHistory: React.FC<AttendanceHistoryProps> = ({
     }
   };
 
- 
-
   useEffect(() => {
     if (email) {
       if (role === "employee") {
@@ -112,16 +109,11 @@ const AttendanceHistory: React.FC<AttendanceHistoryProps> = ({
     currentPage * pageSize
   );
 
-  console.log(paginatedData,"paginated attendence-----------------------------");
-  
-
   const handleSaveAttendance = async (
     updatedAttendance: IattendenceSummary
   ) => {
     try {
       const { id, checkIn, checkOut } = updatedAttendance;
-      console.log("id------------------------", id);
-
       if (!checkIn || !checkOut) {
         message.error("Check-in and check-out times are required.");
         return;

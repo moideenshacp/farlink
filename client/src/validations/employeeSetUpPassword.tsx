@@ -19,5 +19,5 @@ export const resetPasswordSchema = Joi.object({
     "any.only": "Passwords must match",
     "string.empty": "Invalid confirm password",
     "any.required": "Invalid confirm password",
-  })
+  }),
 });

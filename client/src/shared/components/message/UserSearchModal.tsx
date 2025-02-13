@@ -117,8 +117,8 @@ const UserSearchModal: React.FC<UserSearchModalProps> = ({
               placeholder="Enter group name..."
               value={groupName}
               onChange={(e) => {
-                setGroupName(e.target.value)
-                setErr("")
+                setGroupName(e.target.value);
+                setErr("");
               }}
             />
 

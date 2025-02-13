@@ -2,7 +2,9 @@ import { Link } from "react-router-dom";
 type SuccessfulEmailVerificationProps = {
   role?: string;
 };
-const InvalidVerifyEmail: React.FC<SuccessfulEmailVerificationProps>  = ({role}) => {
+const InvalidVerifyEmail: React.FC<SuccessfulEmailVerificationProps> = ({
+  role,
+}) => {
   const isEmployee = role === "employee";
 
   return (

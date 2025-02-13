@@ -13,7 +13,7 @@ const Step2 = () => {
   const { registrationData } = useCompanyBasicData();
   const { formErrors, validate, setFormErrors } = useFormValidationStep2();
   const navigate = useNavigate();
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   const [street, setStreet] = useState("");
   const [country, setCountry] = useState("");
@@ -61,15 +61,10 @@ const Step2 = () => {
       email: userEmail,
     };
     try {
-      console.log("registrationData", registrationData);
-
       const response = await regitserCompany(organization);
-      console.log("msggggg", response.data.message);
 
       if (response.data.message === "organization registered successfully") {
-        console.log(response.data);
         dispatch(setOrganizationId(response.data.organizationId));
-        console.log("come come");
         localStorage.removeItem("registrationData");
 
         navigate("/step-3");

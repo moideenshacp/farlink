@@ -19,9 +19,14 @@ interface DashboardChartProps {
 }
 
 // Register necessary chart components
-ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
-
-
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend
+);
 
 // Chart options
 const chartOptions = {
@@ -37,17 +42,34 @@ const chartOptions = {
   },
 };
 
-export const DashboardChart : React.FC<DashboardChartProps> = ({ projects, tasks }) => {
-
-  const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+export const DashboardChart: React.FC<DashboardChartProps> = ({
+  projects,
+  tasks,
+}) => {
+  const months = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
 
   const totalProjects = new Array(12).fill(0);
   const completedProjects = new Array(12).fill(0);
   const totalTasks = new Array(12).fill(0);
   const completedTasks = new Array(12).fill(0);
-  
+
   projects.forEach((project) => {
-    const monthIndex = project.startDate ? new Date(project.startDate).getMonth() : null;
+    const monthIndex = project.startDate
+      ? new Date(project.startDate).getMonth()
+      : null;
     if (monthIndex !== null) {
       totalProjects[monthIndex] += 1;
       if (project.status === "completed") {
@@ -57,7 +79,9 @@ export const DashboardChart : React.FC<DashboardChartProps> = ({ projects, tasks
   });
 
   tasks.forEach((task) => {
-    const monthIndex = task.startDate ? new Date(task.startDate).getMonth() : null;
+    const monthIndex = task.startDate
+      ? new Date(task.startDate).getMonth()
+      : null;
     if (monthIndex !== null) {
       totalTasks[monthIndex] += 1;
       if (task.status === "completed") {
@@ -101,4 +125,3 @@ export const DashboardChart : React.FC<DashboardChartProps> = ({ projects, tasks
     </div>
   );
 };
-

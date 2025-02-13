@@ -14,8 +14,6 @@ const DashBoardTopBar = () => {
 
   const { user } = useSelector((state: RootState) => state.user);
 
-  console.log("name of user", user?.image);
-
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
   };
@@ -88,9 +86,7 @@ const DashBoardTopBar = () => {
             </h1>
           )}
           <div className="flex p-2 items-center gap-12">
-            
-
-            <NotificationDropdown/>
+            <NotificationDropdown />
             <div className="relative inline-block text-left">
               <div>
                 <button onClick={toggleDropdown} className="flex items-center">

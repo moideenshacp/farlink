@@ -7,8 +7,6 @@ const OrganizationPrivateRoute = () => {
     (state: RootState) => state.user.isAuthenticated
   );
   const userRole = useSelector((state: RootState) => state.user?.user?.role);
-  console.log("admin route");
-
   if (!isAuthenticated) {
     return <Navigate to="/sign-in" replace />;
   }

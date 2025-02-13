@@ -4,7 +4,7 @@ import { RootState } from "../../../redux/store";
 import StatCard from "../../../shared/components/StatsCard";
 import { fetchEmployeesProject } from "../../../api/projectApi";
 import { IProject } from "../../../interface/IprojectDetails";
-import {  FaProjectDiagram, FaCheckCircle } from "react-icons/fa";
+import { FaProjectDiagram, FaCheckCircle } from "react-icons/fa";
 import { fetchAllTasksOfEmployee } from "../../../api/taskApi";
 import { ITaskDetails } from "../../../interface/ItaskDetails";
 import { GrTasks } from "react-icons/gr";
@@ -20,11 +20,11 @@ const DashboardOverview = () => {
 
   useEffect(() => {
     const fetchProject = async () => {
-      const res = await fetchEmployeesProject(user?.organizationId,user?._id);
+      const res = await fetchEmployeesProject(user?.organizationId, user?._id);
       const project = res.data.result;
       if (project) {
         setAllProjects(project.length);
-        setProjects(project)
+        setProjects(project);
         const completedProjects = project.filter(
           (p: IProject) => p.status === "completed"
         );
@@ -32,7 +32,7 @@ const DashboardOverview = () => {
       }
     };
     fetchProject();
-  }, [user?._id,user?.organizationId]);
+  }, [user?._id, user?.organizationId]);
 
   useEffect(() => {
     const fetchTasks = async () => {
@@ -40,20 +40,17 @@ const DashboardOverview = () => {
       const tasks = res.data.result;
       if (tasks) {
         setAllTasks(tasks.length);
-        setTasks(tasks)
+        setTasks(tasks);
         const completedTasks = tasks.filter(
           (t: ITaskDetails) => t.status === "completed"
         );
         setCompletedTasks(completedTasks.length);
-        
       }
     };
     fetchTasks();
   }, [user?._id]);
-  
+
   const stats = [
-
-
     {
       title: "Total Projects",
       value: allProjects,
@@ -76,11 +73,8 @@ const DashboardOverview = () => {
     },
   ];
 
-  
-  
   return (
     <div>
-      
       <div className="flex flex-wrap space-x-10 gap-y-6 justify-center sm:justify-start">
         {stats.map((stat, index) => (
           <div
@@ -97,14 +91,11 @@ const DashboardOverview = () => {
           </div>
         ))}
       </div>
-      <div className="mt-5" >
-
-      <DashboardChart projects={projects} tasks={tasks} />
+      <div className="mt-5">
+        <DashboardChart projects={projects} tasks={tasks} />
       </div>
     </div>
   );
-  
-  
 };
 
 export default DashboardOverview;

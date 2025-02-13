@@ -1,14 +1,14 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface User {
-  _id:string
+  _id: string;
   name: string;
   email: string;
   position?: string;
   role: "admin" | "superAdmin" | "employee";
-  isOrganizationAdded: boolean
+  isOrganizationAdded: boolean;
   organizationId?: string;
-  image?:string | null
+  image?: string | null;
 }
 
 // Define the initial state type
@@ -38,7 +38,7 @@ const userSlice = createSlice({
       state.user = null;
       state.isAuthenticated = false;
       state.token = null;
-      localStorage.clear()
+      localStorage.clear();
     },
     toggleOrganizationStatus(state) {
       if (state.user) {
@@ -50,13 +50,19 @@ const userSlice = createSlice({
         state.user.organizationId = action.payload;
       }
     },
-    setImage(state,action:PayloadAction<string>){
-      if(state.user){
-        state.user.image = action.payload
+    setImage(state, action: PayloadAction<string>) {
+      if (state.user) {
+        state.user.image = action.payload;
       }
-    }
+    },
   },
 });
 
-export const { login, logout ,toggleOrganizationStatus,setOrganizationId,setImage} = userSlice.actions;
+export const {
+  login,
+  logout,
+  toggleOrganizationStatus,
+  setOrganizationId,
+  setImage,
+} = userSlice.actions;
 export default userSlice.reducer;

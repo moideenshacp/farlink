@@ -47,7 +47,7 @@ const TaskViewTable: React.FC<
             projectData.flatMap((project: any) => [...project.members])
           ),
         ];
-        
+
         let employeeRes;
         if (user?.email === project.manager.email) {
           employeeRes = await fetchEmployeesByIds(allEmployeeIds);

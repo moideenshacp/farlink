@@ -76,9 +76,7 @@ const ApplyLeaveModal: React.FC<applyModalProps> = ({
         organizationId,
         employeeEmail,
       };
-      console.log(leaveData, "levae dta");
       const res = await applyLeave(leaveData);
-      console.log("res from apply leave", res);
       if (res.data.message === "Leave applied successfully") {
         setFormData({
           leaveType: "sick",
@@ -95,7 +93,6 @@ const ApplyLeaveModal: React.FC<applyModalProps> = ({
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
-      console.log(error);
       if (error.response && error.response.data) {
         message.warning(error.response.data.error, 2);
       } else {
@@ -133,22 +130,16 @@ const ApplyLeaveModal: React.FC<applyModalProps> = ({
             >
               <option value="sick">
                 Sick
-                <span>
-                  ({leaveBalance?.sick})
-                </span>
+                <span>({leaveBalance?.sick})</span>
               </option>
 
               <option value="casual">
-              Casual
-                <span>
-                  ({leaveBalance?.casual})
-                </span>
+                Casual
+                <span>({leaveBalance?.casual})</span>
               </option>
               <option value="vacation">
-              Vacation
-                <span>
-                  ({leaveBalance?.vacation})
-                </span>
+                Vacation
+                <span>({leaveBalance?.vacation})</span>
               </option>
             </select>
           </div>

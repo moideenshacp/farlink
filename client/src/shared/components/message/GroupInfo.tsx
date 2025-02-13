@@ -23,7 +23,9 @@ const GroupInfo: React.FC<GroupInfoProps> = ({ chat }) => {
             <div className="flex items-center gap-2">
               <Avatar src={member.image} className="w-6 h-6">
                 {!member.image &&
-                  `${member.firstName.charAt(0)}${member.lastName.charAt(0)}`.toUpperCase()}
+                  `${member.firstName.charAt(0)}${member.lastName.charAt(
+                    0
+                  )}`.toUpperCase()}
               </Avatar>
               <span className="text-sm">{`${member.firstName} ${member.lastName}`}</span>
             </div>

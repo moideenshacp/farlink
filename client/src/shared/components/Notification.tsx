@@ -11,7 +11,6 @@ const Notifications = () => {
         const res = await fetchEmployeesByIds(notification.sender);
         if (res?.data?.employees?.length > 0) {
           const name = `${res.data.employees[0].firstName} ${res.data.employees[0].lastName}`;
-          console.log("Notification received from:", name);
           message.info(`${notification.message} from ${name}`);
         } else {
           message.info(notification.message);

@@ -34,7 +34,7 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({
 }) => {
   const [open, setOpen] = useState(false);
   const [refreshKey, setRefreshKey] = useState(0);
-  const {user}= useSelector((state:RootState)=>state.user)
+  const { user } = useSelector((state: RootState) => state.user);
 
   const showDrawer = () => {
     setOpen(true);
@@ -63,7 +63,13 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({
           Completed Tasks
         </span>
       ),
-      children: <TaskViewTable refreshKey={refreshKey} project={project} statusFilter="completed" />,
+      children: (
+        <TaskViewTable
+          refreshKey={refreshKey}
+          project={project}
+          statusFilter="completed"
+        />
+      ),
     },
     {
       key: "Pending Tasks",
@@ -73,7 +79,13 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({
           Pending Tasks
         </span>
       ),
-      children: <TaskViewTable refreshKey={refreshKey} project={project} statusFilter="in_progress" />,
+      children: (
+        <TaskViewTable
+          refreshKey={refreshKey}
+          project={project}
+          statusFilter="in_progress"
+        />
+      ),
     },
   ];
 
@@ -96,15 +108,14 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({
               {project.projectName}
             </Title>
             {user?.email === project.manager.email && (
-
-            <Button
-              type="primary"
-              className="bg-[#4361EE] p-4 hover:bg-[#3b59d7]"
-              onClick={showDrawer}
-            >
-              <FaFileCirclePlus />
-              Assign Task
-            </Button>
+              <Button
+                type="primary"
+                className="bg-[#4361EE] p-4 hover:bg-[#3b59d7]"
+                onClick={showDrawer}
+              >
+                <FaFileCirclePlus />
+                Assign Task
+              </Button>
             )}
           </div>
         }
@@ -199,8 +210,8 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({
         />
       </div>
 
-            {/* Use the AssignTaskDrawer component */}
-            <AssignTaskDrawer open={open} project={project} onClose={onClose} />
+      {/* Use the AssignTaskDrawer component */}
+      <AssignTaskDrawer open={open} project={project} onClose={onClose} />
     </div>
   );
 };
