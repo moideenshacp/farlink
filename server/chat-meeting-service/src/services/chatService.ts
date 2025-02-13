@@ -24,8 +24,6 @@ export class chatService implements IchatService {
   }
   async createChat(chatDetails: any): Promise<IchatModel | null> {
     try {
-      console.log("coming to create chat-service", chatDetails);
-      console.log("coming to create chat-service legth", chatDetails.chatType);
       if (!chatDetails.participants || chatDetails.participants.length < 2) {
         throw new CustomError(
           "A chat must have at least two participants",
@@ -35,8 +33,6 @@ export class chatService implements IchatService {
 
       const res = await this._chatRepository.createChat(chatDetails);
       if (res) {
-        console.log("create dc hat", res);
-
         return res;
       }
       return null;
@@ -72,8 +68,6 @@ export class chatService implements IchatService {
       ) {
         throw new CustomError("Invalid message details", 400);
       }
-      console.log(messageDetails, "meyasage details-----------------");
-
       const message = await this._messageRepository.createMessage(
         messageDetails
       );
@@ -105,12 +99,8 @@ export class chatService implements IchatService {
     updateData: any
   ): Promise<IchatModel | null> {
     try {
-      console.log("updatee data----------------------", updateData);
-
       const updated = await this._chatRepository.updateChat(chatId, updateData);
       if (updated) {
-        console.log("updateeddd-------------------", updated);
-
         return updated;
       } else {
         return null;
@@ -127,7 +117,6 @@ export class chatService implements IchatService {
       const result =
         await this._notificationRepository.getNotificationsByUserId(userId);
       if (result) {
-        console.log("result-------------------", result);
         return result;
       } else {
         return null;

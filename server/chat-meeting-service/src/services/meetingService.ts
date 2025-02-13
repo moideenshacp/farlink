@@ -15,7 +15,6 @@ export class meetService implements ImeetingService {
   async createMeeting(meetDetails: ImeetDetails): Promise<ImeetModel | null> {
     try {
       const currentDate = new Date();
-      console.log("meetdetails", meetDetails);
       if (!meetDetails.meetTitle.trim()) {
         throw new CustomError("Please enter a valid Title", 400);
       }
@@ -61,7 +60,6 @@ export class meetService implements ImeetingService {
   }
   async fetchMeeting(organizationId: string): Promise<ImeetModel[] | null> {
     try {
-      console.log("fetch meting", organizationId);
       const meetings = await this._meetRepository.fetchMeet(organizationId);
       if (meetings) {
         const sortedMeetings = meetings.sort((a, b) => {
@@ -70,8 +68,6 @@ export class meetService implements ImeetingService {
 
           return meetingB.getTime() - meetingA.getTime();
         });
-        console.log(sortedMeetings, "meettss");
-
         return sortedMeetings;
       }
       return null;
@@ -121,8 +117,6 @@ export class meetService implements ImeetingService {
 
           return meetingB.getTime() - meetingA.getTime();
         });
-        console.log(sortedMeetings, "meettss emplyees");
-
         return sortedMeetings;
       }
       return null;

@@ -5,11 +5,10 @@ const NotificationSchema = new Schema({
   sender: {
     type: mongoose.Schema.Types.ObjectId,
   },
-  reciever: 
-    {
-      type: mongoose.Schema.Types.ObjectId,
-    },
-  
+  reciever: {
+    type: mongoose.Schema.Types.ObjectId,
+  },
+
   message: {
     type: String,
   },
@@ -20,5 +19,7 @@ const NotificationSchema = new Schema({
   read: { type: Boolean, default: false },
 });
 
-
-export default mongoose.model<InotificationModel>("notification",NotificationSchema)
+export default mongoose.model<InotificationModel>(
+  "notification",
+  NotificationSchema
+);

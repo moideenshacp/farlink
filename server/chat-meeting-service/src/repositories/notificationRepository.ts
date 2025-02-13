@@ -15,19 +15,23 @@ export class NotificationRepository
     notificationData: Partial<InotificationModel>
   ): Promise<InotificationModel | null> {
     try {
-      const notification = new this.model(notificationData); 
+      const notification = new this.model(notificationData);
       return await notification.save();
     } catch (error) {
       console.error("Error creating notification:", error);
       throw new Error("Failed to create notification");
     }
   }
-  async getNotificationsByUserId(userId: string): Promise<InotificationModel[]> {
+  async getNotificationsByUserId(
+    userId: string
+  ): Promise<InotificationModel[]> {
     try {
-      const notifications = await this.model.find({
-        reciever: userId, 
-      }).sort({ timestamp: -1 });
-  
+      const notifications = await this.model
+        .find({
+          reciever: userId,
+        })
+        .sort({ timestamp: -1 });
+
       return notifications;
     } catch (error) {
       console.error("Error fetching notifications:", error);
@@ -37,8 +41,8 @@ export class NotificationRepository
   async markAllAsRead(userId: string): Promise<void> {
     try {
       await this.model.updateMany(
-        { reciever: userId, read: false }, 
-        { $set: { read: true } } 
+        { reciever: userId, read: false },
+        { $set: { read: true } }
       );
     } catch (error) {
       console.error("Error marking notifications as read:", error);
@@ -47,15 +51,10 @@ export class NotificationRepository
   }
   async clearReadNotifications(userId: string): Promise<void> {
     try {
-      await this.model.deleteMany({ reciever: userId, read: true }); 
+      await this.model.deleteMany({ reciever: userId, read: true });
     } catch (error) {
       console.error("Error clearing read notifications:", error);
       throw new Error("Failed to clear read notifications");
     }
   }
-  
-  
-  
-  
 }
-

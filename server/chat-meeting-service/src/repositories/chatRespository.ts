@@ -21,7 +21,6 @@ export class chatRepository
         });
 
         if (existingChat) {
-          console.log("Private chat already exists:", existingChat);
           return existingChat;
         }
       }
@@ -49,7 +48,7 @@ export class chatRepository
       const chats = await chatModel
         .find({ participants: userId })
         .populate("lastMessage")
-        .sort({ "lastMessage.updatedAt": -1, updatedAt: -1 }); 
+        .sort({ "lastMessage.updatedAt": -1, updatedAt: -1 });
       return chats;
     } catch (error) {
       console.error("Error fetching chats:", error);
@@ -58,26 +57,24 @@ export class chatRepository
   }
   async updateChat(chatId: string, updateData: Partial<IchatModel>) {
     try {
-        const updatedChat = await chatModel.findByIdAndUpdate(
-            chatId,
-            { $set: updateData, updatedAt: new Date() },
-            { new: true }
-        );
-        return updatedChat;
+      const updatedChat = await chatModel.findByIdAndUpdate(
+        chatId,
+        { $set: updateData, updatedAt: new Date() },
+        { new: true }
+      );
+      return updatedChat;
     } catch (error) {
-        console.error("Error updating chat:", error);
-        throw error;
+      console.error("Error updating chat:", error);
+      throw error;
     }
+  }
+  async getChatById(chatId: string): Promise<IchatModel | null> {
+    try {
+      const chat = await chatModel.findById(chatId);
+      return chat;
+    } catch (error) {
+      console.error("Error fetching chat by ID:", error);
+      throw new Error("Failed to fetch chat");
     }
-    async getChatById(chatId: string): Promise<IchatModel | null> {
-        try {
-          const chat = await chatModel.findById(chatId)
-          return chat;
-        } catch (error) {
-          console.error("Error fetching chat by ID:", error);
-          throw new Error("Failed to fetch chat");
-        }
-      }
-      
-  
+  }
 }

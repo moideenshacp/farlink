@@ -54,9 +54,7 @@ export class meetRepository
       throw error;
     }
   }
-  async fetchAllMeetsOfEmployee(
-    employeeId: string
-  ): Promise<ImeetModel[]> {
+  async fetchAllMeetsOfEmployee(employeeId: string): Promise<ImeetModel[]> {
     try {
       const meets = await this.model.find({
         $or: [{ members: employeeId }],
@@ -67,5 +65,4 @@ export class meetRepository
       throw error;
     }
   }
-  
 }

@@ -16,7 +16,6 @@ export class chatController implements IchatController {
   ): Promise<Response> => {
     try {
       const chatDetails = req.body;
-      console.log("coming to create chat-controllere", chatDetails);
       const result = await this._chatService.createChat(chatDetails);
 
       if (result) {
@@ -39,8 +38,6 @@ export class chatController implements IchatController {
   ): Promise<Response | void> => {
     try {
       const { userId } = req.query;
-      console.log("user id", userId);
-
       if (!userId) {
         return res.status(400).json({ error: "User ID is required" });
       }

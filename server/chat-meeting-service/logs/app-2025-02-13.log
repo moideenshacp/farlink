@@ -301,3 +301,5 @@
 {"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"GET\",\"url\":\"/api/chat/fetch-notification?userId=67869a521514145a6498835f\",\"status\":\"304\",\"responseTime\":\"95.520\"}","timestamp":"2025-02-13T10:33:32.789Z"}
 {"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"GET\",\"url\":\"/api/chat/fetch-notification?userId=67869a521514145a6498835f\",\"status\":\"304\",\"responseTime\":\"52.810\"}","timestamp":"2025-02-13T10:33:48.954Z"}
 {"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"GET\",\"url\":\"/api/chat/fetch-notification?userId=67869a521514145a6498835f\",\"status\":\"304\",\"responseTime\":\"50.293\"}","timestamp":"2025-02-13T10:34:20.766Z"}
+{"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"GET\",\"url\":\"/api/chat/fetch-notification?userId=67869a521514145a6498835f\",\"status\":\"304\",\"responseTime\":\"50.707\"}","timestamp":"2025-02-13T10:34:29.434Z"}
+{"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"GET\",\"url\":\"/api/chat/fetch-notification?userId=67869a521514145a6498835f\",\"status\":\"304\",\"responseTime\":\"65.861\"}","timestamp":"2025-02-13T10:35:18.072Z"}
