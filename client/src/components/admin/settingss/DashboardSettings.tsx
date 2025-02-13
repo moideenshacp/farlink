@@ -3,11 +3,11 @@ import { Tabs } from "antd";
 import DashboardProfile from "../../../shared/components/DashboardProfile";
 import DashboardOrg from "../../../shared/components/DashboardOrg";
 import DashboardPassword from "../../../shared/components/DashboardPassword";
-import DashboardEmail from "../../../shared/components/DashboardEmail";
+// import DashboardEmail from "../../../shared/components/DashboardEmail";
 import { ImProfile } from "react-icons/im";
 import { GoOrganization } from "react-icons/go";
 import { RiLockPasswordLine } from "react-icons/ri";
-import { MdOutlineEmail } from "react-icons/md";
+// import { MdOutlineEmail } from "react-icons/md";
 
 const DashboardSettings = () => {
   const [activeTab, setActiveTab] = useState("profile");
@@ -43,16 +43,16 @@ const DashboardSettings = () => {
       ),
       children: <DashboardPassword />,
     },
-    {
-      key: "email",
-      label:   (
-        <span className="flex items-center gap-2">
-          <MdOutlineEmail />
-          Email
-        </span>
-      ),
-      children: <DashboardEmail />,
-    },
+    // {
+    //   key: "email",
+    //   label:   (
+    //     <span className="flex items-center gap-2">
+    //       <MdOutlineEmail />
+    //       Email
+    //     </span>
+    //   ),
+    //   children: <DashboardEmail />,
+    // },
   ];
 
   return (

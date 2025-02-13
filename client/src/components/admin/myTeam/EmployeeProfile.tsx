@@ -5,8 +5,8 @@ import EmployeeProfile_settings from "./EmployeeProfile_settings";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
-import { GrTasks } from "react-icons/gr";
-import { BookCheck } from "lucide-react";
+// import { GrTasks } from "react-icons/gr";
+// import { BookCheck } from "lucide-react";
 import { HiOutlineCalendarDateRange } from "react-icons/hi2";
 import { ArrowBigLeftDash } from "lucide-react";
 
@@ -92,16 +92,16 @@ const EmployeeProfile = () => {
             {employee.dateOfJoining ? employee.dateOfJoining.split("T")[0] : ""}
           </span>
 
-          <GrTasks size={16} className="ml-16" color="#8C97A8" />
+          {/* <GrTasks size={16} className="ml-16" color="#8C97A8" /> */}
 
-          <span className="text-red-500">
+          {/* <span className="text-red-500">
             Assigned: {employee.assignedTasks || ""}
           </span>
           <BookCheck size={16} className="ml-16" color="#8C97A8" />
 
           <span className="text-green-500">
             Completed: {employee.completedTasks || ""}
-          </span>
+          </span> */}
         </div>
 
         {/* Assign Task Button */}

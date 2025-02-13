@@ -142,29 +142,26 @@ const LeaveDetailsModel: React.FC<LeaveDetailsModelProps> = ({
               <label className="block mb-1 font-medium text-[#232360]">
                 Leave Type
               </label>
-              {status !== "pending" ? (
-                <Input
-                  name="leaveType"
-                  value={formData.leaveType}
-                  onChange={handleChange}
-                  readOnly={isAdmin || status !== "pending"}
-                />
-              ) : (
-                <select
-                  className="w-full border focus:outline-none rounded-lg p-2"
-                  value={formData.leaveType}
-                  name="leaveType"
-                  onChange={handleChange}
-                >
-                  <option value="sick">Sick ({leaveBalance?.sick})</option>
-                  <option value="casual">
-                    Casual ({leaveBalance?.casual})
-                  </option>
-                  <option value="vacation">
-                    Vacation ({leaveBalance?.vacation})
-                  </option>
-                </select>
-              )}
+              {isAdmin || user?.position === "HR" || status !== "pending" ? (
+  <Input
+    name="leaveType"
+    value={formData.leaveType}
+    onChange={handleChange}
+    readOnly
+  />
+) : (
+  <select
+    className="w-full border focus:outline-none rounded-lg p-2"
+    value={formData.leaveType}
+    name="leaveType"
+    onChange={handleChange}
+  >
+    <option value="sick">Sick ({leaveBalance?.sick})</option>
+    <option value="casual">Casual ({leaveBalance?.casual})</option>
+    <option value="vacation">Vacation ({leaveBalance?.vacation})</option>
+  </select>
+)}
+
             </div>
 
             <div className="mb-4">

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { MoreVertical, Users, Edit, UserMinus } from "lucide-react";
+import { MoreVertical, Users, Edit } from "lucide-react";
 import { ChatHeaderProps } from "../../../interface/Imessage";
 import { Avatar, Dropdown, Modal, Input, message } from "antd";
 import { useSelector } from "react-redux";
@@ -65,11 +65,7 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({ chat,fetchChats }) => {
               },
               
             },
-            {
-              key: "3",
-              label: "Remove Members",
-              icon: <UserMinus className="w-4 h-4" />,
-            },
+            
           ]
         : []),
     ],

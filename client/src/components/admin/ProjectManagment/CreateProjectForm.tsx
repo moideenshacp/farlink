@@ -226,18 +226,9 @@ const CreateProjectForm = ({
       });
     } else {
       
-      setProjectDetails({
-        projectName: "",
-        projectDescription: "",
-        startDate: null,
-        endDate: null,
-        manager: null,
-        members: [],
-        priority: null,
-        status: null,
-        organizationId,
-      });
+      resetForm()
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [project, organizationId]);
 
   return (

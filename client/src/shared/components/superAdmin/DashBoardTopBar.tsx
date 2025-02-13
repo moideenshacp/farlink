@@ -55,28 +55,8 @@ const DashBoardTopBar = () => {
               Billing
             </h1>
           )}
-          <div className="flex items-center gap-12 sm:gap-6">
-            <div className="flex items-center ml-12 relative">
-              <input
-                type="text"
-                placeholder="Search anything..."
-                className="border border-gray-300 rounded-md px-4 py-2 text-[#8C97A8] focus:outline-none focus:ring-2 focus:ring-blue-400 pl-10"
-              />
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="#8C97A8"
-                className="absolute left-3 w-5 h-5"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
-                />
-              </svg>
-            </div>
+          <div className="flex items-center p-2 gap-12 sm:gap-6">
+            
 
             <button aria-label="Notifications" className="flex items-center">
               <svg
