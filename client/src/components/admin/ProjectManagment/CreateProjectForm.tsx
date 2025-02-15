@@ -124,6 +124,11 @@ const CreateProjectForm = ({
       </div>
     ),
   }));
+  // Filtered options to ensure selected members are not in manager dropdown
+  const filteredManagerOptions = employeeOptions.filter(
+    (emp) =>
+      !projectDetails.members.some((member) => member.value === emp.value)
+  );
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -284,13 +289,15 @@ const CreateProjectForm = ({
           </div>
           <SelectField
             label="Choose Manager"
-            options={employeeOptions}
+            options={filteredManagerOptions}
             value={projectDetails.manager}
             onChange={(option: any) => handleSelectChange("manager", option)}
           />
           <SelectField
             label="Choose Members"
-            options={employeeOptions}
+            options={employeeOptions.filter(
+              (emp) => emp.value !== projectDetails.manager?.value
+            )}
             isMulti
             value={projectDetails.members}
             onChange={(option: any) => handleSelectChange("members", option)}
