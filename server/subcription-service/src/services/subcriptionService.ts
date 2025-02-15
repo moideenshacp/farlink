@@ -10,7 +10,7 @@ export class subcriptionService implements Isubcriptionservice {
   private _subcriptionRepository: IsubcriptionRepository;
 
   constructor(_subcriptionRepository: IsubcriptionRepository) {
-    this._subcriptionRepository = _subcriptionRepository
+    this._subcriptionRepository = _subcriptionRepository;
   }
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   async getSubscriptionDetails(organizationId: string | null): Promise<any> {
@@ -18,8 +18,6 @@ export class subcriptionService implements Isubcriptionservice {
       if (!organizationId) {
         throw new Error("organizationId cannot be null or undefined");
       }
-      console.log(organizationId);
-
       await this._subcriptionRepository.findByOrganizationId(organizationId);
 
       const subcription =
@@ -28,7 +26,6 @@ export class subcriptionService implements Isubcriptionservice {
         );
 
       if (!subcription) {
-        console.log("No subscription data");
         return;
       }
       const subscriptionId = subcription?.subscriptionId;
@@ -60,12 +57,7 @@ export class subcriptionService implements Isubcriptionservice {
           } else {
             planName = "FREE";
           }
-          console.log("Plan planAmount in INR: ", planAmount);
-        } else {
-          console.log("Plan or amount is null");
         }
-      } else {
-        console.log("No items in this subscription.");
       }
 
       return {
@@ -94,8 +86,6 @@ export class subcriptionService implements Isubcriptionservice {
     organizationId: string
   ): Promise<{ url: string | null }> {
     try {
-      console.log(plan, amount);
-
       const session = await stripe.checkout.sessions.create({
         payment_method_types: ["card"],
         mode: "subscription",
@@ -106,7 +96,7 @@ export class subcriptionService implements Isubcriptionservice {
         subscription_data: {
           metadata: { plan },
         },
-        metadata: { plan }, 
+        metadata: { plan },
       });
 
       const subcriptionData: Partial<IsubcriptionModel> = {
@@ -115,17 +105,11 @@ export class subcriptionService implements Isubcriptionservice {
         status: "initiated",
         sessionId: session.id,
       };
-      console.log(subcriptionData,"123");
-      
-      const updatedSub = await this._subcriptionRepository.update(
+
+      await this._subcriptionRepository.update(
         { organizationId: new mongoose.Types.ObjectId(organizationId) },
         subcriptionData
       );
-      if (updatedSub) {
-        console.log("updated");
-      } else {
-        console.log("uupdation failed");
-      }
 
       return { url: session.url };
     } catch (error) {
@@ -153,15 +137,13 @@ export class subcriptionService implements Isubcriptionservice {
         signature,
         endpointSecret
       );
-      console.log("Verified event:", event);
 
       switch (event.type) {
         case "checkout.session.completed": {
           const session = event.data.object as Stripe.Checkout.Session;
-          console.log("Checkout session completed:");
           const subscriptionId = session.subscription as string;
 
-          const updated = await this._subcriptionRepository.update(
+          await this._subcriptionRepository.update(
             { sessionId: session.id },
             {
               status: "active",
@@ -173,41 +155,25 @@ export class subcriptionService implements Isubcriptionservice {
             }
           );
 
-          if (updated) {
-            console.log(
-              "Subscription updated successfully after checkout.session.completed."
-            );
-          } else {
-            console.log(
-              "Failed to update subscription after checkout.session.completed."
-            );
-          }
           break;
         }
         case "invoice.payment_succeeded": {
           const invoice = event.data.object as Stripe.Invoice;
-          console.log("Payment succeeded:");
           const subscriptionId = invoice.subscription as string;
 
-          const updated = await this._subcriptionRepository.update(
+          await this._subcriptionRepository.update(
             { subscriptionId: subscriptionId },
             { lastPaymentDate: new Date() }
           );
 
-          if (updated) {
-            console.log("Last payment date updated successfully.");
-          } else {
-            console.log("Failed to update last payment date.");
-          }
           break;
         }
         case "customer.subscription.updated": {
           const subscription = event.data.object as Stripe.Subscription;
-          console.log("Subscription updated:");
 
           const subscriptionId = subscription.id;
           const status = subscription.status;
-          
+
           const cancelAtPeriodEnd = subscription.cancel_at_period_end;
           const currentPeriodEnd = new Date(
             subscription.current_period_end * 1000
@@ -215,30 +181,25 @@ export class subcriptionService implements Isubcriptionservice {
           const cancelAt = subscription.cancel_at
             ? new Date(subscription.cancel_at * 1000)
             : null;
-            const subscriptionType =(subscription.metadata?.plan as "free" | "MONTHLY" | "YEARLY") || "free";
+          const subscriptionType =
+            (subscription.metadata?.plan as "free" | "MONTHLY" | "YEARLY") ||
+            "free";
 
-    console.log("Extracted subscriptionType:", subscriptionType);
-          const updated = await this._subcriptionRepository.update(
+          await this._subcriptionRepository.update(
             { subscriptionId: subscriptionId },
             {
               status: status,
               cancelAtPeriodEnd: cancelAtPeriodEnd,
               currentPeriodEnd: currentPeriodEnd,
               cancelAt: cancelAt,
-              subscriptionType:subscriptionType
+              subscriptionType: subscriptionType,
             }
           );
 
-          if (updated) {
-            console.log("Subscription updated successfully in the database.");
-          } else {
-            console.log("Failed to update subscription in the database.");
-          }
           break;
         }
         case "customer.subscription.deleted": {
           const subscription = event.data.object as Stripe.Subscription;
-          console.log("Subscription canceled:");
           const subscriptionId = subscription.id;
 
           const existingSubscription =
@@ -249,7 +210,7 @@ export class subcriptionService implements Isubcriptionservice {
           const subscriptionType =
             existingSubscription?.subscriptionType || "free";
 
-          const updated = await this._subcriptionRepository.update(
+          await this._subcriptionRepository.update(
             { subscriptionId: subscriptionId },
             {
               status: "canceled",
@@ -257,11 +218,6 @@ export class subcriptionService implements Isubcriptionservice {
             }
           );
 
-          if (updated) {
-            console.log("Subscription cancelled successfully.");
-          } else {
-            console.log("Failed to cancel subscription.");
-          }
           break;
         }
 

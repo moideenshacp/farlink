@@ -1,0 +1,2 @@
+{"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"GET\",\"url\":\"/api/subscription/get-subcriptionDetails?organizationId=67869a6a1514145a64988362\",\"status\":\"200\",\"responseTime\":\"1571.124\"}","timestamp":"2025-02-15T03:33:47.383Z"}
+{"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"GET\",\"url\":\"/api/subscription/payment-history?customerId=cus_RaOh4Vz2cjATPh\",\"status\":\"200\",\"responseTime\":\"953.541\"}","timestamp":"2025-02-15T03:33:48.362Z"}

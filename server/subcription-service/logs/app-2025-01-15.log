@@ -1,4 +1,0 @@
-{"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"GET\",\"url\":\"/api/subscription/get-subcriptionDetails?organizationId=67869a6a1514145a64988362\",\"status\":\"304\",\"responseTime\":\"1450.181\"}","timestamp":"2025-01-15T03:40:02.552Z"}
-{"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"GET\",\"url\":\"/api/subscription/payment-history?customerId=cus_RaOh4Vz2cjATPh\",\"status\":\"200\",\"responseTime\":\"749.994\"}","timestamp":"2025-01-15T03:40:03.361Z"}
-{"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"GET\",\"url\":\"/api/subscription/get-subcriptionDetails?organizationId=67869a6a1514145a64988362\",\"status\":\"304\",\"responseTime\":\"1072.994\"}","timestamp":"2025-01-15T03:48:11.280Z"}
-{"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"GET\",\"url\":\"/api/subscription/payment-history?customerId=cus_RaOh4Vz2cjATPh\",\"status\":\"200\",\"responseTime\":\"783.049\"}","timestamp":"2025-01-15T03:48:12.085Z"}

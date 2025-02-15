@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Request, Response } from "express";
 import { IsubcriptionController } from "../interfaces/IsubcriptionController";
 import Stripe from "stripe";
@@ -5,40 +6,41 @@ import { Isubcriptionservice } from "../interfaces/IsubcriptionService";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "");
 
-
-
 export class subcriptionController implements IsubcriptionController {
   private _subcriptionservice: Isubcriptionservice;
 
   constructor(_subcriptionservice: Isubcriptionservice) {
-    this._subcriptionservice = _subcriptionservice
+    this._subcriptionservice = _subcriptionservice;
   }
-  public getSubscriptionDetails = async(req: Request, res: Response): Promise<void>=> {
-      try {
-
-        console.log("-----------------------------------------------------------------------------------------------------");
-        
-        const organizationId = req.query.organizationId as string;         
-        const companyDetails = await this._subcriptionservice.getSubscriptionDetails(organizationId)
-        if(companyDetails){
-
-          res.status(200).json({message:"sucessfully fetch subcription plans",companyDetails})
-        }else{
-          res.status(400).json({message:"No subscription data found"})
-        }
-      } catch (error) {
-        console.log(error);
-        
+  public getSubscriptionDetails = async (
+    req: Request,
+    res: Response
+  ): Promise<void> => {
+    try {
+      const organizationId = req.query.organizationId as string;
+      const companyDetails =
+        await this._subcriptionservice.getSubscriptionDetails(organizationId);
+      if (companyDetails) {
+        res.status(200).json({
+          message: "sucessfully fetch subcription plans",
+          companyDetails,
+        });
+      } else {
+        res.status(400).json({ message: "No subscription data found" });
       }
-  }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
-  public createCheckoutSession = async (req: Request, res: Response): Promise<void> => {
-    const { email, planId, plan, amount ,organizationId} = req.body;
-    console.log("Request received in createCheckoutSession:", req.body);
-
+  public createCheckoutSession = async (
+    req: Request,
+    res: Response
+  ): Promise<void> => {
+    const { email, planId, plan, amount, organizationId } = req.body;
     if (!email || !planId) {
-       res.status(400).json({ error: "Missing email or planId" });
-       return
+      res.status(400).json({ error: "Missing email or planId" });
+      return;
     }
 
     try {
@@ -49,8 +51,7 @@ export class subcriptionController implements IsubcriptionController {
         amount,
         organizationId
       );
-      if(session){
-
+      if (session) {
         res.status(200).json({ url: session.url });
       }
     } catch (error) {
@@ -58,10 +59,8 @@ export class subcriptionController implements IsubcriptionController {
       res.status(400).json({ error: error });
     }
   };
-  
-  public webhook = async (req: Request, res: Response): Promise<void> => {
-    console.log("Webhook received");
 
+  public webhook = async (req: Request, res: Response): Promise<void> => {
     const sig = req.headers["stripe-signature"] as string | undefined;
     const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET;
 
@@ -77,61 +76,65 @@ export class subcriptionController implements IsubcriptionController {
       res.status(400).send(err);
     }
   };
-  public createCustomerPortalSession = async (req: Request, res: Response): Promise<void> => {
+  public createCustomerPortalSession = async (
+    req: Request,
+    res: Response
+  ): Promise<void> => {
     try {
       const customerId = req.body.customerId as string;
       if (!customerId) {
         res.status(400).json({ error: "Customer ID is required" });
         return;
       }
-  
-      const url = await this._subcriptionservice.createCustomerPortalSession(customerId);
+
+      const url = await this._subcriptionservice.createCustomerPortalSession(
+        customerId
+      );
       res.status(200).json({ url });
     } catch (error) {
       res.status(500).json({ error: error });
     }
   };
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  public getPaymentHistory = async (req: Request, res: Response): Promise<any> => {
+  public getPaymentHistory = async (
+    req: Request,
+    res: Response
+  ): Promise<any> => {
     const { customerId } = req.query;
-    console.log("get in history");
-    
     if (!customerId) {
       return res.status(400).json({ error: "Customer ID is required" });
     }
-  
-    try {
 
-      const data = await this._subcriptionservice.getPaymentHistory(customerId as string)
-      if(data){
-        
-        res.status(200).json({message:"history fetched successfully",data});
-      }else{
-        res.status(400).json({message:"No data found"})
+    try {
+      const data = await this._subcriptionservice.getPaymentHistory(
+        customerId as string
+      );
+      if (data) {
+        res.status(200).json({ message: "history fetched successfully", data });
+      } else {
+        res.status(400).json({ message: "No data found" });
       }
     } catch (error) {
       console.error("Error fetching payment history:", error);
       res.status(500).json({ error: "Unable to fetch payment history" });
     }
   };
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  public getAllPaymentHistory = async(req: Request, res: Response): Promise<any> => {
+  public getAllPaymentHistory = async (
+    req: Request,
+    res: Response
+  ): Promise<any> => {
     try {
       const invoices = await stripe.invoices.list({
         limit: 100,
       });
-      
-    if(invoices){
-      res.json({ invoices: invoices.data });
-    }else{
-      res.status(400).json({message:"No data found"})
-    }
-      
-    } catch (error) {
-      console.log(error); 
-      res.status(500).json({ error: "Unable to fetch payment history" });
 
-      
+      if (invoices) {
+        res.json({ invoices: invoices.data });
+      } else {
+        res.status(400).json({ message: "No data found" });
+      }
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ error: "Unable to fetch payment history" });
     }
-  }
+  };
 }
