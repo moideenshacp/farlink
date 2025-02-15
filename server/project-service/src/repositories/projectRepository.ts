@@ -1,3 +1,4 @@
+import { CustomError } from "../errors/CustomError";
 import { IprojectDetails } from "../interfaces/IprojectDetails";
 import IprojectModel from "../interfaces/IprojectModel";
 import IprojectRepository from "../interfaces/IprojectRepository";
@@ -16,6 +17,18 @@ export class projectRepository
   ): Promise<IprojectModel | null> {
     return this.save(projectDetails);
   }
+    async fetchProject(projectId: string): Promise<IprojectModel> {
+      try {
+        const projects = await this.model.findById(projectId );
+        if (!projects) {
+          throw new CustomError("No projects found",400)
+        }
+        return projects;
+      } catch (error) {
+        console.error("Error fetching projects:", error);
+        throw error;
+      }
+    }
   async fetchProjects(organizationId: string): Promise<IprojectModel[]> {
     try {
       const projects = await this.model.find({ organizationId });

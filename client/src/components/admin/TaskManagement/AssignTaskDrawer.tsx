@@ -12,6 +12,7 @@ import { ITaskDetails } from "../../../interface/ItaskDetails";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
 import { createTask, updateTask } from "../../../api/taskApi";
+import axios from "axios";
 
 interface AssignTaskDrawerProps {
   open: boolean;
@@ -196,13 +197,18 @@ const AssignTaskDrawer: React.FC<AssignTaskDrawerProps> = ({
         onClose();
       }
     } catch (error: any) {
-      console.error(error);
+      if(axios.isAxiosError(error)){
+        message.error(error.response?.data.error)
+        return
+      }
       const errorMsg =
         error.response?.data?.errors ||
         `An error occurred while ${
           editTask ? "updating" : "creating"
         } the task.`;
       message.error(errorMsg);
+
+      
     }
   };
 

@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { CustomError } from "../errors/CustomError";
+import IprojectRepository from "../interfaces/IprojectRepository";
 import IsubTaskModel from "../interfaces/IsubTaskModel";
 import IsubTaskRepository from "../interfaces/IsubTaskRepository";
 import { ItaskDetails } from "../interfaces/ItaskDetails";
@@ -10,16 +11,31 @@ import { ItaskService } from "../interfaces/ItaskService";
 export class taskService implements ItaskService {
   private _taskRepository: ItaskRepository;
   private _subTaskRepository: IsubTaskRepository;
+  private _projectRepository: IprojectRepository;
   constructor(
     _taskRepository: ItaskRepository,
-    _subTaskRepository: IsubTaskRepository
+    _subTaskRepository: IsubTaskRepository,
+    _projectRepository: IprojectRepository
   ) {
     this._taskRepository = _taskRepository;
     this._subTaskRepository = _subTaskRepository;
+    this._projectRepository = _projectRepository
   }
 
   async createTask(taskDetails: ItaskDetails): Promise<ItaskModel | null> {
     try {
+      const projectDetails =await this._projectRepository.fetchProject(taskDetails.projectId.toString())
+      const projectStartDate = new Date(projectDetails.startDate);
+      const projectEndDate = new Date(projectDetails.endDate);
+      if (
+        new Date(taskDetails.startDate) < projectStartDate ||
+        new Date(taskDetails.endDate)  > projectEndDate
+      ) {
+        throw new CustomError(
+          "tasks Start-Date and End-Date range should be in between of Project Date",
+          400
+        );
+      }
       if (new Date(taskDetails.endDate) <= new Date(taskDetails.startDate)) {
         throw new CustomError("End date must be after start date", 400);
       }
