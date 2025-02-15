@@ -7,12 +7,15 @@ import IuserRepo from "interfaces/IuserRepository";
 import IorganizationRepository from "interfaces/IorganizationRepository";
 
 export class companyService implements IcompanyService {
-  private _userrepository: IuserRepo
+  private _userrepository: IuserRepo;
   private _organizationRepository: IorganizationRepository;
 
-  constructor(_userrepository: IuserRepo,_organizationRepository: IorganizationRepository) {
-    this._userrepository = _userrepository
-    this._organizationRepository = _organizationRepository
+  constructor(
+    _userrepository: IuserRepo,
+    _organizationRepository: IorganizationRepository
+  ) {
+    this._userrepository = _userrepository;
+    this._organizationRepository = _organizationRepository;
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -23,7 +26,7 @@ export class companyService implements IcompanyService {
       if (!email) {
         throw new Error("Email is required to register an organization.");
       }
-      const admin = await this._userrepository.findByEmail( email );
+      const admin = await this._userrepository.findByEmail(email);
       if (!admin) {
         throw new Error("Admin with the provided email does not exist.");
       }
@@ -44,17 +47,16 @@ export class companyService implements IcompanyService {
         }
       );
       const queue = "subscription-service-queue";
-    await publishEvent(queue, {
-      event: "COMPANY_SUBCRIPTION",
-      payload: {
-        organizationId: newOrganization._id,
-        subscriptionType:newOrganization.subscriptionType,
-        industry:newOrganization.industry,
-        admin:newOrganization.admin
-      },
-    });
+      await publishEvent(queue, {
+        event: "COMPANY_SUBCRIPTION",
+        payload: {
+          organizationId: newOrganization._id,
+          subscriptionType: newOrganization.subscriptionType,
+          industry: newOrganization.industry,
+          admin: newOrganization.admin,
+        },
+      });
 
-      console.log("Organization registered successfully", newOrganization);
       return newOrganization._id.toString();
     } catch (error) {
       console.log(error);
@@ -63,47 +65,56 @@ export class companyService implements IcompanyService {
   }
   async fetchCompanyProfile(email: string): Promise<IorgModel | null> {
     try {
-      const userWithCompany = await this._userrepository.findByEmailWithPopulate(email, "organizationId");
+      const userWithCompany =
+        await this._userrepository.findByEmailWithPopulate(
+          email,
+          "organizationId"
+        );
       if (!userWithCompany) {
-        console.log("User not found.");
         return null;
       }
       if (!userWithCompany.organizationId) {
-        console.log("No organization associated with this user.");
         return null;
       }
-        const companyDetails = userWithCompany.organizationId as IorgModel;
-  
+      const companyDetails = userWithCompany.organizationId as IorgModel;
+
       return companyDetails;
     } catch (error) {
       console.log(error);
       return null;
     }
   }
-  async updateCompanyProfile(FormData: object, email: string): Promise<IorgModel | null> {
+  async updateCompanyProfile(
+    FormData: object,
+    email: string
+  ): Promise<IorgModel | null> {
     try {
-      const findUserCompany = await this._userrepository.findByEmailWithPopulate(email, "organizationId");
-      
+      const findUserCompany =
+        await this._userrepository.findByEmailWithPopulate(
+          email,
+          "organizationId"
+        );
+
       if (!findUserCompany) {
         return null;
       }
-      
+
       if (!findUserCompany.organizationId) {
         return null;
       }
-      
+
       const companyDetails = findUserCompany.organizationId as IorgModel;
-    
-      const updatedCompany = await this._organizationRepository.updateOrganization(
-        { _id: companyDetails._id.toString() },
-        FormData
-      );  
+
+      const updatedCompany =
+        await this._organizationRepository.updateOrganization(
+          { _id: companyDetails._id.toString() },
+          FormData
+        );
       if (!updatedCompany) {
         return null;
       }
-    
+
       return updatedCompany;
-      
     } catch (error) {
       console.log("Error updating company profile:", error);
       return null;
@@ -111,58 +122,58 @@ export class companyService implements IcompanyService {
   }
   async fetchAllOrganization(): Promise<IorgModel[] | null> {
     try {
-      const allOrganizations = await this._organizationRepository.findAll()
-      if(!allOrganizations  || allOrganizations.length === 0){
-        console.log("No organizations found.");
+      const allOrganizations = await this._organizationRepository.findAll();
+      if (!allOrganizations || allOrganizations.length === 0) {
         return null;
       }
-      return allOrganizations
+      return allOrganizations;
     } catch (error) {
       console.log(error);
-      return null
-      
+      return null;
     }
   }
   async blockOrganization(email: string): Promise<IuserModel | null> {
     try {
-      const organizationAdmin = await this._userrepository.findByEmail(email)
-      if(!organizationAdmin){
-        return null
+      const organizationAdmin = await this._userrepository.findByEmail(email);
+      if (!organizationAdmin) {
+        return null;
       }
 
-      let updateToBlockAndUnblock
-      if(organizationAdmin.isActive === true){
-         updateToBlockAndUnblock = await this._userrepository.update({email},{isActive:false})
-      }else{
-         updateToBlockAndUnblock = await this._userrepository.update({email},{isActive:true})
+      let updateToBlockAndUnblock;
+      if (organizationAdmin.isActive === true) {
+        updateToBlockAndUnblock = await this._userrepository.update(
+          { email },
+          { isActive: false }
+        );
+      } else {
+        updateToBlockAndUnblock = await this._userrepository.update(
+          { email },
+          { isActive: true }
+        );
       }
 
-      console.log(updateToBlockAndUnblock);
-      
-      return updateToBlockAndUnblock
-      
-      
+      return updateToBlockAndUnblock;
     } catch (error) {
       console.log(error);
-      return null
-      
+      return null;
     }
   }
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   async findSubcription(email: string | null): Promise<any> {
     try {
-  
       if (!email) {
         throw new Error("Email cannot be null or undefined");
       }
 
-      const result = await this._userrepository.findByEmailWithPopulate(email,'organizationId')
-  
-      return result
+      const result = await this._userrepository.findByEmailWithPopulate(
+        email,
+        "organizationId"
+      );
+
+      return result;
     } catch (error) {
       console.error(error);
       throw error;
     }
   }
-  
 }

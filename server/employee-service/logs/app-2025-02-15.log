@@ -1,0 +1,2 @@
+{"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"GET\",\"url\":\"/api/employee/fetch-EmployeesCount?organizationId=67869a6a1514145a64988362\",\"status\":\"401\",\"responseTime\":\"21.074\"}","timestamp":"2025-02-15T03:33:43.033Z"}
+{"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"GET\",\"url\":\"/api/employee/fetch-EmployeesCount?organizationId=67869a6a1514145a64988362\",\"status\":\"304\",\"responseTime\":\"94.631\"}","timestamp":"2025-02-15T03:33:43.950Z"}

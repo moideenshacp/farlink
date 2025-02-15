@@ -20,22 +20,18 @@ export class userController implements IuserController {
       });
       if (error) {
         const errorMessage = error.details.map((err) => err.message);
-        console.log(errorMessage);
-
         res.status(400).json({ errors: errorMessage });
         return;
       }
       const { name, email, password } = value;
 
-       await this._userService.registersUser(name, email, password);
+      await this._userService.registersUser(name, email, password);
       res.status(201).json({ message: "User registered successfully" });
     } catch (error) {
       if (error instanceof CustomError) {
         res.status(error.status).json({ error: error.message });
-        console.log("msg", error.message);
       } else {
         res.status(400).json({ error: error });
-        console.log(error);
       }
     }
   };
@@ -60,8 +56,6 @@ export class userController implements IuserController {
   public loginUser = async (req: Request, res: Response): Promise<Response> => {
     try {
       const { email, password } = req.body;
-
-      console.log("body", email);
       if (!email || !password) {
         return res
           .status(400)
@@ -70,39 +64,40 @@ export class userController implements IuserController {
 
       const user = await this._userService.loginUser(email, password);
 
-      const token = AuthService.generateToken({ email: user.email, role: user.role });
-      const refreshToken = AuthService.generateRefreshToken({ email: user.email, role: user.role });
-      console.log("token====", token);
-
+      const token = AuthService.generateToken({
+        email: user.email,
+        role: user.role,
+      });
+      const refreshToken = AuthService.generateRefreshToken({
+        email: user.email,
+        role: user.role,
+      });
       res.cookie("accessToken", token, {
         httpOnly: true,
         sameSite: "strict",
-        maxAge:  60  * 60 * 1000,
-        
+        maxAge: 60 * 60 * 1000,
       });
 
       res.cookie("refreshToken", refreshToken, {
         httpOnly: true,
-        sameSite: "strict", 
+        sameSite: "strict",
         maxAge: 7 * 24 * 60 * 60 * 1000,
       });
-      
-      return res
-        .status(200)
-        .json({
-          message: "Login sucessfull",
-          user: {
-            _id:user._id,
-            email: user.email,
-            role: user.role,
-            name: user.name,
-            token: token,
-            image:user.image,
-            isOrganizationAdded:user.isOrganizationAdded,
-            organizationId:user.organizationId,
-            position:user.position
-          },
-        });
+
+      return res.status(200).json({
+        message: "Login sucessfull",
+        user: {
+          _id: user._id,
+          email: user.email,
+          role: user.role,
+          name: user.name,
+          token: token,
+          image: user.image,
+          isOrganizationAdded: user.isOrganizationAdded,
+          organizationId: user.organizationId,
+          position: user.position,
+        },
+      });
     } catch (error) {
       if (error instanceof CustomError) {
         return res.status(error.status).json({ error: error.message });
@@ -116,7 +111,7 @@ export class userController implements IuserController {
     try {
       res.clearCookie("accessToken", {
         httpOnly: true,
-        sameSite: "strict"
+        sameSite: "strict",
       });
 
       return res.status(200).json({ message: "Logged out successfully" });
@@ -128,7 +123,6 @@ export class userController implements IuserController {
 
   public forgetPassword = async (req: Request, res: Response) => {
     try {
-
       const { email } = req.body;
       if (!email) {
         res.status(400).json({ error: "Email is required" });
@@ -141,10 +135,8 @@ export class userController implements IuserController {
     } catch (error) {
       if (error instanceof CustomError) {
         res.status(error.status).json({ error: error.message });
-        console.log("msg", error.message);
       } else {
         res.status(400).json({ error: error });
-        console.log(error);
       }
     }
   };
@@ -168,30 +160,25 @@ export class userController implements IuserController {
       return res.status(201).json({ message: "Password updated successfully" });
     } catch (error) {
       if (error instanceof CustomError) {
-        console.log("msg", error.message);
         return res.status(error.status).json({ error: error.message });
       } else {
-        console.log(error);
         return res.status(400).json({ error: error });
       }
     }
   };
-  public refreshToken = async (req: Request, res: Response): Promise<Response> => {
+  public refreshToken = async (
+    req: Request,
+    res: Response
+  ): Promise<Response> => {
     try {
-      console.log("coming ot create refrsh token");
-      
       const refreshToken = req.cookies.refreshToken;
-      console.log("refresh token----------------",refreshToken);
-      
-      const newAccessToken = await this._userService.refreshToken(refreshToken)
-      console.log("newaccess",newAccessToken);
-      
+      const newAccessToken = await this._userService.refreshToken(refreshToken);
       res.cookie("accessToken", newAccessToken, {
         httpOnly: true,
         sameSite: "strict",
-        maxAge: 60 * 60 * 1000, // 1 hour 
+        maxAge: 60 * 60 * 1000, // 1 hour
       });
-  
+
       return res.status(200).json({
         message: "Access token refreshed successfully",
         accessToken: newAccessToken,
@@ -199,108 +186,123 @@ export class userController implements IuserController {
     } catch (error) {
       console.error(error);
       if (error instanceof CustomError) {
-        console.log("msg", error.message);
         return res.status(error.status).json({ error: error.message });
       } else {
-        console.log(error);
         return res.status(400).json({ error: error });
       }
     }
   };
 
-
   public updateProfile = async (req: Request, res: Response): Promise<void> => {
     try {
-      const { fName, lName, phone, email ,image} = req.body;
-      
-      
-      const user = await this._userService.updateProfile(fName, lName, phone, email,image);
+      const { fName, lName, phone, email, image } = req.body;
+
+      const user = await this._userService.updateProfile(
+        fName,
+        lName,
+        phone,
+        email,
+        image
+      );
       if (user) {
-        res.status(200).json({ 
+        res.status(200).json({
           message: "Profile updated successfully",
           user: {
             firstName: user.firstName,
             lastName: user.lastName,
             phone: user.phone,
             email: user.email,
-          }
+          },
         });
       }
     } catch (error) {
       console.log(error);
-  
-      res.status(500).json({ 
-        message: "An error occurred while updating the profile" 
+
+      res.status(500).json({
+        message: "An error occurred while updating the profile",
       });
     }
   };
 
-  public getUserProfile = async (req: Request, res: Response): Promise<void> => {
+  public getUserProfile = async (
+    req: Request,
+    res: Response
+  ): Promise<void> => {
     try {
       const { email } = req.query;
-  
+
       if (!email) {
         res.status(400).json({ message: "Email is required" });
         return;
       }
-      const userProfile = await this._userService.getUserProfile(email  as string);
+      const userProfile = await this._userService.getUserProfile(
+        email as string
+      );
       if (!userProfile) {
         res.status(404).json({ message: "User not found" });
         return;
       }
-      res.status(200).json({ message: "Profile fetched successfully",  userProfile });
+      res
+        .status(200)
+        .json({ message: "Profile fetched successfully", userProfile });
     } catch (error) {
-      console.log( error);
-      res.status(500).json({ message: "An error occurred while fetching the profile" });
+      console.log(error);
+      res
+        .status(500)
+        .json({ message: "An error occurred while fetching the profile" });
     }
   };
-  
-  public googleLogin = async(req: Request, res: Response): Promise<Response>=> {
+
+  public googleLogin = async (
+    req: Request,
+    res: Response
+  ): Promise<Response> => {
     try {
       const { email, name, picture, sub } = req.body;
-    
+
       if (!email || !sub) {
-         res.status(400).json({ error: "Invalid Google data." });
-      }  
-        const user = await this._userService.googleLogin(
-          email,
-          name,
-          sub,
-          picture,
-        );
-  
-      console.log(user,'fro controller');
-      if(user){
-      const token = AuthService.generateToken({ email: user.email, role: user.role });
-      const refreshToken = AuthService.generateRefreshToken({ email: user.email, role: user.role });
-      console.log("token====", token);
+        res.status(400).json({ error: "Invalid Google data." });
+      }
+      const user = await this._userService.googleLogin(
+        email,
+        name,
+        sub,
+        picture
+      );
 
-      res.cookie("accessToken", token, {
-        httpOnly: true,
-        sameSite: "strict",
-        maxAge:  60  * 60 * 1000,
-        
-      });
+      if (user) {
+        const token = AuthService.generateToken({
+          email: user.email,
+          role: user.role,
+        });
+        const refreshToken = AuthService.generateRefreshToken({
+          email: user.email,
+          role: user.role,
+        });
 
-      res.cookie("refreshToken", refreshToken, {
-        httpOnly: true,
-        sameSite: "strict", 
-        maxAge: 7 * 24 * 60 * 60 * 1000,
-      });
+        res.cookie("accessToken", token, {
+          httpOnly: true,
+          sameSite: "strict",
+          maxAge: 60 * 60 * 1000,
+        });
 
-      return res
-        .status(200)
-        .json({
+        res.cookie("refreshToken", refreshToken, {
+          httpOnly: true,
+          sameSite: "strict",
+          maxAge: 7 * 24 * 60 * 60 * 1000,
+        });
+
+        return res.status(200).json({
           message: "Login sucessfull",
           user: {
-            _id:user._id,
+            _id: user._id,
             email: user.email,
             role: user.role,
             name: user.name,
             token: token,
-            image:user.image,
-            isOrganizationAdded:user.isOrganizationAdded,
-            organizationId:user.organizationId
+            image: user.image,
+            isOrganizationAdded: user.isOrganizationAdded,
+            organizationId: user.organizationId,
           },
         });
       }
@@ -311,43 +313,48 @@ export class userController implements IuserController {
       } else {
         return res.status(500).json({ error: "Internal server Errror" });
       }
-      
     }
-  }
-   
-  public fetchEmployeesId = async(req: Request, res: Response): Promise<void> =>{
+  };
+
+  public fetchEmployeesId = async (
+    req: Request,
+    res: Response
+  ): Promise<void> => {
     try {
-      const {employeeIds} = req.query
-      console.log("from emolyeecontroller",employeeIds);
-      
-      const employees = await this._userService.fetchEmployeesId(employeeIds as string[])
-      res.status(200).json({message:"Employees fetched succesfuly",employees})
+      const { employeeIds } = req.query;
+      const employees = await this._userService.fetchEmployeesId(
+        employeeIds as string[]
+      );
+      res
+        .status(200)
+        .json({ message: "Employees fetched succesfuly", employees });
     } catch (error) {
       console.log(error);
-      
     }
-  }
+  };
   public getAllEmployees = async (
     req: Request,
     res: Response
   ): Promise<void> => {
     try {
-      console.log("gte in allllll");
-
-      const { organizationId,page,pageSize } = req.query;
+      const { organizationId, page, pageSize } = req.query;
       if (!organizationId) {
         throw new Error("organix=zation id is needed");
       }
       const pageNumber = page ? parseInt(page as string, 10) : undefined;
-      const pageSizeNumber = pageSize ? parseInt(pageSize as string, 10) : undefined;
-      const {employees,totalEmployees} = await this._userService.getAllEmployees(
-        organizationId as string,pageNumber,pageSizeNumber
-      );
-      res.status(200).json({ message: "sucess", employees,totalEmployees });
+      const pageSizeNumber = pageSize
+        ? parseInt(pageSize as string, 10)
+        : undefined;
+      const { employees, totalEmployees } =
+        await this._userService.getAllEmployees(
+          organizationId as string,
+          pageNumber,
+          pageSizeNumber
+        );
+      res.status(200).json({ message: "sucess", employees, totalEmployees });
     } catch (error) {
       console.log(error);
       res.status(500).json({ message: "Interval server error" });
     }
   };
-  
 }

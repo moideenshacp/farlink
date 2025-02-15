@@ -31,8 +31,6 @@ export class userService implements IuserService {
     password: string
   ): Promise<IuserModel> {
     const existingUser = await this._userRepository.findByEmail(email);
-    console.log("exist  user============", existingUser);
-
     if (existingUser?.verified) {
       throw new UserExist();
     }
@@ -66,38 +64,27 @@ export class userService implements IuserService {
     try {
       // Decode the token to extract the email
       const { email } = jwt.verify(token, EMAIL_SECRET) as { email: string };
-      console.log("EMAIL_SECRET",EMAIL_SECRET);
-      
       const user = await this._userRepository.findByEmail(email);
-
-      console.log("Found user:", user);
 
       if (!user) {
         throw new userNotFound();
       }
 
       if (user.verified) {
-        console.log("User already verified");
         throw new userAlreadyverifed();
       }
 
-      const updatedUser = await this._userRepository.update(
-        { email },
-        { verified: true }
-      );
+      await this._userRepository.update({ email }, { verified: true });
 
-      console.log("User verified successfully:", updatedUser);
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       if (
         error.name === "JsonWebTokenError" ||
         error.name === "TokenExpiredError"
       ) {
-        console.log("tttttttttttttt");
         throw new TokenError();
       }
       if (error instanceof CustomError) {
-        console.log("bbbbbb");
         throw error;
       }
       throw new CustomError(500, "Internal Server Error");
@@ -105,38 +92,28 @@ export class userService implements IuserService {
   }
   async refreshToken(refreshToken: string): Promise<string> {
     try {
-
-      console.log(refreshToken,"tokennnnnnn");
       if (!refreshToken) {
-        console.log("1010====================================================");
-        
-        throw new CustomError(401,"Refresh token is required")
+        throw new CustomError(401, "Refresh token is required");
       }
       const decoded = AuthService.verifyRefreshToken(refreshToken);
-      if(decoded){
-
+      if (decoded) {
         const userExist = await this._userRepository.findByEmail(decoded.email);
-        if(userExist && userExist.isActive === false){
-          throw new userBlocked()
+        if (userExist && userExist.isActive === false) {
+          throw new userBlocked();
         }
       }
 
-
       if (!decoded) {
-        console.log("2020===============================");
-        
-        throw new CustomError(403,"Invalid or expired refresh token" )
+        throw new CustomError(403, "Invalid or expired refresh token");
       }
       const newAccessToken = AuthService.generateToken({
         email: decoded.email,
         role: decoded.role,
       });
-      return newAccessToken
-      
+      return newAccessToken;
     } catch (error) {
       console.log(error);
-      throw error
-      
+      throw error;
     }
   }
 
@@ -148,11 +125,9 @@ export class userService implements IuserService {
     if (userExist && userExist.verified === false) {
       throw new LoginUserNotVerified();
     }
-    if(userExist && userExist.isActive === false){
-      throw new userBlocked()
+    if (userExist && userExist.isActive === false) {
+      throw new userBlocked();
     }
-    console.log("useerexistsss", userExist);
-
     const passwordMatch = bcrypt.compareSync(password, userExist.password);
     if (!passwordMatch) {
       throw new LoginUserError();
@@ -162,8 +137,6 @@ export class userService implements IuserService {
   }
   async generatePasswordResetToken(email: string): Promise<void> {
     const user = await this._userRepository.findByEmail(email);
-    console.log("marnnaa userrrr", user);
-
     if (!user) {
       throw new userNotFound();
     }
@@ -186,17 +159,15 @@ export class userService implements IuserService {
         { password: hashedPassword }
       );
       return updatePassword as IuserModel;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       if (
         error.name === "JsonWebTokenError" ||
         error.name === "TokenExpiredError"
       ) {
-        console.log("tttttttttttttt");
         throw new TokenError();
       }
       if (error instanceof CustomError) {
-        console.log("bbbbbb");
         throw error;
       }
       throw new CustomError(500, "Internal Server Error");
@@ -227,14 +198,12 @@ export class userService implements IuserService {
 
       const updatedUser = await this._userRepository.update(
         { email },
-        { firstName: fName, lastName: lName, phone: phone ,image:image}
+        { firstName: fName, lastName: lName, phone: phone, image: image }
       );
 
       if (!updatedUser) {
         throw new Error("Failed to update the user.");
       }
-
-      console.log("Updated User:", updatedUser);
 
       return updatedUser;
     } catch (error) {
@@ -256,39 +225,39 @@ export class userService implements IuserService {
       return null;
     }
   }
-  async googleLogin(email: string, name: string, googleId: string, image: string): Promise<IuserModel> {
-      const data = {email,name,googleId,image}
+  async googleLogin(
+    email: string,
+    name: string,
+    googleId: string,
+    image: string
+  ): Promise<IuserModel> {
+    const data = { email, name, googleId, image };
 
-      let user = await this._userRepository.findByEmail(email );
-  
-      if (!user) {
-        user = await this._userRepository.createUser(data);
-        console.log("New user created:", user);
-      }
-          if (user && user.isActive === false) {
-        throw new userBlocked();
-      }
-      if (!user) {
-        throw new Error("User creation failed");
-      }
-    
-      return user;     
+    let user = await this._userRepository.findByEmail(email);
+
+    if (!user) {
+      user = await this._userRepository.createUser(data);
+    }
+    if (user && user.isActive === false) {
+      throw new userBlocked();
+    }
+    if (!user) {
+      throw new Error("User creation failed");
+    }
+
+    return user;
   }
   async fetchEmployeesId(employeeId: string[]): Promise<IuserModel[] | null> {
     try {
-      console.log(employeeId);
-      const employees = await this._userRepository.findEmployeesByIds(employeeId);
-      if(employees){
-        console.log(employees,"gotacha project empmlyees");
-        
-        return employees
+      const employees =
+        await this._userRepository.findEmployeesByIds(employeeId);
+      if (employees) {
+        return employees;
       }
-      return null
-      
+      return null;
     } catch (error) {
       console.log(error);
-      return null
-      
+      return null;
     }
   }
   async getAllEmployees(
@@ -298,11 +267,16 @@ export class userService implements IuserService {
   ): Promise<{ employees: IuserModel[]; totalEmployees: number }> {
     try {
       // Count total employees
-      const totalEmployees = await this._userRepository.countEmployeesByOrganization(organizationId);
-  
+      const totalEmployees =
+        await this._userRepository.countEmployeesByOrganization(organizationId);
+
       // Fetch employees with optional pagination
-      const employees = await this._userRepository.findByOrganizationId(organizationId, page, pageSize);
-  
+      const employees = await this._userRepository.findByOrganizationId(
+        organizationId,
+        page,
+        pageSize
+      );
+
       return { employees, totalEmployees };
     } catch (error) {
       console.error("Error in fetching employees:", error);

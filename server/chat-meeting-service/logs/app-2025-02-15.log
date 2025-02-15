@@ -1,0 +1,2 @@
+{"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"GET\",\"url\":\"/api/chat/fetch-notification?userId=67869a521514145a6498835f\",\"status\":\"401\",\"responseTime\":\"16.185\"}","timestamp":"2025-02-15T03:33:42.985Z"}
+{"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"GET\",\"url\":\"/api/chat/fetch-notification?userId=67869a521514145a6498835f\",\"status\":\"200\",\"responseTime\":\"99.798\"}","timestamp":"2025-02-15T03:33:43.659Z"}

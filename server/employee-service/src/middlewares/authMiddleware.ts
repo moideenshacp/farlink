@@ -6,7 +6,6 @@ export const authenticate = async (req: Request, res: Response, next: NextFuncti
 const token = req.cookies.accessToken;
 
   if (!token) {
-    console.log("Access token is missing or invalid.");
     return res.status(401).json({ error: 'Access token is missing or invalid.' });
   }
 
