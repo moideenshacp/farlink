@@ -23,14 +23,14 @@ export class positionRepository
         existingRecord.positions.push(position);
         return existingRecord.save();
       }
-      return existingRecord; 
+      return existingRecord;
     } else {
       return this.model.create({ organizationId, positions: [position] });
     }
   }
-  async findByOrganizationId(organizationId: mongoose.Types.ObjectId): Promise<IpositionModel | null> {
+  async findByOrganizationId(
+    organizationId: mongoose.Types.ObjectId
+  ): Promise<IpositionModel | null> {
     return this.model.findOne({ organizationId }).exec();
   }
-  
-
 }

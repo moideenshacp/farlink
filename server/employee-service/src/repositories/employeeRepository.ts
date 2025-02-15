@@ -53,7 +53,6 @@ export class employeeRepository
   }
   public async findEmployeesByIds(employeeIds: string[]): Promise<IemployeeModel[]> {
     try {
-      console.log(employeeIds,"ellaare id yum repository il und_______________________________________");
       const employees = await this.model.find({ _id: { $in: employeeIds } });
       return employees;
     } catch (error) {

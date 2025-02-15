@@ -68,10 +68,7 @@ export class attendenceController implements IattendenceController {
 
       res.status(200).json({ message: "Attendence marked successfully" });
     } catch (error) {
-      console.log(error);
       if (error instanceof CustomError) {
-        console.log("custom error underyyyy");
-
         res.status(error.statusCode).json({ error: error.message });
       } else {
         res.status(500).json({ error: "Internal Server Error" });
@@ -89,33 +86,32 @@ export class attendenceController implements IattendenceController {
         await this._attendenceservice.getAttendenceReport(
           employeeEmail as string
         );
-      console.log(employeeEmail);
-      res
-        .status(200)
-        .json({
-          message: "Attendence details fetched successfully",
-          attendancereport,
-        });
+      res.status(200).json({
+        message: "Attendence details fetched successfully",
+        attendancereport,
+      });
     } catch (error) {
       console.log(error);
     }
   };
-  public editAttendance =async(req: Request, res: Response): Promise<void>=> {
+  public editAttendance = async (
+    req: Request,
+    res: Response
+  ): Promise<void> => {
     try {
-      const {attendenceId,checkIn,checkOut} = req.body
-      await this._attendenceservice.editAttendance(attendenceId,checkIn,checkOut)
+      const { attendenceId, checkIn, checkOut } = req.body;
+      await this._attendenceservice.editAttendance(
+        attendenceId,
+        checkIn,
+        checkOut
+      );
       res.status(200).json({ message: "Attendence edited successfully" });
-
     } catch (error) {
       if (error instanceof CustomError) {
-        console.log("custom error underyyyy");
-
         res.status(error.statusCode).json({ error: error.message });
       } else {
         res.status(500).json({ error: "Internal Server Error" });
       }
-      
     }
-    
-  }
+  };
 }

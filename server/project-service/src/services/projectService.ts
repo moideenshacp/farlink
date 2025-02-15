@@ -14,7 +14,6 @@ export class projectService implements IprojectService {
     projectDetails: IprojectDetails
   ): Promise<IprojectModel | null> {
     try {
-      console.log("projectDetails", projectDetails);
       if (
         new Date(projectDetails.endDate) <= new Date(projectDetails.startDate)
       ) {
@@ -34,12 +33,10 @@ export class projectService implements IprojectService {
     organizationId: string
   ): Promise<IprojectModel[] | null> {
     try {
-      console.log(organizationId, "projects fetching orgId");
       const result = await this._projectRepository.fetchProjects(
         organizationId
       );
       if (result) {
-        console.log(result, "all projects");
         return result;
       } else {
         return null;
@@ -54,7 +51,6 @@ export class projectService implements IprojectService {
     projectDetails: IprojectDetails
   ): Promise<IprojectModel | null> {
     try {
-      console.log(projectId, projectDetails, "Updating project");
       if (
         new Date(projectDetails.endDate) <= new Date(projectDetails.startDate)
       ) {
@@ -76,13 +72,15 @@ export class projectService implements IprojectService {
     }
   }
   async fetchEmployeesProject(
-    employeeId: string,organizationId:string
+    employeeId: string,
+    organizationId: string
   ): Promise<IprojectModel[] | null> {
     try {
-      console.log(employeeId, "projects fetching orgId");
-      const result = await this._projectRepository.fetchEmployeesProjects(organizationId,employeeId);
+      const result = await this._projectRepository.fetchEmployeesProjects(
+        organizationId,
+        employeeId
+      );
       if (result) {
-        console.log(result, "all projects");
         return result;
       } else {
         return null;

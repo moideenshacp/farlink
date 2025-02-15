@@ -73,7 +73,6 @@ export class taskController implements ItaskController {
   ): Promise<Response> => {
     try {
       const { taskId, taskDetails } = req.body;
-      console.log("taskID:", taskDetails);
       const updatedTask = await this._taskservice.updateTask(
         taskId,
         taskDetails
@@ -154,8 +153,6 @@ export class taskController implements ItaskController {
   ): Promise<Response> => {
     try {
       const { taskDetails } = req.body;
-      console.log("subtask------from", taskDetails);
-
       const result = await this._taskservice.createSubTask(taskDetails);
       if (result) {
         return res
@@ -180,8 +177,6 @@ export class taskController implements ItaskController {
   ): Promise<Response> => {
     try {
       const { taskId, taskDetails } = req.body;
-      console.log("taskDetails", taskDetails);
-
       const updatedTask = await this._taskservice.updateSubTask(
         taskId,
         taskDetails
@@ -203,20 +198,24 @@ export class taskController implements ItaskController {
       }
     }
   };
-  public fetchAllSubTasks = async(req: Request, res: Response): Promise<Response> =>{
+  public fetchAllSubTasks = async (
+    req: Request,
+    res: Response
+  ): Promise<Response> => {
     try {
-      const {parentTaskId } = req.query
-      const result = await this._taskservice.fetchAllSubTasks(parentTaskId as string)
+      const { parentTaskId } = req.query;
+      const result = await this._taskservice.fetchAllSubTasks(
+        parentTaskId as string
+      );
       if (result) {
         return res
           .status(200)
-          .json({ message: "Sub-Tasks fetched sucessfully..",result });
+          .json({ message: "Sub-Tasks fetched sucessfully..", result });
       } else {
         return res
           .status(400)
           .json({ message: "Something went wrong,please try again..." });
       }
-      
     } catch (error) {
       if (error instanceof CustomError) {
         return res.status(error.statusCode).json({ error: error.message });
@@ -224,5 +223,5 @@ export class taskController implements ItaskController {
         return res.status(500).json({ error: "Internal Server Error" });
       }
     }
-  }
+  };
 }

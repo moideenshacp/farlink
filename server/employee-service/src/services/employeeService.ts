@@ -15,28 +15,28 @@ export class employeeService implements IemployeeService {
   private _employeeRepository: IemployeeRepo;
   private _positionRepository: IpositionRepo;
 
-  constructor(_employeeRepository: IemployeeRepo,_positionRepository: IpositionRepo) {
-    this._employeeRepository = _employeeRepository
-    this._positionRepository = _positionRepository
+  constructor(
+    _employeeRepository: IemployeeRepo,
+    _positionRepository: IpositionRepo
+  ) {
+    this._employeeRepository = _employeeRepository;
+    this._positionRepository = _positionRepository;
   }
 
-  async registerEmployee(employeeData: IemployeeData): Promise<IemployeeModel | null> {
+  async registerEmployee(
+    employeeData: IemployeeData
+  ): Promise<IemployeeModel | null> {
     try {
-      console.log("username", employeeData);
-
       const employeeExist = await this._employeeRepository.findByEmail(
         employeeData.email
       );
       if (employeeExist) {
-        throw new CustomError("Email already Exist",400)
-
+        throw new CustomError("Email already Exist", 400);
       }
 
       const registeredEmployee = await this._employeeRepository.createEmployee(
         employeeData
       );
-
-      console.log("savedd", registeredEmployee);
 
       const queue = "user-service-queue";
       await publishEvent(queue, {
@@ -51,13 +51,13 @@ export class employeeService implements IemployeeService {
           role: registeredEmployee?.role,
           image: registeredEmployee?.image,
           organizationId: registeredEmployee?.organizationId,
-          position:registeredEmployee?.position
+          position: registeredEmployee?.position,
         },
       });
-      return registeredEmployee
+      return registeredEmployee;
     } catch (error) {
       console.log(error);
-      throw error
+      throw error;
     }
   }
   async getAllEmployees(
@@ -67,18 +67,25 @@ export class employeeService implements IemployeeService {
   ): Promise<{ employees: IemployeeModel[]; totalEmployees: number }> {
     try {
       // Count total employees
-      const totalEmployees = await this._employeeRepository.countEmployeesByOrganization(organizationId);
-  
+      const totalEmployees =
+        await this._employeeRepository.countEmployeesByOrganization(
+          organizationId
+        );
+
       // Fetch employees with optional pagination
-      const employees = await this._employeeRepository.findByOrganizationId(organizationId, page, pageSize);
-  
+      const employees = await this._employeeRepository.findByOrganizationId(
+        organizationId,
+        page,
+        pageSize
+      );
+
       return { employees, totalEmployees };
     } catch (error) {
       console.error("Error in fetching employees:", error);
       throw error;
     }
   }
-  
+
   async updateEmployee(
     employeeId: string,
     employeeData: IemployeeModel | null
@@ -88,18 +95,14 @@ export class employeeService implements IemployeeService {
         throw new Error("Employee data cannot be null");
       }
 
-      console.log(employeeId, "fromservice");
-
       const findEmployee = await this._employeeRepository.update(
         new mongoose.Types.ObjectId(employeeId),
         employeeData
       );
-      console.log(employeeData,"employeeee");
-      
+
       if (!findEmployee) {
         throw new Error("Employee not found");
       }
-      console.log("kitty mwone kitty", findEmployee);
       const queue = "user-service-queue";
       await publishEvent(queue, {
         event: "UPDATE_EMPLOYEE",
@@ -113,7 +116,7 @@ export class employeeService implements IemployeeService {
           role: employeeData?.role,
           image: employeeData?.image,
           organizationId: findEmployee?.organizationId,
-          position:findEmployee?.position
+          position: findEmployee?.position,
         },
       });
       return findEmployee;
@@ -131,10 +134,8 @@ export class employeeService implements IemployeeService {
       return "";
     }
   }
-  async setUpPassword(password: string,email:string): Promise<string> {
+  async setUpPassword(password: string, email: string): Promise<string> {
     try {
-      console.log(password, "passsssssssssssssssssssss");
-      console.log(email, "email------------------of melployee");
       const hashedPassword = await bcrypt.hash(password, 10);
 
       const queue = "user-service-queue";
@@ -142,7 +143,7 @@ export class employeeService implements IemployeeService {
         event: "SET_UP_PASSWORD",
         payload: {
           password: hashedPassword,
-          email:email
+          email: email,
         },
       });
       return "successfully updated";
@@ -153,69 +154,84 @@ export class employeeService implements IemployeeService {
   }
   async EmployeesCount(organizationId: string): Promise<any> {
     try {
+      const employeeData = await this._employeeRepository.findByOrganizationId(
+        organizationId
+      );
+      const ActiveEmployeesCount = employeeData.filter(
+        (data) => data.isActive === true
+      ).length;
+      const TerminatedEmployeesCount = employeeData.filter(
+        (data) => data.isActive === false
+      ).length;
 
-      console.log(organizationId,"sdtfghjrtfyguhj")
-      const employeeData = await this._employeeRepository.findByOrganizationId(organizationId)
-      const ActiveEmployeesCount =employeeData.filter((data)=>data.isActive === true).length
-      const TerminatedEmployeesCount =employeeData.filter((data)=>data.isActive === false).length
-      console.log("employeeData",ActiveEmployeesCount);
-      console.log("employeeData",TerminatedEmployeesCount);
-      const data = {ActiveEmployeesCount,TerminatedEmployeesCount}
-      return data     
+      const data = { ActiveEmployeesCount, TerminatedEmployeesCount };
+      return data;
     } catch (error) {
-      console.log(error);      
+      console.log(error);
     }
   }
   async TerminateEmployee(email: string): Promise<any> {
     try {
+      const employee = await this._employeeRepository.findByEmail(email);
 
-      console.log(email,"EMployeeeeeeeeeeee email")
-      const employee = await this._employeeRepository.findByEmail(email)
-
-      console.log("employeee",employee);
-      if(!employee){
-        throw new CustomError("employee not found",400)
+      if (!employee) {
+        throw new CustomError("employee not found", 400);
       }
       const queue = "user-service-queue";
       await publishEvent(queue, {
         event: "TERMINATE_EMPLOYEE",
         payload: {
-          email:email
+          email: email,
         },
       });
       let TerminateEmployee;
-      if(employee.isActive === true){
-        TerminateEmployee = await this._employeeRepository.update({email},{isActive:false})
-      }else{
-        TerminateEmployee  = await this._employeeRepository.update({email},{isActive:true})
+      if (employee.isActive === true) {
+        TerminateEmployee = await this._employeeRepository.update(
+          { email },
+          { isActive: false }
+        );
+      } else {
+        TerminateEmployee = await this._employeeRepository.update(
+          { email },
+          { isActive: true }
+        );
       }
-      return TerminateEmployee
-      
+      return TerminateEmployee;
     } catch (error) {
       console.log(error);
-      
     }
   }
-  async AddPosition(organizationId: string, position: string): Promise<IpositionModel | null> {
+  async AddPosition(
+    organizationId: string,
+    position: string
+  ): Promise<IpositionModel | null> {
     try {
-      console.log(organizationId, position);
-  
       if (organizationId && position) {
-        const organizationObjectId = new mongoose.Types.ObjectId(organizationId);
-        const existingRecord = await this._positionRepository.findByOrganizationId(organizationObjectId);
-        
+        const organizationObjectId = new mongoose.Types.ObjectId(
+          organizationId
+        );
+        const existingRecord =
+          await this._positionRepository.findByOrganizationId(
+            organizationObjectId
+          );
+
         if (existingRecord && existingRecord.positions.includes(position)) {
-          console.error(`Position "${position}" already exists for this organization.`);
-          throw new CustomError(`Position "${position}" already exists for this organization.`,400)
+          console.error(
+            `Position "${position}" already exists for this organization.`
+          );
+          throw new CustomError(
+            `Position "${position}" already exists for this organization.`,
+            400
+          );
         }
-        const positionAdded = await this._positionRepository.createPosition(organizationObjectId, position);
-        if (positionAdded) {
-          console.log("Position saved successfully.");
-        }
-  
+        const positionAdded = await this._positionRepository.createPosition(
+          organizationObjectId,
+          position
+        );
+
         return positionAdded;
       }
-  
+
       return null;
     } catch (error: any) {
       console.log(error);
@@ -224,38 +240,33 @@ export class employeeService implements IemployeeService {
   }
   async fetchPosition(organizationId: string): Promise<IpositionModel | null> {
     try {
-      console.log(organizationId);
-      const organizationObjectId = new mongoose.Types.ObjectId(organizationId)
-      const positions =await this._positionRepository.findByOrganizationId(organizationObjectId)
-      if(positions){
-        console.log("allpositons");
-        
-        return positions
+      const organizationObjectId = new mongoose.Types.ObjectId(organizationId);
+      const positions = await this._positionRepository.findByOrganizationId(
+        organizationObjectId
+      );
+      if (positions) {
+        return positions;
       }
-      return null
-      
+      return null;
     } catch (error) {
       console.log(error);
-      return null
+      return null;
     }
-    
   }
-  async fetchEmployeesId(employeeId: string[]): Promise<IemployeeModel[] | null> {
+  async fetchEmployeesId(
+    employeeId: string[]
+  ): Promise<IemployeeModel[] | null> {
     try {
-      console.log(employeeId);
-      const employees = await this._employeeRepository.findEmployeesByIds(employeeId);
-      if(employees){
-        console.log(employees,"gotacha project empmlyees");
-        
-        return employees
+      const employees = await this._employeeRepository.findEmployeesByIds(
+        employeeId
+      );
+      if (employees) {
+        return employees;
       }
-      return null
-      
+      return null;
     } catch (error) {
       console.log(error);
-      return null
-      
+      return null;
     }
   }
-  
 }

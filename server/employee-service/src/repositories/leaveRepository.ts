@@ -34,7 +34,7 @@ export class leaveRepository
             $gte: new Date(`${year}-${month}-01`),
             $lt: new Date(`${year}-${month + 1}-01`),
           },
-          status: "approved" 
+          status: "approved",
         },
       },
       {
@@ -100,5 +100,4 @@ export class leaveRepository
   async updateLeave(leave: IleaveModel): Promise<IleaveModel | null> {
     return this.model.findByIdAndUpdate(leave._id, leave, { new: true });
   }
-  
 }

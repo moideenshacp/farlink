@@ -10,14 +10,16 @@ import { ItaskService } from "../interfaces/ItaskService";
 export class taskService implements ItaskService {
   private _taskRepository: ItaskRepository;
   private _subTaskRepository: IsubTaskRepository;
-  constructor(_taskRepository: ItaskRepository,_subTaskRepository: IsubTaskRepository) {
+  constructor(
+    _taskRepository: ItaskRepository,
+    _subTaskRepository: IsubTaskRepository
+  ) {
     this._taskRepository = _taskRepository;
-    this._subTaskRepository = _subTaskRepository
+    this._subTaskRepository = _subTaskRepository;
   }
 
   async createTask(taskDetails: ItaskDetails): Promise<ItaskModel | null> {
     try {
-      console.log(taskDetails, "taskDetails");
       if (new Date(taskDetails.endDate) <= new Date(taskDetails.startDate)) {
         throw new CustomError("End date must be after start date", 400);
       }
@@ -32,7 +34,6 @@ export class taskService implements ItaskService {
     try {
       const result = await this._taskRepository.fetchTasks(projectId);
       if (result) {
-        console.log(result, "all Tasks");
         return result;
       } else {
         return null;
@@ -47,7 +48,6 @@ export class taskService implements ItaskService {
     taskDetails: ItaskDetails
   ): Promise<ItaskModel | null> {
     try {
-      console.log(taskId, taskDetails, "Updating task");
       if (new Date(taskDetails.endDate) <= new Date(taskDetails.startDate)) {
         throw new CustomError("End date must be after start date", 400);
       }
@@ -71,13 +71,11 @@ export class taskService implements ItaskService {
     projectId: string
   ): Promise<IsubTaskModel[] | null> {
     try {
-      console.log(employeeId, "tasks fetching orgId");
       const result = await this._subTaskRepository.fetchEmployeesTasks(
         projectId,
         employeeId
       );
       if (result) {
-        console.log(result, "all Tasks");
         return result;
       } else {
         return null;
@@ -88,15 +86,13 @@ export class taskService implements ItaskService {
     }
   }
   async fetchAllTasksOfEmployee(
-    employeeId: string,
+    employeeId: string
   ): Promise<IsubTaskModel[] | null> {
     try {
-      console.log(employeeId, "tasks fetching orgId");
       const result = await this._subTaskRepository.fetchAllTasksOfEmployee(
         employeeId
       );
       if (result) {
-        console.log(result, "all Tasks");
         return result;
       } else {
         return null;
@@ -109,68 +105,83 @@ export class taskService implements ItaskService {
 
   async createSubTask(taskDetails: any): Promise<IsubTaskModel[] | null> {
     try {
-      console.log(taskDetails,"subtask-------------------")
       const parentTaskId = taskDetails[0]?.parentTaskId;
-      console.log("parenttaskId",parentTaskId);
-      
       if (!parentTaskId) {
-        throw new CustomError("Parent Task ID is required for validation.",400);
+        throw new CustomError(
+          "Parent Task ID is required for validation.",
+          400
+        );
       }
-      const parentTask = await this._taskRepository.fetchParentTask(parentTaskId)
-      console.log("parenttask",parentTask);
-      
-    if (!parentTask) {
-      throw new CustomError("Parent task not found.",400);
-    }
-    const parentStartDate = new Date(parentTask.startDate);
-    const parentEndDate = new Date(parentTask.endDate);
-    for (const subtask of taskDetails) {
-      const subtaskStartDate = new Date(subtask.startDate);
-      const subtaskEndDate = new Date(subtask.endDate);
+      const parentTask = await this._taskRepository.fetchParentTask(
+        parentTaskId
+      );
+      if (!parentTask) {
+        throw new CustomError("Parent task not found.", 400);
+      }
+      const parentStartDate = new Date(parentTask.startDate);
+      const parentEndDate = new Date(parentTask.endDate);
+      for (const subtask of taskDetails) {
+        const subtaskStartDate = new Date(subtask.startDate);
+        const subtaskEndDate = new Date(subtask.endDate);
 
-      if (subtaskStartDate < parentStartDate || subtaskEndDate > parentEndDate) {
-        throw new CustomError("Sub task Start-Date and End-Date range should be in between of Main Task",400)
+        if (
+          subtaskStartDate < parentStartDate ||
+          subtaskEndDate > parentEndDate
+        ) {
+          throw new CustomError(
+            "Sub task Start-Date and End-Date range should be in between of Main Task",
+            400
+          );
+        }
       }
-    }
-     const result = await this._subTaskRepository.createMultipleTasks(taskDetails)
-     if(result){
-      return result
-     }
-      return null
+      const result = await this._subTaskRepository.createMultipleTasks(
+        taskDetails
+      );
+      if (result) {
+        return result;
+      }
+      return null;
     } catch (error) {
       console.log(error);
-      throw error
-      
+      throw error;
     }
   }
-  async updateSubTask(taskId: string, taskDetails: any): Promise<IsubTaskModel | null> {
+  async updateSubTask(
+    taskId: string,
+    taskDetails: any
+  ): Promise<IsubTaskModel | null> {
     try {
-      console.log(taskId, taskDetails, "Updating task");
       const parentTaskId = taskDetails?.parentTaskId;
-      console.log("parenttaskId",parentTaskId);
-      if(parentTaskId){
+      if (parentTaskId) {
+        if (!parentTaskId) {
+          throw new CustomError(
+            "Parent Task ID is required for validation.",
+            400
+          );
+        }
+        const parentTask = await this._taskRepository.fetchParentTask(
+          parentTaskId as string
+        );
+        if (!parentTask) {
+          throw new CustomError("Parent task not found.", 400);
+        }
+        const parentStartDate = new Date(parentTask.startDate);
+        const parentEndDate = new Date(parentTask.endDate);
 
-      
-      if (!parentTaskId) {
-        throw new CustomError("Parent Task ID is required for validation.",400);
-      }
-      const parentTask = await this._taskRepository.fetchParentTask(parentTaskId as string)
-      console.log("parenttask",parentTask);
-      
-    if (!parentTask) {
-      throw new CustomError("Parent task not found.",400);
-    }
-    const parentStartDate = new Date(parentTask.startDate);
-    const parentEndDate = new Date(parentTask.endDate);
+        const subtaskStartDate = new Date(taskDetails.startDate);
+        const subtaskEndDate = new Date(taskDetails.endDate);
 
-      const subtaskStartDate = new Date(taskDetails.startDate);
-      const subtaskEndDate = new Date(taskDetails.endDate);
+        if (
+          subtaskStartDate < parentStartDate ||
+          subtaskEndDate > parentEndDate
+        ) {
+          throw new CustomError(
+            "Sub task Start-Date and End-Date range should be in between of Main Task",
+            400
+          );
+        }
 
-      if (subtaskStartDate < parentStartDate || subtaskEndDate > parentEndDate) {
-        throw new CustomError("Sub task Start-Date and End-Date range should be in between of Main Task",400)
-      }
-
-      taskDetails.members = taskDetails.members[0]
+        taskDetails.members = taskDetails.members[0];
       }
       const updatedtask = await this._subTaskRepository.updateSubTask(
         taskId,
@@ -187,20 +198,21 @@ export class taskService implements ItaskService {
       throw error;
     }
   }
-  async fetchAllSubTasks(parentTaskId: string): Promise<IsubTaskModel[] | null> {
+  async fetchAllSubTasks(
+    parentTaskId: string
+  ): Promise<IsubTaskModel[] | null> {
     try {
-      const res = await this._subTaskRepository.fetchSubTasksByParentTaskId(parentTaskId)
+      const res = await this._subTaskRepository.fetchSubTasksByParentTaskId(
+        parentTaskId
+      );
 
-      if(res){
-        return res
+      if (res) {
+        return res;
       }
-      return null
-      
+      return null;
     } catch (error) {
       console.log(error);
-      throw error
-      
+      throw error;
     }
-    
   }
 }

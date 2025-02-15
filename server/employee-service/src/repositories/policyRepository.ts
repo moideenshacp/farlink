@@ -31,6 +31,4 @@ export class AttendancePolicyRepository
   ): Promise<IAttendancePolicyModel | null> {
     return this.model.findOne({ organizationId }).exec();
   }
-
-
 }

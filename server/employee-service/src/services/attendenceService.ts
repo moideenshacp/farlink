@@ -38,31 +38,25 @@ export class attendenceService implements IattendenceService {
     organizationId: string
   ): Promise<IattendencePolicy | null> {
     try {
-      console.log("Fetching policy for organizationId:", policy);
-
       const organizationObjectId = new mongoose.Types.ObjectId(organizationId);
 
       let existingPolicy: IAttendancePolicyModel | null;
       existingPolicy = await this._policyRepository.findByOrganizationId(
         organizationObjectId
       );
-      console.log("Existing policy:", existingPolicy);
 
       if (!existingPolicy) {
-        console.log("Policy does not exist. Creating new policy.");
         existingPolicy = await this._policyRepository.createPolicy({
           ...policy,
           organizationId: organizationObjectId,
         });
       } else {
-        console.log("Policy exists. Updating policy.");
         existingPolicy = await this._policyRepository.updatePolicy(
           { organizationId: organizationObjectId },
           policy
         );
       }
 
-      console.log("Final policy:", existingPolicy);
       return existingPolicy;
     } catch (error) {
       console.error("Error updating attendance policy:", error);
@@ -102,8 +96,6 @@ export class attendenceService implements IattendenceService {
           currentTime.toISOString()
       );
       const dayOfWeek = currentTimeIST.getDay();
-      console.log("daaayyyyyy", dayOfWeek);
-
       if (policy?.holidayDays?.includes(dayOfWeek)) {
         throw new CustomError("Attendance cannot be marked on weekends.", 400);
       }
@@ -124,14 +116,10 @@ export class attendenceService implements IattendenceService {
       const lateMarkThresholdIST = new Date(
         officeStartTimeIST.getTime() + lateMarkAfterMinutes * 60000
       );
-      console.log("policy.halfday after", policy.halfDayAfterHours);
-
       const halfDayThresholdHours =
         typeof policy.halfDayAfterHours === "number"
           ? policy.halfDayAfterHours
           : 0;
-
-      console.log("halfDayThresholdHours", halfDayThresholdHours);
 
       const totalWorkingHoursRequired =
         typeof policy.totalWorkingHours === "number"
@@ -152,8 +140,6 @@ export class attendenceService implements IattendenceService {
             const workingHours =
               (currentTimeIST.getTime() - recentAttendance.checkIn.getTime()) /
               3600000;
-            console.log("workingHours", workingHours);
-
             recentAttendance.workingHours = workingHours;
 
             if (workingHours < halfDayThresholdHours) {
@@ -169,11 +155,7 @@ export class attendenceService implements IattendenceService {
             { _id: recentAttendance._id },
             recentAttendance
           );
-          console.log("Checked out successfully", recentAttendance);
         } else {
-          console.log(
-            "You have already completed your attendance for the day."
-          );
           throw new CustomError(
             "You have already completed your attendance for the day.",
             400
@@ -199,11 +181,10 @@ export class attendenceService implements IattendenceService {
           employeeEmail,
           checkIn: currentTimeIST,
           status,
-          date: currentTimeIST, 
+          date: currentTimeIST,
         };
 
         await this._attendenceRepository.createattendence(attendanceData);
-        console.log("Checked in successfully");
       }
     } catch (error: unknown) {
       console.error("Error handling attendance:", error);
@@ -217,10 +198,7 @@ export class attendenceService implements IattendenceService {
       const attendanceData =
         await this._attendenceRepository.findAllByEmployeeEmail(employeeEmail);
 
-      console.log("attendanceData", attendanceData);
-
       if (!attendanceData || attendanceData.length === 0) {
-        console.log("No attendance data found for employee:", employeeEmail);
         return null;
       }
 
@@ -237,8 +215,10 @@ export class attendenceService implements IattendenceService {
             : "N/A";
 
           return {
-            id:attendance._id,
-            date: attendance.date ? attendance.date.toISOString().split("T")[0] : checkInDate,
+            id: attendance._id,
+            date: attendance.date
+              ? attendance.date.toISOString().split("T")[0]
+              : checkInDate,
             checkIn: checkInTime,
             checkOut: checkOutTime,
             status: attendance.status,
@@ -250,7 +230,7 @@ export class attendenceService implements IattendenceService {
         const dateB = b.date ? new Date(b.date).getTime() : 0;
         return dateB - dateA; // Newest first
       });
-      
+
       return attendanceSummary;
     } catch (error) {
       console.error("Error fetching attendance report:", error);
@@ -272,9 +252,7 @@ export class attendenceService implements IattendenceService {
           currentTime.toISOString()
       );
       const dayOfWeek = currentTimeIST.getDay();
-      console.log("daaayyyyyy", dayOfWeek);
-
-      if (dayOfWeek == 0 ) {
+      if (dayOfWeek == 0) {
         throw new CustomError("Attendance cannot be marked on weekends.", 400);
       }
 
@@ -318,7 +296,6 @@ export class attendenceService implements IattendenceService {
           };
 
           await this._attendenceRepository.createattendence(attendanceData);
-          console.log(`Marked absent for ${employee.email}`);
         }
       }
     } catch (error: unknown) {
@@ -333,46 +310,60 @@ export class attendenceService implements IattendenceService {
     checkOut: string
   ): Promise<void> {
     try {
-      console.log(attendenceId, "id---------");
-  
-      const attendanceRecord = await this._attendenceRepository.findById(attendenceId);
-      
+      const attendanceRecord = await this._attendenceRepository.findById(
+        attendenceId
+      );
+
       if (!attendanceRecord) {
         throw new CustomError("Attendance record not found", 404);
       }
-  
+
       const organizationId = attendanceRecord?.organizationId?.toString();
       const policy = await this.getAttendencePolicy(organizationId as string);
       if (!policy) throw new Error("Attendance policy not found");
-  
+
       const currentDate = new Date();
       const currentDateString = currentDate.toISOString().split("T")[0]; // YYYY-MM-DD
-  
+
       // Convert check-in and check-out to IST timezone
       const checkInIST = new Date(`${currentDateString}T${checkIn}:00+05:30`);
       const checkOutIST = new Date(`${currentDateString}T${checkOut}:00+05:30`);
-  
+
       if (checkOutIST <= checkInIST) {
-        throw new CustomError("Check-out time must be after check-in time", 400);
+        throw new CustomError(
+          "Check-out time must be after check-in time",
+          400
+        );
       }
-  
+
       // Calculate working hours
-      const workingHours = (checkOutIST.getTime() - checkInIST.getTime()) / 3600000;
-  
+      const workingHours =
+        (checkOutIST.getTime() - checkInIST.getTime()) / 3600000;
+
       let status: "late" | "present" | "halfDay" | "absent" = "present";
-  
+
       const halfDayThresholdHours = Number(policy.halfDayAfterHours);
       const totalWorkingHoursRequired = Number(policy.totalWorkingHours);
       const lateMarkAfterMinutes = Number(policy.lateMarkAfterMinutes);
-      const officeStartTimeIST = new Date(`${currentDateString}T${policy.officeStartTime}:00+05:30`);
-  
-      if (isNaN(halfDayThresholdHours) || isNaN(totalWorkingHoursRequired) || isNaN(lateMarkAfterMinutes)) {
-        throw new Error("Invalid working hours configuration in attendance policy");
+      const officeStartTimeIST = new Date(
+        `${currentDateString}T${policy.officeStartTime}:00+05:30`
+      );
+
+      if (
+        isNaN(halfDayThresholdHours) ||
+        isNaN(totalWorkingHoursRequired) ||
+        isNaN(lateMarkAfterMinutes)
+      ) {
+        throw new Error(
+          "Invalid working hours configuration in attendance policy"
+        );
       }
-  
+
       // Determine late status based on policy.lateMarkAfterMinutes
-      const lateMarkThresholdIST = new Date(officeStartTimeIST.getTime() + lateMarkAfterMinutes * 60000);
-  
+      const lateMarkThresholdIST = new Date(
+        officeStartTimeIST.getTime() + lateMarkAfterMinutes * 60000
+      );
+
       if (workingHours < halfDayThresholdHours) {
         status = "halfDay";
       } else if (checkInIST > lateMarkThresholdIST) {
@@ -380,28 +371,14 @@ export class attendenceService implements IattendenceService {
       } else if (workingHours >= totalWorkingHoursRequired) {
         status = "present";
       }
-  
-      // Update attendance record
-      const updatedAttendance = {
-        checkIn: checkInIST,
-        checkOut: checkOutIST,
-        workingHours,
-        status,
-      };
-  
+
       await this._attendenceRepository.updateAttendance(
         { _id: attendanceRecord._id },
-        { checkIn: checkInIST, checkOut: checkOutIST, workingHours, status } 
+        { checkIn: checkInIST, checkOut: checkOutIST, workingHours, status }
       );
-      
-  
-      console.log("Attendance updated successfully", updatedAttendance);
     } catch (error) {
       console.error("Error updating attendance:", error);
       throw error;
     }
   }
-  
-  
-  
 }

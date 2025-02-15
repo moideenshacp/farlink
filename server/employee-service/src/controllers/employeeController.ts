@@ -20,8 +20,6 @@ export class employeeController implements IemployeeController {
     try {
       const { employeeData } = req.body;
 
-      console.log("emoloyeee", employeeData);
-
       const { error } = registerEmployeeSchema.validate(employeeData, {
         abortEarly: false,
       });
@@ -31,7 +29,6 @@ export class employeeController implements IemployeeController {
           message: "validaton error",
           details: error.details[0].message,
         });
-        console.log("Validation Error:", error.details);
         return;
       }
       const registeredEmployee = await this._employeeservice.registerEmployee(
@@ -54,8 +51,6 @@ export class employeeController implements IemployeeController {
     res: Response
   ): Promise<void> => {
     try {
-      console.log("gte in allllll");
-
       const { organizationId,page,pageSize } = req.query;
       if (!organizationId) {
         throw new Error("organix=zation id is needed");
@@ -76,8 +71,6 @@ export class employeeController implements IemployeeController {
     res: Response
   ): Promise<void> => {
     try {
-      console.log("get in to update=======================================");
-
       const { employeeId, ...otherData } = req.body.data;
       const { error } = employeeProfileUpdate.validate(otherData, {
         abortEarly: false,
@@ -88,7 +81,6 @@ export class employeeController implements IemployeeController {
           message: "validaton error",
           details: error.details[0].message,
         });
-        console.log("Validation Error:", error.details);
         return;
       }
 
@@ -130,7 +122,6 @@ export class employeeController implements IemployeeController {
           message: "validaton error",
           details: error.details[0].message,
         });
-        console.log("Validation Error:", error.details);
         return;
       }
       const updated = await this._employeeservice.setUpPassword(

@@ -81,7 +81,6 @@ export class projectController implements IprojectController {
   ): Promise<Response> => {
     try {
       const { projectId, projectDetails } = req.body;
-      console.log("projcetID:", projectId);
       const updatedProject = await this._projectservice.updateProject(
         projectId,
         projectDetails
@@ -109,7 +108,7 @@ export class projectController implements IprojectController {
     res: Response
   ): Promise<Response> => {
     try {
-      const { employeeId,organizationId } = req.query;
+      const { employeeId, organizationId } = req.query;
       const result = await this._projectservice.fetchEmployeesProject(
         employeeId as string,
         organizationId as string
@@ -117,7 +116,7 @@ export class projectController implements IprojectController {
       if (result) {
         return res
           .status(200)
-          .json({ message: "Projects fetched sucessfully..",result });
+          .json({ message: "Projects fetched sucessfully..", result });
       } else {
         return res
           .status(400)
