@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: subscription-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: subscription-service
+  template:
+    metadata:
+      labels:
+        app: subscription-service
+    spec:
+      containers:
+        - name: subscription-service
+          image: moideenshacp/farlink-subscription-service:latest
+          ports:
+            - containerPort: 3003
+          envFrom:
+            - configMapRef:
+                name: subscription-service-config  # 🔹 Loads non-sensitive values
+            - secretRef:
+                name: subscription-service-secrets  # 🔹 Loads sensitive values
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: subscription-service
+spec:
+  selector:
+    app: subscription-service
+  ports:
+    - protocol: TCP
+      port: 3003
+      targetPort: 3003
+  type: ClusterIP

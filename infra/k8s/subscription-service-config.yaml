@@ -1,0 +1,15 @@
+apiVersion: v1
+data:
+  PORT: "3003"
+  RABBITMQ_HOST: rabbitmq
+  RABBITMQ_PORT: "5672"
+kind: ConfigMap
+metadata:
+  annotations:
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"v1","data":{"PORT":"3003","RABBITMQ_HOST":"rabbitmq","RABBITMQ_PORT":"5672"},"kind":"ConfigMap","metadata":{"annotations":{},"creationTimestamp":null,"name":"subscription-service-config","namespace":"default"}}
+  creationTimestamp: "2025-02-17T06:41:43Z"
+  name: subscription-service-config
+  namespace: default
+  resourceVersion: "38842"
+  uid: a0b52c5d-478a-4124-95af-c09c0805bf15

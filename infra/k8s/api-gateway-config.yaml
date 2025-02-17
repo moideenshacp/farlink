@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: api-gateway-config
+data:
+  AUTH_SERVICE_URL: "http://user-service:3001"
+  EMPLOYEE_SERVICE_URL: "http://employee-service:3002"
+  SUBCRIPTION_SERVICE_URL: "http://subscription-service:3003"
+  PROJECT_SERVICE_URL: "http://project-service:3004"
+  CHAT_MEET_SERVICE_URL: "http://chat-meeting-service:3005"
+  SERVER_PORT: "4000"
+  FRONT_URL: "http://localhost:5173"
+  RABBITMQ_HOST: "rabbitmq"
+  RABBITMQ_PORT: "5672"

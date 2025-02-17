@@ -1,0 +1,15 @@
+apiVersion: v1
+data:
+  PORT: "3002"
+  RABBITMQ_HOST: rabbitmq
+  RABBITMQ_PORT: "5672"
+kind: ConfigMap
+metadata:
+  annotations:
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"v1","data":{"PORT":"3002","RABBITMQ_HOST":"rabbitmq","RABBITMQ_PORT":"5672"},"kind":"ConfigMap","metadata":{"annotations":{},"creationTimestamp":null,"name":"employee-service-config","namespace":"default"}}
+  creationTimestamp: "2025-02-17T06:40:27Z"
+  name: employee-service-config
+  namespace: default
+  resourceVersion: "37998"
+  uid: eb7293a7-b571-458b-8956-61d87a733af4

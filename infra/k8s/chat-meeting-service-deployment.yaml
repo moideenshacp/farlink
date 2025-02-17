@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: chat-meeting-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: chat-meeting-service
+  template:
+    metadata:
+      labels:
+        app: chat-meeting-service
+    spec:
+      containers:
+        - name: chat-meeting-service
+          image: moideenshacp/farlink-chat-meeting-service:latest
+          ports:
+            - containerPort: 3005
+          envFrom:
+            - configMapRef:
+                name: chat-meeting-service-config  # 🔹 Loads non-sensitive values
+            - secretRef:
+                name: chat-meeting-service-secrets  # 🔹 Loads sensitive values
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: chat-meeting-service
+spec:
+  selector:
+    app: chat-meeting-service
+  ports:
+    - protocol: TCP
+      port: 3005
+      targetPort: 3005
+  type: ClusterIP

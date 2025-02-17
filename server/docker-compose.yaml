@@ -1,4 +1,4 @@
-version: '3.8'
+
 
 networks:
   farlink-network:
@@ -9,7 +9,7 @@ services:
   api-gateway:
     build:
       context: ./apiGateway
-    image:moideenshacp/farlink-api-gateway:latest
+    image: moideenshacp/farlink-api-gateway:latest
     ports:
       - "4000:4000"
     depends_on:
@@ -19,6 +19,8 @@ services:
       - subscription-service
       - project-service
       - chat-meeting-service
+    env_file:
+      - ./apiGateway/.env
     networks:
       - farlink-network
 
@@ -26,15 +28,15 @@ services:
   user-service:
     build:
       context: ./user-service
-    image:moideenshacp/farlink-user-service:latest
+    image: moideenshacp/farlink-user-service:latest
     container_name: user-service
     ports:
       - "3001:3001"
     depends_on:
-      - rabbitmq
-    environment:
-      RABBITMQ_HOST: rabbitmq
-      RABBITMQ_PORT: 5672
+      rabbitmq:
+        condition: service_healthy
+    env_file:
+      - ./user-service/.env
     networks:
       - farlink-network
 
@@ -42,31 +44,31 @@ services:
   employee-service:
     build:
       context: ./employee-service
-    image:moideenshacp/farlink-employee-service:latest
+    image: moideenshacp/farlink-employee-service:latest
     container_name: employee-service
     ports:
       - "3002:3002"
     depends_on:
-      - rabbitmq
-    environment:
-      RABBITMQ_HOST: rabbitmq
-      RABBITMQ_PORT: 5672
+      rabbitmq:
+        condition: service_healthy
+    env_file:
+      - ./employee-service/.env
     networks:
       - farlink-network
 
   # Subscription Service
   subscription-service:
     build:
-      context: ./subscription-service
-    image:moideenshacp/farlink-subscription-service:latest
+      context: ./subcription-service
+    image: moideenshacp/farlink-subscription-service:latest
     container_name: subscription-service
     ports:
       - "3003:3003"
     depends_on:
-      - rabbitmq
-    environment:
-      RABBITMQ_HOST: rabbitmq
-      RABBITMQ_PORT: 5672
+      rabbitmq:
+        condition: service_healthy
+    env_file:
+      - ./subcription-service/.env
     networks:
       - farlink-network
 
@@ -74,15 +76,15 @@ services:
   project-service:
     build:
       context: ./project-service
-    image:moideenshacp/farlink-project-service:latest
+    image: moideenshacp/farlink-project-service:latest
     container_name: project-service
     ports:
       - "3004:3004"
     depends_on:
-      - rabbitmq
-    environment:
-      RABBITMQ_HOST: rabbitmq
-      RABBITMQ_PORT: 5672
+      rabbitmq:
+        condition: service_healthy
+    env_file:
+      - ./project-service/.env
     networks:
       - farlink-network
 
@@ -90,15 +92,15 @@ services:
   chat-meeting-service:
     build:
       context: ./chat-meeting-service
-    image:moideenshacp/farlink-chat-meeting-service:latest
+    image: moideenshacp/farlink-chat-meeting-service:latest
     container_name: chat-meeting-service
     ports:
       - "3005:3005"
     depends_on:
-      - rabbitmq
-    environment:
-      RABBITMQ_HOST: rabbitmq
-      RABBITMQ_PORT: 5672
+      rabbitmq:
+        condition: service_healthy
+    env_file:
+      - ./chat-meeting-service/.env
     networks:
       - farlink-network
 
@@ -107,7 +109,12 @@ services:
     image: rabbitmq:management
     container_name: rabbitmq
     ports:
-      - "5672:5672"
-      - "15672:15672"  # Management UI (http://localhost:15672)
+      - "5673:5672"
+      - "15673:15672"  # Management UI (http://localhost:15672)
     networks:
       - farlink-network
+    healthcheck:
+      test: ["CMD", "rabbitmqctl", "status"]
+      interval: 10s
+      retries: 5
+      start_period: 10s

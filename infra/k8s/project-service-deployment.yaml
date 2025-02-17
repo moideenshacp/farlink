@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: project-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: project-service
+  template:
+    metadata:
+      labels:
+        app: project-service
+    spec:
+      containers:
+        - name: project-service
+          image: moideenshacp/farlink-project-service:latest
+          ports:
+            - containerPort: 3004
+          envFrom:
+            - configMapRef:
+                name: project-service-config  # 🔹 Loads non-sensitive values
+            - secretRef:
+                name: project-service-secrets  # 🔹 Loads sensitive values
+          
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: project-service
+spec:
+  selector:
+    app: project-service
+  ports:
+    - protocol: TCP
+      port: 3004
+      targetPort: 3004
+  type: ClusterIP
