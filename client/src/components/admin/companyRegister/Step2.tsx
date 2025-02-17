@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState } from "react";
 import logo from "../../../assets/EmailLogo.png";
 import Footer from "../../../shared/components/landingPageComponents/Footer";
@@ -9,7 +10,9 @@ import { RootState } from "../../../redux/store";
 import { useFormValidationStep2 } from "../../../shared/hooks/useCompanyValidations";
 import { setOrganizationId } from "../../../redux/user/userSlice";
 
-const Step2 = () => {
+
+
+const Step2   = () => {
   const { registrationData } = useCompanyBasicData();
   const { formErrors, validate, setFormErrors } = useFormValidationStep2();
   const navigate = useNavigate();
@@ -31,7 +34,6 @@ const Step2 = () => {
     if (name === "state") setState(value);
     if (name === "city") setCity(value);
     if (name === "zipcode") setZipcode(value);
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     setFormErrors((prevErrors: any) => ({
       ...prevErrors,
       [name]: "",

@@ -5,7 +5,7 @@ import { useCompanyBasicData } from "../../../shared/hooks/UseRegisteration";
 import { useNavigate } from "react-router-dom";
 import { useValidation } from "../../../shared/hooks/useCompanyValidations";
 
-const Step1 = () => {
+const Step1= () => {
   const navigate = useNavigate();
   const { registrationData, setRegistrationData } = useCompanyBasicData();
   const { errors, validate, setErrors } = useValidation(registrationData);
