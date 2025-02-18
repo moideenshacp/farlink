@@ -2,10 +2,22 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: api-gateway-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/enable-cors: "true"
+    nginx.ingress.kubernetes.io/cors-allow-origin: "https://farlink.moideensha.store"
+    nginx.ingress.kubernetes.io/cors-allow-methods: "GET, PUT, POST, DELETE,PATCH,OPTIONS"
+    nginx.ingress.kubernetes.io/cors-allow-headers: "DNT,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range"
+    nginx.ingress.kubernetes.io/cors-expose-headers: "Content-Length,Content-Range"
+    cert-manager.io/cluster-issuer: letsencrypt-prod
 spec:
-  ingressClassName: nginx  
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - api.moideensha.store
+      secretName: my-tls-secret
   rules:
-  - http:
+  - host: api.moideensha.store
+    http:
       paths:
       - path: /
         pathType: Prefix

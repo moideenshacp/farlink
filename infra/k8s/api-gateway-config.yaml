@@ -9,6 +9,6 @@ data:
   PROJECT_SERVICE_URL: "http://project-service:3004"
   CHAT_MEET_SERVICE_URL: "http://chat-meeting-service:3005"
   SERVER_PORT: "4000"
-  FRONT_URL: "http://localhost:5173"
+  FRONT_URL: "https://farlink.moideensha.store"
   RABBITMQ_HOST: "rabbitmq"
   RABBITMQ_PORT: "5672"

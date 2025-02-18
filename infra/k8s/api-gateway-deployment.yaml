@@ -15,7 +15,8 @@ spec:
       containers:
       - name: api-gateway
         image: moideenshacp/farlink-api-gateway:latest
-        envFrom:
+        imagePullPolicy: Always
+        envFrom: 
         - configMapRef:
             name: api-gateway-config   # 🔹 Loads non-sensitive values
         ports:

@@ -62,5 +62,5 @@ app.use("/api/company", companyRoutes);
 const port = process.env.PORT;
 
 app.listen(port, () => {
-  console.log(`auth-service started on port ${port}`);
+  console.log(`auth-servicee started on port ${port}`);
 });

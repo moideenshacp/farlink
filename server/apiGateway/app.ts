@@ -13,7 +13,7 @@ app.use(express.static("public"));
 app.use(morgan("tiny"));
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: "https://farlink.moideensha.store",
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
     allowedHeaders: ["Content-Type"],
     credentials: true,
@@ -32,5 +32,5 @@ app.use("/chat-meet-service", proxy(`${process.env.CHAT_MEET_SERVICE_URL}`));
 const port = process.env.SERVER_PORT || 4000;
 
 app.listen(port, () => {
-  console.log(`API GATEWAY RUNNING ON ${port}`);
+  console.log(`API GATEWAYY RUNNING ON ${port}`);
 });

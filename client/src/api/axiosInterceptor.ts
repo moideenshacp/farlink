@@ -4,7 +4,7 @@ import { logout } from "../redux/user/userSlice";
 
 // Axios instance
 const axiosInstance = axios.create({
-  baseURL: "http://localhost:4000/",
+  baseURL: "https://api.moideensha.store/",
   withCredentials: true,
 });
 
@@ -19,7 +19,7 @@ axiosInstance.interceptors.response.use(
 
       try {
         await axios.post(
-          "http://localhost:4000/auth-service/api/auth/refresh-token",
+          "https://api.moideensha.store/auth-service/api/auth/refresh-token",
           {},
           {
             withCredentials: true,
