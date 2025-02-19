@@ -15,6 +15,7 @@ spec:
       containers:
         - name: subscription-service
           image: moideenshacp/farlink-subscription-service:latest
+          imagePullPolicy: Always
           ports:
             - containerPort: 3003
           envFrom:

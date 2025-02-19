@@ -19,6 +19,13 @@ spec:
   - host: api.moideensha.store
     http:
       paths:
+      - path: /socket.io/
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: chat-meeting-service
+            port:
+              number: 3005
       - path: /
         pathType: Prefix
         backend:

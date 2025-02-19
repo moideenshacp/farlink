@@ -18,7 +18,7 @@ const app = express();
 const port = process.env.PORT;
 
 const server = app.listen(port, () => {
-  console.log(`chat-meeting-service started on port ${port}`);
+  console.log(`chat-meeting-servicee started on port ${port}`);
 });
 initializeSocket(server); 
 app.use(

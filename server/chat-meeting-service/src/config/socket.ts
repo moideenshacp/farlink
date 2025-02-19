@@ -31,6 +31,7 @@ export const initializeSocket = (server: http.Server) => {
     });
 
     socket.on("joinRoom", (chatId: string) => {
+      console.log("user jined-----------------",chatId);
       socket.join(chatId);
     });
 
