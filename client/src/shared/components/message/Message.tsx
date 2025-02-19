@@ -24,9 +24,6 @@ const ChatContainer: React.FC = () => {
     "individual"
   );
   const [selectedChat, setSelectedChat] = useState<Chat | null>(null);
-  console.log("seleected chat------------------------------------",selectedChat);
-  console.log("user------------------------------------",user);
-  
 
   const handleSelectChat = async (chat: Chat) => {
     try {
@@ -215,15 +212,11 @@ const ChatContainer: React.FC = () => {
     }
   };
   useEffect(() => {
-    console.log("coming to register-------------------------------");
-
     socket.emit("registerUser", user?._id);
-  },);
+  }, [user?._id]);
 
   useEffect(() => {
     if (selectedChat) {
-      console.log("coming to chat-------------------------------");
-      
       socket.emit("joinRoom", selectedChat.id);
     }
   }, [selectedChat, user?._id]);
