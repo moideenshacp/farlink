@@ -218,7 +218,7 @@ const ChatContainer: React.FC = () => {
     console.log("coming to register-------------------------------");
 
     socket.emit("registerUser", user?._id);
-  }, [user?._id]);
+  },);
 
   useEffect(() => {
     if (selectedChat) {

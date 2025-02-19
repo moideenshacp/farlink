@@ -23,10 +23,13 @@ export const initializeSocket = (server: http.Server) => {
       methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
       credentials: true,
     },
+    transports: ["websocket"],
   });
 
   io.on("connection", (socket) => {
     socket.on("registerUser", (userId: string) => {
+      console.log("socket connected---------------------------------------");
+      
       userSockets.set(userId, socket.id);
     });
 
