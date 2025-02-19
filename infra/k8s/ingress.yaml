@@ -9,6 +9,11 @@ metadata:
     nginx.ingress.kubernetes.io/cors-allow-headers: "DNT,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range"
     nginx.ingress.kubernetes.io/cors-expose-headers: "Content-Length,Content-Range"
     cert-manager.io/cluster-issuer: letsencrypt-prod
+    # 🔹 WebSocket Annotations
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
+    nginx.ingress.kubernetes.io/proxy-buffering: "off"
+    nginx.ingress.kubernetes.io/websocket-services: "chat-meeting-service"
 spec:
   ingressClassName: nginx
   tls:
