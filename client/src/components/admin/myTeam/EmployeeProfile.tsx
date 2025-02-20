@@ -104,10 +104,10 @@ const EmployeeProfile = () => {
           </span> */}
         </div>
 
-        {/* Assign Task Button */}
+        {/* Assign Task Button
         <button className="bg-[#4361EE] text-white px-4 py-2 rounded-md">
           +Assign Task
-        </button>
+        </button> */}
       </div>
 
       {/* Tabs Section */}

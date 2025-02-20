@@ -253,7 +253,7 @@ const AddEmployeeModal = ({ toggleModal }: { toggleModal: () => void }) => {
             Gender
           </label>
           <select
-            className="w-full p-2 border rounded focus:outline-none"
+            className="w-full p-2 bg-white border rounded focus:outline-none"
             name="gender"
             onChange={handleChange}
             value={formData.gender}

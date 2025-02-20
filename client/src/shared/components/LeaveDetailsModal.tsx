@@ -133,7 +133,7 @@ const LeaveDetailsModel: React.FC<LeaveDetailsModelProps> = ({
               &times;
             </button>
           </div>
-          <h2 className="text-xl font-bold mb-4">Leave Details</h2>
+          <h2 className="text-xl text-black font-bold mb-4">Leave Details</h2>
           <form onSubmit={handleEdit}>
             <div className="mb-4">
               <label className="block mb-1 font-medium text-[#232360]">
@@ -172,7 +172,7 @@ const LeaveDetailsModel: React.FC<LeaveDetailsModelProps> = ({
                 name="fromDate"
                 selected={formData.fromDate}
                 onChange={(date) => handleDateChange(date, "fromDate")}
-                className="w-full p-3 border rounded-lg focus:outline-none"
+                className="w-full p-3 bg-white border rounded-lg focus:outline-none"
                 disabled={isAdmin || status !== "pending"}
               />
             </div>
@@ -185,7 +185,7 @@ const LeaveDetailsModel: React.FC<LeaveDetailsModelProps> = ({
                 name="toDate"
                 selected={formData.toDate}
                 onChange={(date) => handleDateChange(date, "toDate")}
-                className="w-full p-3 border rounded-lg focus:outline-none"
+                className="w-full p-3 bg-white border rounded-lg focus:outline-none"
                 disabled={isAdmin || status !== "pending"}
               />
             </div>

@@ -92,7 +92,7 @@ const ManageLeave = () => {
   return (
     <form onSubmit={handleSubmit}>
       <div className="p-6 ">
-        <h1 className="text-2xl font-bold mb-6">
+        <h1 className="text-2xl text-black font-bold mb-6">
           Attendance Policy Management
         </h1>
         {error && <p className="text-red-600 text-center">{error}</p>}

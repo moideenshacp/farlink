@@ -101,7 +101,7 @@ const Myteam = () => {
               value={newTeam}
               onChange={(e) => setNewTeam(e.target.value)}
               placeholder="Enter new team name"
-              className="border lg:mt-2 border-gray-300 py-2 px-4 rounded shadow focus:outline-none w-full md:w-auto"
+              className="border bg-white lg:mt-2 border-gray-300 py-2 px-4 rounded shadow focus:outline-none w-full md:w-auto"
             />
             <button
               onClick={addTeam}

@@ -163,7 +163,7 @@ const DashboardProfile = () => {
               label="Username"
               type="text"
               value={user?.name || ""}
-              className="w-full p-2 border rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-200 text-[#333333] font-normal"
+              className="w-full bg-white p-2 border rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-200 text-[#333333] font-normal"
               readOnly
             />
 
@@ -175,7 +175,7 @@ const DashboardProfile = () => {
               name="fName"
               value={formData.fName}
               readOnly={user?.role === "employee"}
-              className="w-full p-2 border rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-200 text-[#333333] font-normal"
+              className="w-full bg-white p-2 border rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-200 text-[#333333] font-normal"
             />
             {validationErrors.fName && (
               <p className="text-red-500 text-sm">{validationErrors.fName}</p>
@@ -189,7 +189,7 @@ const DashboardProfile = () => {
               name="lName"
               value={formData.lName}
               readOnly={user?.role === "employee"}
-              className="w-full p-2 border rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-200 text-[#333333] font-normal"
+              className="w-full bg-white p-2 border rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-200 text-[#333333] font-normal"
             />
             {validationErrors.lName && (
               <p className="text-red-500 text-sm">{validationErrors.lName}</p>
@@ -203,7 +203,7 @@ const DashboardProfile = () => {
               name="phone"
               value={formData.phone}
               readOnly={user?.role === "employee"}
-              className="w-full p-2 border rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-200 text-[#333333] font-normal"
+              className="w-full bg-white p-2 border rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-200 text-[#333333] font-normal"
             />
             {validationErrors.phone && (
               <p className="text-red-500 text-sm">{validationErrors.phone}</p>
@@ -215,7 +215,7 @@ const DashboardProfile = () => {
                 type="text"
                 value={user?.email || ""}
                 readOnly
-                className="w-full p-2 border rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-200 text-[#333333] font-normal"
+                className="w-full bg-white p-2 border rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-200 text-[#333333] font-normal"
               />
             )}
             {user?.position && (
@@ -224,7 +224,7 @@ const DashboardProfile = () => {
                 type="text"
                 value={user?.position || ""}
                 readOnly
-                className="w-full p-2 border rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-200 text-[#333333] font-normal"
+                className="w-full bg-white p-2 border rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-200 text-[#333333] font-normal"
               />
             )}
             <Input
@@ -232,7 +232,7 @@ const DashboardProfile = () => {
               type="text"
               value={user?.role || ""}
               readOnly
-              className="w-full p-2 border rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-200 text-[#333333] font-normal"
+              className="w-full bg-white p-2 border rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-200 text-[#333333] font-normal"
             />
           </div>
         </div>

@@ -161,7 +161,7 @@ const EmployeeProfile_Profile: React.FC<EmployeeProfileProps> = ({
             onChange={handleChange}
             name="userName"
             value={formData.userName}
-            className="w-full border-b border-gray-300 focus:outline-none focus:border-[#4361EE] py-1"
+            className="w-full bg-white border-b border-gray-300 focus:outline-none focus:border-[#4361EE] py-1"
           />
           {errors.userName && <p className="text-red-600">{errors.userName}</p>}
 
@@ -172,7 +172,7 @@ const EmployeeProfile_Profile: React.FC<EmployeeProfileProps> = ({
             onChange={handleChange}
             name="firstName"
             value={formData.firstName}
-            className="w-full border-b border-gray-300 focus:outline-none focus:border-[#4361EE] py-1"
+            className="w-full bg-white border-b border-gray-300 focus:outline-none focus:border-[#4361EE] py-1"
           />
           {errors.firstName && (
             <p className="text-red-600">{errors.firstName}</p>
@@ -185,7 +185,7 @@ const EmployeeProfile_Profile: React.FC<EmployeeProfileProps> = ({
             onChange={handleChange}
             name="lastName"
             value={formData.lastName}
-            className="w-full border-b border-gray-300 focus:outline-none focus:border-[#4361EE] py-1"
+            className="w-full bg-white border-b border-gray-300 focus:outline-none focus:border-[#4361EE] py-1"
           />
           {errors.lastName && <p className="text-red-600">{errors.lastName}</p>}
         </div>
@@ -195,7 +195,7 @@ const EmployeeProfile_Profile: React.FC<EmployeeProfileProps> = ({
             Position
           </label>
           <select
-            className="w-full p-2 border rounded focus:outline-none"
+            className="w-full bg-white p-2 border rounded focus:outline-none"
             name="position"
             onChange={handleChange}
             value={formData.position}
@@ -213,7 +213,7 @@ const EmployeeProfile_Profile: React.FC<EmployeeProfileProps> = ({
             Gender
           </label>
           <select
-            className="w-full p-2 border rounded focus:outline-none"
+            className="w-full p-2 bg-white border rounded focus:outline-none"
             name="gender"
             onChange={handleChange}
             value={formData.gender}
@@ -230,7 +230,7 @@ const EmployeeProfile_Profile: React.FC<EmployeeProfileProps> = ({
             onChange={handleChange}
             name="dateOfJoining"
             value={formData.dateOfJoining}
-            className="w-full border-b border-gray-300 focus:outline-none focus:border-[#4361EE] py-1"
+            className="w-full border-b bg-white border-gray-300 focus:outline-none focus:border-[#4361EE] py-1"
           />
           {errors.dateOfJoining && (
             <p className="text-red-600">{errors.dateOfJoining}</p>
@@ -242,7 +242,7 @@ const EmployeeProfile_Profile: React.FC<EmployeeProfileProps> = ({
             onChange={handleChange}
             name="dateOfBirth"
             value={formData.dateOfBirth}
-            className="w-full border-b border-gray-300 focus:outline-none focus:border-[#4361EE] py-1"
+            className="w-full bg-white border-b border-gray-300 focus:outline-none focus:border-[#4361EE] py-1"
           />
           {errors.dateOfBirth && (
             <p className="text-red-600">{errors.dateOfBirth}</p>
@@ -254,7 +254,7 @@ const EmployeeProfile_Profile: React.FC<EmployeeProfileProps> = ({
             onChange={handleChange}
             name="phone"
             value={formData.phone}
-            className="w-full border-b border-gray-300 focus:outline-none focus:border-[#4361EE] py-1"
+            className="w-full bg-white border-b border-gray-300 focus:outline-none focus:border-[#4361EE] py-1"
           />
         </div>
 
@@ -266,7 +266,7 @@ const EmployeeProfile_Profile: React.FC<EmployeeProfileProps> = ({
           onChange={handleChange}
           name="email"
           value={formData.email}
-          className="w-full border-b border-gray-300 focus:outline-none focus:border-[#4361EE] py-1"
+          className="w-full bg-white border-b border-gray-300 focus:outline-none focus:border-[#4361EE] py-1"
         />
         {errors.email && <p className="text-red-600">{errors.email}</p>}
 
@@ -279,7 +279,7 @@ const EmployeeProfile_Profile: React.FC<EmployeeProfileProps> = ({
             onChange={handleChange}
             name="highestQualification"
             value={formData.highestQualification}
-            className="w-full border-b border-gray-300 focus:outline-none focus:border-[#4361EE] py-1"
+            className="w-full bg-white border-b border-gray-300 focus:outline-none focus:border-[#4361EE] py-1"
           />
           {errors.highestQualification && (
             <p className="text-red-600">{errors.highestQualification}</p>
@@ -291,7 +291,7 @@ const EmployeeProfile_Profile: React.FC<EmployeeProfileProps> = ({
             onChange={handleChange}
             name="institution"
             value={formData.institution}
-            className="w-full border-b border-gray-300 focus:outline-none focus:border-[#4361EE] py-1"
+            className="w-full bg-white border-b border-gray-300 focus:outline-none focus:border-[#4361EE] py-1"
           />
           {errors.institution && (
             <p className="text-red-600">{errors.institution}</p>
@@ -304,7 +304,7 @@ const EmployeeProfile_Profile: React.FC<EmployeeProfileProps> = ({
             onChange={handleChange}
             name="qualificationYear"
             value={formData.qualificationYear}
-            className="w-full border-b border-gray-300 focus:outline-none focus:border-[#4361EE] py-1"
+            className="w-full bg-white border-b border-gray-300 focus:outline-none focus:border-[#4361EE] py-1"
           />
           {errors.qualificationYear && (
             <p className="text-red-600">{errors.qualificationYear}</p>
@@ -319,7 +319,7 @@ const EmployeeProfile_Profile: React.FC<EmployeeProfileProps> = ({
             onChange={handleChange}
             name="fatherName"
             value={formData.fatherName}
-            className="w-full border-b border-gray-300 focus:outline-none focus:border-[#4361EE] py-1"
+            className="w-full bg-white border-b border-gray-300 focus:outline-none focus:border-[#4361EE] py-1"
           />
           {errors.fatherName && (
             <p className="text-red-600">{errors.fatherName}</p>
@@ -331,7 +331,7 @@ const EmployeeProfile_Profile: React.FC<EmployeeProfileProps> = ({
             onChange={handleChange}
             name="fatherProfession"
             value={formData.fatherProfession}
-            className="w-full border-b border-gray-300 focus:outline-none focus:border-[#4361EE] py-1"
+            className="w-full bg-white border-b border-gray-300 focus:outline-none focus:border-[#4361EE] py-1"
           />
           {errors.fatherProfession && (
             <p className="text-red-600">{errors.fatherProfession}</p>
@@ -345,7 +345,7 @@ const EmployeeProfile_Profile: React.FC<EmployeeProfileProps> = ({
             onChange={handleChange}
             name="motherName"
             value={formData.motherName}
-            className="w-full border-b border-gray-300 focus:outline-none focus:border-[#4361EE] py-1"
+            className="w-full bg-white border-b border-gray-300 focus:outline-none focus:border-[#4361EE] py-1"
           />
           {errors.motherName && (
             <p className="text-red-600">{errors.motherName}</p>
@@ -358,7 +358,7 @@ const EmployeeProfile_Profile: React.FC<EmployeeProfileProps> = ({
             onChange={handleChange}
             name="motherProfession"
             value={formData.motherProfession}
-            className="w-full border-b border-gray-300 focus:outline-none focus:border-[#4361EE] py-1"
+            className="w-full bg-white border-b border-gray-300 focus:outline-none focus:border-[#4361EE] py-1"
           />
           {errors.motherProfession && (
             <p className="text-red-600">{errors.motherProfession}</p>
