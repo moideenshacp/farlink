@@ -14,11 +14,14 @@ import Meetings from "../../components/employee/meeting/Meetings";
 import DashboardOverview from "../../components/employee/overview/DashboardOverview";
 import CreateProject from "../../components/admin/ProjectManagment/CreateProject";
 import ChatContainer from "../../shared/components/message/Message";
+import NotFound from "../../pages/404-page/NotFound";
 const ServiceRequest = () => <div>ServiceRequest Content</div>;
 const RequestService = () => <div>ServiceRequest Content</div>;
 const RealTimeAlert = () => <div>RealTimeAlert Content</div>;
 const EmployeeRoutes = () => (
   <Routes>
+              <Route path="*" element={<NotFound routeType="employee" />} />
+
     <Route path="/" element={<EmployeeDashboard />}>
       <Route index element={<DashboardOverview />} />
       <Route path="/my-team" element={<Myteam />} />

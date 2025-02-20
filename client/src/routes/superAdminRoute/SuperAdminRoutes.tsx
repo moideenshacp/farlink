@@ -5,9 +5,12 @@ import DashboardAllOrg from "../../components/superAdmin/DashboardAllOrg";
 import DashboardSettings from "../../components/superAdmin/DashboardSettings";
 import PaymentHistoryAdmin from "../../components/superAdmin/Billings";
 import CompanyDetails from "../../components/superAdmin/CompanyDetails";
+import NotFound from "../../pages/404-page/NotFound";
 
 const SuperAdminRoutes = () => (
   <Routes>
+              <Route path="*" element={<NotFound routeType="superadmin" />} />
+
     <Route path="/" element={<Dashboard />}>
       <Route index element={<DashboardOverview />} />
       <Route path="/All-organization" element={<DashboardAllOrg />} />

@@ -12,11 +12,14 @@ import TaskSummary from "../../components/admin/TaskManagement/TaskSummary";
 import SubscriptionRoute from "../SubscriptionRoute";
 import Meeting from "../../components/admin/meeting/Meeting";
 import ChatContainer from "../../shared/components/message/Message";
+import NotFound from "../../pages/404-page/NotFound";
 const ServiceRequest = () => <div>ServiceRequest Content</div>;
 const RealTimeAlert = () => <div>RealTimeAlert Content</div>;
 
 const AdminRoutes = () => (
   <Routes>
+          <Route path="*" element={<NotFound routeType="admin" />} />
+
     <Route path="/" element={<AdminDashboard />}>
       <Route index element={<DashboardOverview />} />
       <Route path="/my-team" element={<Myteam />} />

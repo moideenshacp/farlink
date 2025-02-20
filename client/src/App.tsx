@@ -24,6 +24,7 @@ import SuperAdminRoutes from "./routes/superAdminRoute/SuperAdminRoutes";
 import EmployeePrivateRoute from "./routes/EmployeePrivateRoute";
 import VideoCall from "./shared/components/VideoCall";
 import SubscriptionRoute from "./routes/SubscriptionRoute";
+import NotFound from "./pages/404-page/NotFound";
 
 function App() {
   return (
@@ -73,6 +74,8 @@ function App() {
             <Route path="/superAdmin/*" element={<SuperAdminRoutes />} />
           </Route>
           {/*================================================================================================================================== */}
+                  {/* 404 Page Route */}
+                  <Route path="*" element={<NotFound />} />
         </Routes>
       </div>
     </BrowserRouter>
