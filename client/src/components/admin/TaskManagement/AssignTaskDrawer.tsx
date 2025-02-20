@@ -50,6 +50,7 @@ const AssignTaskDrawer: React.FC<AssignTaskDrawerProps> = ({
   }));
 
   const { user } = useSelector((state: RootState) => state.user);
+  const [errors, setErrors] = useState<Record<string, string>>({});
   const [taskDetails, setTaskDetails] = useState<ITaskDetails>({
     taskName: "",
     taskDescription: "",
@@ -110,12 +111,14 @@ const AssignTaskDrawer: React.FC<AssignTaskDrawerProps> = ({
     (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
       const { name, value } = e.target;
       setTaskDetails((prevDetails) => ({ ...prevDetails, [name]: value }));
+      setErrors({})
     },
     []
   );
 
   const handleDateChange = useCallback((name: string, date: Date | null) => {
     setTaskDetails((prevDetails) => ({ ...prevDetails, [name]: date }));
+    setErrors({})
   }, []);
 
   const handleSelectChange = useCallback(
@@ -124,6 +127,7 @@ const AssignTaskDrawer: React.FC<AssignTaskDrawerProps> = ({
         ...prevDetails,
         [name]: selectedOption,
       }));
+      setErrors({})
     },
     []
   );
@@ -137,6 +141,7 @@ const AssignTaskDrawer: React.FC<AssignTaskDrawerProps> = ({
           ...prevDetails,
           file: fileUrl ?? null,
         }));
+        setErrors({})
       } else {
         message.error("File upload failed. Please try again.");
       }
@@ -146,6 +151,7 @@ const AssignTaskDrawer: React.FC<AssignTaskDrawerProps> = ({
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setErrors({});
 
     const formattedTaskDetails = {
       ...taskDetails,
@@ -158,14 +164,22 @@ const AssignTaskDrawer: React.FC<AssignTaskDrawerProps> = ({
       projectId: project._id,
     };
 
+    const newErrors: Record<string, string> = {};
+    if (!formattedTaskDetails.priority) {
+      newErrors.priority = "Please choose a valid priority";
+    }
     const { error } = TaskValidationSchema.validate(formattedTaskDetails, {
       abortEarly: false,
     });
 
     if (error) {
       error.details.forEach((err) => {
-        message.error(err.message);
+        newErrors[err.path[0]] = err.message;
       });
+    }
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
       return;
     }
 
@@ -211,6 +225,11 @@ const AssignTaskDrawer: React.FC<AssignTaskDrawerProps> = ({
       
     }
   };
+  const handleClose = () => {
+    setErrors({});
+    onClose();
+  };
+  
 
   return (
     <Drawer
@@ -220,7 +239,7 @@ const AssignTaskDrawer: React.FC<AssignTaskDrawerProps> = ({
         </div>
       }
       closable={false}
-      onClose={onClose}
+      onClose={handleClose}
       open={open}
     >
       <form onSubmit={handleSubmit} className="space-y-4 mt-2">
@@ -235,7 +254,9 @@ const AssignTaskDrawer: React.FC<AssignTaskDrawerProps> = ({
           className="p-2 border-gray-300 rounded-md"
           placeholder="Enter Task Name"
         />
-
+  {errors.taskName && (
+            <p className="text-red-500">{errors.taskName}</p>
+          )}
         <div>
           <label className="block mb-1 font-semibold text-sm text-[#232360]">
             Task Description
@@ -247,9 +268,14 @@ const AssignTaskDrawer: React.FC<AssignTaskDrawerProps> = ({
             placeholder="Enter Task Description"
             className="w-full border focus:outline-[#1677ff] border-gray-300 rounded-md p-2 h-24"
           />
+          {errors.taskDescription && (
+            <p className="text-red-500">{errors.taskDescription}</p>
+          )}
         </div>
 
         <div className="grid grid-cols-2 gap-4">
+          <div>
+
           <DatePickerField
             label="Start Date"
             value={taskDetails.startDate}
@@ -257,6 +283,12 @@ const AssignTaskDrawer: React.FC<AssignTaskDrawerProps> = ({
               handleDateChange("startDate", date?.toDate() || null)
             }
           />
+           {errors.startDate && (
+            <p className="text-red-500">{errors.startDate}</p>
+          )}
+          </div>
+          <div>
+
           <DatePickerField
             label="End Date"
             value={taskDetails.endDate}
@@ -264,7 +296,13 @@ const AssignTaskDrawer: React.FC<AssignTaskDrawerProps> = ({
               handleDateChange("endDate", date?.toDate() || null)
             }
           />
+          {errors.endDate && (
+            <p className="text-red-500">{errors.endDate}</p>
+          )}
+          </div>
         </div>
+
+          <div>
 
         <SelectField
           label="Choose Members"
@@ -273,12 +311,22 @@ const AssignTaskDrawer: React.FC<AssignTaskDrawerProps> = ({
           value={taskDetails.members}
           onChange={(option: any) => handleSelectChange("members", option)}
         />
+        {errors.members && (
+            <p className="text-red-500">{errors.members}</p>
+          )}
+          </div>
+          <div>
+
         <SelectField
           label="Set Priority"
           options={priorityOptions}
           value={taskDetails.priority}
           onChange={(option: any) => handleSelectChange("priority", option)}
         />
+        {errors.priority && (
+            <p className="text-red-500">{errors.priority}</p>
+          )}
+          </div>
 
         <FileUpload
           onFileSelect={handleFileSelect}

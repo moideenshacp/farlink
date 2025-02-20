@@ -33,14 +33,9 @@ export const TaskValidationSchema = Joi.object({
       "array.min": "At least one member is required",
       "array.base": "Members must be an array of valid MongoDB ObjectIds",
     }),
-  priority: Joi.string()
-    .trim()
-    .valid("high", "medium", "low")
-    .required()
-    .messages({
-      "any.only": "Priority must be one of high, medium, low",
-      "any.required": "Priority is required",
-    }),
+  priority: Joi.any().required().messages({
+    "any.required": "Please select a valid priority",
+  }),
   file: Joi.alternatives()
     .try(Joi.string(), Joi.valid(null))
     .optional()
