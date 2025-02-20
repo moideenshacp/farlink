@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from "react";
 import {
   addEmployee,
@@ -8,14 +9,17 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
 import Input from "../../../shared/components/Input";
 import { message } from "antd";
+import SelectField from "../../../shared/components/SelectField";
 
 const AddEmployeeModal = ({ toggleModal }: { toggleModal: () => void }) => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [isUploading, setIsUploading] = useState(false);
+
+
   const [formData, setFormData] = useState({
     userName: "",
-    position: "",
+    position: null,
     email: "",
     gender: "male",
     firstName: "",
@@ -24,11 +28,25 @@ const AddEmployeeModal = ({ toggleModal }: { toggleModal: () => void }) => {
   });
   console.log(imageUrl);
 
+  
+
   const { user } = useSelector((state: RootState) => state.user);
   const [teams, setTeams] = useState([]);
   const organizationId = useSelector(
     (state: RootState) => state.user?.user?.organizationId
   );
+
+  const positionOptions = teams.map((position) => ({
+    value: position,
+    label: position
+  }));
+
+  const handlePositionChange = (selectedOption: any) => {
+    setFormData(prev => ({
+      ...prev,
+      position: selectedOption?.value || ''
+    }));
+  };
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -109,7 +127,7 @@ const AddEmployeeModal = ({ toggleModal }: { toggleModal: () => void }) => {
 
         setFormData({
           userName: "",
-          position: "",
+          position: null,
           email: "",
           gender: "male",
           firstName: "",
@@ -120,7 +138,6 @@ const AddEmployeeModal = ({ toggleModal }: { toggleModal: () => void }) => {
       } else {
         message.error("Something went wrong. Please try again.", 2);
       }
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       if (
         error.response &&
@@ -157,21 +174,15 @@ const AddEmployeeModal = ({ toggleModal }: { toggleModal: () => void }) => {
         />
 
         <div>
-          <label className="block mb-1 font-medium text-[#232360]">
-            Position
-          </label>
-          <select
-            className="w-full p-2 border rounded focus:outline-none"
-            name="position"
-            onChange={handleChange}
-            value={formData.position}
-          >
-            {teams.map((team, index) => (
-              <option key={index} value={team}>
-                {team}
-              </option>
-            ))}
-          </select>
+        <div className="col-span-1">
+          <SelectField
+            label="Position"
+            options={positionOptions}
+            value={positionOptions.find(option => option.value === formData.position) || null}
+            onChange={handlePositionChange}
+            isMulti={false}
+          />
+        </div>
         </div>
         <Input
           label="Last Name"

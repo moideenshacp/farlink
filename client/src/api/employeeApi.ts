@@ -3,7 +3,7 @@ import axiosInstance from "./axiosInterceptor";
 
 interface EmployeeData {
   userName: string;
-  position: string;
+  position: string | null;
   email: string;
   gender: string;
   firstName: string;
