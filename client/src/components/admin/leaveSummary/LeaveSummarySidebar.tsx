@@ -50,7 +50,7 @@ const Sidebar: React.FC<SidebarProps> = ({ onSelectEmail }) => {
           placeholder="Search Team members..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          className="w-full border border-gray-300 rounded-md pl-8 pr-2 py-2 text-[#8C97A8] focus:outline-none focus:ring-2 focus:ring-blue-400"
+          className="w-full border bg-white border-gray-300 rounded-md pl-8 pr-2 py-2 text-[#8C97A8] focus:outline-none focus:ring-2 focus:ring-blue-400"
         />
         <svg
           xmlns="http://www.w3.org/2000/svg"

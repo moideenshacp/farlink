@@ -19,7 +19,7 @@ const Input: React.FC<ReusableInputProps> = ({
   placeholder,
   readOnly,
   min,
-  className = "w-full p-3 border rounded focus:outline-none",
+  className = "w-full p-3 border bg-white rounded focus:outline-none",
 }) => {
   return (
     <div className="mb-3">

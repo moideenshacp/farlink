@@ -52,7 +52,7 @@ const ViewProjectDetail = ({ project }: ViewProjectDetailProps) => {
               value={project?.projectDescription}
               placeholder="Enter Project Description"
               readOnly
-              className="w-full border focus:outline-[#1677ff] border-gray-300 rounded-md p-2 h-24"
+              className="w-full bg-white border focus:outline-[#1677ff] border-gray-300 rounded-md p-2 h-24"
             ></textarea>
           </div>
           <div className="grid pb-2 grid-cols-2 gap-4">

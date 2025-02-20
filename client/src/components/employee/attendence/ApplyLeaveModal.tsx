@@ -123,7 +123,7 @@ const ApplyLeaveModal: React.FC<applyModalProps> = ({
               Leave Type
             </label>
             <select
-              className="w-full border focus:outline-none rounded-lg p-2"
+              className="w-full border bg-white focus:outline-none rounded-lg p-2"
               value={formData.leaveType}
               name="leaveType"
               onChange={handleChange}
@@ -151,7 +151,7 @@ const ApplyLeaveModal: React.FC<applyModalProps> = ({
             <DatePicker
               selected={formData.fromDate}
               onChange={(date) => handleDateChange(date, "fromDate")}
-              className="w-full border rounded-lg p-2 focus:outline-none"
+              className="w-full border bg-white rounded-lg p-2 focus:outline-none"
             />
           </div>
 
@@ -160,7 +160,7 @@ const ApplyLeaveModal: React.FC<applyModalProps> = ({
             <DatePicker
               selected={formData.toDate}
               onChange={(date) => handleDateChange(date, "toDate")}
-              className="w-full p-3 border rounded-lg focus:outline-none"
+              className="w-full p-3 border bg-white rounded-lg focus:outline-none"
             />
           </div>
 
@@ -169,7 +169,7 @@ const ApplyLeaveModal: React.FC<applyModalProps> = ({
               Reason for Leave
             </label>
             <textarea
-              className="w-full border focus:outline-none rounded-lg p-2"
+              className="w-full bg-white border focus:outline-none rounded-lg p-2"
               value={formData.reason}
               name="reason"
               onChange={handleChange}

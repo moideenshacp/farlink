@@ -100,7 +100,7 @@ const LeaveSummary = () => {
             <DatePicker
               selected={fromDate}
               onChange={(date: Date | null) => setFromDate(date)}
-              className="border px-3 py-2   rounded-lg w-full focus:outline-none"
+              className="border bg-white px-3 py-2   rounded-lg w-full focus:outline-none"
             />
           </div>
           <div>
@@ -108,7 +108,7 @@ const LeaveSummary = () => {
             <DatePicker
               selected={toDate}
               onChange={(date: Date | null) => setToDate(date)}
-              className="border px-3 py-2 rounded-lg w-full focus:outline-none"
+              className="border px-3 bg-white py-2 rounded-lg w-full focus:outline-none"
             />
           </div>
           <div>

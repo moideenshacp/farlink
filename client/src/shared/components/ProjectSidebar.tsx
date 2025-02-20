@@ -44,7 +44,7 @@ const ProjectSidebar = ({
           placeholder={searchPlaceholder}
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          className="w-full border border-gray-300 rounded-md pl-8 pr-2 py-2 text-[#8C97A8] focus:outline-none focus:ring-2 focus:ring-blue-400"
+          className="w-full border bg-white border-gray-300 rounded-md pl-8 pr-2 py-2 text-[#8C97A8] focus:outline-none focus:ring-2 focus:ring-blue-400"
         />
         <CiSearch className="absolute top-8 left-6 w-5 h-5" color="#8C97A8" />
       </div>

@@ -295,7 +295,7 @@ const CreateProjectForm = ({
               value={projectDetails.projectDescription}
               onChange={handleInputChange}
               placeholder="Enter Project Description"
-              className="w-full border focus:outline-[#1677ff] border-gray-300 rounded-md p-2 h-24"
+              className="w-full border bg-white focus:outline-[#1677ff] border-gray-300 rounded-md p-2 h-24"
             ></textarea>
             {errors.projectDescription && (
               <p className="text-red-500">{errors.projectDescription}</p>

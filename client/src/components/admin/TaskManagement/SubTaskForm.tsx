@@ -55,7 +55,7 @@ const SubtaskForm: React.FC<SubtaskFormProps> = ({
         onChange={(e) =>
           updateSubtask(currentPage, { taskDescription: e.target.value })
         }
-        className="w-full border rounded-md p-2 h-24 mb-2"
+        className="w-full border bg-white rounded-md p-2 h-24 mb-2"
       />
 
       <div className="grid grid-cols-2 gap-4 mb-2">
