@@ -44,6 +44,7 @@ const AddEmployeeModal = ({ toggleModal }: { toggleModal: () => void }) => {
       ...prev,
       position: selectedOption?.value || "",
     }));
+    setErrors(({ }));
   };
 
   const handleChange = (
@@ -96,8 +97,8 @@ const AddEmployeeModal = ({ toggleModal }: { toggleModal: () => void }) => {
     if (!formData.firstName.trim() || formData.firstName.trim().length < 2) {
       validationErrors.firstName = "First Name must be at least 2 characters.";
     }
-    if (!formData.lastName.trim() || formData.lastName.trim().length < 2) {
-      validationErrors.lastName = "Last Name must be at least 2 characters.";
+    if (!formData.lastName.trim() || formData.lastName.trim().length < 1) {
+      validationErrors.lastName = "Last Name must be at least 1 characters.";
     }
     if (!formData.phone.trim() || formData.phone.trim().length < 10) {
       validationErrors.phone = "Phone number must be at least 10 digits.";
