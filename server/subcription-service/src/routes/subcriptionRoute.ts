@@ -5,14 +5,13 @@ import { Isubcriptionservice } from '../interfaces/IsubcriptionService';
 import { subcriptionService } from '../services/subcriptionService';
 import IsubcriptionRepository from '../interfaces/IsubcriptionRepository';
 import { subcriptionRepository } from '../repositories/subcriptionRepository';
-
 const router = Router();
+
 
 const SubcriptionRepository:IsubcriptionRepository = new subcriptionRepository()
 const SubcriptionService:Isubcriptionservice = new subcriptionService(SubcriptionRepository)
 const SubcriptionController = new subcriptionController(SubcriptionService)
 
-router.post('/webhook', SubcriptionController.webhook);
 router.get('/get-subcriptionDetails',authenticate,SubcriptionController.getSubscriptionDetails)
 router.post('/create-checkout-session',authenticate,SubcriptionController.createCheckoutSession)
 router.post('/customer-portal-session',authenticate,SubcriptionController.createCustomerPortalSession)

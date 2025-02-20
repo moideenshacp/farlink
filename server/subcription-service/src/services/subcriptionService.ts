@@ -91,7 +91,7 @@ export class subcriptionService implements Isubcriptionservice {
         mode: "subscription",
         customer_email: email,
         line_items: [{ price: planId, quantity: 1 }],
-        success_url: `${process.env.FRONT_URL}/success?session_id={CHECKOUT_SESSION_ID}`,
+        success_url: `${process.env.FRONT_URL}/success`,
         cancel_url: "http://localhost:3000/cancel",
         subscription_data: {
           metadata: { plan },
@@ -129,6 +129,9 @@ export class subcriptionService implements Isubcriptionservice {
     if (!endpointSecret) {
       throw new Error("Missing Stripe webhook secret.");
     }
+
+    console.log("rawwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww",rawBody);
+    
 
     let event: Stripe.Event;
     try {

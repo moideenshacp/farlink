@@ -22,9 +22,7 @@ export class AuthService {
 
   static verifyToken(token: string): JwtPayload | null {
     try {
-      const decoded = jwt.verify(token, JWT_SECRET);
-      console.log("decoded from utils",decoded);
-      
+      const decoded = jwt.verify(token, JWT_SECRET);      
       return decoded as JwtPayload;
     } catch (error) {
       if (error instanceof jwt.TokenExpiredError) {

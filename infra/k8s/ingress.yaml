@@ -3,7 +3,9 @@ kind: Ingress
 metadata:
   name: api-gateway-ingress
   annotations:
+    nginx.ingress.kubernetes.io/proxy-body-size: "10m"
     nginx.ingress.kubernetes.io/enable-cors: "true"
+    nginx.ingress.kubernetes.io/proxy-request-buffering: "off" # Ensures raw body is sent
     nginx.ingress.kubernetes.io/cors-allow-origin: "https://farlink.moideensha.store"
     nginx.ingress.kubernetes.io/cors-allow-methods: "GET, PUT, POST, DELETE, PATCH, OPTIONS"
     nginx.ingress.kubernetes.io/cors-allow-headers: "DNT,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range"
@@ -31,6 +33,13 @@ spec:
             name: chat-meeting-service
             port:
               number: 3005
+      - path: /webhook
+        pathType: Prefix
+        backend:
+          service:
+            name: subscription-service  # webhooks go directly to subscription-service
+            port:
+              number: 3003
       - path: /
         pathType: Prefix
         backend:

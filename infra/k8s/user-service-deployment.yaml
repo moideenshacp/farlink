@@ -20,9 +20,9 @@ spec:
             - containerPort: 3001
           envFrom:
             - configMapRef:
-                name: user-service-config  # 🔹 Loads non-sensitive values
+                name: user-service-config  # 🔹 Loads non-sensitive values-
             - secretRef:
-                name: user-service-secrets  # 🔹 Loads sensitive values
+                name: user-service-secrets  # 🔹 Loads sensitive values-
 ---
 apiVersion: v1
 kind: Service

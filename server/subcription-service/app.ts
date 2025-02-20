@@ -9,6 +9,7 @@ import morgan from "morgan";
 import subscriptionRoutes from './src/routes/subcriptionRoute';
 import { rabbitmqConnect } from "./src/config/rabbitmq";
 import { consumeEvents } from "./src/rabbitmq/consumer/consumer";
+import webhookRoute from "./src/routes/webHookRoute";
 dotenv.config();
 connectDB();
 const startApplication = async () => {
@@ -50,16 +51,18 @@ app.use(
   })
 );
 
+app.use("/webhook", express.raw({ type: 'application/json' }), webhookRoute);
+
 app.use(cookieParser());
-app.use('/api/subscription/webhook', bodyParser.raw({ type: 'application/json' })); 
-app.use(bodyParser.json());
 app.use(express.json());
+app.use(bodyParser.json());
+
 
 app.use('/api/subscription', subscriptionRoutes);
 
 const port = process.env.PORT;
 
 app.listen(port, () => {
-  console.log(`subcription-servicee started on port ${port}`);
+  console.log(`subcription-service>>> started on port ${port}`);
 });
 
