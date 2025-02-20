@@ -107,9 +107,11 @@ const Header = () => {
       {isMenuOpen && (
         <div className="absolute top-16 left-0 w-full bg-white shadow-md md:hidden">
           <ul className="flex flex-col items-center space-y-4 py-4 text-gray-800">
+          <Link to="/">
             <li className="text-[#172C56] font-semibold cursor-pointer hover:text-[#4361EE]">
               Home
             </li>
+            </Link>
             <li className="text-[#172C56] font-semibold cursor-pointer hover:text-[#4361EE]">
               About Us
             </li>
@@ -145,9 +147,11 @@ const Header = () => {
             </div>
           </ul>
           <div className="flex justify-center pb-4">
+          <Link to="/sign-up">
             <button className="bg-[#4361EE] font-medium text-white px-6 py-2 rounded-full text-sm hover:bg-blue-700 transition duration-300">
               Sign Up
             </button>
+            </Link>
           </div>
         </div>
       )}
