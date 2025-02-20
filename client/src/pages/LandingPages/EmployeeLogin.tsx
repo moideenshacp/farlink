@@ -83,7 +83,7 @@ const EmployeeLogin = () => {
                 placeholder="Email"
                 name="email"
                 onChange={handleChange}
-                className="flex-1 outline-none text-sm text-[#172C56]"
+                className="flex-1 bg-white outline-none text-sm text-[#172C56]"
               />
             </div>
 
@@ -94,7 +94,7 @@ const EmployeeLogin = () => {
                 placeholder="Password"
                 name="password"
                 onChange={handleChange}
-                className="flex-1 outline-none text-sm text-[#172C56]"
+                className="flex-1 bg-white outline-none text-sm text-[#172C56]"
               />
             </div>
 

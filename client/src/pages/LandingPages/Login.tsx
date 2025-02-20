@@ -129,7 +129,7 @@ const Login = () => {
 
   return (
     <div>
-      <div className="flex flex-col lg:flex-row">
+      <div className="flex bg-white flex-col lg:flex-row">
         <Header />
 
         <div className="flex flex-col justify-center h-auto lg:h-[480px] w-full lg:w-[50%] bg-[#F8FAFF] p-6 lg:p-12">

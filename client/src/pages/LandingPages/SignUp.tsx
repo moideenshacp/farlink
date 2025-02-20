@@ -134,7 +134,7 @@ const SignUp = () => {
   };
   return (
     <div>
-      <div className="flex flex-col lg:flex-row">
+      <div className="flex flex-col bg-white lg:flex-row">
         <Header />
 
         <div className="flex flex-col justify-center h-auto lg:h-[480px] w-full lg:w-[50%] bg-[#F8FAFF] p-6 lg:p-12">
@@ -162,7 +162,7 @@ const SignUp = () => {
                   placeholder="Username"
                   onChange={handleChange}
                   name="name"
-                  className="flex-1 outline-none text-sm text-[#969AB8]"
+                  className="flex-1 outline-none bg-white text-sm text-[#969AB8]"
                 />
               </div>
               {errors.name && (
@@ -178,7 +178,7 @@ const SignUp = () => {
                   name="email"
                   onChange={handleChange}
                   placeholder="Email"
-                  className="flex-1 outline-none text-sm text-[#969AB8]"
+                  className="flex-1 outline-none bg-white text-sm text-[#969AB8]"
                 />
               </div>
               {errors.email && (
@@ -194,7 +194,7 @@ const SignUp = () => {
                   name="password"
                   onChange={handleChange}
                   placeholder="Password"
-                  className="flex-1 outline-none text-sm text-[#969AB8]"
+                  className="flex-1 outline-none bg-white text-sm text-[#969AB8]"
                 />
               </div>
               {errors.password && (
@@ -210,7 +210,7 @@ const SignUp = () => {
                   name="confirmPassword"
                   onChange={handleChange}
                   placeholder="Repeat Password"
-                  className="flex-1 outline-none text-sm text-[#969AB8]"
+                  className="flex-1 outline-none bg-white text-sm text-[#969AB8]"
                 />
               </div>
               {errors.confirmPassword && (
