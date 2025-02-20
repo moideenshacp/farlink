@@ -16,7 +16,6 @@ const AddEmployeeModal = ({ toggleModal }: { toggleModal: () => void }) => {
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [isUploading, setIsUploading] = useState(false);
 
-
   const [formData, setFormData] = useState({
     userName: "",
     position: null,
@@ -27,8 +26,7 @@ const AddEmployeeModal = ({ toggleModal }: { toggleModal: () => void }) => {
     phone: "",
   });
   console.log(imageUrl);
-
-  
+  const [errors, setErrors] = useState<Record<string, string>>({});
 
   const { user } = useSelector((state: RootState) => state.user);
   const [teams, setTeams] = useState([]);
@@ -38,13 +36,13 @@ const AddEmployeeModal = ({ toggleModal }: { toggleModal: () => void }) => {
 
   const positionOptions = teams.map((position) => ({
     value: position,
-    label: position
+    label: position,
   }));
 
   const handlePositionChange = (selectedOption: any) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      position: selectedOption?.value || ''
+      position: selectedOption?.value || "",
     }));
   };
 
@@ -56,12 +54,14 @@ const AddEmployeeModal = ({ toggleModal }: { toggleModal: () => void }) => {
       ...formData,
       [name]: value,
     });
+    setErrors((prevErrors) => ({ ...prevErrors, [name]: "" }));
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       setSelectedFile(file);
+      setErrors((prevErrors) => ({ ...prevErrors, file: "" }));
     }
   };
 
@@ -82,27 +82,32 @@ const AddEmployeeModal = ({ toggleModal }: { toggleModal: () => void }) => {
   }, [user?.organizationId]);
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!selectedFile) {
-      message.error("Please upload an image before submitting!", 2);
 
-      return;
-    }
+    const validationErrors: Record<string, string> = {};
     if (!formData.userName.trim() || formData.userName.trim().length < 2) {
-      message.error("Please enter a valid userName with at least 2 characters");
-      return;
+      validationErrors.userName = "Username must be at least 2 characters.";
     }
-    if (!formData.firstName.trim() || formData.firstName.trim().length < 2) {
-      message.error(
-        "Please enter a valid FirstName with at least 2 characters"
-      );
-      return;
-    }
-    if (!formData.lastName.trim() || formData.lastName.trim().length < 1) {
-      message.error("Please enter a valid LastName with at least 2 characters");
-      return;
+    if (!formData.position) {
+      validationErrors.position = "Please select a position.";
     }
     if (!formData.email.trim() || !/\S+@\S+\.\S+/.test(formData.email.trim())) {
-      message.error("Please enter a valid email address");
+      validationErrors.email = "Invalid email format.";
+    }
+    if (!formData.firstName.trim() || formData.firstName.trim().length < 2) {
+      validationErrors.firstName = "First Name must be at least 2 characters.";
+    }
+    if (!formData.lastName.trim() || formData.lastName.trim().length < 2) {
+      validationErrors.lastName = "Last Name must be at least 2 characters.";
+    }
+    if (!formData.phone.trim() || formData.phone.trim().length < 10) {
+      validationErrors.phone = "Phone number must be at least 10 digits.";
+    }
+    if (!selectedFile) {
+      validationErrors.file = "Please upload an image.";
+    }
+
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
       return;
     }
 
@@ -156,58 +161,92 @@ const AddEmployeeModal = ({ toggleModal }: { toggleModal: () => void }) => {
       <form onSubmit={handleSubmit} className="grid grid-cols-2  gap-4">
         {/* Personal Data */}
         <div className="col-span-2 font-bold">Personal data</div>
-        <Input
-          label="User Name"
-          type="text"
-          name="userName"
-          value={formData.userName}
-          onChange={handleChange}
-          placeholder="Enter user name"
-        />
-        <Input
-          label="First Name"
-          type="text"
-          name="firstName"
-          value={formData.firstName}
-          onChange={handleChange}
-          placeholder="Enter first name"
-        />
+        <div>
+          <Input
+            label="User Name"
+            type="text"
+            name="userName"
+            value={formData.userName}
+            onChange={handleChange}
+            placeholder="Enter user name"
+          />
+          {errors.userName && (
+            <p className="text-red-500 text-sm">{errors.userName}</p>
+          )}
+        </div>
+        <div>
+          <Input
+            label="First Name"
+            type="text"
+            name="firstName"
+            value={formData.firstName}
+            onChange={handleChange}
+            placeholder="Enter first name"
+          />
+          {errors.firstName && (
+            <p className="text-red-500 text-sm">{errors.firstName}</p>
+          )}
+        </div>
 
         <div>
-        <div className="col-span-1">
-          <SelectField
-            label="Position"
-            options={positionOptions}
-            value={positionOptions.find(option => option.value === formData.position) || null}
-            onChange={handlePositionChange}
-            isMulti={false}
+          <div className="col-span-1">
+            <SelectField
+              label="Position"
+              options={positionOptions}
+              value={
+                positionOptions.find(
+                  (option) => option.value === formData.position
+                ) || null
+              }
+              onChange={handlePositionChange}
+              isMulti={false}
+            />
+          </div>
+          {errors.position && (
+            <p className="text-red-500 text-sm">{errors.position}</p>
+          )}
+        </div>
+        <div>
+          <Input
+            label="Last Name"
+            type="text"
+            name="lastName"
+            value={formData.lastName}
+            onChange={handleChange}
+            placeholder="Enter last name"
           />
+          {errors.lastName && (
+            <p className="text-red-500 text-sm">{errors.lastName}</p>
+          )}
         </div>
+        <div>
+          <Input
+            label="Email"
+            type="email"
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
+            placeholder="Enter email"
+          />
+          {errors.email && (
+            <p className="text-red-500 text-sm">{errors.email}</p>
+          )}
         </div>
-        <Input
-          label="Last Name"
-          type="text"
-          name="lastName"
-          value={formData.lastName}
-          onChange={handleChange}
-          placeholder="Enter last name"
-        />
-        <Input
-          label="Email"
-          type="email"
-          name="email"
-          value={formData.email}
-          onChange={handleChange}
-          placeholder="Enter email"
-        />
-        <Input
-          label="Phone Number"
-          type="tel"
-          name="phone"
-          value={formData.phone}
-          onChange={handleChange}
-          placeholder="Enter phone number"
-        />
+
+        <div>
+          <Input
+            label="Phone Number"
+            type="tel"
+            name="phone"
+            value={formData.phone}
+            onChange={handleChange}
+            placeholder="Enter phone number"
+          />
+          {errors.phone && (
+            <p className="text-red-500 text-sm">{errors.phone}</p>
+          )}
+        </div>
+
         <div>
           <label className="block mb-1 font-medium text-[#232360]">
             Gender
@@ -262,6 +301,8 @@ const AddEmployeeModal = ({ toggleModal }: { toggleModal: () => void }) => {
               ? "Change Image"
               : "Upload"}
           </label>
+          {errors.file && <p className="text-red-500 text-sm">{errors.file}</p>}
+
           <div className="flex justify-end gap-2  mt-6">
             <button
               type="button"
