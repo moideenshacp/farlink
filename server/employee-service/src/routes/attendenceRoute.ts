@@ -1,5 +1,4 @@
 import express from 'express'
-import { authenticate } from '../middlewares/authMiddleware'
 import { attendenceController } from '../controllers/attendenceController'
 import IattendenceRepo from '../interfaces/IattendenceRepo'
 import { AttendancePolicyRepository } from '../repositories/policyRepository'
@@ -21,13 +20,13 @@ const AttendenceController = new attendenceController(AttendenceService)
 
 //admin=====================================================================================================================
 
-router.patch('/update-policy',authenticate,AttendenceController.UpdateAttendencePolicy)
-router.patch('/update-attendence',authenticate,AttendenceController.editAttendance)
-router.get('/get-policy',authenticate,AttendenceController.getAttendencePolicy)
-router.post('/handle-attendence',authenticate,AttendenceController.handleAttendence)
+router.patch('/update-policy',AttendenceController.UpdateAttendencePolicy)
+router.patch('/update-attendence',AttendenceController.editAttendance)
+router.get('/get-policy',AttendenceController.getAttendencePolicy)
+router.post('/handle-attendence',AttendenceController.handleAttendence)
 
 //common====================================================================================================================
-router.get('/get-attendence',authenticate,AttendenceController.getAttendenceReport)
+router.get('/get-attendence',AttendenceController.getAttendenceReport)
 
 
 

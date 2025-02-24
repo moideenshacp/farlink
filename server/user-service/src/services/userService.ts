@@ -15,6 +15,7 @@ import { EmailService } from "../utils/emailVerify";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { AuthService } from "../utils/jwt";
+import { HttpStatusCode } from "../constants/HttpStatusCode";
 
 const EMAIL_SECRET = process.env.EMAIL_SECRET || "email_secret_key";
 
@@ -87,13 +88,13 @@ export class userService implements IuserService {
       if (error instanceof CustomError) {
         throw error;
       }
-      throw new CustomError(500, "Internal Server Error");
+      throw new CustomError(HttpStatusCode.INTERNAL_SERVER_ERROR, "Internal Server Error");
     }
   }
   async refreshToken(refreshToken: string): Promise<string> {
     try {
       if (!refreshToken) {
-        throw new CustomError(401, "Refresh token is required");
+        throw new CustomError(HttpStatusCode.UNAUTHORIZED, "Refresh token is required");
       }
       const decoded = AuthService.verifyRefreshToken(refreshToken);
       if (decoded) {
@@ -104,7 +105,7 @@ export class userService implements IuserService {
       }
 
       if (!decoded) {
-        throw new CustomError(403, "Invalid or expired refresh token");
+        throw new CustomError(HttpStatusCode.FORBIDDEN, "Invalid or expired refresh token");
       }
       const newAccessToken = AuthService.generateToken({
         email: decoded.email,
@@ -170,7 +171,7 @@ export class userService implements IuserService {
       if (error instanceof CustomError) {
         throw error;
       }
-      throw new CustomError(500, "Internal Server Error");
+      throw new CustomError(HttpStatusCode.INTERNAL_SERVER_ERROR, "Internal Server Error");
     }
   }
   async updateProfile(

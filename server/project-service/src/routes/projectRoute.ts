@@ -1,5 +1,4 @@
 import { Router } from 'express';
-import { authenticate } from '../middlewares/authMiddleware';
 import IprojectRepository from '../interfaces/IprojectRepository';
 import { projectRepository } from '../repositories/projectRepository';
 import { IprojectService } from '../interfaces/IprojectService';
@@ -13,10 +12,10 @@ const ProjectRepository:IprojectRepository = new projectRepository()
 const ProjectService:IprojectService = new projectService(ProjectRepository)
 const ProjectController = new projectController(ProjectService)
 
-router.post('/create-project',authenticate, ProjectController.createProject);
-router.get('/fetch-projects',authenticate, ProjectController.fetchAllProject);
-router.patch('/update-project',authenticate, ProjectController.updateProject);
-router.get('/fetchEmployees-projects',authenticate, ProjectController.fetchEmployeesProject);
+router.post('/create-project', ProjectController.createProject);
+router.get('/fetch-projects', ProjectController.fetchAllProject);
+router.patch('/update-project', ProjectController.updateProject);
+router.get('/fetchEmployees-projects', ProjectController.fetchEmployeesProject);
 
 
 export default router;

@@ -1,5 +1,4 @@
 import { Router } from 'express';
-import { authenticate } from '../middlewares/authMiddleware';
 import ItaskRepository from '../interfaces/ItaskRepository';
 import { taskRepository } from '../repositories/taskRepository';
 import { ItaskService } from '../interfaces/ItaskService';
@@ -19,14 +18,14 @@ const ProjectRepository:IprojectRepository = new projectRepository()
 const TaskService:ItaskService = new taskService(TaskRepository,SubTaskRepository,ProjectRepository)
 const TaskController = new taskController(TaskService)
 
-router.post('/create-task',authenticate, TaskController.createTask);
-router.get('/fetch-tasks',authenticate, TaskController.fetchTasks);
-router.get('/fetch-subTasks',authenticate, TaskController.fetchAllSubTasks);
-router.patch('/update-task',authenticate, TaskController.updateTask);
-router.patch('/update-subTask',authenticate, TaskController.updateSubTask);
-router.get('/fetchEmployees-tasks',authenticate, TaskController.fetchEmployeesTask);
-router.get('/fetchEmployees-Alltasks',authenticate, TaskController.fetchAllTasksOfEmployee);
-router.post('/create-subTask',authenticate, TaskController.createSubTask);
+router.post('/create-task', TaskController.createTask);
+router.get('/fetch-tasks', TaskController.fetchTasks);
+router.get('/fetch-subTasks', TaskController.fetchAllSubTasks);
+router.patch('/update-task', TaskController.updateTask);
+router.patch('/update-subTask', TaskController.updateSubTask);
+router.get('/fetchEmployees-tasks', TaskController.fetchEmployeesTask);
+router.get('/fetchEmployees-Alltasks', TaskController.fetchAllTasksOfEmployee);
+router.post('/create-subTask', TaskController.createSubTask);
 
 
 

@@ -1,5 +1,4 @@
 import express from 'express'
-import { authenticate } from '../middlewares/authMiddleware'
 import { leaveController } from '../controllers/leaveController'
 import IpolicyRepo from '../interfaces/IpolicyRepo'
 import { AttendancePolicyRepository } from '../repositories/policyRepository'
@@ -19,11 +18,11 @@ const LeaveController = new leaveController(LeaveService)
 
 //employee=====================================================================================================================
 
-router.post('/apply-leave',authenticate,LeaveController.handleLeaveApplication)
-router.patch('/edit-leave',authenticate,LeaveController.editLeave)
-router.get('/fetch-leave',authenticate,LeaveController.fetchAppliedLeaves)
-router.patch('/manage-leave',authenticate,LeaveController.ManageAppliedLeaves)
-router.get('/fetch-remainingLeaves',authenticate,LeaveController.fetchRemainingLeaves)
+router.post('/apply-leave',LeaveController.handleLeaveApplication)
+router.patch('/edit-leave',LeaveController.editLeave)
+router.get('/fetch-leave',LeaveController.fetchAppliedLeaves)
+router.patch('/manage-leave',LeaveController.ManageAppliedLeaves)
+router.get('/fetch-remainingLeaves',LeaveController.fetchRemainingLeaves)
 
 
 
