@@ -129,8 +129,6 @@ export class subcriptionService implements Isubcriptionservice {
     if (!endpointSecret) {
       throw new Error("Missing Stripe webhook secret.");
     }
-
-    console.log("rawwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww",rawBody);
     
 
     let event: Stripe.Event;

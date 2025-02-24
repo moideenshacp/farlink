@@ -3,6 +3,9 @@ import { Request, Response } from "express";
 import { IsubcriptionController } from "../interfaces/IsubcriptionController";
 import Stripe from "stripe";
 import { Isubcriptionservice } from "../interfaces/IsubcriptionService";
+import { HttpStatusCode } from "../constants/HttpStatusCode";
+import { MessageConstants } from "../constants/MessageConstants";
+
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "");
 
@@ -21,12 +24,12 @@ export class subcriptionController implements IsubcriptionController {
       const companyDetails =
         await this._subcriptionservice.getSubscriptionDetails(organizationId);
       if (companyDetails) {
-        res.status(200).json({
-          message: "sucessfully fetch subcription plans",
+        res.status(HttpStatusCode.OK).json({
+          message: MessageConstants.SUBSCRIPTION_FETCHED,
           companyDetails,
         });
       } else {
-        res.status(400).json({ message: "No subscription data found" });
+        res.status(HttpStatusCode.BAD_REQUEST).json({ message: MessageConstants.BAD_REQUEST });
       }
     } catch (error) {
       console.log(error);
@@ -39,7 +42,7 @@ export class subcriptionController implements IsubcriptionController {
   ): Promise<void> => {
     const { email, planId, plan, amount, organizationId } = req.body;
     if (!email || !planId) {
-      res.status(400).json({ error: "Missing email or planId" });
+      res.status(HttpStatusCode.BAD_REQUEST).json({ error: MessageConstants.BAD_REQUEST });
       return;
     }
 
@@ -52,11 +55,11 @@ export class subcriptionController implements IsubcriptionController {
         organizationId
       );
       if (session) {
-        res.status(200).json({ url: session.url });
+        res.status(HttpStatusCode.OK).json({ url: session.url });
       }
     } catch (error) {
       console.error("Stripe error:", error);
-      res.status(400).json({ error: error });
+      res.status(HttpStatusCode.BAD_REQUEST).json({ error: error });
     }
   };
 
@@ -72,10 +75,10 @@ export class subcriptionController implements IsubcriptionController {
         sig,
         endpointSecret
       );
-      res.status(200).json({ received: true });
+      res.status(HttpStatusCode.OK).json({ received: true });
     } catch (err) {
       console.error("Webhook Error:", err);
-      res.status(400).send(err);
+      res.status(HttpStatusCode.BAD_REQUEST).send(err);
     }
   };
   public createCustomerPortalSession = async (
@@ -85,16 +88,16 @@ export class subcriptionController implements IsubcriptionController {
     try {
       const customerId = req.body.customerId as string;
       if (!customerId) {
-        res.status(400).json({ error: "Customer ID is required" });
+        res.status(HttpStatusCode.BAD_REQUEST).json({ error:MessageConstants.BAD_REQUEST});
         return;
       }
 
       const url = await this._subcriptionservice.createCustomerPortalSession(
         customerId
       );
-      res.status(200).json({ url });
+      res.status(HttpStatusCode.OK).json({ url });
     } catch (error) {
-      res.status(500).json({ error: error });
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ error: error });
     }
   };
   public getPaymentHistory = async (
@@ -103,7 +106,7 @@ export class subcriptionController implements IsubcriptionController {
   ): Promise<any> => {
     const { customerId } = req.query;
     if (!customerId) {
-      return res.status(400).json({ error: "Customer ID is required" });
+      return res.status(HttpStatusCode.BAD_REQUEST).json({ error: MessageConstants.BAD_REQUEST });
     }
 
     try {
@@ -111,13 +114,13 @@ export class subcriptionController implements IsubcriptionController {
         customerId as string
       );
       if (data) {
-        res.status(200).json({ message: "history fetched successfully", data });
+        res.status(HttpStatusCode.OK).json({ message: MessageConstants.HISTORY_FETCHED, data });
       } else {
-        res.status(400).json({ message: "No data found" });
+        res.status(HttpStatusCode.BAD_REQUEST).json({ message: MessageConstants.BAD_REQUEST });
       }
     } catch (error) {
       console.error("Error fetching payment history:", error);
-      res.status(500).json({ error: "Unable to fetch payment history" });
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ error: MessageConstants.INTERNAL_SERVER_ERROR });
     }
   };
   public getAllPaymentHistory = async (
@@ -132,11 +135,11 @@ export class subcriptionController implements IsubcriptionController {
       if (invoices) {
         res.json({ invoices: invoices.data });
       } else {
-        res.status(400).json({ message: "No data found" });
+        res.status(HttpStatusCode.BAD_REQUEST).json({ message: MessageConstants.BAD_REQUEST });
       }
     } catch (error) {
       console.log(error);
-      res.status(500).json({ error: "Unable to fetch payment history" });
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ error:MessageConstants.INTERNAL_SERVER_ERROR});
     }
   };
 }

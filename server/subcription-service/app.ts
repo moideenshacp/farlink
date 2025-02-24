@@ -63,6 +63,6 @@ app.use('/api/subscription', subscriptionRoutes);
 const port = process.env.PORT;
 
 app.listen(port, () => {
-  console.log(`subcription-service>>> started on port ${port}`);
+  console.log(`subcription-service== started on port ${port}`);
 });
 
