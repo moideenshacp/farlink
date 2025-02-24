@@ -1,3 +1,4 @@
+import { HttpStatusCode } from "../constants/HttpStatusCode";
 import { CustomError } from "../errors/CustomError";
 import { ImeetDetails } from "../interfaces/ImeetDetails";
 import { ImeetingService } from "../interfaces/ImeetingService";
@@ -16,17 +17,17 @@ export class meetService implements ImeetingService {
     try {
       const currentDate = new Date();
       if (!meetDetails.meetTitle.trim()) {
-        throw new CustomError("Please enter a valid Title", 400);
+        throw new CustomError("Please enter a valid Title", HttpStatusCode.BAD_REQUEST);
       }
       if (!meetDetails.meetTime.trim().match(/^([01]\d|2[0-3]):([0-5]\d)$/)) {
-        throw new CustomError("Please enter a valid Time in HH:mm format", 400);
+        throw new CustomError("Please enter a valid Time in HH:mm format", HttpStatusCode.BAD_REQUEST);
       }
       if (meetDetails.members.length === 0) {
-        throw new CustomError("Please choose at least one member", 400);
+        throw new CustomError("Please choose at least one member", HttpStatusCode.BAD_REQUEST);
       }
       const meetingDate = new Date(meetDetails.meetDate);
       if (meetingDate.setHours(0, 0, 0, 0) < currentDate.setHours(0, 0, 0, 0)) {
-        throw new CustomError("Please select a valid future date", 400);
+        throw new CustomError("Please select a valid future date", HttpStatusCode.BAD_REQUEST);
       }
       if (meetingDate.toDateString() === currentDate.toDateString()) {
         const [meetHours, meetMinutes] = meetDetails.meetTime
@@ -41,7 +42,7 @@ export class meetService implements ImeetingService {
         ) {
           throw new CustomError(
             "Please select a future time for today's meeting",
-            400
+            HttpStatusCode.BAD_REQUEST
           );
         }
       }

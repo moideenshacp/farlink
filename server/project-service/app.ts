@@ -54,5 +54,5 @@ app.use(errorHandler);
 const port = process.env.PORT;
 
 app.listen(port, () => {
-  console.log(`project-service started on port ${port}`);
+  console.log(`project-service== started on port ${port}`);
 });

@@ -1,3 +1,4 @@
+import { HttpStatusCode } from "../constants/HttpStatusCode";
 import { CustomError } from "../errors/CustomError";
 import { IprojectDetails } from "../interfaces/IprojectDetails";
 import IprojectModel from "../interfaces/IprojectModel";
@@ -17,7 +18,7 @@ export class projectService implements IprojectService {
       if (
         new Date(projectDetails.endDate) <= new Date(projectDetails.startDate)
       ) {
-        throw new CustomError("End date must be after start date", 400);
+        throw new CustomError("End date must be after start date", HttpStatusCode.BAD_REQUEST);
       }
       const project = await this._projectRepository.createProject(
         projectDetails
@@ -54,7 +55,7 @@ export class projectService implements IprojectService {
       if (
         new Date(projectDetails.endDate) <= new Date(projectDetails.startDate)
       ) {
-        throw new CustomError("End date must be after start date", 400);
+        throw new CustomError("End date must be after start date", HttpStatusCode.BAD_REQUEST);
       }
       const updatedProject = await this._projectRepository.updateProject(
         projectId,
@@ -62,7 +63,7 @@ export class projectService implements IprojectService {
       );
 
       if (!updatedProject) {
-        throw new CustomError("Project not found or could not be updated", 404);
+        throw new CustomError("Project not found or could not be updated", HttpStatusCode.NOT_FOUND);
       }
 
       return updatedProject;

@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: chat-meeting-service
-          image: moideenshacp/farlink-chat-meeting-service:latest
+          image: moideenshacp/farlink-chat-meeting-service:v1
           imagePullPolicy: Always
           ports:
             - containerPort: 3005

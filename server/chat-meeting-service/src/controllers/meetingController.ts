@@ -2,6 +2,8 @@ import { Request, Response } from "express";
 import { ImeetingController } from "../interfaces/ImeetingController";
 import { ImeetingService } from "../interfaces/ImeetingService";
 import { CustomError } from "../errors/CustomError";
+import { HttpStatusCode } from "../constants/HttpStatusCode";
+import { MessageConstants } from "../constants/MessageConstants";
 
 export class meetController implements ImeetingController {
   private _meetservice: ImeetingService;
@@ -18,17 +20,17 @@ export class meetController implements ImeetingController {
 
       const result = await this._meetservice.createMeeting(meetDetails);
       if (result) {
-        return res.status(200).json({ message: "Meet created sucessfully.." });
+        return res.status(HttpStatusCode.OK).json({ message: MessageConstants.MEET_CREATED });
       } else {
         return res
-          .status(400)
-          .json({ message: "Something went wrong,please try again..." });
+          .status(HttpStatusCode.BAD_REQUEST)
+          .json({ message: MessageConstants.BAD_REQUEST });
       }
     } catch (error) {
       if (error instanceof CustomError) {
         return res.status(error.statusCode).json({ error: error.message });
       } else {
-        return res.status(500).json({ error: "Internal Server Error" });
+        return res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ error: MessageConstants.INTERNAL_SERVER_ERROR });
       }
     }
   };
@@ -43,18 +45,18 @@ export class meetController implements ImeetingController {
       );
       if (result) {
         return res
-          .status(200)
-          .json({ message: "Meetings fetched sucessfully..", result });
+          .status(HttpStatusCode.OK)
+          .json({ message: MessageConstants.MEETINGS_FETCHED, result });
       } else {
         return res
-          .status(400)
-          .json({ message: "Something went wrong,please try again..." });
+          .status(HttpStatusCode.BAD_REQUEST)
+          .json({ message: MessageConstants.BAD_REQUEST });
       }
     } catch (error) {
       if (error instanceof CustomError) {
         return res.status(error.statusCode).json({ error: error.message });
       } else {
-        return res.status(500).json({ error: "Internal Server Error" });
+        return res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ error: MessageConstants.INTERNAL_SERVER_ERROR });
       }
     }
   };
@@ -67,18 +69,18 @@ export class meetController implements ImeetingController {
       const result = await this._meetservice.editMeeting(meetId, meetDetails);
       if (result) {
         return res
-          .status(200)
-          .json({ message: "Meet edited sucessfully..", result });
+          .status(HttpStatusCode.OK)
+          .json({ message: MessageConstants.MEET_EDITED, result });
       } else {
         return res
-          .status(400)
-          .json({ message: "Something went wrong,please try again..." });
+          .status(HttpStatusCode.BAD_REQUEST)
+          .json({ message: MessageConstants.BAD_REQUEST });
       }
     } catch (error) {
       if (error instanceof CustomError) {
         return res.status(error.statusCode).json({ error: error.message });
       } else {
-        return res.status(500).json({ error: "Internal Server Error" });
+        return res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ error: MessageConstants.INTERNAL_SERVER_ERROR });
       }
     }
   };
@@ -90,17 +92,17 @@ export class meetController implements ImeetingController {
       const { meetId } = req.query;
       const result = await this._meetservice.deleteMeeting(meetId as string);
       if (result) {
-        return res.status(200).json({ message: "Meet deleted sucessfully.." });
+        return res.status(HttpStatusCode.OK).json({ message: MessageConstants.MEET_DELETED });
       } else {
         return res
-          .status(400)
-          .json({ message: "Something went wrong,please try again..." });
+          .status(HttpStatusCode.BAD_REQUEST)
+          .json({ message: MessageConstants.BAD_REQUEST });
       }
     } catch (error) {
       if (error instanceof CustomError) {
         return res.status(error.statusCode).json({ error: error.message });
       } else {
-        return res.status(500).json({ error: "Internal Server Error" });
+        return res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ error: MessageConstants.INTERNAL_SERVER_ERROR });
       }
     }
   };
@@ -116,18 +118,18 @@ export class meetController implements ImeetingController {
       );
       if (result) {
         return res
-          .status(200)
-          .json({ message: "Meetings fetched sucessfully..", result });
+          .status(HttpStatusCode.OK)
+          .json({ message: MessageConstants.FETCHED_EMP_MEETINGS, result });
       } else {
         return res
-          .status(400)
-          .json({ message: "Failed to join the meeting. Please try again." });
+          .status(HttpStatusCode.BAD_REQUEST)
+          .json({ message: MessageConstants.BAD_REQUEST });
       }
     } catch (error) {
       if (error instanceof CustomError) {
         return res.status(error.statusCode).json({ error: error.message });
       } else {
-        return res.status(500).json({ error: "Internal Server Error" });
+        return res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ error: MessageConstants.INTERNAL_SERVER_ERROR });
       }
     }
   };

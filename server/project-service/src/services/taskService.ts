@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { HttpStatusCode } from "../constants/HttpStatusCode";
 import { CustomError } from "../errors/CustomError";
 import IprojectRepository from "../interfaces/IprojectRepository";
 import IsubTaskModel from "../interfaces/IsubTaskModel";
@@ -33,11 +34,11 @@ export class taskService implements ItaskService {
       ) {
         throw new CustomError(
           "tasks Start-Date and End-Date range should be in between of Project Date",
-          400
+          HttpStatusCode.BAD_REQUEST
         );
       }
       if (new Date(taskDetails.endDate) <= new Date(taskDetails.startDate)) {
-        throw new CustomError("End date must be after start date", 400);
+        throw new CustomError("End date must be after start date", HttpStatusCode.BAD_REQUEST);
       }
       const task = await this._taskRepository.createTask(taskDetails);
       return task;
@@ -65,7 +66,7 @@ export class taskService implements ItaskService {
   ): Promise<ItaskModel | null> {
     try {
       if (new Date(taskDetails.endDate) <= new Date(taskDetails.startDate)) {
-        throw new CustomError("End date must be after start date", 400);
+        throw new CustomError("End date must be after start date", HttpStatusCode.BAD_REQUEST);
       }
       const updatedtask = await this._taskRepository.updateTask(
         taskId,
@@ -73,7 +74,7 @@ export class taskService implements ItaskService {
       );
 
       if (!updatedtask) {
-        throw new CustomError("task not found or could not be updated", 404);
+        throw new CustomError("task not found or could not be updated", HttpStatusCode.NOT_FOUND);
       }
 
       return updatedtask;
@@ -125,14 +126,14 @@ export class taskService implements ItaskService {
       if (!parentTaskId) {
         throw new CustomError(
           "Parent Task ID is required for validation.",
-          400
+          HttpStatusCode.BAD_REQUEST
         );
       }
       const parentTask = await this._taskRepository.fetchParentTask(
         parentTaskId
       );
       if (!parentTask) {
-        throw new CustomError("Parent task not found.", 400);
+        throw new CustomError("Parent task not found.", HttpStatusCode.BAD_REQUEST);
       }
       const parentStartDate = new Date(parentTask.startDate);
       const parentEndDate = new Date(parentTask.endDate);
@@ -146,7 +147,7 @@ export class taskService implements ItaskService {
         ) {
           throw new CustomError(
             "Sub task Start-Date and End-Date range should be in between of Main Task",
-            400
+            HttpStatusCode.BAD_REQUEST
           );
         }
       }
@@ -172,14 +173,14 @@ export class taskService implements ItaskService {
         if (!parentTaskId) {
           throw new CustomError(
             "Parent Task ID is required for validation.",
-            400
+            HttpStatusCode.BAD_REQUEST
           );
         }
         const parentTask = await this._taskRepository.fetchParentTask(
           parentTaskId as string
         );
         if (!parentTask) {
-          throw new CustomError("Parent task not found.", 400);
+          throw new CustomError("Parent task not found.", HttpStatusCode.BAD_REQUEST);
         }
         const parentStartDate = new Date(parentTask.startDate);
         const parentEndDate = new Date(parentTask.endDate);
@@ -193,7 +194,7 @@ export class taskService implements ItaskService {
         ) {
           throw new CustomError(
             "Sub task Start-Date and End-Date range should be in between of Main Task",
-            400
+            HttpStatusCode.BAD_REQUEST
           );
         }
 
@@ -205,7 +206,7 @@ export class taskService implements ItaskService {
       );
 
       if (!updatedtask) {
-        throw new CustomError("task not found or could not be updated", 404);
+        throw new CustomError("task not found or could not be updated", HttpStatusCode.NOT_FOUND);
       }
 
       return updatedtask;

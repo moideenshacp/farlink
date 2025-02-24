@@ -2,6 +2,8 @@ import { Request, Response } from "express";
 import { IchatService } from "../interfaces/IchatService";
 import { CustomError } from "../errors/CustomError";
 import { IchatController } from "../interfaces/IchatController";
+import { HttpStatusCode } from "../constants/HttpStatusCode";
+import { MessageConstants } from "../constants/MessageConstants";
 
 export class chatController implements IchatController {
   private _chatService: IchatService;
@@ -20,15 +22,15 @@ export class chatController implements IchatController {
 
       if (result) {
         return res
-          .status(201)
-          .json({ message: "Chat created successfully", result });
+          .status(HttpStatusCode.CREATED)
+          .json({ message: MessageConstants.CHAT_CREATED, result });
       }
-      return res.status(400).json({ message: "Failed to create chat" });
+      return res.status(HttpStatusCode.BAD_REQUEST).json({ message: MessageConstants.BAD_REQUEST });
     } catch (error) {
       if (error instanceof CustomError) {
         return res.status(error.statusCode).json({ error: error.message });
       } else {
-        return res.status(500).json({ error: "Internal Server Error" });
+        return res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ error: MessageConstants.INTERNAL_SERVER_ERROR });
       }
     }
   };
@@ -39,26 +41,24 @@ export class chatController implements IchatController {
     try {
       const { userId } = req.query;
       if (!userId) {
-        return res.status(400).json({ error: "User ID is required" });
+        return res.status(HttpStatusCode.BAD_REQUEST).json({ error: MessageConstants.BAD_REQUEST });
       }
 
       const result = await this._chatService.fetchAllChats(userId as string);
 
       if (result) {
         return res
-          .status(200)
-          .json({ message: "Chats fetched successfully", result });
+          .status(HttpStatusCode.OK)
+          .json({ message: MessageConstants.CHAT_FETCHED, result });
       } else {
-        return res.status(404).json({ message: "No private chats found" });
+        return res.status(HttpStatusCode.NOT_FOUND).json({ message: MessageConstants.NOT_FOUND });
       }
     } catch (error) {
-      console.error("Error fetching private chats:", error);
-
       if (error instanceof CustomError) {
         return res.status(error.statusCode).json({ error: error.message });
       }
 
-      res.status(500).json({ error: "Internal Server Error" });
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ error: MessageConstants.INTERNAL_SERVER_ERROR });
     }
   };
 
@@ -76,15 +76,15 @@ export class chatController implements IchatController {
 
       if (result) {
         return res
-          .status(201)
-          .json({ message: "Message sent successfully", result });
+          .status(HttpStatusCode.CREATED)
+          .json({ message: MessageConstants.MESSAGE_SENT, result });
       }
-      return res.status(400).json({ message: "Failed to send message" });
+      return res.status(HttpStatusCode.BAD_REQUEST).json({ message: MessageConstants.BAD_REQUEST });
     } catch (error) {
       if (error instanceof CustomError) {
         return res.status(error.statusCode).json({ error: error.message });
       } else {
-        return res.status(500).json({ error: "Internal Server Error" });
+        return res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ error: MessageConstants.INTERNAL_SERVER_ERROR });
       }
     }
   };
@@ -99,16 +99,16 @@ export class chatController implements IchatController {
 
       if (result) {
         return res
-          .status(200)
-          .json({ message: "Messages fetched successfully", result });
+          .status(HttpStatusCode.OK)
+          .json({ message: MessageConstants.MESSAGE_FETCHED, result });
       } else {
-        return res.status(400).json({ message: "Failed to fetch messages" });
+        return res.status(HttpStatusCode.BAD_REQUEST).json({ message:MessageConstants.BAD_REQUEST });
       }
     } catch (error) {
       if (error instanceof CustomError) {
         return res.status(error.statusCode).json({ error: error.message });
       } else {
-        return res.status(500).json({ error: "Internal Server Error" });
+        return res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ error: MessageConstants.INTERNAL_SERVER_ERROR });
       }
     }
   };
@@ -121,16 +121,16 @@ export class chatController implements IchatController {
       const result = await this._chatService.updateChat(chatId, updateData);
       if (result) {
         return res
-          .status(200)
-          .json({ message: "Chat Updated successfully", result });
+          .status(HttpStatusCode.OK)
+          .json({ message: MessageConstants.CHAT_UPDATED, result });
       } else {
-        return res.status(400).json({ message: "Failed to fetch messages" });
+        return res.status(HttpStatusCode.BAD_REQUEST).json({ message: MessageConstants.BAD_REQUEST });
       }
     } catch (error) {
       if (error instanceof CustomError) {
         return res.status(error.statusCode).json({ error: error.message });
       } else {
-        return res.status(500).json({ error: "Internal Server Error" });
+        return res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ error: MessageConstants.INTERNAL_SERVER_ERROR });
       }
     }
   };
@@ -145,16 +145,16 @@ export class chatController implements IchatController {
       );
       if (result) {
         return res
-          .status(200)
-          .json({ message: "Notfications fetched successfully", result });
+          .status(HttpStatusCode.OK)
+          .json({ message: MessageConstants.NOTIFICATION_FETCHED, result });
       } else {
-        return res.status(400).json({ message: "Failed to fetch notifcation" });
+        return res.status(HttpStatusCode.BAD_REQUEST).json({ message: MessageConstants.BAD_REQUEST });
       }
     } catch (error) {
       if (error instanceof CustomError) {
         return res.status(error.statusCode).json({ error: error.message });
       } else {
-        return res.status(500).json({ error: "Internal Server Error" });
+        return res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ error: MessageConstants.INTERNAL_SERVER_ERROR });
       }
     }
   };
@@ -166,13 +166,13 @@ export class chatController implements IchatController {
       const { userId } = req.body;
       await this._chatService.markAllAsRead(userId);
       return res
-        .status(200)
-        .json({ message: "Notfications updated successfully" });
+        .status(HttpStatusCode.OK)
+        .json({ message: MessageConstants.UPDATE_NOTIFICATION });
     } catch (error) {
       if (error instanceof CustomError) {
         return res.status(error.statusCode).json({ error: error.message });
       } else {
-        return res.status(500).json({ error: "Internal Server Error" });
+        return res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ error: MessageConstants.INTERNAL_SERVER_ERROR });
       }
     }
   };
@@ -184,13 +184,13 @@ export class chatController implements IchatController {
       const { userId } = req.body;
       await this._chatService.clearReadNotifications(userId);
       return res
-        .status(200)
-        .json({ message: "Notfications cleared successfully" });
+        .status(HttpStatusCode.OK)
+        .json({ message: MessageConstants.NOTIFICATION_CLEARED });
     } catch (error) {
       if (error instanceof CustomError) {
         return res.status(error.statusCode).json({ error: error.message });
       } else {
-        return res.status(500).json({ error: "Internal Server Error" });
+        return res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ error: MessageConstants.INTERNAL_SERVER_ERROR });
       }
     }
   };

@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: project-service
-          image: moideenshacp/farlink-project-service:latest
+          image: moideenshacp/farlink-project-service:v1
           ports:
             - containerPort: 3004
           envFrom:

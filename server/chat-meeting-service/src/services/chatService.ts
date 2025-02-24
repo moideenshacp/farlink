@@ -7,6 +7,7 @@ import IchatRepository from "../interfaces/IchatRepository";
 import ImessageRepository from "../interfaces/ImessageRepository";
 import InotificationRepository from "../interfaces/InotificationRepository";
 import InotificationModel from "../interfaces/INotificationModel";
+import { HttpStatusCode } from "../constants/HttpStatusCode";
 
 export class chatService implements IchatService {
   private _chatRepository: IchatRepository;
@@ -27,7 +28,7 @@ export class chatService implements IchatService {
       if (!chatDetails.participants || chatDetails.participants.length < 2) {
         throw new CustomError(
           "A chat must have at least two participants",
-          400
+          HttpStatusCode.BAD_REQUEST
         );
       }
 
@@ -45,7 +46,7 @@ export class chatService implements IchatService {
   async fetchAllChats(userId: string): Promise<IchatModel[] | null> {
     try {
       if (!userId) {
-        throw new CustomError("User ID is required", 400);
+        throw new CustomError("User ID is required", HttpStatusCode.BAD_REQUEST);
       }
       const chats = await this._chatRepository.fetchAllChats(userId);
 
@@ -66,7 +67,7 @@ export class chatService implements IchatService {
         !messageDetails.sender ||
         !messageDetails.chatId
       ) {
-        throw new CustomError("Invalid message details", 400);
+        throw new CustomError("Invalid message details", HttpStatusCode.BAD_REQUEST);
       }
       const message = await this._messageRepository.createMessage(
         messageDetails
@@ -81,7 +82,7 @@ export class chatService implements IchatService {
   async fetchMessages(chatId: string): Promise<ImessageModel[] | null> {
     try {
       if (!chatId) {
-        throw new CustomError("Chat ID is required", 400);
+        throw new CustomError("Chat ID is required", HttpStatusCode.BAD_REQUEST);
       }
       const result = await this._messageRepository.fetchMessages(chatId);
       if (result) {

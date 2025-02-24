@@ -3,6 +3,8 @@ import { ItaskController } from "../interfaces/ItaskController";
 import { ItaskService } from "../interfaces/ItaskService";
 import { CustomError } from "../errors/CustomError";
 import { TaskValidationSchema } from "../validators/TaskValidation";
+import { HttpStatusCode } from "../constants/HttpStatusCode";
+import { MessageConstants } from "../constants/MessageConstants";
 
 export class taskController implements ItaskController {
   private _taskservice: ItaskService;
@@ -21,24 +23,24 @@ export class taskController implements ItaskController {
 
       if (error) {
         console.log(error);
-        return res.status(400).json({
+        return res.status(HttpStatusCode.BAD_REQUEST).json({
           message: "Validation failed",
           errors: error.details.map((err) => err.message),
         });
       }
       const result = await this._taskservice.createTask(taskDetails);
       if (result) {
-        return res.status(200).json({ message: "Task added successfully..." });
+        return res.status(HttpStatusCode.OK).json({ message: MessageConstants.TAST_ADDED });
       } else {
         return res
-          .status(400)
-          .json({ message: "Something went wrong,please try again..." });
+          .status(HttpStatusCode.BAD_REQUEST)
+          .json({ message: MessageConstants.BAD_REQUEST });
       }
     } catch (error) {
       if (error instanceof CustomError) {
         return res.status(error.statusCode).json({ error: error.message });
       } else {
-        return res.status(500).json({ error: "Internal Server Error" });
+        return res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ error: MessageConstants.INTERNAL_SERVER_ERROR });
       }
     }
   };
@@ -51,19 +53,19 @@ export class taskController implements ItaskController {
       const result = await this._taskservice.fetchTasks(projectId as string);
       if (result) {
         return res
-          .status(200)
-          .json({ message: "Tasks fetched successfully...", result });
+          .status(HttpStatusCode.OK)
+          .json({ message: MessageConstants.TASK_FETCHED, result });
       } else {
         return res
-          .status(400)
-          .json({ message: "Something went wrong,please try again..." });
+          .status(HttpStatusCode.BAD_REQUEST)
+          .json({ message: MessageConstants.BAD_REQUEST });
       }
     } catch (error) {
       console.log(error);
       if (error instanceof CustomError) {
         return res.status(error.statusCode).json({ error: error.message });
       } else {
-        return res.status(500).json({ error: "Internal Server Error" });
+        return res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ error: MessageConstants.INTERNAL_SERVER_ERROR });
       }
     }
   };
@@ -78,18 +80,18 @@ export class taskController implements ItaskController {
         taskDetails
       );
       if (updatedTask) {
-        return res.status(200).json({ message: "Task updated sucessfully.." });
+        return res.status(HttpStatusCode.OK).json({ message: MessageConstants.TASK_UPDATED });
       } else {
         return res
-          .status(400)
-          .json({ message: "Something went wrong,please try again..." });
+          .status(HttpStatusCode.BAD_REQUEST)
+          .json({ message: MessageConstants.BAD_REQUEST });
       }
     } catch (error) {
       console.log(error);
       if (error instanceof CustomError) {
         return res.status(error.statusCode).json({ error: error.message });
       } else {
-        return res.status(500).json({ error: "Internal Server Error" });
+        return res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ error: MessageConstants.INTERNAL_SERVER_ERROR });
       }
     }
   };
@@ -105,18 +107,18 @@ export class taskController implements ItaskController {
       );
       if (result) {
         return res
-          .status(200)
-          .json({ message: "Tasks fetched sucessfully..", result });
+          .status(HttpStatusCode.OK)
+          .json({ message: MessageConstants.FETCH_EMPLOYEES_TASK, result });
       } else {
         return res
-          .status(400)
-          .json({ message: "Something went wrong,please try again..." });
+          .status(HttpStatusCode.BAD_REQUEST)
+          .json({ message: MessageConstants.BAD_REQUEST });
       }
     } catch (error) {
       if (error instanceof CustomError) {
         return res.status(error.statusCode).json({ error: error.message });
       } else {
-        return res.status(500).json({ error: "Internal Server Error" });
+        return res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ error: MessageConstants.INTERNAL_SERVER_ERROR });
       }
     }
   };
@@ -131,18 +133,18 @@ export class taskController implements ItaskController {
       );
       if (result) {
         return res
-          .status(200)
-          .json({ message: "Tasks fetched sucessfully..", result });
+          .status(HttpStatusCode.OK)
+          .json({ message: MessageConstants.FETCH_ALL_TASKS_EMPLOYEES, result });
       } else {
         return res
-          .status(400)
-          .json({ message: "Something went wrong,please try again..." });
+          .status(HttpStatusCode.BAD_REQUEST)
+          .json({ message: MessageConstants.BAD_REQUEST });
       }
     } catch (error) {
       if (error instanceof CustomError) {
         return res.status(error.statusCode).json({ error: error.message });
       } else {
-        return res.status(500).json({ error: "Internal Server Error" });
+        return res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ error: MessageConstants.INTERNAL_SERVER_ERROR });
       }
     }
   };
@@ -156,18 +158,18 @@ export class taskController implements ItaskController {
       const result = await this._taskservice.createSubTask(taskDetails);
       if (result) {
         return res
-          .status(200)
-          .json({ message: "SubTask created sucessfully.." });
+          .status(HttpStatusCode.OK)
+          .json({ message: MessageConstants.SUBTASK_CREATED });
       } else {
         return res
-          .status(400)
-          .json({ message: "Something went wrong,please try again..." });
+          .status(HttpStatusCode.BAD_REQUEST)
+          .json({ message: MessageConstants.BAD_REQUEST });
       }
     } catch (error) {
       if (error instanceof CustomError) {
         return res.status(error.statusCode).json({ error: error.message });
       } else {
-        return res.status(500).json({ error: "Internal Server Error" });
+        return res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ error: MessageConstants.INTERNAL_SERVER_ERROR });
       }
     }
   };
@@ -183,18 +185,18 @@ export class taskController implements ItaskController {
       );
       if (updatedTask) {
         return res
-          .status(200)
-          .json({ message: "Sub-Task updated sucessfully.." });
+          .status(HttpStatusCode.OK)
+          .json({ message: MessageConstants.SUBTASK_UPDATED });
       } else {
         return res
-          .status(400)
-          .json({ message: "Something went wrong,please try again..." });
+          .status(HttpStatusCode.BAD_REQUEST)
+          .json({ message: MessageConstants.BAD_REQUEST });
       }
     } catch (error) {
       if (error instanceof CustomError) {
         return res.status(error.statusCode).json({ error: error.message });
       } else {
-        return res.status(500).json({ error: "Internal Server Error" });
+        return res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ error: MessageConstants.INTERNAL_SERVER_ERROR });
       }
     }
   };
@@ -209,18 +211,18 @@ export class taskController implements ItaskController {
       );
       if (result) {
         return res
-          .status(200)
-          .json({ message: "Sub-Tasks fetched sucessfully..", result });
+          .status(HttpStatusCode.OK)
+          .json({ message: MessageConstants.FETCH_SUBTASK, result });
       } else {
         return res
-          .status(400)
-          .json({ message: "Something went wrong,please try again..." });
+          .status(HttpStatusCode.BAD_REQUEST)
+          .json({ message: MessageConstants.BAD_REQUEST });
       }
     } catch (error) {
       if (error instanceof CustomError) {
         return res.status(error.statusCode).json({ error: error.message });
       } else {
-        return res.status(500).json({ error: "Internal Server Error" });
+        return res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ error: MessageConstants.INTERNAL_SERVER_ERROR });
       }
     }
   };
