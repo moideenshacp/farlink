@@ -1,0 +1,26 @@
+export const MessageConstants = {
+    USER_REGISTERED: "User registered successfully",
+    ORGANIZATION_REGISTERED:"organization registered successfully",
+    EMAIL_VERIFIED: "Email successfully verified.",
+    LOGIN_SUCCESS: "Login sucessfull",
+    LOGOUT_SUCCESS: "Logged out successfully",
+    PASSWORD_RESET_LINK_SENT: "Password reset link sent successfully",
+    PASSWORD_UPDATED: "Password updated successfully",
+    TOKEN_REFRESHED: "Access token refreshed successfully",
+    PROFILE_UPDATED: "Profile updated successfully",
+    PROFILE_FETCHED: "Profile fetched successfully",
+    INVALID_GOOGLE_DATA: "Invalid Google data.",
+    USER_NOT_FOUND: "User not found",
+    ORGANIZATION_NOT_FOUND:"No organizations found.",
+    ORGANIZATIONS_FETCHED:"Organizations fetched successfully",
+    ORGANIZATION_BLOCKED:"Organization blocked successfully",
+    FETCH_SUBSCRIPTION:"sucessfully fetch subcription plans",
+    EMPLOYEES_FETCHED: "Employees fetched succesfuly",
+    EMPLOYEES_LIST_FETCHED: "Employee list fetched successfully",
+    ORGANIZATION_DATA_FETCHED:"organization data fetched successfully",
+    ORGANIZATION_ID_REQUIRED: "Organization ID is required",
+    INTERNAL_SERVER_ERROR: "Internal server error",
+    BAD_REQUEST: "Invalid request data",
+  };
+  
+  

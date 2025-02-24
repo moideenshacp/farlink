@@ -2,6 +2,8 @@ import { Request, Response } from "express";
 import { IcompanyController } from "../interfaces/IcompanyController";
 import { companyValidationSchema } from "../validators/CompanyValidation";
 import IcompanyService from "interfaces/IcompanyService";
+import { HttpStatusCode } from "../constants/HttpStatusCode";
+import { MessageConstants } from "../constants/MessageConstants";
 
 export class companyController implements IcompanyController {
   private _companyservice: IcompanyService;
@@ -20,9 +22,9 @@ export class companyController implements IcompanyController {
       const organizationId =
         await this._companyservice.registerCompany(organization);
       res
-        .status(201)
+        .status(HttpStatusCode.CREATED)
         .json({
-          message: "organization registered successfully",
+          message: MessageConstants.ORGANIZATION_REGISTERED,
           organizationId,
         });
     } catch (error) {
@@ -38,13 +40,13 @@ export class companyController implements IcompanyController {
       const companyDetails = await this._companyservice.fetchCompanyProfile(
         email as string
       );
-      res.status(201).json({
-        message: "organization data fetched successfully",
+      res.status(HttpStatusCode.CREATED).json({
+        message: MessageConstants.ORGANIZATION_DATA_FETCHED,
         companyDetails,
       });
     } catch (error) {
       console.log(error);
-      res.status(500).json({ message: "Internal server error" });
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ message: MessageConstants.INTERNAL_SERVER_ERROR });
     }
   };
 
@@ -60,19 +62,19 @@ export class companyController implements IcompanyController {
       });
 
       if (error) {
-        res.status(400).json({
+        res.status(HttpStatusCode.BAD_REQUEST).json({
           message: "Validation error",
           details: error.details,
         });
       }
       await this._companyservice.updateCompanyProfile(FormData, email);
 
-      res.status(201).json({
-        message: "organization data fetched successfully",
+      res.status(HttpStatusCode.CREATED).json({
+        message: MessageConstants.ORGANIZATION_DATA_FETCHED,
       });
     } catch (error) {
       console.log(error);
-      res.status(500).json({ message: "Internal server error" });
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ message: MessageConstants.INTERNAL_SERVER_ERROR });
     }
   };
   public fetchAllOrganization = async (
@@ -84,16 +86,16 @@ export class companyController implements IcompanyController {
         await this._companyservice.fetchAllOrganization();
 
       if (!allOrganizations) {
-        res.status(404).json({ message: "No organizations found." });
+        res.status(HttpStatusCode.NOT_FOUND).json({ message: MessageConstants.ORGANIZATION_NOT_FOUND });
         return;
       }
-      res.status(200).json({
-        message: "Organizations fetched successfully",
+      res.status(HttpStatusCode.OK).json({
+        message: MessageConstants.ORGANIZATIONS_FETCHED,
         data: allOrganizations,
       });
     } catch (error) {
       console.log(error);
-      res.status(500).json({ message: "Internal server error" });
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ message: MessageConstants.INTERNAL_SERVER_ERROR });
     }
   };
   public blockOrganization = async (
@@ -107,14 +109,14 @@ export class companyController implements IcompanyController {
         email as string
       );
       if (result) {
-        res.status(200).json({
-          message: "Organization blocked successfully",
+        res.status(HttpStatusCode.OK).json({
+          message: MessageConstants.ORGANIZATION_BLOCKED,
           result,
         });
       }
     } catch (error) {
       console.log(error);
-      res.status(500).json({ message: "Internal server error" });
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ message: MessageConstants.INTERNAL_SERVER_ERROR });
     }
   };
   public findSubcription = async (
@@ -125,8 +127,8 @@ export class companyController implements IcompanyController {
       const email = req.query.email as string;
       const details = await this._companyservice.findSubcription(email);
       res
-        .status(200)
-        .json({ message: "sucessfully fetch subcription plans", details });
+        .status(HttpStatusCode.OK)
+        .json({ message: MessageConstants.FETCH_SUBSCRIPTION, details });
     } catch (error) {
       console.log(error);
     }

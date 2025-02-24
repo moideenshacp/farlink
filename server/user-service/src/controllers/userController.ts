@@ -5,6 +5,8 @@ import { CustomError } from "../errors/CustomError";
 import { AuthService } from "../utils/jwt";
 import { resetPasswordSchema } from "../validators/ResetPasswordValidation";
 import IuserService from "interfaces/IuserService";
+import { HttpStatusCode } from "../constants/HttpStatusCode";
+import { MessageConstants } from "../constants/MessageConstants";
 
 export class userController implements IuserController {
   private _userService: IuserService;
@@ -20,18 +22,18 @@ export class userController implements IuserController {
       });
       if (error) {
         const errorMessage = error.details.map((err) => err.message);
-        res.status(400).json({ errors: errorMessage });
+        res.status(HttpStatusCode.BAD_REQUEST).json({ errors: errorMessage });
         return;
       }
       const { name, email, password } = value;
 
       await this._userService.registersUser(name, email, password);
-      res.status(201).json({ message: "User registered successfully" });
+      res.status(HttpStatusCode.CREATED).json({ message:MessageConstants.USER_REGISTERED  });
     } catch (error) {
       if (error instanceof CustomError) {
         res.status(error.status).json({ error: error.message });
       } else {
-        res.status(400).json({ error: error });
+        res.status(HttpStatusCode.BAD_REQUEST).json({ error: error });
       }
     }
   };
@@ -42,13 +44,13 @@ export class userController implements IuserController {
 
       await this._userService.verifyEmail(token as string);
       res
-        .status(200)
-        .json({ status: "success", message: "Email successfully verified." });
+        .status(HttpStatusCode.OK)
+        .json({ status: "success", message: MessageConstants.EMAIL_VERIFIED });
     } catch (error) {
       if (error instanceof CustomError) {
         res.status(error.status).json({ error: error.message });
       } else {
-        res.status(500).json({ error: "Internal server Errror" });
+        res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ error: MessageConstants.INTERNAL_SERVER_ERROR });
       }
     }
   };
@@ -58,8 +60,8 @@ export class userController implements IuserController {
       const { email, password } = req.body;
       if (!email || !password) {
         return res
-          .status(400)
-          .json({ error: "Email and password are required." });
+          .status(HttpStatusCode.BAD_REQUEST)
+          .json({ error: MessageConstants.BAD_REQUEST });
       }
 
       const user = await this._userService.loginUser(email, password);
@@ -84,8 +86,8 @@ export class userController implements IuserController {
         maxAge: 7 * 24 * 60 * 60 * 1000,
       });
 
-      return res.status(200).json({
-        message: "Login sucessfull",
+      return res.status(HttpStatusCode.OK).json({
+        message: MessageConstants.LOGIN_SUCCESS,
         user: {
           _id: user._id,
           email: user.email,
@@ -102,7 +104,7 @@ export class userController implements IuserController {
       if (error instanceof CustomError) {
         return res.status(error.status).json({ error: error.message });
       } else {
-        return res.status(500).json({ error: "Internal server Errror" });
+        return res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ error: MessageConstants.INTERNAL_SERVER_ERROR });
       }
     }
   };
@@ -114,10 +116,10 @@ export class userController implements IuserController {
         sameSite: "strict",
       });
 
-      return res.status(200).json({ message: "Logged out successfully" });
+      return res.status(HttpStatusCode.OK).json({ message: MessageConstants.LOGOUT_SUCCESS });
     } catch (error) {
       console.log(error);
-      return res.status(500).json({ error: "Internal server Errror" });
+      return res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ error: MessageConstants.INTERNAL_SERVER_ERROR });
     }
   };
 
@@ -125,18 +127,18 @@ export class userController implements IuserController {
     try {
       const { email } = req.body;
       if (!email) {
-        res.status(400).json({ error: "Email is required" });
+        res.status(HttpStatusCode.BAD_REQUEST).json({ error: MessageConstants.BAD_REQUEST });
         return;
       }
       await this._userService.generatePasswordResetToken(email);
       res
-        .status(200)
-        .json({ message: "Password reset link sent successfully" });
+        .status(HttpStatusCode.OK)
+        .json({ message: MessageConstants.PASSWORD_RESET_LINK_SENT });
     } catch (error) {
       if (error instanceof CustomError) {
         res.status(error.status).json({ error: error.message });
       } else {
-        res.status(400).json({ error: error });
+        res.status(HttpStatusCode.BAD_REQUEST).json({ error: error });
       }
     }
   };
@@ -150,19 +152,18 @@ export class userController implements IuserController {
       });
       if (error) {
         const errorMessage = error.details.map((err) => err.message);
-        console.error("Validation errors:", errorMessage);
-        return res.status(400).json({ errors: errorMessage });
+        return res.status(HttpStatusCode.BAD_REQUEST).json({ errors: errorMessage });
       }
 
       const { password, token } = value;
 
       await this._userService.resetPassword(password, token);
-      return res.status(201).json({ message: "Password updated successfully" });
+      return res.status(HttpStatusCode.CREATED).json({ message: MessageConstants.PASSWORD_UPDATED });
     } catch (error) {
       if (error instanceof CustomError) {
         return res.status(error.status).json({ error: error.message });
       } else {
-        return res.status(400).json({ error: error });
+        return res.status(HttpStatusCode.BAD_REQUEST).json({ error: error });
       }
     }
   };
@@ -179,8 +180,8 @@ export class userController implements IuserController {
         maxAge: 60 * 60 * 1000, // 1 hour
       });
 
-      return res.status(200).json({
-        message: "Access token refreshed successfully",
+      return res.status(HttpStatusCode.OK).json({
+        message: MessageConstants.TOKEN_REFRESHED,
         accessToken: newAccessToken,
       });
     } catch (error) {
@@ -188,7 +189,7 @@ export class userController implements IuserController {
       if (error instanceof CustomError) {
         return res.status(error.status).json({ error: error.message });
       } else {
-        return res.status(400).json({ error: error });
+        return res.status(HttpStatusCode.BAD_REQUEST).json({ error: error });
       }
     }
   };
@@ -205,8 +206,8 @@ export class userController implements IuserController {
         image
       );
       if (user) {
-        res.status(200).json({
-          message: "Profile updated successfully",
+        res.status(HttpStatusCode.OK).json({
+          message: MessageConstants.PROFILE_UPDATED,
           user: {
             firstName: user.firstName,
             lastName: user.lastName,
@@ -218,8 +219,8 @@ export class userController implements IuserController {
     } catch (error) {
       console.log(error);
 
-      res.status(500).json({
-        message: "An error occurred while updating the profile",
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+        message: MessageConstants.INTERNAL_SERVER_ERROR,
       });
     }
   };
@@ -232,24 +233,24 @@ export class userController implements IuserController {
       const { email } = req.query;
 
       if (!email) {
-        res.status(400).json({ message: "Email is required" });
+        res.status(HttpStatusCode.BAD_REQUEST).json({ message: MessageConstants.BAD_REQUEST });
         return;
       }
       const userProfile = await this._userService.getUserProfile(
         email as string
       );
       if (!userProfile) {
-        res.status(404).json({ message: "User not found" });
+        res.status(HttpStatusCode.NOT_FOUND).json({ message: MessageConstants.USER_NOT_FOUND });
         return;
       }
       res
-        .status(200)
-        .json({ message: "Profile fetched successfully", userProfile });
+        .status(HttpStatusCode.OK)
+        .json({ message: MessageConstants.PROFILE_FETCHED, userProfile });
     } catch (error) {
       console.log(error);
       res
-        .status(500)
-        .json({ message: "An error occurred while fetching the profile" });
+        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+        .json({ message: MessageConstants.INTERNAL_SERVER_ERROR });
     }
   };
 
@@ -261,7 +262,7 @@ export class userController implements IuserController {
       const { email, name, picture, sub } = req.body;
 
       if (!email || !sub) {
-        res.status(400).json({ error: "Invalid Google data." });
+        res.status(HttpStatusCode.BAD_REQUEST).json({ error: MessageConstants.BAD_REQUEST });
       }
       const user = await this._userService.googleLogin(
         email,
@@ -292,8 +293,8 @@ export class userController implements IuserController {
           maxAge: 7 * 24 * 60 * 60 * 1000,
         });
 
-        return res.status(200).json({
-          message: "Login sucessfull",
+        return res.status(HttpStatusCode.OK).json({
+          message: MessageConstants.LOGIN_SUCCESS,
           user: {
             _id: user._id,
             email: user.email,
@@ -306,12 +307,12 @@ export class userController implements IuserController {
           },
         });
       }
-      return res.status(404).json({ error: "User not found." });
+      return res.status(HttpStatusCode.NOT_FOUND).json({ error: MessageConstants.USER_NOT_FOUND });
     } catch (error) {
       if (error instanceof CustomError) {
         return res.status(error.status).json({ error: error.message });
       } else {
-        return res.status(500).json({ error: "Internal server Errror" });
+        return res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ error: MessageConstants.INTERNAL_SERVER_ERROR });
       }
     }
   };
@@ -326,8 +327,8 @@ export class userController implements IuserController {
         employeeIds as string[]
       );
       res
-        .status(200)
-        .json({ message: "Employees fetched succesfuly", employees });
+        .status(HttpStatusCode.OK)
+        .json({ message: MessageConstants.EMPLOYEES_FETCHED, employees });
     } catch (error) {
       console.log(error);
     }
@@ -351,10 +352,10 @@ export class userController implements IuserController {
           pageNumber,
           pageSizeNumber
         );
-      res.status(200).json({ message: "sucess", employees, totalEmployees });
+      res.status(HttpStatusCode.OK).json({ message: "sucess", employees, totalEmployees });
     } catch (error) {
       console.log(error);
-      res.status(500).json({ message: "Interval server error" });
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ message:MessageConstants.INTERNAL_SERVER_ERROR});
     }
   };
 }
