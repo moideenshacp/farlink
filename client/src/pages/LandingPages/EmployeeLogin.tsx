@@ -8,6 +8,7 @@ import { LoginAdmin } from "../../api/authApi";
 import { useDispatch } from "react-redux";
 import { login } from "../../redux/user/userSlice";
 import Header from "../../shared/components/landingPageComponents/Header";
+import { UserRole } from "../../constant/UserRole";
 
 const EmployeeLogin = () => {
   const navigate = useNavigate();
@@ -37,8 +38,8 @@ const EmployeeLogin = () => {
 
         // Fix for case mismatch in position check
         if (
-          user.role === "employee" &&
-          user?.position?.trim().toLowerCase() === "hmmmmmmr"
+          user.role === UserRole.EMPLOYEE &&
+          user?.position?.trim().toLowerCase() === "hr"
         ) {
           navigate("/admin/", { replace: true });
           dispatch(login({ user, token: user.token }));

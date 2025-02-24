@@ -15,6 +15,7 @@ import { CredentialResponse, GoogleLogin } from "@react-oauth/google";
 // import Input from "../../shared/components/Input";
 import { message } from "antd";
 import { Input } from "antd";
+import { UserRole } from "../../constant/UserRole";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -43,7 +44,7 @@ const Login = () => {
       if (res.data.message === "Login sucessfull") {
         const user = res.data.user;
 
-        if (user.role === "admin") {
+        if (user.role === UserRole.ADMIN) {
           dispatch(login({ user, token: user.token }));
 
           if (user.isOrganizationAdded) {
@@ -56,12 +57,12 @@ const Login = () => {
         }
 
         // Check for superAdmin role
-        if (user.role === "superAdmin") {
+        if (user.role === UserRole.SUPER_ADMIN) {
           dispatch(login({ user, token: user.token }));
           navigate("/superAdmin/", { replace: true });
         }
 
-        if (user.role === "employee") {
+        if (user.role === UserRole.EMPLOYEE) {
           message.error("Please do Login via employee login section!!.", 2);
         }
       }
@@ -87,7 +88,7 @@ const Login = () => {
         if (res.data.message === "Login sucessfull") {
           const user = res.data.user;
 
-          if (user.role === "admin") {
+          if (user.role === UserRole.ADMIN) {
             dispatch(login({ user, token: user.token }));
 
             if (user.isOrganizationAdded) {
@@ -99,11 +100,11 @@ const Login = () => {
           }
 
           // Check for superAdmin role
-          if (user.role === "superAdmin") {
+          if (user.role === UserRole.SUPER_ADMIN) {
             dispatch(login({ user, token: user.token }));
             navigate("/superAdmin/", { replace: true });
           }
-          if (user.role === "employee") {
+          if (user.role === UserRole.EMPLOYEE) {
             message.error("Please do Login via employee login section!!.", 2);
           }
         }

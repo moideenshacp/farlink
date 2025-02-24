@@ -12,6 +12,7 @@ import { jwtDecode } from "jwt-decode";
 import { useDispatch } from "react-redux";
 import { login, setOrganizationId } from "../../redux/user/userSlice";
 import { message } from "antd";
+import { UserRole } from "../../constant/UserRole";
 
 const SignUp = () => {
   const navigate = useNavigate();
@@ -102,7 +103,7 @@ const SignUp = () => {
         if (res.data.message === "Login sucessfull") {
           const user = res.data.user;
 
-          if (user.role === "admin") {
+          if (user.role === UserRole.ADMIN) {
             dispatch(login({ user, token: user.token }));
 
             if (user.isOrganizationAdded) {
@@ -114,7 +115,7 @@ const SignUp = () => {
           }
 
           // Check for superAdmin role
-          if (user.role === "superAdmin") {
+          if (user.role === UserRole.SUPER_ADMIN) {
             dispatch(login({ user, token: user.token }));
             navigate("/superAdmin/", { replace: true });
           }
