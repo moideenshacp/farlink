@@ -2,6 +2,8 @@ import { Request, Response } from "express";
 import { IleaveController } from "../interfaces/IleaveController";
 import { CustomError } from "../errors/CustomError";
 import { IleaveService } from "../interfaces/IleaveService";
+import { HttpStatusCode } from "../constants/HttpStatusCode";
+import { MessageConstants } from "../constants/MessageConstants";
 
 export class leaveController implements IleaveController {
   private _leaveservice: IleaveService;
@@ -19,13 +21,13 @@ export class leaveController implements IleaveController {
         leaveData
       );
       if (savedLeave) {
-        res.status(200).json({ message: "Leave applied successfully" });
+        res.status(HttpStatusCode.OK).json({ message: MessageConstants.LEAVE_APPLIED });
       }
     } catch (error) {
       if (error instanceof CustomError) {
         res.status(error.statusCode).json({ error: error.message });
       } else {
-        res.status(500).json({ error: "Internal Server Error" });
+        res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ error: MessageConstants.INTERNAL_SERVER_ERROR });
       }
     }
   };
@@ -39,11 +41,11 @@ export class leaveController implements IleaveController {
         employeeEmail as string
       );
       if (leaves) {
-        res.status(200).json({ message: "Fetched Applied leaves", leaves });
+        res.status(HttpStatusCode.OK).json({ message: MessageConstants.FETCH_APPLIED_LEAVE, leaves });
       }
     } catch (error) {
       console.log(error);
-      res.status(500).json({ error: "Internal Server Error" });
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ error: MessageConstants.INTERNAL_SERVER_ERROR });
     }
   };
   public ManageAppliedLeaves = async (
@@ -57,13 +59,13 @@ export class leaveController implements IleaveController {
         status
       );
       if (updated) {
-        res.status(200).json({ message: "Leave Managed successfully.." });
+        res.status(HttpStatusCode.OK).json({ message: MessageConstants.LEAVE_MANAGED });
         return;
       }
-      res.status(500).json({ error: "Internal Server Error" });
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ error: MessageConstants.INTERNAL_SERVER_ERROR });
     } catch (error) {
       console.log(error);
-      res.status(500).json({ error: "Internal Server Error" });
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ error: MessageConstants.INTERNAL_SERVER_ERROR });
     }
   };
   public fetchRemainingLeaves = async (
@@ -78,14 +80,14 @@ export class leaveController implements IleaveController {
       );
       if (result) {
         res
-          .status(200)
-          .json({ message: "Remaining leaves fetched sucessfully", result });
+          .status(HttpStatusCode.OK)
+          .json({ message: MessageConstants.FETCH_REMAINING_LEAVE, result });
         return;
       }
-      res.status(500).json({ error: "Internal Server Error" });
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ error: MessageConstants.INTERNAL_SERVER_ERROR });
     } catch (error) {
       console.log(error);
-      res.status(500).json({ error: "Internal Server Error" });
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ error: MessageConstants.INTERNAL_SERVER_ERROR });
     }
   };
   public editLeave = async (req: Request, res: Response): Promise<void> => {
@@ -93,15 +95,15 @@ export class leaveController implements IleaveController {
       const { leaveId, formData } = req.body;
       const savedLeave = await this._leaveservice.editLeave(leaveId, formData);
       if (savedLeave) {
-        res.status(200).json({ message: "Leave edited successfully" });
+        res.status(HttpStatusCode.OK).json({ message: MessageConstants.LEAVE_EDITED });
       } else {
-        res.status(400).json({ error: "Error in updating leave" });
+        res.status(HttpStatusCode.BAD_REQUEST).json({ error: MessageConstants.BAD_REQUEST });
       }
     } catch (error) {
       if (error instanceof CustomError) {
         res.status(error.statusCode).json({ error: error.message });
       } else {
-        res.status(500).json({ error: "Internal Server Error" });
+        res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ error: MessageConstants.INTERNAL_SERVER_ERROR });
       }
     }
   };

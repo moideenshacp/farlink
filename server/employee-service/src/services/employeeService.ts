@@ -10,6 +10,7 @@ import IpositionModel from "../interfaces/IpositionModel";
 import mongoose from "mongoose";
 import IemployeeRepo from "../interfaces/IemployeeRepository";
 import IpositionRepo from "../interfaces/IpositionRepo";
+import { HttpStatusCode } from "../constants/HttpStatusCode";
 
 export class employeeService implements IemployeeService {
   private _employeeRepository: IemployeeRepo;
@@ -31,7 +32,7 @@ export class employeeService implements IemployeeService {
         employeeData.email
       );
       if (employeeExist) {
-        throw new CustomError("Email already Exist", 400);
+        throw new CustomError("Email already Exist", HttpStatusCode.BAD_REQUEST);
       }
 
       const registeredEmployee = await this._employeeRepository.createEmployee(
@@ -175,7 +176,7 @@ export class employeeService implements IemployeeService {
       const employee = await this._employeeRepository.findByEmail(email);
 
       if (!employee) {
-        throw new CustomError("employee not found", 400);
+        throw new CustomError("employee not found", HttpStatusCode.BAD_REQUEST);
       }
       const queue = "user-service-queue";
       await publishEvent(queue, {
@@ -221,7 +222,7 @@ export class employeeService implements IemployeeService {
           );
           throw new CustomError(
             `Position "${position}" already exists for this organization.`,
-            400
+            HttpStatusCode.BAD_REQUEST
           );
         }
         const positionAdded = await this._positionRepository.createPosition(

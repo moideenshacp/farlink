@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: employee-service
-          image: moideenshacp/farlink-employee-service:latest
+          image: moideenshacp/farlink-employee-service:v1
           imagePullPolicy: Always
           ports:
             - containerPort: 3002

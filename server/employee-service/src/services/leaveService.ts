@@ -7,6 +7,7 @@ import IleaveRepo from "../interfaces/IleaveRepository";
 import IpolicyRepo from "../interfaces/IpolicyRepo";
 import mongoose from "mongoose";
 import IAttendancePolicyModel from "../interfaces/IpolicyModel";
+import { HttpStatusCode } from "../constants/HttpStatusCode";
 
 export class leaveService implements IleaveService {
   private _policyRepository: IpolicyRepo;
@@ -53,20 +54,20 @@ export class leaveService implements IleaveService {
             ) {
               throw new CustomError(
                 `Leave cannot be applied after the office start time (${policy.officeStartTime}) on the same day.`,
-                400
+                HttpStatusCode.BAD_REQUEST
               );
             }
           }
         }
 
         if (startDate < currentDate || endDate < currentDate) {
-          throw new CustomError("Leave dates cannot be in the past.", 400);
+          throw new CustomError("Leave dates cannot be in the past.", HttpStatusCode.BAD_REQUEST);
         }
 
         if (endDate < startDate) {
           throw new CustomError(
             "The end date must be greater than the start date.",
-            400
+            HttpStatusCode.BAD_REQUEST
           );
         }
         const overlappingLeaves =
@@ -80,7 +81,7 @@ export class leaveService implements IleaveService {
         if (overlappingLeaves.length > 0) {
           throw new CustomError(
             "You already have approved leave's during the selected date range.",
-            400
+            HttpStatusCode.BAD_REQUEST
           );
         }
 
@@ -107,7 +108,7 @@ export class leaveService implements IleaveService {
         if (leavesTakenThisMonth + requestedDays > allowedLeaves) {
           throw new CustomError(
             `Insufficient leave balance for ${leaveType} in the current month.`,
-            400
+            HttpStatusCode.BAD_REQUEST
           );
         }
 
@@ -215,7 +216,7 @@ export class leaveService implements IleaveService {
       // Fetch the existing leave application
       const existingLeave = await this._leaveRepository.findById(leaveId);
       if (!existingLeave) {
-        throw new CustomError("Leave application not found.", 404);
+        throw new CustomError("Leave application not found.", HttpStatusCode.NOT_FOUND);
       }
 
       // Fetch the organization's leave policy
@@ -224,12 +225,12 @@ export class leaveService implements IleaveService {
       );
 
       if (!policy) {
-        throw new CustomError("Leave policy not found.", 400);
+        throw new CustomError("Leave policy not found.", HttpStatusCode.BAD_REQUEST);
       }
 
       const leaveType = data.formData.leaveType;
       if (!policy.leaveType || !(leaveType in policy.leaveType)) {
-        throw new CustomError(`Invalid leave type: ${leaveType}`, 400);
+        throw new CustomError(`Invalid leave type: ${leaveType}`, HttpStatusCode.BAD_REQUEST);
       }
 
       const startDate = new Date(data.formData.fromDate.split("T")[0]);
@@ -258,7 +259,7 @@ export class leaveService implements IleaveService {
           ) {
             throw new CustomError(
               `Leave cannot be edited after the office start time (${policy.officeStartTime}) on the same day.`,
-              400
+              HttpStatusCode.BAD_REQUEST
             );
           }
         }
@@ -266,12 +267,12 @@ export class leaveService implements IleaveService {
 
       // Validate leave dates
       if (startDate < currentDate || endDate < currentDate) {
-        throw new CustomError("Leave dates cannot be in the past.", 400);
+        throw new CustomError("Leave dates cannot be in the past.", HttpStatusCode.BAD_REQUEST);
       }
       if (endDate < startDate) {
         throw new CustomError(
           "The end date must be greater than the start date.",
-          400
+          HttpStatusCode.BAD_REQUEST
         );
       }
 
@@ -288,7 +289,7 @@ export class leaveService implements IleaveService {
       if (overlappingLeaves.length > 0) {
         throw new CustomError(
           "You already have approved leave's during the selected date range.",
-          400
+          HttpStatusCode.BAD_REQUEST
         );
       }
 
@@ -316,7 +317,7 @@ export class leaveService implements IleaveService {
       if (leavesTakenThisMonth + requestedDays > allowedLeaves) {
         throw new CustomError(
           `Insufficient leave balance for ${leaveType} in the current month.`,
-          400
+          HttpStatusCode.BAD_REQUEST
         );
       }
 

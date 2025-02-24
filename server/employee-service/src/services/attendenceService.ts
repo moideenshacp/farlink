@@ -8,6 +8,7 @@ import { CustomError } from "../errors/CustomError";
 import IpolicyRepo from "../interfaces/IpolicyRepo";
 import IattendenceRepo from "../interfaces/IattendenceRepo";
 import IemployeeRepo from "../interfaces/IemployeeRepository";
+import { HttpStatusCode } from "../constants/HttpStatusCode";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function convertToIST(date: any) {
@@ -97,7 +98,7 @@ export class attendenceService implements IattendenceService {
       );
       const dayOfWeek = currentTimeIST.getDay();
       if (policy?.holidayDays?.includes(dayOfWeek)) {
-        throw new CustomError("Attendance cannot be marked on weekends.", 400);
+        throw new CustomError("Attendance cannot be marked on weekends.", HttpStatusCode.BAD_REQUEST);
       }
 
       const officeStartTimeIST = new Date(
@@ -158,7 +159,7 @@ export class attendenceService implements IattendenceService {
         } else {
           throw new CustomError(
             "You have already completed your attendance for the day.",
-            400
+            HttpStatusCode.BAD_REQUEST
           );
         }
       } else {
@@ -168,7 +169,7 @@ export class attendenceService implements IattendenceService {
           status = "absent";
           throw new CustomError(
             "Office time has ended, check-in is not allowed.",
-            400
+            HttpStatusCode.BAD_REQUEST
           );
         } else if (currentTimeIST > lateMarkThresholdIST) {
           status = "late";
@@ -253,7 +254,7 @@ export class attendenceService implements IattendenceService {
       );
       const dayOfWeek = currentTimeIST.getDay();
       if (dayOfWeek == 0) {
-        throw new CustomError("Attendance cannot be marked on weekends.", 400);
+        throw new CustomError("Attendance cannot be marked on weekends.", HttpStatusCode.BAD_REQUEST);
       }
 
       const officeEndTimeIST = new Date(
@@ -263,7 +264,7 @@ export class attendenceService implements IattendenceService {
       if (currentTimeIST < officeEndTimeIST) {
         throw new CustomError(
           "Cannot mark absentees before office hours end.",
-          400
+          HttpStatusCode.BAD_REQUEST
         );
       }
 
@@ -315,7 +316,7 @@ export class attendenceService implements IattendenceService {
       );
 
       if (!attendanceRecord) {
-        throw new CustomError("Attendance record not found", 404);
+        throw new CustomError("Attendance record not found", HttpStatusCode.NOT_FOUND);
       }
 
       const organizationId = attendanceRecord?.organizationId?.toString();
@@ -332,7 +333,7 @@ export class attendenceService implements IattendenceService {
       if (checkOutIST <= checkInIST) {
         throw new CustomError(
           "Check-out time must be after check-in time",
-          400
+          HttpStatusCode.BAD_REQUEST
         );
       }
 

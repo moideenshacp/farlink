@@ -5,6 +5,8 @@ import { employeeProfileUpdate } from "../validators/EmployeeProfileUpdate";
 import { setUpPasswordSchema } from "../validators/SetUpPassword";
 import { CustomError } from "../errors/CustomError";
 import { IemployeeService } from "../interfaces/IemployeeService";
+import { HttpStatusCode } from "../constants/HttpStatusCode";
+import { MessageConstants } from "../constants/MessageConstants";
 
 export class employeeController implements IemployeeController {
   private _employeeservice: IemployeeService;
@@ -25,7 +27,7 @@ export class employeeController implements IemployeeController {
       });
 
       if (error) {
-        res.status(400).json({
+        res.status(HttpStatusCode.BAD_REQUEST).json({
           message: "validaton error",
           details: error.details[0].message,
         });
@@ -35,14 +37,14 @@ export class employeeController implements IemployeeController {
         employeeData
       );
       if (registeredEmployee) {
-        res.status(200).json({ message: "Employee added successfully" });
+        res.status(HttpStatusCode.OK).json({ message: MessageConstants.EMPLOYEE_ADDED });
       }
     } catch (error) {
       if (error instanceof CustomError) {
         res.status(error.statusCode).json({ message: error.message });
       } else {
         console.log(error);
-        res.status(500).json({ message: "Internal Server Error" });
+        res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ message: MessageConstants.INTERNAL_SERVER_ERROR });
       }
     }
   };
@@ -60,10 +62,10 @@ export class employeeController implements IemployeeController {
       const {employees,totalEmployees} = await this._employeeservice.getAllEmployees(
         organizationId as string,pageNumber,pageSizeNumber
       );
-      res.status(200).json({ message: "sucess", employees,totalEmployees });
+      res.status(HttpStatusCode.OK).json({ message: "sucess", employees,totalEmployees });
     } catch (error) {
       console.log(error);
-      res.status(500).json({ message: "Interval server error" });
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ message: MessageConstants.INTERNAL_SERVER_ERROR });
     }
   };
   public updateEmployees = async (
@@ -77,7 +79,7 @@ export class employeeController implements IemployeeController {
       });
 
       if (error) {
-        res.status(400).json({
+        res.status(HttpStatusCode.BAD_REQUEST).json({
           message: "validaton error",
           details: error.details[0].message,
         });
@@ -89,7 +91,7 @@ export class employeeController implements IemployeeController {
         otherData
       );
       if (updatedEmployee) {
-        res.status(200).json({ message: "employee updated" });
+        res.status(HttpStatusCode.OK).json({ message: MessageConstants.EMPLOYEE_UPDATED });
       }
     } catch (error) {
       console.log(error);
@@ -104,7 +106,7 @@ export class employeeController implements IemployeeController {
       const invitation = await this._employeeservice.inviteEmployee(email);
 
       if (invitation) {
-        res.status(200).json({ message: "Invitation sended successfully" });
+        res.status(HttpStatusCode.OK).json({ message: MessageConstants.INVITATION_SENDED});
       }
     } catch (error) {
       console.log(error);
@@ -118,7 +120,7 @@ export class employeeController implements IemployeeController {
       });
 
       if (error) {
-        res.status(400).json({
+        res.status(HttpStatusCode.BAD_REQUEST).json({
           message: "validaton error",
           details: error.details[0].message,
         });
@@ -129,7 +131,7 @@ export class employeeController implements IemployeeController {
         email
       );
       if (updated) {
-        res.status(200).json({ message: "Password set-up successfully" });
+        res.status(HttpStatusCode.OK).json({ message: MessageConstants.PASSWORD_SET_UP});
       }
     } catch (error) {
       console.log(error);
@@ -142,7 +144,7 @@ export class employeeController implements IemployeeController {
     try {
       const { organizationId } = req.query;
       if (!organizationId) {
-        res.status(404).json({ message: "No organization found." });
+        res.status(HttpStatusCode.NOT_FOUND).json({ message: MessageConstants.BAD_REQUEST });
         return;
       }
       const employeeCountResponse = await this._employeeservice.EmployeesCount(
@@ -150,16 +152,16 @@ export class employeeController implements IemployeeController {
       );
 
       if (employeeCountResponse) {
-        res.status(200).json({
-          message: "Employees count fetched successfully",
+        res.status(HttpStatusCode.OK).json({
+          message: MessageConstants.EMPLOYEES_COUNT_FETCHED,
           data: employeeCountResponse,
         });
       } else {
-        res.status(404).json({ message: "No employees found." });
+        res.status(HttpStatusCode.NOT_FOUND).json({ message:MessageConstants.NOT_FOUND });
       }
     } catch (error) {
       console.log(error);
-      res.status(500).json({ message: "Internal Server Error" });
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ message: MessageConstants.INTERNAL_SERVER_ERROR });
     }
   };
   public TerminateEmployee = async (
@@ -172,16 +174,16 @@ export class employeeController implements IemployeeController {
         email as string
       );
       if (result) {
-        res.status(200).json({
-          message: "Employee terminated successfully",
+        res.status(HttpStatusCode.OK).json({
+          message: MessageConstants.EMPLOYEE_TERMINATED,
           isActive: result.isActive,
         });
       } else {
-        res.status(400).json({ message: "Employee Termination failed.." });
+        res.status(HttpStatusCode.BAD_REQUEST).json({ message: MessageConstants.BAD_REQUEST });
       }
     } catch (error) {
       console.log(error);
-      res.status(500).json({ message: "Internal Server Error" });
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ message:MessageConstants.INTERNAL_SERVER_ERROR });
     }
   };
 
@@ -193,18 +195,18 @@ export class employeeController implements IemployeeController {
         position
       );
       if (positionAdded) {
-        res.status(200).json({ message: "Position added successfully" });
+        res.status(HttpStatusCode.OK).json({ message: MessageConstants.POSITION_ADDED});
         return;
       }
       res
-        .status(400)
-        .json({ message: "An Error occurred while adding position" });
+        .status(HttpStatusCode.BAD_REQUEST)
+        .json({ message: MessageConstants.BAD_REQUEST });
     } catch (error) {
       if (error instanceof CustomError) {
         res.status(error.statusCode).json({ message: error.message });
       } else {
         console.log(error);
-        res.status(500).json({ message: "Internal Server Error" });
+        res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ message: MessageConstants.INTERNAL_SERVER_ERROR});
       }
     }
   };
@@ -215,13 +217,13 @@ export class employeeController implements IemployeeController {
 
       const result = await this._employeeservice.fetchPosition(organizationId as string);
       if (result) {
-        res.status(200).json({ message: "Positions fetched sucessfully..", result });
+        res.status(HttpStatusCode.OK).json({ message: MessageConstants.POSITION_FETCHED, result });
         return;
       }
-      res.status(400).json({ message: "Positions fetching failed..", result });
+      res.status(HttpStatusCode.BAD_REQUEST).json({ message: MessageConstants.BAD_REQUEST, result });
     } catch (error) {
       console.log(error);
-      res.status(500).json({ message: "Internal Server Error" });
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ message: MessageConstants.INTERNAL_SERVER_ERROR });
     }
   };
   public fetchEmployeesId = async(req: Request, res: Response): Promise<void> =>{
@@ -229,7 +231,7 @@ export class employeeController implements IemployeeController {
       const {employeeIds} = req.query
       
       const employees = await this._employeeservice.fetchEmployeesId(employeeIds as string[])
-      res.status(200).json({message:"Employees fetched succesfuly",employees})
+      res.status(HttpStatusCode.OK).json({message:MessageConstants.EMPLOYEES_FETCHED,employees})
     } catch (error) {
       console.log(error);
       

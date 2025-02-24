@@ -2,6 +2,9 @@ import { Request, Response } from "express";
 import { IattendenceController } from "../interfaces/IattendenceController";
 import { CustomError } from "../errors/CustomError";
 import { IattendenceService } from "../interfaces/IattendenceService";
+import { HttpStatusCode } from "../constants/HttpStatusCode";
+import { MessageConstants } from "../constants/MessageConstants";
+
 
 export class attendenceController implements IattendenceController {
   private _attendenceservice: IattendenceService;
@@ -22,13 +25,13 @@ export class attendenceController implements IattendenceController {
         organizationId
       );
       if (result) {
-        res.status(200).json({ message: "Policy Updated successfully" });
+        res.status(HttpStatusCode.OK).json({ message: MessageConstants.POLICY_UPDATED });
       } else {
-        res.status(400).json({ message: "Policy updation failed.." });
+        res.status(HttpStatusCode.BAD_REQUEST).json({ message: MessageConstants.BAD_REQUEST });
       }
     } catch (error) {
       console.log(error);
-      res.status(500).json({ message: "Internal Server Error" });
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ message: MessageConstants.INTERNAL_SERVER_ERROR });
     }
   };
   public getAttendencePolicy = async (
@@ -39,17 +42,17 @@ export class attendenceController implements IattendenceController {
       const { organizationId } = req.query;
 
       if (!organizationId) {
-        res.status(400).json({ message: "No organizationId is provided" });
+        res.status(HttpStatusCode.BAD_REQUEST).json({ message: MessageConstants.BAD_REQUEST });
       }
       const result = await this._attendenceservice.getAttendencePolicy(
         organizationId as string
       );
       if (result) {
         res
-          .status(200)
-          .json({ message: "Policy fetched successfully", result });
+          .status(HttpStatusCode.OK)
+          .json({ message: MessageConstants.POLICY_FETCHED, result });
       } else {
-        res.status(200).json({ message: "No policy found.." });
+        res.status(HttpStatusCode.BAD_REQUEST).json({ message: MessageConstants.BAD_REQUEST });
       }
     } catch (error) {
       console.log(error);
@@ -66,12 +69,12 @@ export class attendenceController implements IattendenceController {
         employeeEmail
       );
 
-      res.status(200).json({ message: "Attendence marked successfully" });
+      res.status(HttpStatusCode.OK).json({ message: MessageConstants.ATTENDENCE_MARKED });
     } catch (error) {
       if (error instanceof CustomError) {
         res.status(error.statusCode).json({ error: error.message });
       } else {
-        res.status(500).json({ error: "Internal Server Error" });
+        res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ error: MessageConstants.INTERNAL_SERVER_ERROR });
       }
     }
   };
@@ -86,8 +89,8 @@ export class attendenceController implements IattendenceController {
         await this._attendenceservice.getAttendenceReport(
           employeeEmail as string
         );
-      res.status(200).json({
-        message: "Attendence details fetched successfully",
+      res.status(HttpStatusCode.OK).json({
+        message: MessageConstants.ATTENDENCE_DETAILS_FETCHED,
         attendancereport,
       });
     } catch (error) {
@@ -105,12 +108,12 @@ export class attendenceController implements IattendenceController {
         checkIn,
         checkOut
       );
-      res.status(200).json({ message: "Attendence edited successfully" });
+      res.status(HttpStatusCode.OK).json({ message: MessageConstants.ATTENDENCE_EDITED });
     } catch (error) {
       if (error instanceof CustomError) {
         res.status(error.statusCode).json({ error: error.message });
       } else {
-        res.status(500).json({ error: "Internal Server Error" });
+        res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ error: MessageConstants.INTERNAL_SERVER_ERROR });
       }
     }
   };

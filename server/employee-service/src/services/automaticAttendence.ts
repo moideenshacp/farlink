@@ -78,7 +78,7 @@ class AbsenteeCheckJob {
   }
 }
 export const jobStart = cron.schedule(
-  "25 16 * * *",
+  "50 23 * * *",
   async () => {
     try {
       const absenteeCheckJob = new AbsenteeCheckJob();
