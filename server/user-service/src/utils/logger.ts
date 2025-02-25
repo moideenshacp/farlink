@@ -9,7 +9,7 @@ import DailyRotateFile from "winston-daily-rotate-file";
 // Custom format for console logging with colors
 const consoleLogFormat = format.combine(
   format.colorize(),
-  format.printf(({ level, message, timestamp }) => {
+  format.printf(({ level, message,  }) => {
     return `${level}: ${message}`;
   })
 );

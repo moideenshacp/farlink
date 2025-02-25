@@ -13,7 +13,6 @@ export const consumeEvents = async (): Promise<void> => {
       if (message) {
         const event = JSON.parse(message.content.toString());
         
-        console.log("Event received1111111111:", event);
         if(event.event === "COMPANY_SUBCRIPTION"){
           const {organizationId,subscriptionType,industry,admin} = event.payload
 

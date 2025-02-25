@@ -85,8 +85,11 @@ const DashBoardTopBar = () => {
               Billing
             </h1>
           )}
-          <div className="flex p-2 items-center gap-12">
+          <div className="flex p-2 items-center sm: gap-56 lg:gap-12">
+            <div className="ml-14" >
             <NotificationDropdown />
+            </div>
+              
             <div className="relative inline-block text-left">
               <div>
                 <button onClick={toggleDropdown} className="flex items-center">

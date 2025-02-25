@@ -10,7 +10,7 @@ const EmployeeDashboard = () => {
       </div>
 
       <div className="flex-1 flex flex-col lg:ml-64">
-        <div className="fixed lg:top-0  lg:left-64 lg:w-[calc(100%-16rem)] bg-white z-10 ">
+        <div className="fixed lg:top-0  lg:left-64 lg:w-[calc(100%-16rem)] sm: w-full bg-white z-10 ">
           <DashBoardTopBar />
         </div>
 

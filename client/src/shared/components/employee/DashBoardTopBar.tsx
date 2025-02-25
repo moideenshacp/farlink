@@ -92,8 +92,10 @@ const DashBoardTopBar = () => {
               Overview
             </h1>
           )}
-          <div className="flex items-center p-2 gap-12">
+          <div className="flex items-center p-2 sm: gap-56 lg:gap-12">
+             <div className="ml-14" >
             <NotificationDropdown />
+            </div>
             <div className="relative inline-block text-left">
               <div>
                 <button onClick={toggleDropdown} className="flex items-center">

@@ -13,8 +13,6 @@ export const consumeEvents = async (): Promise<void> => {
     channel.consume(queue, async (message) => {
       if (message) {
         const event = JSON.parse(message.content.toString());
-        console.log("Event received:", event);
-
         if (event.event === "REGISTER_EMPLOYEE") {
           const {
             id,
@@ -75,8 +73,6 @@ export const consumeEvents = async (): Promise<void> => {
             position
           };
 
-          console.log("Updating employee with data:", employeeData);
-
           const userRepo = new userRepository();
           try {
             const updateData = await userRepo.findByIdAndUpdate(
@@ -93,14 +89,10 @@ export const consumeEvents = async (): Promise<void> => {
             console.error("Error during employee update:", error);
           }
         }
-        if (event.event === "SET_UP_PASSWORD") {
-            console.log("gettttttttttt-------------------");
-  
+        if (event.event === "SET_UP_PASSWORD") {  
             const {
               password,email
-            } = event.payload;
-           console.log(password,email,"we are from user-service");
-           
+            } = event.payload;           
             const userRepo = new userRepository();
   
             const updateEmployee = await userRepo.update({ email }, { password })
@@ -117,16 +109,13 @@ export const consumeEvents = async (): Promise<void> => {
             const userRepo = new userRepository();
             
             const details = await userRepo.findByEmailWithPopulate(email,"organizationId")
-            console.log(details);
             await publishEvent(responseQueue, { success: true, details });
           }
           if (event.event === "TERMINATE_EMPLOYEE") {
-            console.log("gettttttttttt-------------------");
   
             const {
               email
             } = event.payload;
-           console.log(email,"we are from user-service");
            
             const userRepo = new userRepository();
             const employee = await userRepo.findByEmail(email)

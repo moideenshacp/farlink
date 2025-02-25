@@ -66,8 +66,6 @@ export class subcriptionController implements IsubcriptionController {
   public webhook = async (req: Request, res: Response): Promise<void> => {
     const sig = req.headers["stripe-signature"] as string | undefined;
     const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET;
-    console.log("Raw Body Type:", req.body instanceof Buffer ? "Buffer" : typeof req.body); 
-    console.log("Raw Body:", req.body);
     try {
 
       await this._subcriptionservice.handleWebhookEvent(

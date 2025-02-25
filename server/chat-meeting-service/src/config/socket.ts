@@ -27,14 +27,11 @@ export const initializeSocket = (server: http.Server) => {
   });
 
   io.on("connection", (socket) => {
-    socket.on("registerUser", (userId: string) => {
-      console.log("socket connected---------------------------------------");
-      
+    socket.on("registerUser", (userId: string) => {      
       userSockets.set(userId, socket.id);
     });
 
     socket.on("joinRoom", (chatId: string) => {
-      console.log("user jined-----------------",chatId);
       socket.join(chatId);
     });
 
