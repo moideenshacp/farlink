@@ -27,7 +27,7 @@ const Home = () => {
         </div>
 
         <div className="bg-[#4361EE] h-72 text-center flex flex-col justify-center items-center">
-          <h2 className="font-bold text-white text-3xl mt-4 tracking-wider">
+          <h2 className="font-bold text-white text-3xl mt-5 tracking-wider">
             Start set-up your team now!
           </h2>
           <h2 className="font-medium text-white text-xs mt-4 tracking-widest">
